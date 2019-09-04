@@ -1,1 +1,26 @@
 ## analyzer code here 
+
+The analysis code is mainly written in the monoHbbAnalyzer.py file. This will create a .root file with trees for each CR/SR. 
+
+
+
+### How to run 
+
+''' python monoHbbAnalyzer.py '''
+
+
+
+The output tree can be used to make 
+
+1. the histogram and then make stack plots using the same framework used earlier. 
+
+2. use tree to make the stack plots using matplotlib (it is possible but slightly tricky to make divide canvas) 
+
+3. use tree to do the optimisation of one of the variable one might need. You have to remove cut on this variable and save in the rootfile. 
+
+
+For 1. i.e. make histogram use the script DataFrameToHisto.py, which save histogram in a .root file. 
+
+### How to run 
+
+''' python DataFrameToHisto.py ''' 
