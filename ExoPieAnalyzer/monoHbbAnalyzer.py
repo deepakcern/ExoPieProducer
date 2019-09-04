@@ -192,13 +192,6 @@ def runbbdm(txtfile):
                    
             ):
             
-            #ep_WenuRecoil, ep_Wenumass, ep_WenuPhi, ep_WmunuRecoil, ep_Wmunumass, ep_WmunuPhi, 
-            #ep_ZeeRecoil, ep_ZeeMass, ep_ZeePhi, ep_ZmumuRecoil, ep_ZmumuMass, ep_ZmumuPhi,
-            #ep_GammaRecoil, ep_GammaPhi, 
-            #df.WenuRecoil, df.Wenumass, df.WenuPhi, df.WmunuRecoil, df.Wmunumass, df.WmunuPhi, 
-            #df.ZeeRecoil, df.ZeeMass, df.ZeePhi, df.ZmumuRecoil, df.ZmumuMass, df.ZmumuPhi, 
-            #df.GammaRecoil, df.GammaPhi 
-            
             
             ieve = ieve + 1
             if ieve%1000==0: print "Processed",ieve,"Events"
@@ -227,7 +220,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for boosted SR. 
-            if  ( ep_nfjet == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.):
+            if  ( ep_nfjet > 0) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.):
                 isBoostedSR=True
                 
                 ## cal function for each of them based on pt and eta
@@ -258,8 +251,7 @@ def runbbdm(txtfile):
             h_mass=-1
             ## Resolved selection will be applied IFF there is no boosted candidate 
             if not isBoostedSR:
-                if (ep_THINnJet>2):
-                    #if  ( ep_nfjet == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) :
+                if (ep_THINnJet>2 and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) and (ep_THINjetDeepCSV[0]>0.8) and (ep_THINjetDeepCSV[1]>0.8)):
                     isResolvedSR=True 
                     ## call the proper functions 
                     

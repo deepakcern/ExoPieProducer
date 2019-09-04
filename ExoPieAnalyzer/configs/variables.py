@@ -16,7 +16,4 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_HPSTau_n', 'st_nTauTightElectron', 'st_nTauTightMuon', 'st_nTauTightEleMu', 'st_nTauLooseEleMu', 
 'st_pu_nTrueInt', 'st_pu_nPUVert', \
 'st_THINjetNPV', \
-'mcweight', 'st_nGenPar', 'st_genParId', 'st_genMomParId', 'st_genParSt', 'st_genParPx', 'st_genParPy', 'st_genParPz', 'st_genParEnergy', \
-'WenuRecoil', 'Wenumass', 'WenuPhi', 'WmunuRecoil', 'Wmunumass', 'WmunuPhi', \
-'ZeeRecoil', 'ZeeMass', 'ZeePhi', 'ZmumuRecoil', 'ZmumuMass', 'ZmumuPhi', \
-'GammaRecoil', 'GammaPhi']
+'mcweight', 'st_nGenPar', 'st_genParId', 'st_genMomParId', 'st_genParSt', 'st_genParPx', 'st_genParPy', 'st_genParPz', 'st_genParEnergy']
