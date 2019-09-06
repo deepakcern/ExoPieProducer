@@ -167,7 +167,7 @@ def runbbdm(txtfile):
             ep_eleIsPasepight, ep_eleIsPassLoose, \
             ep_nPho, ep_phoIsPasepight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_iepightMuon, \
-	    ep_HPSTau_n,\
+	    ep_HPSTau_n,ep_Taudisc_againstLooseMu,ep_Taudisc_againstLooseEle,ep_tau_isoLoose,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
             ep_mcweight, ep_nGenPar, ep_genParId, ep_genMomParId, ep_genParEp, ep_genParPx, ep_genParPy, ep_genParPz, ep_genParEnergy, \
@@ -185,7 +185,7 @@ def runbbdm(txtfile):
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
-                   df.st_HPSTau_n,\
+                   df.st_HPSTau_n,df.st_Taudisc_againstLooseMuon,df.st_Taudisc_againstLooseElectron,df.st_tau_isoLoose,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_nGenPar, df.st_genParId, df.st_genMomParId, df.st_genParSt, df.st_genParPx, df.st_genParPy, df.st_genParPz, df.st_genParEnergy, \
@@ -224,12 +224,17 @@ def runbbdm(txtfile):
             fatjeteta = [getEta(ep_fjetPx[ij], ep_fjetPy[ij], ep_fjetPz[ij]) for ij in range(ep_nfjet)]
             fatjetphi = [getPhi(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
             #if ep_nfjet == 0 : continue
-            #print ep_fjetSDMass
-            pass_nfjetIndex = [index for index in range(ep_nfjet) if (fatjetpt[index] > 200.0 and abs(fatjeteta[index]< 2.5) and ep_fjetSDMass[index] and ep_fjetProbHbb[index] > 0.86) ]
+            print "ep_nfjet",ep_nfjet
+            pass_nfjetIndex = [index for index in range(ep_nfjet) if (fatjetpt[index] > 200.0 and abs(fatjeteta[index])< 2.5 and ep_fjetSDMass[index] > 100.0 and ep_fjetSDMass[index] < 150.0 and ep_fjetProbHbb[index] > 0.86) ]
             sel_nfjets = len(pass_nfjetIndex)
             if sel_nfjets: fjetIndex = pass_nfjetIndex[0]
-            #print nselfjets
-            #print fatjetpt
+            #if not sel_nfjets: continue
+
+	        '''
+            TAU HADRONIC COLLECTION
+            '''
+            nTau = ep_HPSTau_n #[tauIndex for tauIndex in range(ep_HPSTau_n) if (ep_Taudisc_againstLooseMu[tauIndex] and ep_Taudisc_againstLooseEle[tauIndex] and ep_tau_isoLoose[tauIndex])]
+            print 'nTau',nTau
             '''
             --------------------------------------------------------------------------------
             SIGNAL REGION BOOSTED
@@ -341,7 +346,7 @@ def runbbdm(txtfile):
 
 if __name__ == '__main__':
     if not runInteractive:
-        txtFile=infile
+        txtFile='signal_sample.txt'#infile
         runbbdm(txtFile)
 
     if runInteractive and runOnTxt:
