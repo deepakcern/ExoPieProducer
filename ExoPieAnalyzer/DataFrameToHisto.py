@@ -33,7 +33,7 @@ def VarToHist(df, varname, binning ):
     df_var = df[varname]
     h_var  = SetHist(varname, binning)
     
-    for i in df_var: h_var.Fill(i, weight)
+    for i in df_var: h_var.Fill(i)
     
     return h_var
 
