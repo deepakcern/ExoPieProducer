@@ -13,7 +13,7 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_eleIsPassTight', 'st_eleIsPassLoose', \
 'st_nPho', 'st_phoIsPassTight', 'st_phoPx', 'st_phoPy', 'st_phoPz', 'st_phoEnergy', \
 'st_nMu', 'st_muPx', 'st_muPy', 'st_muPz', 'st_muEnergy', 'st_isTightMuon', \
-'st_HPSTau_n', 'st_Taudisc_againstLooseMuon','st_Taudisc_againstLooseElectron','st_tau_isoLoose', 
+'st_nTau_discBased_looseElelooseMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_mediumElelooseMuVeto','st_nTau_discBased_TightEleTightMuVeto', 
 'st_pu_nTrueInt', 'st_pu_nPUVert', \
 'st_THINjetNPV', \
 'mcweight', 'st_nGenPar', 'st_genParId', 'st_genMomParId', 'st_genParSt', 'st_genParPx', 'st_genParPy', 'st_genParPz', 'st_genParEnergy']
