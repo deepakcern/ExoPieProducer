@@ -100,6 +100,8 @@ def TextToList(textfile):
 #### first element is the list of rootfiles 
 #### second element is the key, user to name output.root
 
+dummy = -9999.0
+
 def runbbdm(txtfile):
     
 
@@ -148,7 +150,12 @@ def runbbdm(txtfile):
     #outputfilename = args.outputfile
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
-
+    for infl in infile_:
+	f_tmp = TFile.Open(infl,'READ')
+        h_tmp = f_tmp.Get('h_total')
+        h_tmp_weight = f_tmp.Get('h_total_mcweight')
+        h_total.Add(h_tmp)
+        h_total_mcweight.Add(h_tmp_weight)
 
     filename = infile_
     ieve = 0;icount = 0
@@ -229,7 +236,7 @@ def runbbdm(txtfile):
 
             pass_nfjetIndex = [index for index in range(ep_nfjet) if (fatjetpt[index] > 200.0 and abs(fatjeteta[index])< 2.5 and ep_fjetSDMass[index] > 100.0 and ep_fjetSDMass[index] < 150.0 and ep_fjetProbHbb[index] > 0.86) ]
             sel_nfjets = len(pass_nfjetIndex)
-            if sel_nfjets: 
+            if (sel_nfjets==1): 
 		fjetIndex = pass_nfjetIndex[0]
 
 
@@ -246,12 +253,19 @@ def runbbdm(txtfile):
             fjet_pt200_eta_2p5 = [True for ij in range(ep_nfjet)] #pt > 200 and eta < 2.5 is already applied at skimmer level
             pass_ak4jet_index_cleaned = []
             if ak4_pt30_eta4p5 > 0 and fjet_pt200_eta_2p5 > 0 : 
-		ak4jet_cleaned_against_fjet = anautil.jetcleaning(ak4_pt30_eta4p5, fjet_pt200_eta_2p5, ak4jeteta, fatjeteta, ak4jetphi, fatjetphi,1.5)
+		ak4jet_cleaned_against_fjet = anautil.jetcleaning(ak4_pt30_eta4p5, fjet_pt200_eta_2p5, ak4jeteta, fatjeteta, ak4jetphi, fatjetphi,0.8)
                 pass_ak4jet_index_cleaned = boolutil.WhereIsTrue(ak4jet_cleaned_against_fjet)
             #print 'pass_ak4jet_index_cleaned', pass_ak4jet_index_cleaned
 		
-	    nJets = len(pass_ak4jet_index_cleaned)
-            nBjets = len([ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > 0.4941 and abs(ak4jeteta[ij]) < 2.5)])
+	    nJets_cleaned = len(pass_ak4jet_index_cleaned)
+            h_mass = -99999.0
+            #if nJets >= 2: 
+	    
+           
+
+            Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > 0.4941 and abs(ak4jeteta[ij]) < 2.5)]
+            nBjets = len(Bjet_index)
+            #print 'Bjet_index', Bjet_index
 
             #print 'nJets', nJets, 'nBjets', nBjets
             
@@ -271,9 +285,8 @@ def runbbdm(txtfile):
             '''
 
             ## place all the selection for boosted SR. 
-            if  (nJets < 2) and (nBjets==0) and ( sel_nfjets == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_HPSTau_n==0) and (ep_nPho==0)and (ep_pfMetCorrPt > 200.):
+            if  (nJets_cleaned >=0) and (nBjets==0) and ( sel_nfjets == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_HPSTau_n==0) and (ep_nPho==0)and (ep_pfMetCorrPt > 200.):
                 isBoostedSR=True
-                dummy  = -9999.0
                 jet1pT =  dummy
                 jet1Eta =  dummy
                 jet1Phi =  dummy
@@ -282,6 +295,7 @@ def runbbdm(txtfile):
                     jet1pT  = ak4jetpt[jet1_endex]
                     jet1Eta = ak4jeteta[jet1_endex]
                     jet1Phi = ak4jetphi[jet1_endex]
+                additional_jets = nJets_cleaned
                 ## cal function for each of them based on pt and eta
                 weightEle=1
                 weightMu=1
@@ -310,31 +324,31 @@ def runbbdm(txtfile):
             h_mass=-1
             ## Resolved selection will be applied IFF there is no boosted candidate 
             if not isBoostedSR:
-                if (nJets<=3) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) and (nBjets==2):
+                if ep_THINnJet < 2: continue
+                h_mass  = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0],ep_THINjetPx[1], ep_THINjetPy[1], ep_THINjetPz[1],ep_THINjetEnergy[1])
+                #print 'h_mass',h_mass 
+                if (ep_THINnJet >=2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) and (ep_THINjetDeepCSV[0] > 0.4941 and ep_THINjetDeepCSV[1] > 0.4941) and (abs(ak4jeteta[0]) < 2.5) and (abs(ak4jeteta[1]) < 2.5) and (h_mass > 100.0 and h_mass < 150.0) :
                     isResolvedSR=True 
                     ## call the proper functions
-                    dummy = -9999.0
                     jet1pT=jet2pT=jet3pT=jet1Eta=jet2Eta=jet3Eta=jet1Phi=jet2Phi=jet3Phi=dummy 
 
-                    jet1index =  pass_ak4jet_index_cleaned[0]
-                    jet2index =  pass_ak4jet_index_cleaned[1]
-                    if (len(pass_ak4jet_index_cleaned)>2):jet3index =  pass_ak4jet_index_cleaned[2]
                     
-                    jet1pT    = ak4jetpt[jet1index]
-                    jet2pT    = ak4jetpt[jet2index]
-                    if (len(pass_ak4jet_index_cleaned)>2):jet3pT    = ak4jetpt[jet3index]
+                    jet1pT    = ak4jetpt[0]
+                    jet2pT    = ak4jetpt[1]
+                    if (ep_THINnJet > 2):jet3pT    = ak4jetpt[2]
 
-                    jet1Eta   = ak4jeteta[jet1index]
-                    jet2Eta   = ak4jeteta[jet2index]
-                    if (len(pass_ak4jet_index_cleaned)>2):jet3Eta   = ak4jeteta[jet3index]
+                    jet1Eta   = ak4jeteta[0]
+                    jet2Eta   = ak4jeteta[1]
+                    if (ep_THINnJet > 2):jet3Eta   = ak4jeteta[2]
 
-                    jet1Phi = ak4jetphi[jet1index]
-                    jet2Phi = ak4jetphi[jet2index]
-                    if (len(pass_ak4jet_index_cleaned)>2):jet3Phi = ak4jetphi[jet3index]
+                    jet1Phi = ak4jetphi[0]
+                    jet2Phi = ak4jetphi[1]
+                    if (ep_THINnJet >2 ):jet3Phi = ak4jetphi[2]
+		    #print 'jet1pT', jet1pT,'jet2pT', jet2pT, 'jet3pT',jet3pT
+                    additional_jets = ep_THINnJet -2
 
                     ## cal function for each of them 
-                    h_mass=125.
-                    
+                    #h_mass=125.
                     
                     ## cal function for each of them based on pt and eta
                     weightEle=1
@@ -349,14 +363,13 @@ def runbbdm(txtfile):
                     weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther 
 
 
-            dummy=1.0
             if isBoostedSR:
                 df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':nJets,
+                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
 						'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
 						'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,
 						'weight':weight
 					   },
 						ignore_index=True)
@@ -364,12 +377,12 @@ def runbbdm(txtfile):
             
             if  isResolvedSR: 
                 df_out_SR_resolved = df_out_SR_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId, 
-                                               'MET':ep_pfMetCorrPt, 'Njets_PassID':nJets, 
+                                               'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet, 
                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
-                                               'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet1CSV':ep_THINjetDeepCSV[jet1index], 
-                                               'Jet2Pt':jet2pT, 'Jet2Eta':jet2Eta, 'Jet2Phi':jet2Phi, 'Jet2CSV':ep_THINjetDeepCSV[jet2index],
+                                               'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet1CSV':ep_THINjetDeepCSV[0], 
+                                               'Jet2Pt':jet2pT, 'Jet2Eta':jet2Eta, 'Jet2Phi':jet2Phi, 'Jet2CSV':ep_THINjetDeepCSV[1],
                                                'Jet3Pt':jet3pT, 'Jet3Eta':jet3Eta, 'Jet3Phi':jet3Phi, 'Jet3CSV':dummy,
-                                               'DiJetMass':h_mass,
+                                               'DiJetMass':h_mass,'nJets':additional_jets,
                                                'weight':weight
                                            },
                                               ignore_index=True)

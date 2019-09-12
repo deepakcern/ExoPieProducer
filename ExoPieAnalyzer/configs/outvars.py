@@ -27,13 +27,13 @@ df_out_resolved = DataFrame(columns=['run', 'lumi', 'event', 'MET',
 df_out_SR_boosted = DataFrame(columns=['run', 'lumi', 'event', 'MET', 
                                        'Njets_PassID', 'Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho',
                                        'FJetPt', 'FJetEta', 'FJetPhi', 'FJetCSV', 'Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet2Pt','Jet2Eta', 'Jet2Phi',
-                                       'FJetMass', 'DiJetPt', 'DiJetEta',
+                                       'FJetMass', 'DiJetPt', 'DiJetEta','nJets',
                                        'weight'])
 
 df_out_SR_resolved = DataFrame(columns=['run', 'lumi', 'event', 'MET', 
                                         'Njets_PassID', 'Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho',
                                         'Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet2Pt','Jet2Eta', 'Jet2Phi', 'Jet3Pt','Jet3Eta','Jet3Phi','Jet1CSV', 'Jet2CSV','Jet3CSV',
-                                        'DiJetMass',
+                                        'DiJetMass','nJets',
                                         'weight'])
 
 
