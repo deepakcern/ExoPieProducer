@@ -159,13 +159,11 @@ def runbbdm(txtfile):
     df_out_SR_1b = out.df_out_SR_1b
     df_out_SR_2b = out.df_out_SR_2b
     #outputfilename = args.outputfile
-    h_total = TH1F('h_total','h_total',2,0,2)
-    h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
-
 
     filename = infile_
     ieve = 0;icount = 0
-
+    h_total = filename.Get('h_total')
+    h_total_mcweight = filename.Get('h_total_mcweight')
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
 
         for ep_runId, ep_lumiSection, ep_eventId, \
@@ -301,7 +299,7 @@ def runbbdm(txtfile):
             '''
             ## place all the selection for 2b SR.
             if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (nBjets==2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
-                isSR1b=True
+                isSR2b=True
                 ## cal function for each of them based on pt and eta
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
