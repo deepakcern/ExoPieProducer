@@ -39,6 +39,14 @@ sys.path.append('configs')
 import variables as var
 import outvars_monoH as out
 
+## from analysisutils
+if isCondor:sys.path.append('ExoPieUtils/scalefactortools/')
+else:sys.path.append('../../ExoPieUtils/scalefactortools/')
+##please change the era accordingly
+year_file= open("Year.py","w")
+year_file.write('era="2016"')
+year_file.close()
+import ana_weight as wgt
 
 ######################################################################################################
 ## All import are done before this
@@ -60,6 +68,7 @@ parser.add_argument("-runOnTXT", "--runOnTXT",action="store_true", dest="runOnTX
 parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
 parser.add_argument("-D", "--outputdir", dest="outputdir")
 parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
+parser.add_argument("-T", "--testing", action="store_true",  dest="testing")
 
 args = parser.parse_args()
 
@@ -67,6 +76,11 @@ if args.farmout==None:
     isfarmout = False
 else:
     isfarmout = args.farmout
+
+if args.testing==None:
+    istest = False
+else:
+    istest = args.testing
 
 if args.inputDir and isfarmout:
     dirName=args.inputDir
@@ -100,6 +114,7 @@ def TextToList(textfile):
 #### first element is the list of rootfiles
 #### second element is the key, user to name output.root
 
+dummy = -9999.0
 def runbbdm(txtfile):
 
 
@@ -111,25 +126,12 @@ def runbbdm(txtfile):
     prefix="Skimmed_"
     ikey_ = ""
 
+
     if  runInteractive:
-        print "running for ", txtfile
+        print "running for ", txtfile[0]
         infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-        outfilename= prefix+key_+".root"
-
-
-
-    if not runInteractive:
-        print "running for ", txtfile
-        infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-
-        ''' old
-        prefix="Skimmed_"
-        outfilename= prefix+infile_.split("/")[-1]
-        '''
-
-        outfilename= prefix+key_+".root"
+        #key_=txtfile[1]
+        outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
 
 
     if not runInteractive:
@@ -145,9 +147,16 @@ def runbbdm(txtfile):
     df_out_SR_resolved = out.df_out_SR_resolved
     df_out_SR_boosted = out.df_out_SR_boosted
     #outputfilename = args.outputfile
+
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
 
+    for infl in infile_:
+        f_tmp = TFile.Open(infl,'READ')
+        h_tmp = f_tmp.Get('h_total')
+        h_tmp_weight = f_tmp.Get('h_total_mcweight')
+        h_total.Add(h_tmp)
+        h_total_mcweight.Add(h_tmp_weight)
 
     filename = infile_
     ieve = 0;icount = 0
@@ -155,6 +164,7 @@ def runbbdm(txtfile):
 
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
+            ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
             ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetPhoEF, ep_THINjetEleEF, ep_THINjetMuoEF, \
@@ -167,12 +177,13 @@ def runbbdm(txtfile):
             ep_eleIsPasepight, ep_eleIsPassLoose, \
             ep_nPho, ep_phoIsPasepight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_iepightMuon, \
-	    ep_HPSTau_n,ep_Taudisc_againstLooseMu,ep_Taudisc_againstLooseEle,ep_tau_isoLoose,\
+            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
-            ep_mcweight, ep_nGenPar, ep_genParId, ep_genMomParId, ep_genParEp, ep_genParPx, ep_genParPy, ep_genParPz, ep_genParEnergy, \
+            ep_mcweight, ep_genParPt, ep_genParSample, \
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
+                   df.st_isData, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
                    df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, df.st_THINjetPhoEF, df.st_THINjetEleEF, df.st_THINjetMuoEF, \
@@ -185,10 +196,10 @@ def runbbdm(txtfile):
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
-                   df.st_HPSTau_n,df.st_Taudisc_againstLooseMuon,df.st_Taudisc_againstLooseElectron,df.st_tau_isoLoose,\
+                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
-                   df.mcweight, df.st_nGenPar, df.st_genParId, df.st_genMomParId, df.st_genParSt, df.st_genParPx, df.st_genParPy, df.st_genParPz, df.st_genParEnergy, \
+                   df.mcweight, df.st_genParPt, df.st_genParSample, \
 
             ):
 
@@ -223,18 +234,50 @@ def runbbdm(txtfile):
             fatjetpt = [getPt(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
             fatjeteta = [getEta(ep_fjetPx[ij], ep_fjetPy[ij], ep_fjetPz[ij]) for ij in range(ep_nfjet)]
             fatjetphi = [getPhi(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
-            #if ep_nfjet == 0 : continue
-            print "ep_nfjet",ep_nfjet
+
             pass_nfjetIndex = [index for index in range(ep_nfjet) if (fatjetpt[index] > 200.0 and abs(fatjeteta[index])< 2.5 and ep_fjetSDMass[index] > 100.0 and ep_fjetSDMass[index] < 150.0 and ep_fjetProbHbb[index] > 0.86) ]
             sel_nfjets = len(pass_nfjetIndex)
-            if sel_nfjets: fjetIndex = pass_nfjetIndex[0]
-            #if not sel_nfjets: continue
+            if (sel_nfjets==1):
+		fjetIndex = pass_nfjetIndex[0]
 
-	        '''
-            TAU HADRONIC COLLECTION
+
             '''
-            nTau = ep_HPSTau_n #[tauIndex for tauIndex in range(ep_HPSTau_n) if (ep_Taudisc_againstLooseMu[tauIndex] and ep_Taudisc_againstLooseEle[tauIndex] and ep_tau_isoLoose[tauIndex])]
-            print 'nTau',nTau
+            AK4JET COLLECTION
+            '''
+            ak4jetpt  = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+            ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
+            ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+
+
+            ak4_pt30_eta4p5  = [True for ij in range(ep_THINnJet)] #pt > 30 and eta < 4.5 is already applied at skimmer level
+            fjet_pt200_eta_2p5 = [True for ij in range(ep_nfjet)] #pt > 200 and eta < 2.5 is already applied at skimmer level
+            pass_ak4jet_index_cleaned = []
+            if ak4_pt30_eta4p5 > 0 and fjet_pt200_eta_2p5 > 0 :
+		ak4jet_cleaned_against_fjet = anautil.jetcleaning(ak4_pt30_eta4p5, fjet_pt200_eta_2p5, ak4jeteta, fatjeteta, ak4jetphi, fatjetphi,0.8)
+                pass_ak4jet_index_cleaned = boolutil.WhereIsTrue(ak4jet_cleaned_against_fjet)
+            #print 'pass_ak4jet_index_cleaned', pass_ak4jet_index_cleaned
+
+	    nJets_cleaned = len(pass_ak4jet_index_cleaned)
+            h_mass = -99999.0
+            #if nJets >= 2:
+
+
+
+            Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > 0.4941 and abs(ak4jeteta[ij]) < 2.5)]
+            nBjets = len(Bjet_index)
+            #print 'Bjet_index', Bjet_index
+
+            #print 'nJets', nJets, 'nBjets', nBjets
+
+	    '''
+            ------------------------------------------------------------------------------
+            TAU HADRONIC COLLECTION
+            ------------------------------------------------------------------------------
+            '''
+            ep_HPSTau_n = ep_nTau_discBased_looseElelooseMuVeto
+
+
+
             '''
             --------------------------------------------------------------------------------
             SIGNAL REGION BOOSTED
@@ -242,18 +285,35 @@ def runbbdm(txtfile):
             '''
 
             ## place all the selection for boosted SR.
-            if  ( sel_nfjets == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.):
+            if  (nJets_cleaned >=0) and (nBjets==0) and ( sel_nfjets == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_HPSTau_n==0) and (ep_nPho==0)and (ep_pfMetCorrPt > 200.):
                 isBoostedSR=True
-
+                jet1pT =  dummy
+                jet1Eta =  dummy
+                jet1Phi =  dummy
+                if len(pass_ak4jet_index_cleaned) > 0:
+		    jet1_endex = pass_ak4jet_index_cleaned[0]
+                    jet1pT  = ak4jetpt[jet1_endex]
+                    jet1Eta = ak4jeteta[jet1_endex]
+                    jet1Phi = ak4jetphi[jet1_endex]
+                additional_jets = nJets_cleaned
                 ## cal function for each of them based on pt and eta
+                weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
                 weightMu=1
                 weightB=1
                 weightTau=1
-                weightEWK=1
-                weightTop=1
-                weightPU=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightOther=1
+
 
                 weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
 
@@ -273,18 +333,31 @@ def runbbdm(txtfile):
             h_mass=-1
             ## Resolved selection will be applied IFF there is no boosted candidate
             if not isBoostedSR:
-                if (ep_THINnJet>2 and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) and (ep_THINjetDeepCSV[0]>0.8) and (ep_THINjetDeepCSV[1]>0.8)):
+                if ep_THINnJet < 2: continue
+                h_mass  = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0],ep_THINjetPx[1], ep_THINjetPy[1], ep_THINjetPz[1],ep_THINjetEnergy[1])
+                #print 'h_mass',h_mass
+                if (ep_THINnJet >=2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 170.) and (ep_THINjetDeepCSV[0] > 0.4941 and ep_THINjetDeepCSV[1] > 0.4941) and (abs(ak4jeteta[0]) < 2.5) and (abs(ak4jeteta[1]) < 2.5) and (h_mass > 100.0 and h_mass < 150.0) :
                     isResolvedSR=True
                     ## call the proper functions
+                    jet1pT=jet2pT=jet3pT=jet1Eta=jet2Eta=jet3Eta=jet1Phi=jet2Phi=jet3Phi=dummy
 
-                    ep_THINjetPt=[1 for ijet in range(ep_THINnJet)]
-                    ep_THINjetEta=[1 for ijet in range(ep_THINnJet)]
-                    ep_THINjetPhi=[1 for ijet in range(ep_THINnJet)]
+
+                    jet1pT    = ak4jetpt[0]
+                    jet2pT    = ak4jetpt[1]
+                    if (ep_THINnJet > 2):jet3pT    = ak4jetpt[2]
+
+                    jet1Eta   = ak4jeteta[0]
+                    jet2Eta   = ak4jeteta[1]
+                    if (ep_THINnJet > 2):jet3Eta   = ak4jeteta[2]
+
+                    jet1Phi = ak4jetphi[0]
+                    jet2Phi = ak4jetphi[1]
+                    if (ep_THINnJet >2 ):jet3Phi = ak4jetphi[2]
+		    #print 'jet1pT', jet1pT,'jet2pT', jet2pT, 'jet3pT',jet3pT
+                    additional_jets = ep_THINnJet -2
 
                     ## cal function for each of them
-                    n_bjets=2
-                    h_mass=125.
-
+                    #h_mass=125.
 
                     ## cal function for each of them based on pt and eta
                     weightEle=1
@@ -296,30 +369,32 @@ def runbbdm(txtfile):
                     weightPU=1
                     weightOther=1
 
+
                     weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
 
 
-            dummy=1.0
             if isBoostedSR:
                 df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
-						'Nbjets_PassID':n_bjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+						'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
 						'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':dummy, 'Jet1Eta':dummy, 'Jet1Phi':dummy, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,
 						'weight':weight
 					   },
 						ignore_index=True)
 
 
+
+
             if  isResolvedSR:
                 df_out_SR_resolved = df_out_SR_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
-                                               'Nbjets_PassID':n_bjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
-                                               'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1CSV':ep_THINjetDeepCSV[0],
-                                               'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2CSV':ep_THINjetDeepCSV[1],
-                                               'Jet3Pt':ep_THINjetPt[2], 'Jet3Eta':ep_THINjetEta[2], 'Jet3Phi':ep_THINjetPhi[2], 'Jet3CSV':ep_THINjetDeepCSV[2],
-                                               'DiJetMass':h_mass,
+                                               'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                               'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet1CSV':ep_THINjetDeepCSV[0],
+                                               'Jet2Pt':jet2pT, 'Jet2Eta':jet2Eta, 'Jet2Phi':jet2Phi, 'Jet2CSV':ep_THINjetDeepCSV[1],
+                                               'Jet3Pt':jet3pT, 'Jet3Eta':jet3Eta, 'Jet3Phi':jet3Phi, 'Jet3CSV':dummy,
+                                               'DiJetMass':h_mass,'nJets':additional_jets,
                                                'weight':weight
                                            },
                                               ignore_index=True)
@@ -327,7 +402,7 @@ def runbbdm(txtfile):
 
 
     outfilenameis=outfilename
-    df_out_SR_resolved.to_root(outfilenameis, key='monoHbb_SR_resolved',mode='a')
+    df_out_SR_resolved.to_root(outfilenameis, key='monoHbb_SR_resolved',mode='w')
     df_out_SR_boosted.to_root(outfilenameis, key='monoHbb_SR_boosted',mode='a')
 
     outfile = TFile(outfilenameis,'UPDATE')
@@ -339,9 +414,6 @@ def runbbdm(txtfile):
     print "output written to ", outfilename
     end = time.clock()
     print "%.4gs" % (end-start)
-
-
-
 
 
 if __name__ == '__main__':
@@ -387,5 +459,8 @@ if __name__ == '__main__':
             ## push information about one sample into global list.
             allsample.append(sample_)
         print allsample
-        pool.map(runbbdm, allsample)
+        if istest:
+            runbbdm(allsample)
+        else:
+            pool.map(runbbdm, allsample)
         ## this works fine but the output file name get same value becuase it is done via a text file at the moment, need to find a better way,

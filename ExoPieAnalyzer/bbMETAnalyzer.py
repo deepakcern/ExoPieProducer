@@ -110,12 +110,13 @@ debug_ = False
 
 
 def TextToList(textfile):
-    return([iline.rstrip()    for iline in open(textfile)])
+    return([iline.rstrip() for iline in open(textfile)])
 
 ## the input file list and key is caught in one variable as a python list,
 #### first element is the list of rootfiles
 #### second element is the key, user to name output.root
 
+dummy = -9999.0
 def runbbdm(txtfile):
 
     print "in main function"
@@ -125,29 +126,16 @@ def runbbdm(txtfile):
     prefix="Skimmed_"
     ikey_ = ""
 
+
     if  runInteractive:
-        print "running for ", txtfile
+        print "running for ", txtfile[0]
         infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-        outfilename= prefix+key_+".root"
-
+        #key_=txtfile[1]
+        outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
 
 
     if not runInteractive:
-        print "running for ", txtfile
-        infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-
-        ''' old
-        prefix="Skimmed_"
-        outfilename= prefix+infile_.split("/")[-1]
-        '''
-
-        outfilename= prefix+key_+".root"
-
-
-    if not runInteractive:
-	infile_=TextToList(txtfile)
+        infile_=TextToList(txtfile)
         prefix_ = '' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
         if outputdir!='.': prefix_ = outputdir+'/'
         print "prefix_", prefix_
@@ -160,10 +148,18 @@ def runbbdm(txtfile):
     df_out_SR_2b = out.df_out_SR_2b
     #outputfilename = args.outputfile
 
+    h_total = TH1F('h_total','h_total',2,0,2)
+    h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
+
+    for infl in infile_:
+        f_tmp = TFile.Open(infl,'READ')
+        h_tmp = f_tmp.Get('h_total')
+        h_tmp_weight = f_tmp.Get('h_total_mcweight')
+        h_total.Add(h_tmp)
+        h_total_mcweight.Add(h_tmp_weight)
     filename = infile_
     ieve = 0;icount = 0
-    h_total = filename.Get('h_total')
-    h_total_mcweight = filename.Get('h_total_mcweight')
+
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
 
         for ep_runId, ep_lumiSection, ep_eventId, \
@@ -177,7 +173,7 @@ def runbbdm(txtfile):
             ep_eleIsPasepight, ep_eleIsPassLoose, \
             ep_nPho, ep_phoIsPasepight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_iepightMuon, \
-            ep_HPSTau_n, ep_TausTightElectron, ep_myTausTightMuon, \
+            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
             ep_mcweight, ep_genParPt, ep_genParSample, \
@@ -192,7 +188,7 @@ def runbbdm(txtfile):
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
-                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,\
+                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample, \
@@ -253,7 +249,7 @@ def runbbdm(txtfile):
             ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetEta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
-            ep_THINbjets = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med)]
+            ep_THINbjets = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
             nBjets = len(ep_THINbjets)
 
             if len(ep_THINjetPt)==0: continue
@@ -271,7 +267,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 1b SR.
-            if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR1b=True
                 ## cal function for each of them based on pt and eta
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
@@ -298,7 +294,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 2b SR.
-            if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (nBjets==2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (nBjets==2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR2b=True
                 ## cal function for each of them based on pt and eta
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
@@ -351,13 +347,19 @@ def runbbdm(txtfile):
             if len(ep_THINjetPt)>1:
                 Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
                 Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
+            elif len(ep_THINjetPt)>2:
+                Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
+                Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
             else:
                 Jet2Pt  = dummy;Jet2Eta     = dummy
                 Jet2Phi = dummy;Jet2deepCSV = dummy
+                Jet3Pt  = dummy;Jet3Eta     = dummy
+                Jet3Phi = dummy;Jet3deepCSV = dummy
+
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_HPSTau_n,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
                                                     'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
@@ -365,16 +367,10 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-            if len(ep_THINjetPt)>2:
-                Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
-                Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
-            else:
-                Jet3Pt  = dummy;Jet3Eta     = dummy
-                Jet3Phi = dummy;Jet3deepCSV = dummy
             if isSR2b:
                 df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_HPSTau_n,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
                                                     'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
