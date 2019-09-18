@@ -347,12 +347,14 @@ def runbbdm(txtfile):
             if len(ep_THINjetPt)>1:
                 Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
                 Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
-            elif len(ep_THINjetPt)>2:
-                Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
-                Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
             else:
                 Jet2Pt  = dummy;Jet2Eta     = dummy
                 Jet2Phi = dummy;Jet2deepCSV = dummy
+
+            if len(ep_THINjetPt)>2:
+                Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
+                Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
+            else:
                 Jet3Pt  = dummy;Jet3Eta     = dummy
                 Jet3Phi = dummy;Jet3deepCSV = dummy
 
