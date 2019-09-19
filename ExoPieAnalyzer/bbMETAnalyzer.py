@@ -159,7 +159,10 @@ def runbbdm(txtfile):
         h_total_mcweight.Add(h_tmp_weight)
     filename = infile_
     ieve = 0;icount = 0
-
+    cut_ep_THINnJet_1b = 0.; cut_ep_THINjetDeepCSV_1b = 0.
+    cut_ep_THINnJet_2b = 0.; cut_ep_THINjetDeepCSV_2b = 0.
+    cut_ep_nLep = 0.0; cut_ep_pfMetCorrPt = 0.; cut_min_dPhi = 0.0
+    test_SR1b = 0.0; test_SR2b = 0.0
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
 
         for ep_runId, ep_lumiSection, ep_eventId, \
@@ -261,6 +264,21 @@ def runbbdm(txtfile):
             # min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ZmumuPhi) for jet_phi in ep_THINjetPhi])
             # min_dPhi_jet_GammaRecoil = min([DeltaPhi(jet_phi,GammaPhi) for jet_phi in ep_THINjetPhi])
 
+            if (ep_pfMetCorrPt > 200.):
+               cut_ep_pfMetCorrPt +=1
+               if (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0):
+                   cut_ep_nLep+=1
+                   if (min_dPhi_jet_MET > 0.5):
+                       cut_min_dPhi +=1
+                       if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           cut_ep_THINnJet_1b +=1;
+                           if (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                               cut_ep_THINjetDeepCSV_1b+=1
+                       elif (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           cut_ep_THINnJet_2b +=1
+                           if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                               cut_ep_THINjetDeepCSV_2b+=1
+
             Jet2Pt  = dummy;Jet2Eta     = dummy
             Jet2Phi = dummy;Jet2deepCSV = dummy
             Jet3Pt  = dummy;Jet3Eta     = dummy
@@ -271,8 +289,9 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 1b SR.
-            if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR1b=True
+                test_SR1b+=1
                 if ep_THINnJet==2:
                     Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
                     Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
@@ -301,8 +320,9 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 2b SR.
-            if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (not isSR1b) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR2b=True
+                test_SR2b+=1
                 if ep_THINnJet==3:
                     Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
                     Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
@@ -387,8 +407,19 @@ def runbbdm(txtfile):
     h_total_mcweight.Write()
     h_total.Write()
     outfile.Write()
-
-    print "output written to ", outfilename
+    print ("output written to ", outfilename)
+    print ('\n============cutflow============')
+    print ('cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi')
+    print (cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi)
+    print ('cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b')
+    print (cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b)
+    print ('cut_ep_THINnJet_2b,cut_ep_THINjetDeepCSV_2b')
+    print (cut_ep_THINnJet_2b,cut_ep_THINjetDeepCSV_2b)
+    print ('===============================\n')
+    print ('===========SR Entries==========')
+    print ('test_SR1b, test_SR2b')
+    print (test_SR1b, test_SR2b)
+    print ('===============================\n')
     end = time.clock()
     print "%.4gs" % (end-start)
 
