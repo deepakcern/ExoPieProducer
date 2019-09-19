@@ -249,8 +249,8 @@ def runbbdm(txtfile):
             ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetEta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
-            ep_THINbjets = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
-            nBjets = len(ep_THINbjets)
+            ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
+            nBjets = len(ep_THINbjets_index)
 
             if len(ep_THINjetPt)==0: continue
 
@@ -271,7 +271,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 1b SR.
-            if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR1b=True
                 if ep_THINnJet==2:
                     Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
@@ -301,7 +301,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 2b SR.
-            if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (nBjets==2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR2b=True
                 if ep_THINnJet==3:
                     Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
