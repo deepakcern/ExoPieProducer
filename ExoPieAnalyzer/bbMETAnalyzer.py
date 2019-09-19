@@ -195,7 +195,7 @@ def runbbdm(txtfile):
             ):
 
             ieve = ieve + 1
-            if ieve%1000==0: print "Processed",ieve,"Events"
+            if ieve%5000==0: print "Processed",ieve,"Events"
 
             isSR1b=False
             is1bCRWenu=False
@@ -261,6 +261,10 @@ def runbbdm(txtfile):
             # min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ZmumuPhi) for jet_phi in ep_THINjetPhi])
             # min_dPhi_jet_GammaRecoil = min([DeltaPhi(jet_phi,GammaPhi) for jet_phi in ep_THINjetPhi])
 
+            Jet2Pt  = dummy;Jet2Eta     = dummy
+            Jet2Phi = dummy;Jet2deepCSV = dummy
+            Jet3Pt  = dummy;Jet3Eta     = dummy
+            Jet3Phi = dummy;Jet3deepCSV = dummy
             '''
             --------------------------------------------------------------------------------
             1b SIGNAL REGION
@@ -269,6 +273,9 @@ def runbbdm(txtfile):
             ## place all the selection for 1b SR.
             if (ep_THINnJet ==1 or ep_THINnJet==2 ) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR1b=True
+                if ep_THINnJet==2:
+                    Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
+                    Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
                 ## cal function for each of them based on pt and eta
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
@@ -296,6 +303,9 @@ def runbbdm(txtfile):
             ## place all the selection for 2b SR.
             if (ep_THINnJet ==2 or ep_THINnJet==3 ) and (ep_THINjetPt[0] > 50.) and (nBjets==2) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR2b=True
+                if ep_THINnJet==3:
+                    Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
+                    Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
                 ## cal function for each of them based on pt and eta
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
@@ -343,20 +353,7 @@ def runbbdm(txtfile):
             #     weightOther=1
             #
             #     weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
-            dummy=-9999.0
-            if len(ep_THINjetPt)>1:
-                Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
-                Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
-            else:
-                Jet2Pt  = dummy;Jet2Eta     = dummy
-                Jet2Phi = dummy;Jet2deepCSV = dummy
 
-            if len(ep_THINjetPt)>2:
-                Jet3Pt  = ep_THINjetPt[2]; Jet3Eta     = ep_THINjetEta[2]
-                Jet3Phi = ep_THINjetPhi[2];Jet3deepCSV = ep_THINjetDeepCSV[2]
-            else:
-                Jet3Pt  = dummy;Jet3Eta     = dummy
-                Jet3Phi = dummy;Jet3deepCSV = dummy
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
@@ -420,7 +417,7 @@ if __name__ == '__main__':
 
     if runInteractive and not runOnTxt:
         ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
-        inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFiles"
+        inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFilesALL"
 
         os.system('rm dirlist.txt')
         os.system("ls -1 "+inputpath+" > dirlist.txt")
