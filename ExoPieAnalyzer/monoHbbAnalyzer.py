@@ -154,8 +154,15 @@ def runbbdm(txtfile):
     
     
     ## define global dataframes 
-    df_out_SR_resolved = out.df_out_SR_resolved
-    df_out_SR_boosted = out.df_out_SR_boosted
+    df_out_SR_resolved  = out.df_out_SR_resolved
+    df_out_SR_boosted   = out.df_out_SR_boosted
+   
+    df_out_Tope_boosted = out.df_out_Tope_boosted
+    df_out_Topmu_boosted= out.df_out_Topmu_boosted
+    df_out_We_boosted   = out.df_out_We_boosted
+    df_out_Wmu_boosted  = out.df_out_Wmu_boosted
+
+
     #outputfilename = args.outputfile
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
@@ -282,20 +289,32 @@ def runbbdm(txtfile):
             #ep_HPSTau_n = ep_nTau_discBased_looseElelooseMuVeto
             ep_HPSTau_n = ep_nTau_DRBased_EleMuVeto
 
-            elephi = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if (ep_eleIsPassLoose[ij]) ] 
-            elept = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if (ep_eleIsPassLoose[ij]) ]
-            
-            elephi_tight = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if (ep_eleIsPasepight[ij]) ]
-            elept_tight = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if (ep_eleIsPasepight[ij])]
+            elephi = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle)] 
+            elept = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle)]
+            eleeta = [getEta(ep_elePx[ij], ep_elePy[ij], ep_elePz[ij]) for ij in range(ep_nEle)]
+
+            ele_loose_index = [index for index in range(ep_nEle) if (ep_eleIsPassLoose[index])]
+            ele_tight_index = [index for index in range(ep_nEle) if (ep_eleIsPasepight[index]) and getPt(ep_elePx[ij], ep_elePy[ij]) > 40]
+
+            ''' 
+            elephi_tight = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if ((ep_eleIsPasepight[ij]) and getPt(ep_elePx[ij], ep_elePy[ij]) > 40) ]
+            elept_tight = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in range(ep_nEle) if (ep_eleIsPasepight[ij] and getPt(ep_elePx[ij], ep_elePy[ij]) > 40)]
+            eleeta_tight = [getEta(ep_elePx[ij], ep_elePy[ij], ep_elePz[ij]) for ij in range(ep_nEle) if (ep_eleIsPasepight[ij])]
+            '''
 
             muphi  = [getPhi(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu)]
-            mupt   = [getPt(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) ] 
+            mupt   = [getPt(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) ]
+            mueta = [getEta(ep_muPz[ij], ep_muPy[ij], ep_muPz[ij]) for ij in range(ep_nMu)]
+            muon_tight_index = [index for index in range(ep_nMu) if (ep_iepightMuon[index] and (mupt[ij] > 20) )] 
+            '''
+	    muphi_tight  = [getPhi(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) if (ep_iepightMuon[ij]) and (mupt[ij] > 20)]
+            mupt_tight   = [getPt(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) if (ep_iepightMuon[ij]) and (mupt[ij] > 20)]
+            '''
 
-	    muphi_tight  = [getPhi(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) if (ep_iepightMuon[ij]) and (mupt > 20)]
-            mupt_tight   = [getPt(ep_muPx[ij],ep_muPy[ij]) for ij in range(ep_nMu) if (ep_iepightMuon[ij]) and (mupt > 20)]
-            nEle_loose = len(elept)
-            nTightEle = len(elept_tight)
-            nTightMu  = len(mupt_tight) 
+            nEle_loose = len(ele_loose_index)
+            nTightEle  = len(ele_tight_index)
+            nLooseMu   = ep_nMu
+            nTightMu   = len(muon_tight_index) 
 
 
             '''
@@ -304,13 +323,11 @@ def runbbdm(txtfile):
             ------------------------------------------------------------------------------
             '''
 
-            #======   usage: WenuRecoil_Phi_Wmass(nEle,elept,elephi,elepx_,elepy_,met_,metphi_) =======
+            #======   usage: WRecoil_Phi_Wmass(nEle,elept,elephi,elepx_,elepy_,met_,metphi_) =======
 	    Werecoil, WerecoildPhi, WeMass = eventSelector.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-
-            #======   usage: WmunuRecoil_Phi_Wmass(nMu,mupt,muphi,mupx_, mupy_,met_,metphi_)  =========
             Wmurecoil, WmurecoildPhi, WmuMass = eventSelector.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
 
-            #======   usage: ZeeRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)
+            #======   usage: ZRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)=====
             ZeeRecoil,ZeeRecoil_dPhi,ZeeMass = eventSelector.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
             ZmumuRecoil,ZmumuRecoil_dPhi,ZmumuMass = eventSelector.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
 
@@ -338,7 +355,7 @@ def runbbdm(txtfile):
             ------------------------------------------------------------------------------
             '''
 
-            # ==== usage: getSel_boosted(nEle,nTightEle,nMu,nTightMu,nTau,nPho,nBjets,cleaned_ak4jets,nFatJet,pfMet,mini_ak4jet_MET_dPhi,ZeeRecoil,min_ak4jets_ZeeRecoil_dPhi,ZeeMass,ZmumuRecoil,min_ak4jets_ZmumuRecoil_dPhi,ZmumuMass,WenuRecoil,min_ak4jets_WenuRecoil_dPhi,WenuMass,WmunuRecoil,min_ak4jets_WmunuRecoil_dPhi,WmunuMass)
+            # ==== usage: getSel_boosted(nEle,nTightEle,nMu,nTightMu,nTau,nPho,nBjets,cleaned_ak4jets,nFatJet,pfMet,mini_ak4jet_MET_dPhi,ZeeRecoil,min_ak4jets_ZeeRecoil_dPhi,ZeeMass,ZmumuRecoil,min_ak4jets_ZmumuRecoil_dPhi,ZmumuMass,WenuRecoil,min_ak4jets_WenuRecoil_dPhi,WenuMass,WmunuRecoil,min_ak4jets_WmunuRecoil_dPhi,WmunuMass) ======
 
             region_boosted = eventSelector.getSel_boosted(ep_nEle,nTightEle,ep_nMu,nTightMu,ep_HPSTau_n,ep_nPho,nBjets,\
                      nJets_cleaned,sel_nfjets,ep_pfMetCorrPt,min_ak4jet_MET_dPhi,\
@@ -357,45 +374,128 @@ def runbbdm(txtfile):
             SIGNAL REGION BOOSTED
             --------------------------------------------------------------------------------
             '''
-            #ep_nPho==0, ep_HPSTau_n==0
+            weight = 1.0
+	    jet1pT=jet1Eta=jet1Phi= -9999.0
+            if nJets_cleaned > 0:
+                jet1pT           = ak4jetpt[pass_ak4jet_index_cleaned[0]]
+                jet1Eta          = ak4jeteta[pass_ak4jet_index_cleaned[0]]
+                jet1Phi          = ak4jetphi[pass_ak4jet_index_cleaned[0]]
 
-            ## place all the selection for boosted SR. 
-            if  (nJets_cleaned >=0) and (nBjets==0) and ( sel_nfjets == 1) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_HPSTau_n==0) and (ep_nPho==0) and (ep_pfMetCorrPt > 200.):
-                isBoostedSR=True
-                jet1pT =  dummy
-                jet1Eta =  dummy
-                jet1Phi =  dummy
-                if len(pass_ak4jet_index_cleaned) > 0:
-		    jet1_endex = pass_ak4jet_index_cleaned[0]
-                    jet1pT  = ak4jetpt[jet1_endex]
-                    jet1Eta = ak4jeteta[jet1_endex]
-                    jet1Phi = ak4jetphi[jet1_endex]
-                additional_jets = nJets_cleaned
-                ## cal function for each of them based on pt and eta
-                weightEle=1
-                weightMu=1
-                weightB=1
-                weightTau=1
-                weightEWK=1
-                weightTop=1
-                weightPU=1
-                weightOther=1
-                
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther 
-            
-                
+            if isBoostedSR:
+		fjet_index           = pass_nfjetIndex[0]
+                min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
+
+                df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
+                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,
+                                                'weight':weight
+                                           },
+                                                ignore_index=True)
+
+
+            '''
+            --------------------------------------------------------------------------------
+            TOP EleREGION BOOSTED
+            --------------------------------------------------------------------------------
+            '''
+ 
+            if isBoostedCRTope:
+                fjet_index           = pass_nfjetIndex[0]
+                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Werecoil
+                ele1_index           = ele_tight_index[0]
+
+                df_out_Tope_boosted  = df_out_Tope_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
+                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,
+						'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
+                                                'weight':weight
+                                           },
+                                                ignore_index=True)
+
+            '''
+            --------------------------------------------------------------------------------
+            TOP MuREGION BOOSTED
+            --------------------------------------------------------------------------------
+            '''
+
+
+	    if isBoostedCRTopmu:
+                fjet_index           = pass_nfjetIndex[0]
+                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Wmurecoil
+                muon1_index          = muon_tight_index[0]
+
+                df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
+                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,
+                                                'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
+                                                'weight':weight
+                                           },
+                                                ignore_index=True)
+
+            '''
+            --------------------------------------------------------------------------------
+            W EleREGION BOOSTED
+            --------------------------------------------------------------------------------
+            '''
+
+	    if isBoostedCRWenu:
+                fjet_index           = pass_nfjetIndex[0]
+                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Werecoil
+                ele1_index           = ele_tight_index[0]
+
+                df_out_We_boosted  = df_out_We_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
+                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,
+                                                'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
+                                                'weight':weight
+                                           },
+                                                ignore_index=True)
+            '''
+            --------------------------------------------------------------------------------
+            W MuREGION BOOSTED
+            --------------------------------------------------------------------------------
+            '''
+
+
+	    if isBoostedCRWmunu:
+                fjet_index           = pass_nfjetIndex[0]
+                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Wmurecoil
+                muon1_index          = muon_tight_index[0]
+                if nJets_cleaned > 0:
+                    jet1pT           = ak4jetpt[pass_ak4jet_index_cleaned[0]]
+                    jet1Eta          = ak4jeteta[pass_ak4jet_index_cleaned[0]]
+                    jet1Phi          = ak4jetphi[pass_ak4jet_index_cleaned[0]]
+
+                df_out_Wmu_boosted  = df_out_Wmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
+                                                'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
+                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,
+                                                'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
+                                                'weight':weight
+                                           },
+                                                ignore_index=True)
+
+
             ''' 
             --------------------------------------------------------------------------------
             SIGNAL REGION RESOLVED
             --------------------------------------------------------------------------------
             '''
             
-            
-            
-            ep_THINjetPt=[]
-            ep_THINjetEta=[]
-            ep_THINjetPhi=[]
-            n_bjets=-1
             h_mass=-1
             ## Resolved selection will be applied IFF there is no boosted candidate 
             if not isBoostedSR:
@@ -437,17 +537,6 @@ def runbbdm(txtfile):
                     
                     weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther 
 
-
-            if isBoostedSR:
-                df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
-						'Nbjets_PassID':nBjets, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':ep_nPho,
-						'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,
-						'weight':weight
-					   },
-						ignore_index=True)
                     
             
             if  isResolvedSR: 
@@ -467,13 +556,17 @@ def runbbdm(txtfile):
     outfilenameis=outfilename
     df_out_SR_resolved.to_root(outfilenameis, key='monoHbb_SR_resolved',mode='w')
     df_out_SR_boosted.to_root(outfilenameis, key='monoHbb_SR_boosted',mode='a')
+    df_out_Tope_boosted.to_root(outfilenameis, key='monoHbb_Tope_boosted', mode='a')
+    df_out_Topmu_boosted.to_root(outfilenameis, key='monoHbb_Topmu_boosted', mode='a')
+    df_out_We_boosted.to_root(outfilenameis, key='monoHbb_We_boosted', mode='a')
+    df_out_Wmu_boosted.to_root(outfilenameis, key='monoHbb_Wmu_boosted', mode='a')
     
     outfile = TFile(outfilenameis,'UPDATE')
     outfile.cd()
     h_total_mcweight.Write()
     h_total.Write()
     outfile.Write()
-    print 'counted events',count 
+
     print "output written to ", outfilename
     end = time.clock()
     print "%.4gs" % (end-start)
