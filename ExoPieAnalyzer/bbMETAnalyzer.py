@@ -59,8 +59,6 @@ start = time.clock()
 
 
 
-
-
 ## ----- command line argument
 usage = "analyzer for bb+DM (debugging) "
 parser = argparse.ArgumentParser(description=usage)
@@ -92,7 +90,6 @@ if args.runOnTXT:
     runOnTxt = True
 
 
-
 if isfarmout:
     infile  = args.inputfile
 
@@ -106,7 +103,6 @@ if args.outputdir:
 infilename = "NCUGlobalTuples.root"
 
 debug_ = False
-
 
 
 def TextToList(textfile):
@@ -126,13 +122,11 @@ def runbbdm(txtfile):
     prefix="Skimmed_"
     ikey_ = ""
 
-
     if  runInteractive:
         print "running for ", txtfile[0]
         infile_  = TextToList(txtfile[0])
         #key_=txtfile[1]
         outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
-
 
     if not runInteractive:
         infile_=TextToList(txtfile)
@@ -146,6 +140,22 @@ def runbbdm(txtfile):
     ## define global dataframes
     df_out_SR_1b = out.df_out_SR_1b
     df_out_SR_2b = out.df_out_SR_2b
+
+    df_out_ZeeCR_1b = out.df_out_ZeeCR_1b
+    df_out_ZeeCR_2b = out.df_out_ZeeCR_2b
+    df_out_ZmumuCR_1b = out.df_out_ZmumuCR_1b
+    df_out_ZmumuCR_2b = out.df_out_ZmumuCR_2b
+
+    df_out_WenuCR_1b = out.df_out_WenuCR_1b
+    df_out_WenuCR_2b = out.df_out_WenuCR_2b
+    df_out_WmunuCR_1b = out.df_out_WmunuCR_1b
+    df_out_WmunuCR_2b = out.df_out_WmunuCR_2b
+
+    df_out_TopenuCR_1b = out.df_out_TopenuCR_1b
+    df_out_TopenuCR_2b = out.df_out_TopenuCR_2b
+    df_out_TopmunuCR_1b = out.df_out_TopmunuCR_1b
+    df_out_TopmunuCR_2b = out.df_out_TopmunuCR_2b
+
     #outputfilename = args.outputfile
 
     h_total = TH1F('h_total','h_total',2,0,2)
@@ -157,14 +167,15 @@ def runbbdm(txtfile):
         h_tmp_weight = f_tmp.Get('h_total_mcweight')
         h_total.Add(h_tmp)
         h_total_mcweight.Add(h_tmp_weight)
+
     filename = infile_
     ieve = 0;icount = 0
     cut_ep_THINnJet_1b = 0.; cut_ep_THINjetDeepCSV_1b = 0.
     cut_ep_THINnJet_2b = 0.; cut_ep_THINjetDeepCSV_2b = 0.
     cut_ep_nLep = 0.0; cut_ep_pfMetCorrPt = 0.; cut_min_dPhi = 0.0
     test_SR1b = 0.0; test_SR2b = 0.0
-    for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
 
+    for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
             ep_isData, \
@@ -173,9 +184,9 @@ def runbbdm(txtfile):
             ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetPhoEF, ep_THINjetEleEF, ep_THINjetMuoEF, \
             ep_THINjetCorrUnc, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
-            ep_eleIsPasepight, ep_eleIsPassLoose, \
-            ep_nPho, ep_phoIsPasepight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
-            ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_iepightMuon, \
+            ep_eleIsPassTight, ep_eleIsPassLoose, \
+            ep_nPho, ep_phoIsPassTight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
+            ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_isTightMuon, \
             ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
@@ -195,7 +206,7 @@ def runbbdm(txtfile):
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample, \
-            ):
+                   ):
 
             ieve = ieve + 1
             if ieve%5000==0: print "Processed",ieve,"Events"
@@ -205,16 +216,16 @@ def runbbdm(txtfile):
             is1bCRWmunu=False
             is1bCRZee=False
             is1bCRZmumu=False
-            is1bCRTope=False
-            is1bCRTopmu=False
+            is1bCRTopenu=False
+            is1bCRTopmunu=False
 
             isSR2b=False
             is2bCRWenu=False
             is2bCRWmunu=False
             is2bCRZee=False
             is2bCRZmumu=False
-            is2bCRTope=False
-            is2bCRTopmu=False
+            is2bCRTopenu=False
+            is2bCRTopmunu=False
 
             deepCSV_Med = 0.6321
             '''
@@ -258,11 +269,10 @@ def runbbdm(txtfile):
             if len(ep_THINjetPt)==0: continue
 
             min_dPhi_jet_MET = min([DeltaPhi(jet_phi,ep_pfMetCorrPhi) for jet_phi in ep_THINjetPhi])
-            # min_dPhi_jet_WenuRecoil = min([DeltaPhi(jet_phi,WenuPhi) for jet_phi in ep_THINjetPhi])
-            # min_dPhi_jet_WmunuRecoil = min([DeltaPhi(jet_phi,WmunuPhi) for jet_phi in ep_THINjetPhi])
-            # min_dPhi_jet_ZeeRecoil = min([DeltaPhi(jet_phi,ZeePhi) for jet_phi in ep_THINjetPhi])
-            # min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ZmumuPhi) for jet_phi in ep_THINjetPhi])
-            # min_dPhi_jet_GammaRecoil = min([DeltaPhi(jet_phi,GammaPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_WenuRecoil = min([DeltaPhi(jet_phi,WenuPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_WmunuRecoil = min([DeltaPhi(jet_phi,WmunuPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_ZeeRecoil = min([DeltaPhi(jet_phi,ZeePhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ZmumuPhi) for jet_phi in ep_THINjetPhi])
 
             if (ep_pfMetCorrPt > 200.):
                cut_ep_pfMetCorrPt +=1
@@ -283,6 +293,7 @@ def runbbdm(txtfile):
             Jet2Phi = dummy;Jet2deepCSV = dummy
             Jet3Pt  = dummy;Jet3Eta     = dummy
             Jet3Phi = dummy;Jet3deepCSV = dummy
+
             '''
             --------------------------------------------------------------------------------
             1b SIGNAL REGION
@@ -347,33 +358,339 @@ def runbbdm(txtfile):
 
                 weight = weightMET*weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
 
-            # '''
-            # --------------------------------------------------------------------------------
-            # WENU CONTROL REGION 1b
-            # --------------------------------------------------------------------------------
-            # '''
-            # ## place all the selection for Wenu SR.
-            # if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.):
-            #     is1bCRWenu=True
-            #     ## cal function for each of them based on pt and eta
-            #     weightEle=wgt.ele_weight()
-            #     weightMu=1
-            #     weightB=1
-            #     weightTau=1
-            #     if ep_genParSample==23:
-            #         weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
-            #     elif ep_genParSample==24:
-            #         weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
-            #     if ep_genParSample==6:
-            #         weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
-            #     else:
-            #         weightEWK = 1.0
-            #         weightTop = 1.0
-            #     weightPU=wgt.puweight(ep_pu_nTrueInt)
-            #     weightOther=1
-            #
-            #     weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            ZEE CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Zee SR.
+            if (not isSR2b) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 2) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRZee=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                no_ele_trig = False
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')*wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
 
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            ZEE CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Zee SR.
+            if (not is1bCRZee) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRZee=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                no_ele_trig = False
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')*wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+
+            '''
+            --------------------------------------------------------------------------------
+            ZMUMU CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Zmumu SR.
+            if (not is2bCRZee) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRZmumu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                no_mu_trig = False
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            ZMUMU CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Zmumu SR.
+            if (not is1bCRZmumu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRZmumu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                no_mu_trig = False
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+
+            '''
+            --------------------------------------------------------------------------------
+            WENU CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Wenu SR.
+            if (not is2bCRZmumu) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRWenu=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                weightEle=ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            WENU CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Wenu SR.
+            if (not is1bCRWenu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRWenu=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+
+            '''
+            --------------------------------------------------------------------------------
+            WMUNU CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Wmunu SR.
+            if (not is2bCRWenu) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRWmunu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            WMUNU CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Wmunu SR.
+            if (not is1bCRWmunu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRWmunu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+
+            '''
+            --------------------------------------------------------------------------------
+            TOPENU CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Topenu SR.
+            if (not is2bCRTopmunu) and (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopenuRecoil > 200.) and (ep_Topenumass <= 160) and (min_dPhi_jet_TopenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRTopenu=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            TOPENU CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Topenu SR.
+            if (not is1bCRTopenu) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopenuRecoil > 200.) and (ep_Topenumass <= 160) and (min_dPhi_jet_TopenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRTopenu=True
+                ## cal function for each of them based on pt and eta
+                ele_trig = True
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
+                weightMu=1
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+
+            '''
+            --------------------------------------------------------------------------------
+            TOPMUNU CONTROL REGION 1b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Topmunu SR.
+            if (not is2bCRTopenu) and (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopmunuRecoil > 200.) and (ep_Topmunumass <= 160) and (min_dPhi_jet_TopmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                is1bCRTopmunu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
+            '''
+            --------------------------------------------------------------------------------
+            TOPMUNU CONTROL REGION 2b
+            --------------------------------------------------------------------------------
+            '''
+            ## place all the selection for Topmunu SR.
+            if (not is1bCRTopmunu) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopmunuRecoil > 200.) and (ep_Topmunumass <= 160) and (min_dPhi_jet_TopmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+                is2bCRTopmunu=True
+                ## cal function for each of them based on pt and eta
+                weightEle=1
+                mu_trig = True
+                weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
+                weightB=1
+                weightTau=1
+                if ep_genParSample==23:
+                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                elif ep_genParSample==24:
+                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample==6:
+                    weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                else:
+                    weightEWK = 1.0
+                    weightTop = 1.0
+                weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightOther=1
+
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
@@ -398,15 +715,197 @@ def runbbdm(txtfile):
                                                     },ignore_index=True
                                                    )
 
+            if is1bCRZee:
+                df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_ZeeRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRZee:
+                df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
+                                                    'dPhi_jetMET':min_dPhi_jet_ZeeRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+
+            if is1bCRZmumu:
+                df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_ZmumuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRZmumu:
+                df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
+                                                    'dPhi_jetMET':min_dPhi_jet_ZmumuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is1bCRWenu:
+                df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_WenuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRWenu:
+                df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'dPhi_jetMET':min_dPhi_jet_WenuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+
+            if is1bCRWmunu:
+                df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_WmunuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRWmunu:
+                df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'dPhi_jetMET':min_dPhi_jet_WmunuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+
+            if is1bCRTopenu:
+                df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_WenuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRTopenu:
+                df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'dPhi_jetMET':min_dPhi_jet_WenuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+
+            if is1bCRTopmunu:
+                df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_WmunuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
+                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
+            if is2bCRTopmunu:
+                df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'dPhi_jetMET':min_dPhi_jet_WmunuRecoil,
+                                                    'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
+                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
+                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
+                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
+                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
+                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
+                                                    'weight':weight
+                                                    },ignore_index=True
+                                                   )
     outfilenameis=outfilename
     df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b',mode='a')
     df_out_SR_2b.to_root(outfilenameis, key='bbDM_SR_2b',mode='a')
+
+    df_out_ZeeCR_1b.to_root(outfilenameis, key='bbDM_ZeeCR_1b',mode='a')
+    df_out_ZeeCR_2b.to_root(outfilenameis, key='bbDM_ZeeCR_2b',mode='a')
+    df_out_ZmumuCR_1b.to_root(outfilenameis, key='bbDM_ZmumuCR_1b',mode='a')
+    df_out_ZmumuCR_2b.to_root(outfilenameis, key='bbDM_ZmumuCR_2b',mode='a')
+
+    df_out_WenuCR_1b.to_root(outfilenameis, key='bbDM_WenuCR_1b',mode='a')
+    df_out_WenuCR_2b.to_root(outfilenameis, key='bbDM_WenuCR_2b',mode='a')
+    df_out_WmunuCR_1b.to_root(outfilenameis, key='bbDM_WmunuCR_1b',mode='a')
+    df_out_WmunuCR_2b.to_root(outfilenameis, key='bbDM_WmunuCR_2b',mode='a')
+
+    df_out_TopenuCR_1b.to_root(outfilenameis, key='bbDM_TopenuCR_1b',mode='a')
+    df_out_TopenuCR_2b.to_root(outfilenameis, key='bbDM_TopenuCR_2b',mode='a')
+    df_out_TopmunuCR_1b.to_root(outfilenameis, key='bbDM_TopmunuCR_1b',mode='a')
+    df_out_TopmunuCR_2b.to_root(outfilenameis, key='bbDM_TopmunuCR_2b',mode='a')
 
     outfile = TFile(outfilenameis,'UPDATE')
     outfile.cd()
     h_total_mcweight.Write()
     h_total.Write()
     outfile.Write()
+
     print ("output written to ", outfilename)
     print ('\n============cutflow============')
     print ('cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi')
