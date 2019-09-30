@@ -178,6 +178,9 @@ def runbbdm(txtfile):
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
+            ep_WenuPhi, ep_WmunuPhi, ep_ZeePhi, ep_ZmumuPhi, \
+            ep_ZeeRecoil, ep_ZmumuRecoil, ep_WenuRecoil, ep_WmunuRecoil, \
+            ep_Zeemass, ep_Zmumumass, ep_Wenumass, ep_Wmunumass, \
             ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
@@ -187,12 +190,15 @@ def runbbdm(txtfile):
             ep_eleIsPassTight, ep_eleIsPassLoose, \
             ep_nPho, ep_phoIsPassTight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_isTightMuon, \
-            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
+            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
             ep_mcweight, ep_genParPt, ep_genParSample, \
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
+                   df.WenuPhi, df.WmunuPhi, df.ZeePhi, df.ZmumuPhi, \
+                   df.ZeeRecoil, df.ZmumuRecoil, df.WenuRecoil, df.WmunuRecoil, \
+                   df.ZeeMass, df.ZmumuMass, df.Wenumass, df.Wmunumass, \
                    df.st_isData, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
@@ -202,7 +208,7 @@ def runbbdm(txtfile):
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
-                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
+                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample, \
@@ -268,11 +274,13 @@ def runbbdm(txtfile):
 
             if len(ep_THINjetPt)==0: continue
 
+            # WenuPhi = WmunuPhi = ZeePhi = ZmumuPhi = 0.001
+            # ep_ZeeRecoil = ep_ZmumuRecoil = ep_WenuRecoil = ep_WmunuRecoil = 200.0
             min_dPhi_jet_MET = min([DeltaPhi(jet_phi,ep_pfMetCorrPhi) for jet_phi in ep_THINjetPhi])
-            min_dPhi_jet_WenuRecoil = min([DeltaPhi(jet_phi,WenuPhi) for jet_phi in ep_THINjetPhi])
-            min_dPhi_jet_WmunuRecoil = min([DeltaPhi(jet_phi,WmunuPhi) for jet_phi in ep_THINjetPhi])
-            min_dPhi_jet_ZeeRecoil = min([DeltaPhi(jet_phi,ZeePhi) for jet_phi in ep_THINjetPhi])
-            min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ZmumuPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_WenuRecoil = min([DeltaPhi(jet_phi,ep_WenuPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_WmunuRecoil = min([DeltaPhi(jet_phi,ep_WmunuPhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_ZeeRecoil = min([DeltaPhi(jet_phi,ep_ZeePhi) for jet_phi in ep_THINjetPhi])
+            min_dPhi_jet_ZmumuRecoil = min([DeltaPhi(jet_phi,ep_ZmumuPhi) for jet_phi in ep_THINjetPhi])
 
             if (ep_pfMetCorrPt > 200.):
                cut_ep_pfMetCorrPt +=1
@@ -316,6 +324,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -331,7 +340,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 2b SR.
-            if (not isSR1b) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+            if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                 isSR2b=True
                 test_SR2b+=1
                 if ep_THINnJet==3:
@@ -347,6 +356,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -364,7 +374,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (not isSR2b) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 2) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 2) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRZee=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -377,6 +387,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -392,7 +403,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (not is1bCRZee) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRZee=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -405,6 +416,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -414,14 +426,13 @@ def runbbdm(txtfile):
                 weightOther=1
 
                 weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
-
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION 1b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (not is2bCRZee) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -434,6 +445,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -449,7 +461,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (not is1bCRZmumu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -462,6 +474,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -478,11 +491,11 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (not is2bCRZmumu) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRWenu=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
-                weightEle=ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
+                weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
                 weightMu=1
                 weightB=1
                 weightTau=1
@@ -490,6 +503,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -505,7 +519,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (not is1bCRWenu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRWenu=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -517,6 +531,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -526,14 +541,13 @@ def runbbdm(txtfile):
                 weightOther=1
 
                 weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
-
             '''
             --------------------------------------------------------------------------------
             WMUNU CONTROL REGION 1b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (not is2bCRWenu) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRWmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -545,6 +559,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -560,7 +575,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (not is1bCRWmunu) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRWmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -572,6 +587,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -581,14 +597,13 @@ def runbbdm(txtfile):
                 weightOther=1
 
                 weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
-
             '''
             --------------------------------------------------------------------------------
             TOPENU CONTROL REGION 1b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (not is2bCRTopmunu) and (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopenuRecoil > 200.) and (ep_Topenumass <= 160) and (min_dPhi_jet_TopenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRTopenu=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -600,6 +615,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -615,7 +631,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (not is1bCRTopenu) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopenuRecoil > 200.) and (ep_Topenumass <= 160) and (min_dPhi_jet_TopenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WenuRecoil > 200.) and (ep_Wenumass <= 160) and (min_dPhi_jet_WenuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRTopenu=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -627,6 +643,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -636,14 +653,13 @@ def runbbdm(txtfile):
                 weightOther=1
 
                 weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightOther
-
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION 1b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (not is2bCRTopenu) and (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopmunuRecoil > 200.) and (ep_Topmunumass <= 160) and (min_dPhi_jet_TopmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -655,6 +671,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -670,7 +687,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (not is1bCRTopmunu) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (nBjets==1) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_HPSTau_n==0) and (ep_pfMetCorrPt > 50.) and (ep_TopmunuRecoil > 200.) and (ep_Topmunumass <= 160) and (min_dPhi_jet_TopmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_WmunuRecoil > 200.) and (ep_Wmunumass <= 160) and (min_dPhi_jet_WmunuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -682,6 +699,7 @@ def runbbdm(txtfile):
                     weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
                     weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 else:
@@ -703,6 +721,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('isSR1b')
             if isSR2b:
                 df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
@@ -714,6 +733,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('isSR2b')
 
             if is1bCRZee:
                 df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
@@ -729,6 +749,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is1bCRZee')
             if is2bCRZee:
                 df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
@@ -743,7 +764,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-
+                if istest: print ('is2bCRZee')
             if is1bCRZmumu:
                 df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
@@ -758,6 +779,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is1bCRZmumu')
             if is2bCRZmumu:
                 df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
@@ -772,6 +794,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is2bCRZmumu')
             if is1bCRWenu:
                 df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -785,6 +808,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                print ('is1bCRWenu')
             if is2bCRWenu:
                 df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -798,7 +822,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-
+                if istest: print ('is2bCRWenu')
             if is1bCRWmunu:
                 df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -809,10 +833,10 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is1bCRWmunu')
             if is2bCRWmunu:
                 df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -826,7 +850,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-
+                if istest: print ('is2bCRWmunu')
             if is1bCRTopenu:
                 df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -840,6 +864,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is1bCRTopenu')
             if is2bCRTopenu:
                 df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -853,7 +878,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-
+                if istest: print ('is2bCRTopenu')
             if is1bCRTopmunu:
                 df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -864,14 +889,14 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
                 df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
-                                                    'dPhi_jetMET':min_dPhi_jet_WmunuRecoil,
+                                                    'dPhi_jetRecoil':min_dPhi_jet_WmunuRecoil,
                                                     'NTau':ep_nTau_discBased_looseElelooseMuVeto,'NEle':ep_nEle,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
                                                     'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
@@ -881,8 +906,9 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
+                if istest: print ('is2bCRTopmunu')
     outfilenameis=outfilename
-    df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b',mode='a')
+    df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b',mode='w')
     df_out_SR_2b.to_root(outfilenameis, key='bbDM_SR_2b',mode='a')
 
     df_out_ZeeCR_1b.to_root(outfilenameis, key='bbDM_ZeeCR_1b',mode='a')
@@ -905,6 +931,7 @@ def runbbdm(txtfile):
     h_total_mcweight.Write()
     h_total.Write()
     outfile.Write()
+    outfile.Close()
 
     print ("output written to ", outfilename)
     print ('\n============cutflow============')
@@ -947,7 +974,9 @@ if __name__ == '__main__':
 
     if runInteractive and not runOnTxt:
         ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
-        inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFilesALL"
+        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFilesALL"
+        inputpath= "/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/V0/MC_USCM_25Sep"
+        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/test_rootFile"
 
         os.system('rm dirlist.txt')
         os.system("ls -1 "+inputpath+" > dirlist.txt")

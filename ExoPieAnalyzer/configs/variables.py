@@ -1,5 +1,8 @@
 allvars_bbDM=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_pfMetCorrPt', 'st_pfMetCorrPhi', 'st_pfMetUncJetResUp', 'st_pfMetUncJetResDown', 'st_pfMetUncJetEnUp', 'st_pfMetUncJetEnDown', \
+'WenuPhi', 'WmunuPhi', 'ZeePhi', 'ZmumuPhi', \
+'ZeeRecoil', 'ZmumuRecoil', 'WenuRecoil', 'WmunuRecoil', \
+'ZeeMass', 'ZmumuMass', 'Wenumass', 'Wmunumass', \
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
