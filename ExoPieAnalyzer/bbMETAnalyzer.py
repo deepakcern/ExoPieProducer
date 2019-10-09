@@ -102,8 +102,9 @@ if args.outputdir:
 
 infilename = "NCUGlobalTuples.root"
 
-debug_ = False
+debug = False
 
+outDir=outputdir
 
 def TextToList(textfile):
     return([iline.rstrip() for iline in open(textfile)])
@@ -123,10 +124,13 @@ def runbbdm(txtfile):
     ikey_ = ""
 
     if  runInteractive:
-        print "running for ", txtfile[0]
-        infile_  = TextToList(txtfile[0])
-        #key_=txtfile[1]
-        outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
+        # print "running for ", txtfile[0]
+        # infile_  = TextToList(txtfile[0])
+        # key_=txtfile[1]
+        # outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
+        print "running for ", txtfile
+        infile_  = TextToList(txtfile)
+        outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
 
     if not runInteractive:
         infile_=TextToList(txtfile)
@@ -233,6 +237,7 @@ def runbbdm(txtfile):
             is2bCRTopenu=False
             is2bCRTopmunu=False
 
+            #deepCSV_Med = 0.8484  # for old DMsimp sample, this deepcsv means CSVv2
             deepCSV_Med = 0.6321
             '''
             -------------------------------------------------------------------------------
@@ -321,9 +326,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -353,9 +358,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -384,9 +389,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -413,9 +418,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -442,9 +447,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -471,9 +476,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -500,9 +505,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -528,9 +533,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -556,9 +561,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -584,9 +589,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -612,9 +617,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -640,9 +645,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -668,9 +673,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -696,9 +701,9 @@ def runbbdm(txtfile):
                 weightB=1
                 weightTau=1
                 if ep_genParSample==23:
-                    weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
                 elif ep_genParSample==24:
-                    weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                    if len(ep_genParPt)==1: weightEWK=wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
                 else: weightEWK = 1.0
                 if ep_genParSample==6:
                     weightTop=wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
@@ -721,7 +726,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('isSR1b')
+                if debug: print ('isSR1b')
             if isSR2b:
                 df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
@@ -733,7 +738,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('isSR2b')
+                if debug: print ('isSR2b')
 
             if is1bCRZee:
                 df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
@@ -749,7 +754,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is1bCRZee')
+                if debug: print ('is1bCRZee')
             if is2bCRZee:
                 df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
@@ -764,7 +769,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRZee')
+                if debug: print ('is2bCRZee')
             if is1bCRZmumu:
                 df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
@@ -779,7 +784,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is1bCRZmumu')
+                if debug: print ('is1bCRZmumu')
             if is2bCRZmumu:
                 df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
@@ -794,7 +799,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRZmumu')
+                if debug: print ('is2bCRZmumu')
             if is1bCRWenu:
                 df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -808,7 +813,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                print ('is1bCRWenu')
+                if debug: print ('is1bCRWenu')
             if is2bCRWenu:
                 df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -822,7 +827,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRWenu')
+                if debug: print ('is2bCRWenu')
             if is1bCRWmunu:
                 df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -836,7 +841,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is1bCRWmunu')
+                if debug: print ('is1bCRWmunu')
             if is2bCRWmunu:
                 df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -850,7 +855,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRWmunu')
+                if debug: print ('is2bCRWmunu')
             if is1bCRTopenu:
                 df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -864,7 +869,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is1bCRTopenu')
+                if debug: print ('is1bCRTopenu')
             if is2bCRTopenu:
                 df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
@@ -878,7 +883,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRTopenu')
+                if debug: print ('is2bCRTopenu')
             if is1bCRTopmunu:
                 df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -892,7 +897,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is1bCRTopmunu')
+                if debug: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
                 df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
@@ -906,7 +911,7 @@ def runbbdm(txtfile):
                                                     'weight':weight
                                                     },ignore_index=True
                                                    )
-                if istest: print ('is2bCRTopmunu')
+                if debug: print ('is2bCRTopmunu')
     outfilenameis=outfilename
     df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b',mode='w')
     df_out_SR_2b.to_root(outfilenameis, key='bbDM_SR_2b',mode='a')
@@ -953,7 +958,7 @@ def runbbdm(txtfile):
 
 if __name__ == '__main__':
     if not runInteractive:
-        txtFile='signal_sample.txt'#infile
+        txtFile=infile
         runbbdm(txtFile)
 
     if runInteractive and runOnTxt:
@@ -961,22 +966,26 @@ if __name__ == '__main__':
         files     = glob.glob(filesPath)
         n = 8 #submit n txt files at a time, make equal to cores
         final = [files[i * n:(i + 1) * n] for i in range((len(files) + n - 1) // n )]
-        for i in range(len(final)):
-            try:
-                pool = mp.Pool(8)
-                pool.map(runbbdm,final[i])
-                pool.close()
-                pool.join()
-            except Exception as e:
-                print e
-                print "Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i]
-                continue
+        if istest:
+            runbbdm,final[0]
+        else:
+            for i in range(len(final)):
+                try:
+                    pool = mp.Pool(8)
+                    pool.map(runbbdm,final[i])
+                    pool.close()
+                    pool.join()
+                except Exception as e:
+                    print e
+                    print "Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i]
+                    continue
 
     if runInteractive and not runOnTxt:
         ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
         #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFilesALL"
-        inputpath= "/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/V0/MC_USCM_25Sep"
-        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/test_rootFile"
+        #inputpath= "/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/V0/MC_USCM_25Sep"
+        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/CondorJobs_v2/Filelists_v1"
+        inputpath="/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/test_rootFile/test_root_file"
 
         os.system('rm dirlist.txt')
         os.system("ls -1 "+inputpath+" > dirlist.txt")
