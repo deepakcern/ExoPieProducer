@@ -379,7 +379,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 2) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 2) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRZee=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -408,7 +408,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 1) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZeeRecoil > 200.) and (ep_Zeemass >= 60 and ep_Zeemass <= 110) and (min_dPhi_jet_ZeeRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRZee=True
                 ## cal function for each of them based on pt and eta
                 ele_trig = True
@@ -437,7 +437,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
+            if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med):
                 is1bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
@@ -466,7 +466,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
+            if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_nEle == 0) and (ep_nMu == 1) and (ep_nPho ==0) and (ep_nTau_discBased_looseElelooseMuVeto==0) and (ep_pfMetCorrPt > 50.) and (ep_ZmumuRecoil > 200.) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 110) and (min_dPhi_jet_ZmumuRecoil > 0.5) and (ep_THINjetCHadEF[0]) >0.1 and (ep_THINjetNHadEF[0] < 0.8) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                 is2bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
