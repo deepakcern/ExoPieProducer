@@ -42,6 +42,7 @@ import outvars_bbDM as out
 ## from analysisutils
 if isCondor:sys.path.append('ExoPieUtils/scalefactortools/')
 else:sys.path.append('../../ExoPieUtils/scalefactortools/')
+
 ##please change the era accordingly
 year_file= open("Year.py","w")
 year_file.write('era="2016"')
@@ -323,7 +324,7 @@ def runbbdm(txtfile):
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -355,7 +356,7 @@ def runbbdm(txtfile):
                 weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
                 weightEle=1
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -386,7 +387,7 @@ def runbbdm(txtfile):
                 no_ele_trig = False
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')*wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -415,7 +416,7 @@ def runbbdm(txtfile):
                 no_ele_trig = False
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')*wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -444,7 +445,7 @@ def runbbdm(txtfile):
                 mu_trig = True
                 no_mu_trig = False
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -473,7 +474,7 @@ def runbbdm(txtfile):
                 mu_trig = True
                 no_mu_trig = False
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -502,7 +503,7 @@ def runbbdm(txtfile):
                 ele_trig = True
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -530,7 +531,7 @@ def runbbdm(txtfile):
                 ele_trig = True
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -558,7 +559,7 @@ def runbbdm(txtfile):
                 weightEle=1
                 mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -586,7 +587,7 @@ def runbbdm(txtfile):
                 weightEle=1
                 mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -614,7 +615,7 @@ def runbbdm(txtfile):
                 ele_trig = True
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -642,7 +643,7 @@ def runbbdm(txtfile):
                 ele_trig = True
                 weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
                 weightMu=1
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -670,7 +671,7 @@ def runbbdm(txtfile):
                 weightEle=1
                 mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
@@ -698,7 +699,7 @@ def runbbdm(txtfile):
                 weightEle=1
                 mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
-                weightB=1
+                weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor)
                 weightTau=1
                 if ep_genParSample==23:
                     if len(ep_genParPt)==1: weightEWK=wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
