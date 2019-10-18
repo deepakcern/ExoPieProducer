@@ -8,6 +8,28 @@ for ibit in range(len(bits)):
     y = bits[ibit] << ibit
     z = z ^ y
     print bits[ibit], y, z
+    
+## now based on the value of z we can decide which cuts were passed. 
+print "z  = ",z
 
-    ## now based on the value of z we can decide which cuts were passed. 
-    #print ibit
+print "binary output= ",bin(z)
+
+
+def setBits(n):
+    x = 1 ## always 1
+    y = 0
+    z = 0
+    for i in range(n):
+        y = x << i
+        z = z ^ y
+        
+    return z
+        
+for i in [1,2,3,4,5,6]:
+    
+    print i, setBits(i), setBits(i) & z 
+    
+    if setBits(i) == (setBits(i) & z) :
+        print ("all selection upto ",i," passed")
+        
+        ## for those cuts, when this print statement is print on screen will be added in the cutflow histogram 
