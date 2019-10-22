@@ -1,0 +1,11 @@
+NLO_pseudo_mphi_50_mchi_1 3.769e-02
+NLO_pseudo_mphi_100_mchi_1 2.072e-02
+NLO_pseudo_mphi_350_mchi_1 1.237e-03
+NLO_pseudo_mphi_400_mchi_1 5.773e-04
+NLO_pseudo_mphi_500_mchi_1 2.802e-04
+NLO_pseudo_mphi_1000_mchi_1 1.372e-05
+NLO_scalar_mphi_300_mchi_1 2.623e-03
+NLO_scalar_mphi_350_mchi_1 1.811e-03
+NLO_scalar_mphi_400_mchi_1 9.503e-04
+NLO_scalar_mphi_500_mchi_1 3.766e-04
+NLO_scalar_mphi_750_mchi_1 5.411e-05

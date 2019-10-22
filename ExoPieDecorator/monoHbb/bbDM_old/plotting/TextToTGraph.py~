@@ -1,0 +1,45 @@
+from ROOT import TGraph, TFile
+from array import array
+import os
+
+
+inputstring_ = ['scalar','pseudo']
+
+for inputstring in inputstring_:
+    filename = 'limits_bbDM2016'+inputstring+'.txt'
+    f = open(filename,"r") 
+    med=array('f')
+    expm2=array('f')
+    expm1=array('f')
+    expmed=array('f')
+    expp1=array('f')
+    expp2=array('f')
+    obs=array('f')
+
+    for line in f:
+        med.append(float(line.rstrip().split()[0]))
+        expm2.append(float(line.rstrip().split()[2]))
+        expm1.append(float(line.rstrip().split()[3]))
+        expmed.append(float(line.rstrip().split()[4]))
+        expp1.append(float(line.rstrip().split()[5]))
+        expp2.append(float(line.rstrip().split()[6]))
+        obs.append(float(line.rstrip().split()[7]))
+
+    g_expm2  = TGraph(int(len(med)), med, expm2 )   ;  g_expm2.SetName("expm2")
+    g_expm1  = TGraph(int(len(med)), med, expm1 )   ;  g_expm1.SetName("expm1")
+    g_expmed = TGraph(int(len(med)), med, expmed)   ;  g_expmed.SetName("expmed")
+    g_expp1  = TGraph(int(len(med)), med, expp1 )   ;  g_expp1.SetName("expp1")
+    g_expp2  = TGraph(int(len(med)), med, expp2 )   ;  g_expp2.SetName("expp2")
+    g_obs    = TGraph(int(len(med)), med, obs   )   ;  g_obs.SetName("obs")
+    
+
+    f1 = TFile(str(inputstring)+'.root','RECREATE')
+    g_expm2.Write() 
+    g_expm1.Write() 
+    g_expmed.Write()
+    g_expp1.Write() 
+    g_expp2.Write() 
+    g_obs.Write() 
+
+    f1.Write()
+    f1.Close()

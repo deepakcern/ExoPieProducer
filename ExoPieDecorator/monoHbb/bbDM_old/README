@@ -1,0 +1,31 @@
+Step1: Convert the rootfiles into workspace. 
+
+This can be done using AddRooDataHistFast.C. This macro need the required rootfiles in the data directory. 
+
+root -l -b -q AddRooDataHistFast.C
+
+For each file it will create a new rootfile with postfix ws and will be saved in the same directory. 
+
+This has now workspace with all the histograms converted into RooDataHist. The shapes are now ready to be used for limits. 
+
+Step2: Create datacards for each mass point. 
+
+I have created one template datacard combining all the datacards and adding rate parameters for major background (rate param still need work). This is done to construct a model which will be used for the fit and extracting the limits. 
+
+The template combined datacards "comb_tmpl.txt" can be changed and a new datacard can created for each mass point using the script: RunLimitOnAll.py
+
+Create the datacards using: 
+
+python RunLimitOnAll.py create
+
+Run the datacards using: 
+
+python RunLimitOnAll.py run
+
+It will print the limit values for each mass point on your screen. These values can be used to draw the limit plot or just a table. 
+
+Step3: Plotting. 
+
+For plotting you can use following macros, 
+
+First create 1d TGraph for each quantile and then in the second step plot them on same canvas with required cosmetics. 

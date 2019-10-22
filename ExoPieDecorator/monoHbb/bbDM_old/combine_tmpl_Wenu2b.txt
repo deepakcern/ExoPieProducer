@@ -1,0 +1,43 @@
+# Simple counting experiment, with one signal and a few background processes 
+# First iteration of the bbDM 2016
+
+imax *  number of channels
+jmax *  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+# add information about the shapes
+
+shapes * Wenu2b data/bbDM_2016_Wenu_2b_ws.root bbDM_2016:$PROCESS bbDM_2016:$PROCESS_$SYSTEMATIC
+------------
+
+
+bin   Wenu2b  
+observation -1
+------------
+
+
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+bin              Wenu2b     Wenu2b      Wenu2b      Wenu2b      Wenu2b     
+process         LO_pseudo_mphi_20_mchi_1     Top     STop     DYJets   DIBOSON
+process          -1      1        2        3        4 
+rate              -1     -1       -1       -1       -1
+------------
+
+
+lumi                    lnN     1.025       1.025    1.025     1.025      1.025
+CMS2016_scale_pu        lnN     1.001       1.001    1.001     1.001      1.001
+CMS2016_eff_b           lnN     1.10        -        -          -          -  
+CMS2016_fake_b          lnN      -          1.05     1.05       1.05       1.05
+pdf_accept              lnN     1.01        1.01     1.01       1.01   	  1.01
+CMS2016_scale_e         lnN     1.01        1.01     1.01       1.01       1.01
+CMS2016_scale_m         lnN     1.01        1.01     1.01       1.01       1.01
+CMS2016_eff_t           lnN     1.03        1.03     1.03       1.03       1.03
+CMS2016_eff_met         lnN     1.04        1.04     1.04       1.04   	  1.04
+
+
+
+#lumi affects both signal and MC-driven backgrounds. lnN = lognormal
+

@@ -1,0 +1,16 @@
+[?1034h{'NLO_pseudo_mphi_400_mchi_1': '5.773e-04', 'NLO_scalar_mphi_500_mchi_1': '3.766e-04', 'NLO_scalar_mphi_300_mchi_1': '2.623e-03', 'NLO_pseudo_mphi_1000_mchi_1': '1.372e-05', 'NLO_scalar_mphi_750_mchi_1': '5.411e-05', 'NLO_scalar_mphi_400_mchi_1': '9.503e-04', 'NLO_pseudo_mphi_350_mchi_1': '1.237e-03', 'NLO_pseudo_mphi_100_mchi_1': '2.072e-02', 'NLO_pseudo_mphi_50_mchi_1': '3.769e-02', 'NLO_pseudo_mphi_500_mchi_1': '2.802e-04', 'NLO_scalar_mphi_350_mchi_1': '1.811e-03'}
+NLO_scalar_mphi_300_mchi_1 0.6707 0.002623 255.699580633
+NLO_scalar_mphi_350_mchi_1 0.4014 0.001811 221.645499724
+NLO_scalar_mphi_400_mchi_1 0.5234 0.0009503 550.773439966
+NLO_scalar_mphi_500_mchi_1 0.418 0.0003766 1109.93096123
+NLO_scalar_mphi_750_mchi_1 0.2255 5.411e-05 4167.43670301
+array('f', [300.0, 350.0, 400.0, 500.0, 750.0])
+array('f', [200.19062805175781, 167.91827392578125, 450.69976806640625, 946.62774658203125, 3394.936279296875])
+array('f', [255.6995849609375, 221.64549255371094, 550.7734375, 1109.930908203125, 4167.4365234375])
+array('f', [345.13916015625, 308.17227172851562, 712.1961669921875, 1373.0748291015625, 5414.8955078125])
+array('f', [475.82919311523438, 432.24737548828125, 947.80596923828125, 1761.5506591796875, 7205.69189453125])
+array('f', [639.4205322265625, 591.99334716796875, 1247.500732421875, 2242.432373046875, 9484.3837890625])
+Traceback (most recent call last):
+  File "TextToTGraph.py", line 62, in <module>
+    print expm2.GetErrorYhigh(1)
+AttributeError: 'array.array' object has no attribute 'GetErrorYhigh'
