@@ -366,6 +366,7 @@ void PrepareWS(){
   // Open input file with all the histograms. 
   TFile* fin = OpenRootFile(inputfile);
   
+  /*
   
   // --------------------------------------------------------------
   // ------------------------Signal region ------------------------
@@ -382,7 +383,7 @@ void PrepareWS(){
   // Import just created RooDataHist into the workspace. 
   wspace.import(dh_B_sr_data);
   std::cout<<" debug 3c" <<std::endl;
-
+  */
   
 
   //the following lines create a freely floating parameter for each of our bins (in this example, there are only 7 bins, defined for our observable met.
@@ -532,15 +533,14 @@ void PrepareWS(){
   
   // all other histograms 
   std::vector<TString> regions; 
-  regions.push_back("SR");
+  //regions.push_back("SR");
+  regions.push_back("TOPE");
+  regions.push_back("TOPMU");
+  regions.push_back("WE");
+  regions.push_back("WMU");
+  regions.push_back("ZEE");
+  regions.push_back("ZMUMU");
   
-  /*regions.push_back("Topmunu");
-  regions.push_back("Wenu");
-  regions.push_back("Wmunu");
-  regions.push_back("Zee");
-  regions.push_back("Zmumu");
-  regions.push_back("SR");
-  */
   
   std::vector<TString> process;
   
