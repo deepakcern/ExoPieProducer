@@ -1,28 +1,29 @@
-## analyzer code here 
+## analyzer code here
 
-The analysis code is mainly written in the monoHbbAnalyzer.py file. This will create a .root file with trees for each CR/SR. 
-
-
-
-### How to run 
-
-''' python monoHbbAnalyzer.py '''
+The analysis code is mainly written in the monoHbbAnalyzer.py file. This will create a .root file with trees for each CR/SR.
 
 
 
-The output tree can be used to make 
+### How to run
+##for interactive run:
 
-1. the histogram and then make stack plots using the same framework used earlier. 
-
-2. use tree to make the stack plots using matplotlib (it is possible but slightly tricky to make divide canvas) 
-
-3. use tree to do the optimisation of one of the variable one might need. You have to remove cut on this variable and save in the rootfile. 
+''' python bbMETAnalyzer.py -runOnTXT -F -inDir inputtextFileDir -D outputDir '''
 
 
-For 1. i.e. make histogram use the script DataFrameToHisto.py, which save histogram in a .root file. 
 
-### How to run 
+The output tree can be used to make
 
-''' python DataFrameToHisto.py ''' 
+1. the histogram and then make stack plots using the same framework used earlier.
+
+2. use tree to make the stack plots using matplotlib (it is possible but slightly tricky to make divide canvas)
+
+3. use tree to do the optimisation of one of the variable one might need. You have to remove cut on this variable and save in the rootfile.
+
+
+For 1. i.e. make histogram use the script DataFrameToHisto_bbDM.py, which save histogram in a .root file.
+
+### How to run
+
+''' python DataFrameToHisto_bbDM.py -F -inDir Analyser_OutPut -D Output_Histograms '''
 
 ''' TreeSelector.py: it has the template to select the dataframe in one line. '''
