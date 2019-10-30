@@ -123,13 +123,13 @@ def runbbdm(txtfile):
     ikey_ = ""
 
     if  runInteractive:
-        print "running for ", txtfile[0]
-        infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-        outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
-        # print "running for ", txtfile
-        # infile_  = TextToList(txtfile)
-        # outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
+        # print "running for ", txtfile[0]
+        # infile_  = TextToList(txtfile[0])
+        # key_=txtfile[1]
+        # outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
+        print "running for ", txtfile
+        infile_  = TextToList(txtfile)
+        outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
 
     if not runInteractive:
         infile_=TextToList(txtfile)
@@ -340,6 +340,17 @@ def runbbdm(txtfile):
             Jet3Phi = dummy;Jet3deepCSV = dummy
 
             '''
+            -------------------------------------------------------------------------------
+            CR VARS
+            -------------------------------------------------------------------------------
+            '''
+            if ep_nEle_index ==2: ZpT_ee = math.sqrt( (ep_elePx[0]+ep_elePx[1])*(ep_elePx[0]+ep_elePx[1]) + (ep_elePy[0]+ep_elePy[1])*(ep_elePy[0]+ep_elePy[1]))
+            if ep_nMu==2: ZpT_mumu = math.sqrt( (ep_muPx[0]+ep_muPx[1])*(ep_muPx[0]+ep_muPx[1]) + (ep_muPy[0]+ep_muPy[1])*(ep_muPy[0]+ep_muPy[1]))
+
+            if ep_nEle_index ==1: WpT_enu = math.sqrt((ep_pfMetCorrPt*math.cos(ep_pfMetCorrPhi) + ep_elePx[0])**2 + ( ep_pfMetCorrPt*math.sin(ep_pfMetCorrPhi) + ep_elePy[0])**2)
+            if ep_nMu==1: WpT_munu = math.sqrt((ep_pfMetCorrPt*math.cos(ep_pfMetCorrPhi) + ep_muPx[0])**2 + ( ep_pfMetCorrPt*math.sin(ep_pfMetCorrPhi) + ep_muPy[0])**2)
+
+            '''
             --------------------------------------------------------------------------------
             SIGNAL REGION Cutflow
             --------------------------------------------------------------------------------
@@ -430,7 +441,7 @@ def runbbdm(txtfile):
             ZEE CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_ZeeRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_ZeeRecoil > 200.) :
                Zee_cut_ep_Recoil +=1
                if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) :
                    Zee_cut_ep_nLep+=1
@@ -460,7 +471,7 @@ def runbbdm(txtfile):
             #     z = z ^ y
             # ## now based on the value of z we can decide which cuts were passed.
             # print "z  = ",z
-            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 ZeeCR1bcount+=1
                 is1bCRZee=True
                 ## cal function for each of them based on pt and eta
@@ -490,7 +501,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 ZeeCR2bcount+=1
                 is2bCRZee=True
                 ## cal function for each of them based on pt and eta
@@ -519,7 +530,7 @@ def runbbdm(txtfile):
             ZMUMU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_ZmumuRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_ZmumuRecoil > 200.) :
                 #print 'Zmumu_cut_ep_Recoil'
                 Zmumu_cut_ep_Recoil +=1
                 if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
@@ -547,7 +558,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.):
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision :
                 ZmumuCR1count+=1
                 is1bCRZmumu=True
                 ## cal function for each of them based on pt and eta
@@ -577,7 +588,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 ZmumuCR2count+=1
                 is2bCRZmumu=True
                 ## cal function for each of them based on pt and eta
@@ -605,7 +616,7 @@ def runbbdm(txtfile):
             WENU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_WenuRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_WenuRecoil > 200.) :
                 #print 'Wenu_cut_ep_Recoil'
                 Wenu_cut_ep_Recoil +=1
                 if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
@@ -633,7 +644,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 WenuCR1bcount+=1
                 is1bCRWenu=True
                 ## cal function for each of them based on pt and eta
@@ -662,7 +673,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 WenuCR2bcount+=1
                 is2bCRWenu=True
                 ## cal function for each of them based on pt and eta
@@ -690,7 +701,7 @@ def runbbdm(txtfile):
             WMUNU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_WmunuRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_WmunuRecoil > 200.) :
                 #print 'Wmunu_cut_ep_Recoil'
                 Wmunu_cut_ep_Recoil +=1
                 if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
@@ -718,7 +729,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
                 WmunuCR1bcount+=1
                 is1bCRWmunu=True
                 ## cal function for each of them based on pt and eta
@@ -747,7 +758,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 WmunuCR2bcount+=1
                 is2bCRWmunu=True
                 ## cal function for each of them based on pt and eta
@@ -775,7 +786,7 @@ def runbbdm(txtfile):
             TOPENU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_WenuRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_WenuRecoil > 200.) :
                 #print 'Wenu_cut_ep_Recoil'
                 Topenu_cut_ep_Recoil +=1
                 if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
@@ -801,7 +812,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 TopenuCR1bcount+=1
                 is1bCRTopenu=True
                 ## cal function for each of them based on pt and eta
@@ -830,7 +841,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 TopenuCR2bcount+=1
                 is2bCRTopenu=True
                 ## cal function for each of them based on pt and eta
@@ -858,7 +869,7 @@ def runbbdm(txtfile):
             TOPMUNU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-            if (ep_WmunuRecoil > 200.) and (ep_pfMetCorrPt > 50.):
+            if (ep_WmunuRecoil > 200.) :
                 #print 'Wenu_cut_ep_Recoil'
                 Topmunu_cut_ep_Recoil +=1
                 if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
@@ -886,7 +897,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
                 TopmunuCR1bcount+=1
                 is1bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
@@ -914,7 +925,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision and (ep_pfMetCorrPt > 50.) :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 TopmunuCR2bcount+=1
                 is2bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
@@ -964,8 +975,8 @@ def runbbdm(txtfile):
 
             if is1bCRZee:
                 df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
-                                                    'dPhi_jetRecoil':min_dPhi_jet_MET,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
+                                                    'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
                                                     'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
@@ -979,7 +990,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRZee')
             if is2bCRZee:
                 df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -994,8 +1005,8 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRZee')
             if is1bCRZmumu:
                 df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
-                                                    'dPhi_jetRecoil':min_dPhi_jet_MET,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
+                                                    'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
                                                     'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
@@ -1009,7 +1020,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRZmumu')
             if is2bCRZmumu:
                 df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1024,7 +1035,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRZmumu')
             if is1bCRWenu:
                 df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1038,7 +1049,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRWenu')
             if is2bCRWenu:
                 df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1052,7 +1063,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRWenu')
             if is1bCRWmunu:
                 df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1066,7 +1077,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRWmunu')
             if is2bCRWmunu:
                 df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1080,7 +1091,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRWmunu')
             if is1bCRTopenu:
                 df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1094,7 +1105,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRTopenu')
             if is2bCRTopenu:
                 df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1108,7 +1119,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRTopenu')
             if is1bCRTopmunu:
                 df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1122,7 +1133,7 @@ def runbbdm(txtfile):
                 if istest: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
                 df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,
+                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -1153,7 +1164,7 @@ def runbbdm(txtfile):
     df_out_TopmunuCR_1b.to_root(outfilenameis, key='bbDM_TopmunuCR_1b',mode='a')
     df_out_TopmunuCR_2b.to_root(outfilenameis, key='bbDM_TopmunuCR_2b',mode='a')
 
-    cfsr_list = {1:'MET',2:'nLep',3:'min_dPhi',5:'nJet',6:'nBjets'}
+    cfsr_list = {1:'MET',2:'nLep',3:'min_dPhi',4:'nJet',5:'nBjets'}
     print ('\n============SR cutflow============')
     print ('cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b')
     print (cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b)
