@@ -185,6 +185,7 @@ filename=infile
 
 def runFile(filename,trees):
     tf =  ROOT.TFile(filename)
+    h_reg_SR_1b_cutFlow = tf.Get('h_reg_SR_1b_cutFlow')
     h_reg_SR_2b_cutFlow = tf.Get('h_reg_SR_2b_cutFlow')
     h_reg_ZeeCR_1b_cutFlow = tf.Get('h_reg_ZeeCR_1b_cutFlow')
     h_reg_ZeeCR_2b_cutFlow = tf.Get('h_reg_ZeeCR_2b_cutFlow')
