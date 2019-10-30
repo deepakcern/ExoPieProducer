@@ -69,7 +69,6 @@ def VarToHist(df_var,df_weight, HISTNAME,binning):
 
     h_var  = SetHist(HISTNAME, binning)
     weight=1.0
-    print df_var
     for index, value in enumerate(df_var):
         #print 'index',index,'value',value, 'weight',df_weight[index]
         weight = df_weight[index]
