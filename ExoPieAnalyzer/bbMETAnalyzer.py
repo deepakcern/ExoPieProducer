@@ -375,7 +375,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 1b SR.
-            if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_nEle_index == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and mettrigdecision:
+            if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_nEle_index == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and mettrigdecision:
                 isSR1b=True
                 SR1bcount+=1
                 if ep_THINnJet==2:
@@ -399,7 +399,6 @@ def runbbdm(txtfile):
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
 
-
                 weight = weightMET*weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
@@ -407,7 +406,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for 2b SR.
-            if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle_index == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and mettrigdecision:
+            if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (ep_nEle_index == 0) and (ep_nMu == 0) and (ep_nPho ==0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_pfMetCorrPt > 200.) and (min_dPhi_jet_MET > 0.5) and mettrigdecision:
                 isSR2b=True
                 SR2bcount+=1
                 if ep_THINnJet==3:
@@ -463,15 +462,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            # zeeCF_bits=[int(eletrigdecision), int(ep_ZeeRecoil > 200. and ep_pfMetCorrPt > 50.) , int(ep_nEle_index == 2 and ep_elePt[0] > 30. and ep_eleIsPassTight[0] and ep_nMu == 0 and ep_nTau_discBased_TightEleTightMuVeto==0) , int(min_dPhi_jet_MET > 0.5) , int(ep_Zeemass >= 60 and ep_Zeemass <= 120) , int(ep_THINnJet ==1 or ep_THINnJet ==2 and ep_THINjetPt[0] > 50. and ep_THINjetCHadEF[0] >0.1 and ep_THINjetNHadEF[0] < 0.8) , int(ep_THINjetDeepCSV[0] > deepCSV_Med)]
-            # x=1 ## always 1
-            # y=0;z=0
-            # for ibit in range(len(zeeCF_bits)):
-            #     y = zeeCF_bits[ibit] << ibit
-            #     z = z ^ y
-            # ## now based on the value of z we can decide which cuts were passed.
-            # print "z  = ",z
-            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
+            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 ZeeCR1bcount+=1
                 is1bCRZee=True
                 ## cal function for each of them based on pt and eta
@@ -501,7 +492,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zee SR.
-            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
+            if (ep_ZeeRecoil > 200.) and (ep_nEle_index == 2) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zeemass >= 60 and ep_Zeemass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 ZeeCR2bcount+=1
                 is2bCRZee=True
                 ## cal function for each of them based on pt and eta
@@ -558,7 +549,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision :
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision :
                 ZmumuCR1count+=1
                 is1bCRZmumu=True
                 ## cal function for each of them based on pt and eta
@@ -579,16 +570,16 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_ZmumuRecoil)
 
-
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 ZmumuCR2count+=1
                 is2bCRZmumu=True
                 ## cal function for each of them based on pt and eta
@@ -609,8 +600,9 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_ZmumuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
             '''
             --------------------------------------------------------------------------------
             WENU CONTROL REGION Cutflow
@@ -644,7 +636,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 WenuCR1bcount+=1
                 is1bCRWenu=True
                 ## cal function for each of them based on pt and eta
@@ -673,7 +665,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 WenuCR2bcount+=1
                 is2bCRWenu=True
                 ## cal function for each of them based on pt and eta
@@ -729,7 +721,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
                 WmunuCR1bcount+=1
                 is1bCRWmunu=True
                 ## cal function for each of them based on pt and eta
@@ -749,16 +741,16 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
             '''
             --------------------------------------------------------------------------------
             WMUNU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 WmunuCR2bcount+=1
                 is2bCRWmunu=True
                 ## cal function for each of them based on pt and eta
@@ -778,9 +770,9 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
             '''
             --------------------------------------------------------------------------------
             TOPENU CONTROL REGION Cutflow
@@ -812,7 +804,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and eletrigdecision  :
                 TopenuCR1bcount+=1
                 is1bCRTopenu=True
                 ## cal function for each of them based on pt and eta
@@ -841,7 +833,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topenu SR.
-            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
+            if (ep_WenuRecoil > 200.) and (ep_nEle_index == 1) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wenumass >= 0 and ep_Wenumass <= 160) and (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and eletrigdecision  :
                 TopenuCR2bcount+=1
                 is2bCRTopenu=True
                 ## cal function for each of them based on pt and eta
@@ -897,7 +889,7 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
                 TopmunuCR1bcount+=1
                 is1bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
@@ -917,15 +909,16 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
                 TopmunuCR2bcount+=1
                 is2bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
@@ -945,8 +938,9 @@ def runbbdm(txtfile):
                     weightEWK = 1.0
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
+                weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
