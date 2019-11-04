@@ -399,7 +399,7 @@ def runbbdm(txtfile):
                     weightTop = 1.0
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
 
-                weight = weightMET*weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
+                weight = weightMET * weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
             2b SIGNAL REGION
@@ -549,12 +549,12 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision :
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mutrigdecision :
                 ZmumuCR1count+=1
                 is1bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 no_mu_trig = False
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
@@ -572,19 +572,19 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_ZmumuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU 
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Zmumu SR.
-            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_ZmumuRecoil > 200.) and (ep_nMu == 2) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) and (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mutrigdecision  :
                 ZmumuCR2count+=1
                 is2bCRZmumu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 no_mu_trig = False
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
@@ -602,7 +602,7 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_ZmumuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
             WENU CONTROL REGION Cutflow
@@ -721,12 +721,12 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mutrigdecision  :
                 WmunuCR1bcount+=1
                 is1bCRWmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightTau=1
@@ -743,19 +743,19 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
             WMUNU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Wmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mutrigdecision  :
                 WmunuCR2bcount+=1
                 is2bCRWmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightTau=1
@@ -772,7 +772,7 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
             TOPENU CONTROL REGION Cutflow
@@ -889,12 +889,12 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and mutrigdecision  :
                 TopmunuCR1bcount+=1
                 is1bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightTau=1
@@ -911,19 +911,19 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION 2b
             --------------------------------------------------------------------------------
             '''
             ## place all the selection for Topmunu SR.
-            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mettrigdecision  :
+            if (ep_WmunuRecoil > 200.) and (ep_nMu == 1) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and (ep_nEle_index == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (min_dPhi_jet_MET > 0.5) and (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) and (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and mutrigdecision  :
                 TopmunuCR2bcount+=1
                 is2bCRTopmunu=True
                 ## cal function for each of them based on pt and eta
                 weightEle=1
-                mu_trig = False
+                mu_trig = True
                 weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
                 weightB=wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightTau=1
@@ -940,7 +940,7 @@ def runbbdm(txtfile):
                 weightPU=wgt.puweight(ep_pu_nTrueInt)
                 weightMET=wgt.getMETtrig_First(ep_WmunuRecoil)
 
-                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU * weightMET
+                weight = weightEle * weightMu * weightB * weightTau * weightEWK * weightTop * weightPU
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
