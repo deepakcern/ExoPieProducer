@@ -362,11 +362,11 @@ def runbbdm(txtfile):
                    cut_ep_nLep+=1
                    if (min_dPhi_jet_MET > 0.5):
                        cut_min_dPhi +=1
-                       if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                       if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                            cut_ep_THINnJet_1b +=1;
                            if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                cut_ep_THINjetDeepCSV_1b+=1
-                       elif (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                       elif (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                            cut_ep_THINnJet_2b +=1
                            if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                cut_ep_THINjetDeepCSV_2b+=1
@@ -449,11 +449,11 @@ def runbbdm(txtfile):
                        Zee_cut_min_dPhi +=1
                        if (ep_Zeemass >= 60 and ep_Zeemass <= 120):
                            Zee_cut_ep_Zeemass +=1
-                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                Zee_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    Zee_cut_ep_THINjetDeepCSV_1b+=1
-                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                Zee_cut_ep_THINnJet_2b +=1
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    Zee_cut_ep_THINjetDeepCSV_2b+=1
@@ -534,13 +534,13 @@ def runbbdm(txtfile):
                        if (ep_Zmumumass >= 60 and ep_Zmumumass <= 120):
                            #print 'Zmumu_cut_ep_Zmumumass'
                            Zmumu_cut_ep_Zmumumass +=1
-                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                #print 'Zmumu_cut_ep_THINnJet_1b'
                                Zmumu_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    #print 'Zmumu_cut_ep_THINjetDeepCSV_1b'
                                    Zmumu_cut_ep_THINjetDeepCSV_1b+=1
-                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                Zmumu_cut_ep_THINnJet_2b +=1
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    Zmumu_cut_ep_THINjetDeepCSV_2b+=1
@@ -621,13 +621,13 @@ def runbbdm(txtfile):
                        if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
                            #print 'Wenu_cut_ep_Wenumass'
                            Wenu_cut_ep_Wenumass +=1
-                           if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
                                #print 'Wenu_cut_ep_THINnJet_1b'
                                Wenu_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    #print 'Wenu_cut_ep_THINjetDeepCSV_1b'
                                    Wenu_cut_ep_THINjetDeepCSV_1b+=1
-                           elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                Wenu_cut_ep_THINnJet_2b +=1
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    Wenu_cut_ep_THINjetDeepCSV_2b+=1
@@ -706,13 +706,13 @@ def runbbdm(txtfile):
                        if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
                            #print 'Wmunu_cut_ep_Wmunumass'
                            Wmunu_cut_ep_Wmunumass +=1
-                           if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
                                #print 'Wmunu_cut_ep_THINnJet_1b'
                                Wmunu_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    #print 'Wmunu_cut_ep_THINjetDeepCSV_1b'
                                    Wmunu_cut_ep_THINjetDeepCSV_1b+=1
-                           elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                Wmunu_cut_ep_THINnJet_2b +=1
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    Wmunu_cut_ep_THINjetDeepCSV_2b+=1
@@ -791,11 +791,11 @@ def runbbdm(txtfile):
                        if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
                            #print 'Wenu_cut_ep_Wenumass'
                            Topenu_cut_ep_Topenumass +=1
-                           if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.):
                                Topenu_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    Topenu_cut_ep_THINjetDeepCSV_1b+=1
-                           if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
                                 Topenu_cut_ep_THINnJet_2b +=1
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                     Topenu_cut_ep_THINjetDeepCSV_2b+=1
@@ -874,13 +874,13 @@ def runbbdm(txtfile):
                        if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
                            #print 'Wenu_cut_ep_Wenumass'
                            Topmunu_cut_ep_Topmunumass +=1
-                           if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.):
                                #print 'Wenu_cut_ep_THINnJet_1b'
                                Topmunu_cut_ep_THINnJet_1b +=1;
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    #print 'Wenu_cut_ep_THINjetDeepCSV_1b'
                                    Topmunu_cut_ep_THINjetDeepCSV_1b+=1
-                           if (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.):
                                Topmunu_cut_ep_THINnJet_2b +=1
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    Topmunu_cut_ep_THINjetDeepCSV_2b+=1
