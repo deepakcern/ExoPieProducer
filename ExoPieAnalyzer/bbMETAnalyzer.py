@@ -806,11 +806,6 @@ def runbbdm(txtfile):
     print ('SR1bcount',SR1bcount,'SR2bcount',SR2bcount)
     sr_1bdict = {1:cut_ep_pfMetCorrPt,2:cut_ep_nLep,3:cut_min_dPhi,4:cut_ep_THINnJet_1b,5:cut_ep_THINjetDeepCSV_1b}
     sr_2bdict = {1:cut_ep_pfMetCorrPt,2:cut_ep_nLep,3:cut_min_dPhi,4:cut_ep_THINnJet_2b,5:cut_ep_THINjetDeepCSV_2b}
-    for i in [1,2,3,4,5]:
-        h_reg_SR_1b_cutFlow.AddBinContent(i,sr_1bdict[i])
-        h_reg_SR_2b_cutFlow.AddBinContent(i,sr_2bdict[i])
-        h_reg_SR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
-        h_reg_SR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
 
     print ('============SR cutflow============')
 
@@ -882,20 +877,6 @@ def runbbdm(txtfile):
     outfile.cd()
     h_total_mcweight.Write()
     h_total.Write()
-    h_reg_SR_1b_cutFlow.Write()
-    h_reg_SR_2b_cutFlow.Write()
-    h_reg_ZeeCR_1b_cutFlow.Write()
-    h_reg_ZeeCR_2b_cutFlow.Write()
-    h_reg_ZmumuCR_1b_cutFlow.Write()
-    h_reg_ZmumuCR_2b_cutFlow.Write()
-    h_reg_WenuCR_1b_cutFlow.Write()
-    h_reg_WenuCR_2b_cutFlow.Write()
-    h_reg_WmunuCR_1b_cutFlow.Write()
-    h_reg_WmunuCR_2b_cutFlow.Write()
-    h_reg_TopenuCR_1b_cutFlow.Write()
-    h_reg_TopenuCR_2b_cutFlow.Write()
-    h_reg_TopmunuCR_1b_cutFlow.Write()
-    h_reg_TopmunuCR_2b_cutFlow.Write()
     outfile.Write()
     outfile.Close()
 
