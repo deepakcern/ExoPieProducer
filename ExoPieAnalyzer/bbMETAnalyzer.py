@@ -157,13 +157,13 @@ def runbbdm(txtfile):
     ikey_ = ""
 
     if  runInteractive:
-        print "running for ", txtfile[0]
-        infile_  = TextToList(txtfile[0])
-        key_=txtfile[1]
-        outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
-        # print "running for ", txtfile
-        # infile_  = TextToList(txtfile)
-        # outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
+        # print "running for ", txtfile[0]
+        # infile_  = TextToList(txtfile[0])
+        # key_=txtfile[1]
+        # outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
+        print "running for ", txtfile
+        infile_  = TextToList(txtfile)
+        outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
 
     if not runInteractive:
         infile_=TextToList(txtfile)
