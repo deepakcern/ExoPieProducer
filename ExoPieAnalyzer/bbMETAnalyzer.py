@@ -560,14 +560,14 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = 1.0
-            weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
-            weightPU = wgt.puweight(ep_pu_nTrueInt)
-            if ep_genParSample   == 23 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
-            if ep_genParSample == 24 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
-            if ep_genParSample == 6 and len(ep_genParPt) > 0  : weightTop = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
-            common_weight = weightB * weightEWK * weightTop * weightPU
-
-            if not ep_isData: weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
+            if not ep_isData:
+                weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
+                weightPU = wgt.puweight(ep_pu_nTrueInt)
+                if ep_genParSample   == 23 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+                if ep_genParSample == 24 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample == 6 and len(ep_genParPt) > 0  : weightTop = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+                common_weight = weightB * weightEWK * weightTop * weightPU
+                 weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
