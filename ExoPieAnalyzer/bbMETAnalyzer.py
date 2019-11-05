@@ -242,7 +242,7 @@ def runbbdm(txtfile):
             ep_eleIsPassTight, ep_eleIsPassLoose, \
             ep_nPho, ep_phoIsPassTight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_isTightMuon, \
-            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEletightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_tightEletightMuVeto,\
+            ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
             ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
