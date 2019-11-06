@@ -195,7 +195,6 @@ def runbbdm(txtfile):
 
     df_out_cutFLOW = out.df_out_cutFLOW
 
-    #outputfilename = args.outputfile
 
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
@@ -209,41 +208,12 @@ def runbbdm(txtfile):
 
     filename = infile_
     ieve = 0;icount = 0
-    cut_ep_THINnJet_1b = 0.; cut_ep_THINjetDeepCSV_1b = 0.
-    cut_ep_THINnJet_2b = 0.; cut_ep_THINjetDeepCSV_2b = 0.
-    cut_ep_nLep = 0.0; cut_ep_pfMetCorrPt = 0.; cut_min_dPhi = 0.0
-
-    Zee_cut_ep_THINnJet_1b = 0.; Zee_cut_ep_THINjetDeepCSV_1b = 0.
-    Zee_cut_ep_THINnJet_2b = 0.; Zee_cut_ep_THINjetDeepCSV_2b = 0.
-    Zee_cut_ep_nLep = 0.0; Zee_cut_min_dPhi = 0.0; Zee_cut_ep_Recoil=0
-    Zee_cut_ep_Zeemass = 0.0; ZeeCR1bcount=0.0; ZeeCR2bcount=0.0
-
-    Zmumu_cut_ep_THINnJet_1b = 0.; Zmumu_cut_ep_THINjetDeepCSV_1b = 0.
-    Zmumu_cut_ep_THINnJet_2b = 0.; Zmumu_cut_ep_THINjetDeepCSV_2b = 0.
-    Zmumu_cut_ep_nLep = 0.0; Zmumu_cut_min_dPhi = 0.0; Zmumu_cut_ep_Recoil=0
-    Zmumu_cut_ep_Zmumumass = 0.0; ZmumuCR1count=0.0; ZmumuCR2count=0.0
-
-    Wenu_cut_ep_THINnJet_1b = 0.; Wenu_cut_ep_THINjetDeepCSV_1b = 0.
-    Wenu_cut_ep_THINnJet_2b = 0.; Wenu_cut_ep_THINjetDeepCSV_2b = 0.
-    Wenu_cut_ep_nLep = 0.0; Wenu_cut_min_dPhi = 0.0; Wenu_cut_ep_Recoil=0
-    Wenu_cut_ep_Wenumass = 0.0; WenuCR1bcount=0.0; WenuCR2bcount=0.0
-
-    Wmunu_cut_ep_THINnJet_1b = 0.; Wmunu_cut_ep_THINjetDeepCSV_1b = 0.
-    Wmunu_cut_ep_THINnJet_2b = 0.; Wmunu_cut_ep_THINjetDeepCSV_2b = 0.
-    Wmunu_cut_ep_nLep = 0.0; Wmunu_cut_min_dPhi = 0.0; Wmunu_cut_ep_Recoil=0
-    Wmunu_cut_ep_Wmunumass = 0.0; WmunuCR1bcount=0.0; WmunuCR2bcount=0.0
-
-    Topenu_cut_ep_THINnJet_1b = 0.; Topenu_cut_ep_THINjetDeepCSV_1b = 0.
-    Topenu_cut_ep_THINnJet_2b = 0.; Topenu_cut_ep_THINjetDeepCSV_2b = 0.
-    Topenu_cut_ep_nLep = 0.0; Topenu_cut_min_dPhi = 0.0; Topenu_cut_ep_Recoil=0
-    Topenu_cut_ep_Topenumass = 0.0; TopenuCR1bcount=0.0; TopenuCR2bcount=0.0
-
-    Topmunu_cut_ep_THINnJet_1b = 0.; Topmunu_cut_ep_THINjetDeepCSV_1b = 0.
-    Topmunu_cut_ep_THINnJet_2b = 0.; Topmunu_cut_ep_THINjetDeepCSV_2b = 0.
-    Topmunu_cut_ep_nLep = 0.0; Topmunu_cut_min_dPhi = 0.0; Topmunu_cut_ep_Recoil=0
-    Topmunu_cut_ep_Topmunumass = 0.0; TopmunuCR1bcount=0.0; TopmunuCR2bcount=0.0
-
     SR1bcount = 0.0; SR2bcount = 0.0
+
+    ZeeCR1bcount=0.0; ZeeCR2bcount=0.0; ZmumuCR1count=0.0; ZmumuCR2count=0.0
+    WenuCR1bcount=0.0; WenuCR2bcount=0.0; WmunuCR1bcount=0.0; WmunuCR2bcount=0.0
+    TopenuCR1bcount=0.0; TopenuCR2bcount=0.0; TopmunuCR1bcount=0.0; TopmunuCR2bcount=0.0
+
 
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
         for ep_runId, ep_lumiSection, ep_eventId, \
@@ -283,10 +253,9 @@ def runbbdm(txtfile):
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision \
                    ):
-
             ieve = ieve + 1
             if ieve%10000==0: print "Processed",ieve,"Events"
-
+            if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
             isSR1b=False
             is1bCRWenu=False
             is1bCRWmunu=False
@@ -349,8 +318,6 @@ def runbbdm(txtfile):
 
             if len(ep_THINjetPt)==0 : continue
 
-            # WenuPhi = WmunuPhi = ZeePhi = ZmumuPhi = 0.001
-            # ep_ZeeRecoil = ep_ZmumuRecoil = ep_WenuRecoil = ep_WmunuRecoil = 200.0
             min_dPhi_jet_MET = min([DeltaPhi(jet_phi,ep_pfMetCorrPhi) for jet_phi in ep_THINjetPhi])
 
             Jet2Pt  = dummy;Jet2Eta     = dummy
@@ -435,7 +402,6 @@ def runbbdm(txtfile):
 
             Zmumu2b_bits = [mettrigdecision, (ep_ZmumuRecoil > 200.) , (ep_nEle_index == 0 and ep_nMu == 2 and ep_muPt[0] > 30. and ep_isTightMuon[0] and ep_nTau_discBased_TightEleTightMuVeto==0) , (min_dPhi_jet_MET > 0.5) , (ep_Zmumumass >= 60 and ep_Zmumumass <= 120) , ((ep_THINnJet==3 or ep_THINnJet==2) and ep_THINjetPt[0] > 50.) , ((ep_THINnJet==3 or ep_THINnJet==2) and ep_THINjetPt[0] > 50. and ep_THINjetDeepCSV[0] > deepCSV_Med and ep_THINjetDeepCSV[1] > deepCSV_Med)]
             Zmumu2b_cutFlow = cutflow_func(Zmumu2b_bits)
-
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION
@@ -532,13 +498,11 @@ def runbbdm(txtfile):
             TOPMUNU CONTROL REGION Cutflow
             --------------------------------------------------------------------------------
             '''
-
             Topmunu1b_bits = [mettrigdecision, (ep_WmunuRecoil > 200.) , (ep_nEle_index == 0 and ep_nMu == 1 and ep_muPt[0] > 30. and ep_isTightMuon[0] and ep_nTau_discBased_TightEleTightMuVeto==0) , (min_dPhi_jet_MET > 0.5) , (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) , (ep_THINnJet >1 and ep_THINjetPt[0] > 50.) , (ep_THINnJet >1 and ep_THINjetPt[0] > 50. and ep_THINjetDeepCSV[0] > deepCSV_Med)]
             Topmunu1b_cutFlow = cutflow_func(Topmunu1b_bits)
 
             Topmunu2b_bits = [mettrigdecision, (ep_WmunuRecoil > 200.) , (ep_nEle_index == 0 and ep_nMu == 1 and ep_muPt[0] > 30. and ep_isTightMuon[0] and ep_nTau_discBased_TightEleTightMuVeto==0) , (min_dPhi_jet_MET > 0.5) , (ep_Wmunumass >= 0 and ep_Wmunumass <= 160) , (ep_THINnJet >2 and ep_THINjetPt[0] > 50.) , (ep_THINnJet>2 and ep_THINjetPt[0] > 50. and ep_THINjetDeepCSV[0] > deepCSV_Med and ep_THINjetDeepCSV[1] > deepCSV_Med)]
             Topmunu2b_cutFlow = cutflow_func(Topmunu2b_bits)
-
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION
@@ -568,7 +532,7 @@ def runbbdm(txtfile):
                 if ep_genParSample == 6 and len(ep_genParPt) > 0  : weightTop = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
                 common_weight = weightB * weightEWK * weightTop * weightPU
                 weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
-
+            # SR1b_cutFlow = SR2b_cutFlow = Zee1b_cutFlow = Zee2b_cutFlow = Zmumu1b_cutFlow = Zmumu2b_cutFlow = Wenu1b_cutFlow = Wenu2b_cutFlow = Wmunu1b_cutFlow = Wmunu2b_cutFlow = Topenu1b_cutFlow = Topenu2b_cutFlow = Topmunu1b_cutFlow = Topmunu2b_cutFlow = 1.0
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
@@ -797,79 +761,21 @@ def runbbdm(txtfile):
 
     df_out_cutFLOW.to_root(outfilenameis, key='bbDM_cutFLOW',mode='a')
 
-    cfsr_list = {1:'MET',2:'nLep',3:'min_dPhi',4:'nJet',5:'nBjets'}
     print ('\n============SR cutflow============')
-    print ('cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b')
-    print (cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_1b,cut_ep_THINjetDeepCSV_1b)
-    print ('cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_2b,cut_ep_THINjetDeepCSV_2b')
-    print (cut_ep_pfMetCorrPt,cut_ep_nLep,cut_min_dPhi,cut_ep_THINnJet_2b,cut_ep_THINjetDeepCSV_2b)
     print ('SR1bcount',SR1bcount,'SR2bcount',SR2bcount)
-    sr_1bdict = {1:cut_ep_pfMetCorrPt,2:cut_ep_nLep,3:cut_min_dPhi,4:cut_ep_THINnJet_1b,5:cut_ep_THINjetDeepCSV_1b}
-    sr_2bdict = {1:cut_ep_pfMetCorrPt,2:cut_ep_nLep,3:cut_min_dPhi,4:cut_ep_THINnJet_2b,5:cut_ep_THINjetDeepCSV_2b}
-
     print ('============SR cutflow============')
 
-    cf_list = {1:'Recoil',2:'nLep',3:'min_dPhi',4:'Z/W mass',5:'nJet',6:'nBjets'}
-    print ('\n============Zee cutflow============')
-    print('Zee_cut_ep_Recoil,Zee_cut_ep_nLep,Zee_cut_min_dPhi,Zee_cut_ep_Zeemass,Zee_cut_ep_THINnJet_1b,Zee_cut_ep_THINjetDeepCSV_1b')
-    print(Zee_cut_ep_Recoil,Zee_cut_ep_nLep,Zee_cut_min_dPhi,Zee_cut_ep_Zeemass,Zee_cut_ep_THINnJet_1b,Zee_cut_ep_THINjetDeepCSV_1b)
-    print('Zee_cut_ep_Recoil,Zee_cut_ep_nLep,Zee_cut_min_dPhi,Zee_cut_ep_Zeemass,Zee_cut_ep_THINnJet_2b,Zee_cut_ep_THINjetDeepCSV_2b')
-    print(Zee_cut_ep_Recoil,Zee_cut_ep_nLep,Zee_cut_min_dPhi,Zee_cut_ep_Zeemass,Zee_cut_ep_THINnJet_2b,Zee_cut_ep_THINjetDeepCSV_2b)
+    print ('\n============Z cutflow============')
     print('ZeeCR1bcount',ZeeCR1bcount,'ZeeCR2bcount',ZeeCR2bcount)
-    Zee_1bdict = {1:Zee_cut_ep_Recoil,2:Zee_cut_ep_nLep,3:Zee_cut_min_dPhi,4:Zee_cut_ep_Zeemass,5:Zee_cut_ep_THINnJet_1b,6:Zee_cut_ep_THINjetDeepCSV_1b}
-    Zee_2bdict = {1:Zee_cut_ep_Recoil,2:Zee_cut_ep_nLep,3:Zee_cut_min_dPhi,4:Zee_cut_ep_Zeemass,5:Zee_cut_ep_THINnJet_2b,6:Zee_cut_ep_THINjetDeepCSV_2b}
-    print ('============Zee cutflow============')
-
-    print ('\n============Zmumu cutflow============')
-    print('Zmumu_cut_ep_Recoil,Zmumu_cut_ep_nLep,Zmumu_cut_min_dPhi,Zmumu_cut_ep_Zmumumass,Zmumu_cut_ep_THINnJet_1b,Zmumu_cut_ep_THINjetDeepCSV_1b')
-    print(Zmumu_cut_ep_Recoil,Zmumu_cut_ep_nLep,Zmumu_cut_min_dPhi,Zmumu_cut_ep_Zmumumass,Zmumu_cut_ep_THINnJet_1b,Zmumu_cut_ep_THINjetDeepCSV_1b)
-    print('Zmumu_cut_ep_Recoil,Zmumu_cut_ep_nLep,Zmumu_cut_min_dPhi,Zmumu_cut_ep_Zmumumass,Zmumu_cut_ep_THINnJet_2b,Zmumu_cut_ep_THINjetDeepCSV_2b')
-    print(Zmumu_cut_ep_Recoil,Zmumu_cut_ep_nLep,Zmumu_cut_min_dPhi,Zmumu_cut_ep_Zmumumass,Zmumu_cut_ep_THINnJet_2b,Zmumu_cut_ep_THINjetDeepCSV_2b)
     print ('ZmumuCR1count', ZmumuCR1count,'ZmumuCR2count', ZmumuCR2count)
-    Zmumu_1bdict = {1:Zmumu_cut_ep_Recoil,2:Zmumu_cut_ep_nLep,3:Zmumu_cut_min_dPhi,4:Zmumu_cut_ep_Zmumumass,5:Zmumu_cut_ep_THINnJet_1b,6:Zmumu_cut_ep_THINjetDeepCSV_1b}
-    Zmumu_2bdict = {1:Zmumu_cut_ep_Recoil,2:Zmumu_cut_ep_nLep,3:Zmumu_cut_min_dPhi,4:Zmumu_cut_ep_Zmumumass,5:Zmumu_cut_ep_THINnJet_2b,6:Zmumu_cut_ep_THINjetDeepCSV_2b}
-    print ('============Zmumu cutflow============')
 
-    print ('\n============Wenu cutflow============')
-    print('Wenu_cut_ep_Recoil,Wenu_cut_ep_nLep,Wenu_cut_min_dPhi,Wenu_cut_ep_Wenumass,Wenu_cut_ep_THINnJet_1b,Wenu_cut_ep_THINjetDeepCSV_1b')
-    print(Wenu_cut_ep_Recoil,Wenu_cut_ep_nLep,Wenu_cut_min_dPhi,Wenu_cut_ep_Wenumass,Wenu_cut_ep_THINnJet_1b,Wenu_cut_ep_THINjetDeepCSV_1b)
-    print('Wenu_cut_ep_Recoil,Wenu_cut_ep_nLep,Wenu_cut_min_dPhi,Wenu_cut_ep_Wenumass,Wenu_cut_ep_THINnJet_2b,Wenu_cut_ep_THINjetDeepCSV_2b')
-    print(Wenu_cut_ep_Recoil,Wenu_cut_ep_nLep,Wenu_cut_min_dPhi,Wenu_cut_ep_Wenumass,Wenu_cut_ep_THINnJet_2b,Wenu_cut_ep_THINjetDeepCSV_2b)
+    print ('\n============W cutflow============')
     print ('WenuCR1bcount', WenuCR1bcount,'WenuCR2bcount', WenuCR2bcount)
-    Wenu_1bdict = {1:Wenu_cut_ep_Recoil,2:Wenu_cut_ep_nLep,3:Wenu_cut_min_dPhi,4:Wenu_cut_ep_Wenumass,5:Wenu_cut_ep_THINnJet_1b,6:Wenu_cut_ep_THINjetDeepCSV_1b}
-    Wenu_2bdict = {1:Wenu_cut_ep_Recoil,2:Wenu_cut_ep_nLep,3:Wenu_cut_min_dPhi,4:Wenu_cut_ep_Wenumass,5:Wenu_cut_ep_THINnJet_2b,6:Wenu_cut_ep_THINjetDeepCSV_2b}
-    print ('============Wenu cutflow============')
-
-    print ('\n============Wmunu cutflow============')
-    print('Wmunu_cut_ep_Recoil,Wmunu_cut_ep_nLep,Wmunu_cut_min_dPhi,Wmunu_cut_ep_Wmunumass,Wmunu_cut_ep_THINnJet_1b,Wmunu_cut_ep_THINjetDeepCSV_1b')
-    print(Wmunu_cut_ep_Recoil,Wmunu_cut_ep_nLep,Wmunu_cut_min_dPhi,Wmunu_cut_ep_Wmunumass,Wmunu_cut_ep_THINnJet_1b,Wmunu_cut_ep_THINjetDeepCSV_1b)
-    print('Wmunu_cut_ep_Recoil,Wmunu_cut_ep_nLep,Wmunu_cut_min_dPhi,Wmunu_cut_ep_Wmunumass,Wmunu_cut_ep_THINnJet_2b,Wmunu_cut_ep_THINjetDeepCSV_2b')
-    print(Wmunu_cut_ep_Recoil,Wmunu_cut_ep_nLep,Wmunu_cut_min_dPhi,Wmunu_cut_ep_Wmunumass,Wmunu_cut_ep_THINnJet_2b,Wmunu_cut_ep_THINjetDeepCSV_2b)
     print ('WmunuCR1bcount', WmunuCR1bcount,'WmunuCR2bcount', WmunuCR2bcount)
-    Wmunu_1bdict = {1:Wmunu_cut_ep_Recoil,2:Wmunu_cut_ep_nLep,3:Wmunu_cut_min_dPhi,4:Wmunu_cut_ep_Wmunumass,5:Wmunu_cut_ep_THINnJet_1b,6:Wmunu_cut_ep_THINjetDeepCSV_1b}
-    Wmunu_2bdict = {1:Wmunu_cut_ep_Recoil,2:Wmunu_cut_ep_nLep,3:Wmunu_cut_min_dPhi,4:Wmunu_cut_ep_Wmunumass,5:Wmunu_cut_ep_THINnJet_2b,6:Wmunu_cut_ep_THINjetDeepCSV_2b}
-    print ('============Wmunu cutflow============')
 
-    print ('\n============Topenu cutflow============')
-    print('Topenu_cut_ep_Recoil,Topenu_cut_ep_nLep,Topenu_cut_min_dPhi,Topenu_cut_ep_Topenumass,Topenu_cut_ep_THINnJet_1b,Topenu_cut_ep_THINjetDeepCSV_1b')
-    print(Topenu_cut_ep_Recoil,Topenu_cut_ep_nLep,Topenu_cut_min_dPhi,Topenu_cut_ep_Topenumass,Topenu_cut_ep_THINnJet_1b,Topenu_cut_ep_THINjetDeepCSV_1b)
-    print('Topenu_cut_ep_Recoil,Topenu_cut_ep_nLep,Topenu_cut_min_dPhi,Topenu_cut_ep_Topenumass,Topenu_cut_ep_THINnJet_2b,Topenu_cut_ep_THINjetDeepCSV_2b')
-    print(Topenu_cut_ep_Recoil,Topenu_cut_ep_nLep,Topenu_cut_min_dPhi,Topenu_cut_ep_Topenumass,Topenu_cut_ep_THINnJet_2b,Topenu_cut_ep_THINjetDeepCSV_2b)
+    print ('\n============Top cutflow============')
     print ('TopenuCR1bcount', TopenuCR1bcount,'TopenuCR2bcount', TopenuCR2bcount)
-    Topenu_1bdict = {1:Topenu_cut_ep_Recoil,2:Topenu_cut_ep_nLep,3:Topenu_cut_min_dPhi,4:Topenu_cut_ep_Topenumass,5:Topenu_cut_ep_THINnJet_1b,6:Topenu_cut_ep_THINjetDeepCSV_1b}
-    Topenu_2bdict = {1:Topenu_cut_ep_Recoil,2:Topenu_cut_ep_nLep,3:Topenu_cut_min_dPhi,4:Topenu_cut_ep_Topenumass,5:Topenu_cut_ep_THINnJet_2b,6:Topenu_cut_ep_THINjetDeepCSV_2b}
-    print ('============Topenu cutflow============')
-
-    print ('\n============Topmunu cutflow============')
-    print('Topmunu_cut_ep_Recoil,Topmunu_cut_ep_nLep,Topmunu_cut_min_dPhi,Topmunu_cut_ep_Topmunumass,Topmunu_cut_ep_THINnJet_1b,Topmunu_cut_ep_THINjetDeepCSV_1b')
-    print(Topmunu_cut_ep_Recoil,Topmunu_cut_ep_nLep,Topmunu_cut_min_dPhi,Topmunu_cut_ep_Topmunumass,Topmunu_cut_ep_THINnJet_1b,Topmunu_cut_ep_THINjetDeepCSV_1b)
-    print('Topmunu_cut_ep_Recoil,Topmunu_cut_ep_nLep,Topmunu_cut_min_dPhi,Topmunu_cut_ep_Topmunumass,Topmunu_cut_ep_THINnJet_2b,Topmunu_cut_ep_THINjetDeepCSV_2b')
-    print(Topmunu_cut_ep_Recoil,Topmunu_cut_ep_nLep,Topmunu_cut_min_dPhi,Topmunu_cut_ep_Topmunumass,Topmunu_cut_ep_THINnJet_2b,Topmunu_cut_ep_THINjetDeepCSV_2b)
     print ('TopmunuCR1bcount', TopmunuCR1bcount,'TopmunuCR2bcount', TopmunuCR2bcount)
-    Topmunu_1bdict = {1:Topmunu_cut_ep_Recoil,2:Topmunu_cut_ep_nLep,3:Topmunu_cut_min_dPhi,4:Topmunu_cut_ep_Topmunumass,5:Topmunu_cut_ep_THINnJet_1b,6:Topmunu_cut_ep_THINjetDeepCSV_1b}
-    Topmunu_2bdict = {1:Topmunu_cut_ep_Recoil,2:Topmunu_cut_ep_nLep,3:Topmunu_cut_min_dPhi,4:Topmunu_cut_ep_Topmunumass,5:Topmunu_cut_ep_THINnJet_2b,6:Topmunu_cut_ep_THINjetDeepCSV_2b}
-    print ('============Topmunu cutflow============\n')
-
 
     print ('===============================\n')
     print ("output written to ", outfilename)
@@ -911,9 +817,6 @@ if __name__ == '__main__':
 
     if runInteractive and not runOnTxt:
         ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
-        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieSlimmer/SIG_2016_2HDMa_SkimRootFilesALL"
-        #inputpath= "/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/V0/MC_USCM_25Sep"
-        #inputpath= "/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/CondorJobs_v2/Filelists_v1"
         inputpath="/afs/cern.ch/work/p/ptiwari/bb+DM_analysis/ntuple_analysis/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/test_rootFile/test_root_file"
 
         os.system('rm dirlist.txt')
