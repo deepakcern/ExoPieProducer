@@ -94,9 +94,4 @@ df_out_TopmunuCR_2b = DataFrame(columns=['run','lumi','event','MET','Recoil','Wm
                                   'Jet3Pt','Jet3Eta','Jet3Phi','Jet3deepCSV',
                                   'leadingLepPt','leadingLepEta','leadingLepPhi',
                                   'weight','weightEle','weightMu','weightB','weightTau','weightEWK','weightTop','weightPU'])
-
-df_out_cutFLOW = DataFrame(columns=['SR1b_cutFlow','SR2b_cutFlow','Zee1b_cutFlow','Zee2b_cutFlow','Zmumu1b_cutFlow','Zmumu2b_cutFlow',
-                                    'Wenu1b_cutFlow','Wenu2b_cutFlow','Wmunu1b_cutFlow','Wmunu2b_cutFlow',
-                                    'Topenu1b_cutFlow','Topenu2b_cutFlow','Topmunu1b_cutFlow','Topmunu2b_cutFlow','weight'])
-
 ## define more data frames for each region

@@ -193,9 +193,6 @@ def runbbdm(txtfile):
     df_out_TopmunuCR_1b = out.df_out_TopmunuCR_1b
     df_out_TopmunuCR_2b = out.df_out_TopmunuCR_2b
 
-    df_out_cutFLOW = out.df_out_cutFLOW
-
-
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
 
@@ -777,13 +774,6 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is2bCRTopmunu')
 
-            # df_out_cutFLOW = df_out_cutFLOW.append({'SR1b_cutFlow':int(SR1b_cutFlow),'SR2b_cutFlow':int(SR2b_cutFlow),'Zee1b_cutFlow':int(Zee1b_cutFlow),
-            #                                         'Zee2b_cutFlow':int(Zee2b_cutFlow),'Zmumu1b_cutFlow':int(Zmumu1b_cutFlow),'Zmumu2b_cutFlow':int(Zmumu2b_cutFlow),
-            #                                         'Wenu1b_cutFlow':int(Wenu1b_cutFlow),'Wenu2b_cutFlow':int(Wenu2b_cutFlow),'Wmunu1b_cutFlow':int(Wmunu1b_cutFlow),
-            #                                         'Wmunu2b_cutFlow':int(Wmunu2b_cutFlow),'Topenu1b_cutFlow':int(Topenu1b_cutFlow),'Topenu2b_cutFlow':int(Topenu2b_cutFlow),
-            #                                         'Topmunu1b_cutFlow':int(Topmunu1b_cutFlow),'Topmunu2b_cutFlow':int(Topmunu2b_cutFlow),'weight':weight
-            #                                         },ignore_index=True
-            #                                         )
     outfilenameis=outfilename
     df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b',mode='w')
     df_out_SR_2b.to_root(outfilenameis, key='bbDM_SR_2b',mode='a')
@@ -802,8 +792,6 @@ def runbbdm(txtfile):
     df_out_TopenuCR_2b.to_root(outfilenameis, key='bbDM_TopenuCR_2b',mode='a')
     df_out_TopmunuCR_1b.to_root(outfilenameis, key='bbDM_TopmunuCR_1b',mode='a')
     df_out_TopmunuCR_2b.to_root(outfilenameis, key='bbDM_TopmunuCR_2b',mode='a')
-
-    # df_out_cutFLOW.to_root(outfilenameis, key='bbDM_cutFLOW',mode='a')
 
     print ('\n============SR cutflow============')
     print ('SR1bcount',SR1bcount,'SR2bcount',SR2bcount)
