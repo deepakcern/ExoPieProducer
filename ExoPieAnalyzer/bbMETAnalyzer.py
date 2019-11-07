@@ -415,14 +415,13 @@ def runbbdm(txtfile):
                        if (ep_Zeemass >= 60 and ep_Zeemass <= 120):
                            h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, weight)
                            h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, weight)
-                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==1 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                h_reg_ZeeCR_1b_cutFlow.AddBinContent(5, weight)
-                               h_reg_ZeeCR_2b_cutFlow.AddBinContent(5, weight)
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                    h_reg_ZeeCR_1b_cutFlow.AddBinContent(6, weight)
                                    ZeeCR1bcount+=1
                                    is1bCRZee=True
-                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                           if (ep_THINnJet ==3 or ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                h_reg_ZeeCR_2b_cutFlow.AddBinContent(5, weight)
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                    h_reg_ZeeCR_2b_cutFlow.AddBinContent(6, weight)
@@ -474,13 +473,13 @@ def runbbdm(txtfile):
                         if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
                             h_reg_WenuCR_1b_cutFlow.AddBinContent(4, weight)
                             h_reg_WenuCR_2b_cutFlow.AddBinContent(4, weight)
-                            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                            if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
                                 h_reg_WenuCR_1b_cutFlow.AddBinContent(5, weight)
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med):
                                     h_reg_WenuCR_1b_cutFlow.AddBinContent(6, weight)
                                     WenuCR1bcount+=1
                                     is1bCRWenu=True
-                            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                 h_reg_WenuCR_2b_cutFlow.AddBinContent(5, weight)
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                     h_reg_WenuCR_2b_cutFlow.AddBinContent(6, weight)
