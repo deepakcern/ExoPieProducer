@@ -510,9 +510,9 @@ def runbbdm(txtfile):
                                     WmunuCR1bcount+=1
                                     is1bCRWmunu=True
                             elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
-                                h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, weight)
+                                h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, weight)
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
-                                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, weight)
+                                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(6, weight)
                                     WmunuCR2bcount+=1
                                     is2bCRWmunu=True
             '''
