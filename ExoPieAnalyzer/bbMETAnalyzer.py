@@ -480,7 +480,7 @@ def runbbdm(txtfile):
                                     h_reg_WenuCR_1b_cutFlow.AddBinContent(6, weight)
                                     WenuCR1bcount+=1
                                     is1bCRWenu=True
-                            elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
+                            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.) and (ep_THINjetCHadEF[0] >0.1) and (ep_THINjetNHadEF[0] < 0.8):
                                 h_reg_WenuCR_2b_cutFlow.AddBinContent(5, weight)
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                     h_reg_WenuCR_2b_cutFlow.AddBinContent(6, weight)
@@ -509,7 +509,7 @@ def runbbdm(txtfile):
                                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(6, weight)
                                     WmunuCR1bcount+=1
                                     is1bCRWmunu=True
-                            elif (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
+                            if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
                                 h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, weight)
                                 if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med):
                                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(6, weight)
