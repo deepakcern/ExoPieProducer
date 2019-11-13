@@ -403,7 +403,7 @@ def runbbdm(txtfile):
             ZEE CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_ZeeRecoil > 200.) :
+            if (ep_ZeeRecoil > 200. and ep_pfMetCorrPt > 50.) :
                h_reg_ZeeCR_1b_cutFlow.AddBinContent(1, weight)
                h_reg_ZeeCR_2b_cutFlow.AddBinContent(1, weight)
                if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) :
@@ -432,7 +432,7 @@ def runbbdm(txtfile):
             ZMUMU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_ZmumuRecoil > 200.) :
+            if (ep_ZmumuRecoil > 200. and ep_pfMetCorrPt > 50.) :
                 h_reg_ZmumuCR_1b_cutFlow.AddBinContent(1, weight)
                 h_reg_ZmumuCR_2b_cutFlow.AddBinContent(1, weight)
                 if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
@@ -461,7 +461,7 @@ def runbbdm(txtfile):
             WENU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_WenuRecoil > 200.) :
+            if (ep_WenuRecoil > 200. and ep_pfMetCorrPt > 50.) :
                 h_reg_WenuCR_1b_cutFlow.AddBinContent(1, weight)
                 h_reg_WenuCR_2b_cutFlow.AddBinContent(1, weight)
                 if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
@@ -490,7 +490,7 @@ def runbbdm(txtfile):
             WMUNU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_WmunuRecoil > 200.) :
+            if (ep_WmunuRecoil > 200. and ep_pfMetCorrPt > 50.) :
                 h_reg_WmunuCR_1b_cutFlow.AddBinContent(1, weight)
                 h_reg_WmunuCR_2b_cutFlow.AddBinContent(1, weight)
                 if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
@@ -519,7 +519,7 @@ def runbbdm(txtfile):
             TOPENU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_WenuRecoil > 200.) :
+            if (ep_WenuRecoil > 200. and ep_pfMetCorrPt > 50.) :
                 h_reg_TopenuCR_1b_cutFlow.AddBinContent(1, weight)
                 h_reg_TopenuCR_2b_cutFlow.AddBinContent(1, weight)
                 if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
@@ -548,7 +548,7 @@ def runbbdm(txtfile):
             TOPMUNU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            if (ep_WmunuRecoil > 200.) :
+            if (ep_WmunuRecoil > 200. and ep_pfMetCorrPt > 50.) :
                 h_reg_TopmunuCR_1b_cutFlow.AddBinContent(1, weight)
                 h_reg_TopmunuCR_2b_cutFlow.AddBinContent(1, weight)
                 if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
