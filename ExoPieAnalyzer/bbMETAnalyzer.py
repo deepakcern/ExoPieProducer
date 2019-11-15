@@ -48,7 +48,7 @@ year_file= open("Year.py","w")
 year_file.write('era="2016"')
 year_file.close()
 import ana_weight as wgt
-
+from Year import era
 
 
 ######################################################################################################
@@ -111,14 +111,6 @@ def TextToList(textfile):
 ## the input file list and key is caught in one variable as a python list,
 #### first element is the list of rootfiles
 #### second element is the key, user to name output.root
-def cutflow_func(bits):
-    x = 1 ## always 1
-    y = 0
-    z = 0
-    for ibit in range(len(bits)):
-        y = bits[ibit] << ibit
-        z = z ^ y
-    return z
 
 def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,nMu,ep_muPt,ep_muEta):
     tot_weight = 1.0;weightMET = 1.0;weightEle=1.0;weightMu=1.0;weightRecoil=1.0
@@ -328,7 +320,10 @@ def runbbdm(txtfile):
             ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetEta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
-            ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
+            if era=='2016':
+                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.4)]
+            else:
+                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
             nBjets = len(ep_THINbjets_index)
 
             if len(ep_THINjetPt)==0 : continue
