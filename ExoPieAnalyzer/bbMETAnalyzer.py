@@ -280,7 +280,12 @@ def runbbdm(txtfile):
             is2bCRTopmunu=False
 
             #deepCSV_Med = 0.8484  # for old DMsimp sample, this deepcsv means CSVv2
-            deepCSV_Med = 0.6321
+            if era=='2016':
+                deepCSV_Med = 0.6321
+            elif era=='2017':
+                deepCSV_Med = 0.4941
+            elif era=='2018':
+                deepCSV_Med = 0.4184
 
             '''
             -------------------------------------------------------------------------------
