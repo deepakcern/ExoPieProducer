@@ -239,7 +239,7 @@ def runbbdm(txtfile):
             ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
-            ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetPhoEF, ep_THINjetEleEF, ep_THINjetMuoEF, \
+            ep_THINjetCEmEF,ep_THINjetCHadEF,ep_THINjetNEmEF,ep_THINjetNHadEF,ep_THINjetCMulti,ep_THINjetNMultiplicity, \
             ep_THINjetCorrUnc, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
             ep_eleIsPassTight, ep_eleIsPassLoose, \
@@ -257,7 +257,7 @@ def runbbdm(txtfile):
                    df.st_isData, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
-                   df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, df.st_THINjetPhoEF, df.st_THINjetEleEF, df.st_THINjetMuoEF, \
+                   df.st_THINjetCEmEF,df.st_THINjetCHadEF,df.st_THINjetNEmEF,df.st_THINjetNHadEF,df.st_THINjetCMulti,df.st_THINjetNMultiplicity, \
                    df.st_THINjetCorrUnc, \
                    df.st_nEle, df.st_elePx, df.st_elePy, df.st_elePz, df.st_eleEnergy, \
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
