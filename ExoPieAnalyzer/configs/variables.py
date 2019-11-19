@@ -5,7 +5,7 @@ allvars_bbDM=['st_runId', 'st_lumiSection', 'st_eventId', \
 'ZeeMass', 'ZmumuMass', 'Wenumass', 'Wmunumass', \
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
-'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
+'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', 'st_THINjetNPV', \
 'st_THINjetCEmEF','st_THINjetCHadEF','st_THINjetNEmEF','st_THINjetNHadEF','st_THINjetCMulti','st_THINjetNMultiplicity', \
 'st_THINjetCorrUnc', \
 'st_nEle', 'st_elePx', 'st_elePy', 'st_elePz', 'st_eleEnergy', \

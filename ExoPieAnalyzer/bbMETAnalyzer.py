@@ -230,7 +230,7 @@ def runbbdm(txtfile):
             ep_Zeemass, ep_Zmumumass, ep_Wenumass, ep_Wmunumass, \
             ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
-            ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
+            ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV \
             ep_THINjetCEmEF,ep_THINjetCHadEF,ep_THINjetNEmEF,ep_THINjetNHadEF,ep_THINjetCMulti,ep_THINjetNMultiplicity, \
             ep_THINjetCorrUnc, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
@@ -248,7 +248,7 @@ def runbbdm(txtfile):
                    df.ZeeMass, df.ZmumuMass, df.Wenumass, df.Wmunumass, \
                    df.st_isData, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
-                   df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
+                   df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, df.st_THINjetNPV, \
                    df.st_THINjetCEmEF,df.st_THINjetCHadEF,df.st_THINjetNEmEF,df.st_THINjetNHadEF,df.st_THINjetCMulti,df.st_THINjetNMultiplicity, \
                    df.st_THINjetCorrUnc, \
                    df.st_nEle, df.st_elePx, df.st_elePy, df.st_elePz, df.st_eleEnergy, \
@@ -574,7 +574,7 @@ def runbbdm(txtfile):
                                     is2bCRTopmunu=True
 
             if isSR1b:
-                df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -586,7 +586,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('isSR1b')
             if isSR2b:
-                df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
                                                     'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
@@ -599,7 +599,7 @@ def runbbdm(txtfile):
                 if istest: print ('isSR2b')
 
             if is1bCRZee:
-                df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -614,7 +614,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRZee')
             if is2bCRZee:
-                df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -630,7 +630,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRZee')
 
             if is1bCRZmumu:
-                df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -645,7 +645,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRZmumu')
             if is2bCRZmumu:
-                df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -660,7 +660,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is2bCRZmumu')
             if is1bCRWenu:
-                df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -674,7 +674,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRWenu')
             if is2bCRWenu:
-                df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -689,7 +689,7 @@ def runbbdm(txtfile):
                 if istest: print ('is2bCRWenu')
 
             if is1bCRWmunu:
-                df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -703,7 +703,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRWmunu')
             if is2bCRWmunu:
-                df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -717,7 +717,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is2bCRWmunu')
             if is1bCRTopenu:
-                df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -731,7 +731,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRTopenu')
             if is2bCRTopenu:
-                df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -745,7 +745,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is2bCRTopenu')
             if is1bCRTopmunu:
-                df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
@@ -759,7 +759,7 @@ def runbbdm(txtfile):
                                                    )
                 if istest: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
-                df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nPUVert':ep_pu_nPUVert,
+                df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
                                                     'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
                                                     'dPhi_jetMET':min_dPhi_jet_MET,
                                                     'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':ep_nPho,
