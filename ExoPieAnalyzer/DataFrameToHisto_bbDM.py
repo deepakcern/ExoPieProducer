@@ -72,7 +72,10 @@ def VarToHist(df_var,df_weight, HISTNAME,binning):
     for index, value in enumerate(df_var):
         #print 'index',index,'value',value, 'weight',df_weight[index]
         weight = df_weight[index]
-        h_var.Fill(value, weight)
+        if '_nPV' in HISTNAME:
+            h_var.Fill(value, 1)
+        else:
+            h_var.Fill(value, weight)
 
     return h_var
 
@@ -98,6 +101,8 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["Jet2deepCSV"], df["weight"], "h_reg_"+reg+"_Jet2deepCSV",[15,0,1.1]))
         h_list.append(VarToHist(df["Njets_PassID"],   df["weight"], "h_reg_"+reg+"_nJets",[10,0,10]))
         h_list.append(VarToHist(df["dPhi_jetMET"],   df["weight"], "h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))#mini_dPhi)
+        h_list.append(VarToHist(df["nPV"],   df["weight"], "h_reg_"+reg+"_nPV",[70,0,70]))
+        h_list.append(VarToHist(df["nPV"],   df["weightPU"], "h_reg_"+reg+"_PUnPV",[70,0,70]))
     else:
         h_list.append(VarToHist(df["MET"], df["weight"], "h_reg_"+reg+"_MET",[15,0,700]))
         h_list.append(VarToHist(df["Recoil"], df["weight"], "h_reg_"+reg+"_Recoil",[200,250,350,500,1000]))
@@ -114,13 +119,15 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["leadingLepPt"], df["weight"], "h_reg_"+reg+"_lep1_pT",[15,30,500]))
         h_list.append(VarToHist(df["leadingLepEta"], df["weight"], "h_reg_"+reg+"_lep1_eta",[15,-2.5,2.5]))
         h_list.append(VarToHist(df["leadingLepPhi"], df["weight"], "h_reg_"+reg+"_lep1_Phi",[15,-3.14,3.14]))
+        h_list.append(VarToHist(df["nPV"],   df["weight"], "h_reg_"+reg+"_nPV",[70,0,70]))
+        h_list.append(VarToHist(df["nPV"],   df["weightPU"], "h_reg_"+reg+"_PUnPV",[70,0,70]))
         if 'munu' in reg or 'enu' in reg:
             h_list.append(VarToHist(df["Wmass"], df["weight"],"h_reg_"+reg+"_Wmass",[15,0,160]))
             h_list.append(VarToHist(df["WpT"], df["weight"], "h_reg_"+reg+"_WpT",[15,0,700]))
         if 'Zmumu' in reg or 'Zee' in reg:
             h_list.append(VarToHist(df["Zmass"], df["weight"],"h_reg_"+reg+"_Zmass",[15,60,120]))
             h_list.append(VarToHist(df["ZpT"], df["weight"], "h_reg_"+reg+"_ZpT",[15,0,700]))
-            h_list.append(VarToHist(df["subleadingLepPt"], df["weight"], "h_reg_"+reg+"_lep2_pT",[15,30,500]))
+            h_list.append(VarToHist(df["subleadingLepPt"], df["weight"], "h_reg_"+reg+"_lep2_pT",[15,10,500]))
             h_list.append(VarToHist(df["subleadingLepEta"], df["weight"], "h_reg_"+reg+"_lep2_eta",[15,-2.5,2.5]))
             h_list.append(VarToHist(df["subleadingLepPhi"], df["weight"], "h_reg_"+reg+"_lep2_Phi",[15,-3.14,3.14]))
     fout = TFile(outfilename, mode)
@@ -142,6 +149,8 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_Jet2deepCSV",[15,0,1.1]))
         h_list.append(SetHist("h_reg_"+reg+"_nJets",[10,0,10]))
         h_list.append(SetHist("h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))#mini_dPhi)
+        h_list.append(SetHist("h_reg_"+reg+"_nPV",[70,0,70]))
+        h_list.append(SetHist("h_reg_"+reg+"_PUnPV",[70,0,70]))
     else:
         h_list.append(SetHist("h_reg_"+reg+"_MET",[15,0,700]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil",[200,250,350,500,1000]))
@@ -158,6 +167,8 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_lep1_pT",[15,30,500]))
         h_list.append(SetHist("h_reg_"+reg+"_lep1_eta",[15,-2.5,2.5]))
         h_list.append(SetHist("h_reg_"+reg+"_lep1_Phi",[15,-3.14,3.14]))
+        h_list.append(SetHist("h_reg_"+reg+"_nPV",[70,0,70]))
+        h_list.append(SetHist("h_reg_"+reg+"_PUnPV",[70,0,70]))
         if 'Wmunu' in reg or 'Wenu' in reg:
             h_list.append(SetHist("h_reg_"+reg+"_Wmass",[15,0,160]))
             h_list.append(SetHist("h_reg_"+reg+"_WpT",[15,0,700]))
