@@ -230,7 +230,7 @@ def runbbdm(txtfile):
             ep_Zeemass, ep_Zmumumass, ep_Wenumass, ep_Wmunumass, \
             ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
-            ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV \
+            ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV, \
             ep_THINjetCEmEF,ep_THINjetCHadEF,ep_THINjetNEmEF,ep_THINjetNHadEF,ep_THINjetCMulti,ep_THINjetNMultiplicity, \
             ep_THINjetCorrUnc, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
