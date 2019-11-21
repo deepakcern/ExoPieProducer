@@ -353,11 +353,13 @@ def runbbdm(txtfile):
 
             '''
             --------------------------------------------------------------------------------
-            COMMAN WEIGHT CALCULATION FOR ALL REGIONS
+            COMMON WEIGHT CALCULATION FOR ALL REGIONS
             --------------------------------------------------------------------------------
             '''
-            weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = 1.0
-            if not ep_isData:
+            weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = -999.0
+            if ep_isData:
+                weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = 1.0
+            else:
                 weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightPU = wgt.puweight(ep_pu_nTrueInt)
                 if ep_genParSample   == 23 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
