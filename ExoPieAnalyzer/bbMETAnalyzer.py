@@ -356,16 +356,20 @@ def runbbdm(txtfile):
             COMMON WEIGHT CALCULATION FOR ALL REGIONS
             --------------------------------------------------------------------------------
             '''
-            weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = -999.0
+            weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEle = weightMu = -999.0
             if ep_isData:
-                weight = weightPU = weightB = weightEWK = weightTop = weightEle = weightMu = 1.0
+                weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEle = weightMu = 1.0
             else:
                 weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightPU = wgt.puweight(ep_pu_nTrueInt)
-                if ep_genParSample   == 23 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
-                if ep_genParSample == 24 and len(ep_genParPt) > 0 : weightEWK = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+                if ep_genParSample   == 23 and len(ep_genParPt) > 0 :
+                    weightEWK = wgt.getEWKZ(ep_genParPt[0])
+                    weightQCD = wgt.getQCDZ(ep_genParPt[0])
+                if ep_genParSample == 24 and len(ep_genParPt) > 0 :
+                    weightEWK = wgt.getEWKW(ep_genParPt[0])
+                    weightQCD = wgt.getQCDW(ep_genParPt[0])
                 if ep_genParSample == 6 and len(ep_genParPt) > 0  : weightTop = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
-                common_weight = weightB * weightEWK * weightTop * weightPU
+                common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU
                 weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
 
             '''
@@ -637,7 +641,7 @@ def runbbdm(txtfile):
                                                     'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR1b')
@@ -649,7 +653,7 @@ def runbbdm(txtfile):
                                                     'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR2b')
@@ -665,7 +669,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
                                                     'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZee')
@@ -680,7 +684,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
                                                     'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZee')
@@ -696,7 +700,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
                                                     'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZmumu')
@@ -711,7 +715,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
                                                     'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZmumu')
@@ -725,7 +729,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWenu')
@@ -739,7 +743,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWenu')
@@ -754,7 +758,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWmunu')
@@ -768,7 +772,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWmunu')
@@ -782,7 +786,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopenu')
@@ -796,7 +800,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopenu')
@@ -810,7 +814,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopmunu')
@@ -824,7 +828,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,  'weightEWK':weightEWK, 'weightTop':weightTop, 'weightPU':weightPU
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopmunu')
