@@ -6,7 +6,6 @@ allvars_bbDM=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', 'st_THINjetNPV', \
-'st_THINjetCEmEF','st_THINjetCHadEF','st_THINjetNEmEF','st_THINjetNHadEF','st_THINjetCMulti','st_THINjetNMultiplicity', \
 'st_THINjetCorrUnc', \
 'st_nEle', 'st_elePx', 'st_elePy', 'st_elePz', 'st_eleEnergy', \
 'st_eleIsPassTight', 'st_eleIsPassLoose', \
@@ -24,7 +23,7 @@ allvars_monoHbb=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
-'st_THINjetNHadEF', 'st_THINjetCHadEF', 'st_THINjetCEmEF', 'st_THINjetPhoEF', 'st_THINjetEleEF', 'st_THINjetMuoEF', \
+'st_THINjetCEmEF','st_THINjetCHadEF','st_THINjetNEmEF','st_THINjetNHadEF','st_THINjetCMulti','st_THINjetNMultiplicity', \
 'st_THINjetCorrUnc', \
 'st_nfjet', 'st_fjetPx', 'st_fjetPy', 'st_fjetPz', 'st_fjetEnergy', \
 'st_fjetDoubleSV', 'st_fjetProbQCDb', 'st_fjetProbHbb', 'st_fjetProbQCDc', 'st_fjetProbHcc', 'st_fjetProbHbbc', 'st_fjetProbbbvsLight', \
