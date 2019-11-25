@@ -122,16 +122,16 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZeeRecoil,ep_WenuRecoil,ep_ZmumuReco
     if (nEle==2 and nMu==0):
         ele_trig = True; no_ele_trig = False
         if ep_elePt[0] > 30: weightEle = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T') * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
-        if ep_ZeeRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_ZeeRecoil)
-        tot_weight = weightEle*common_weight*weightRecoil
-        weightMET = 1.0;  weightMu = 1.0;
+        #if ep_ZeeRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_ZeeRecoil)
+        tot_weight = weightEle*common_weight
+        weightMET = 1.0;  weightMu = 1.0; weightRecoil = 1.0
 
     if (nEle==1 and nMu==0):
         ele_trig = True
         if ep_elePt[0] > 30: weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
-        if ep_WenuRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_WenuRecoil)
-        tot_weight = weightEle*common_weight*weightRecoil
-        weightMET = 1.0;  weightMu = 1.0;
+        #if ep_WenuRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_WenuRecoil)
+        tot_weight = weightEle*common_weight
+        weightMET = 1.0;  weightMu = 1.0; weightRecoil = 1.0
 
     if (nEle==0 and nMu==1):
         mu_trig = False
