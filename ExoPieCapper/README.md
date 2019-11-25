@@ -1,5 +1,3 @@
-### all kind of plotting code here
-
 **For MET Channel:**
 
 ```python StackPlotter.py -d MET -m -y 2016/2017```
