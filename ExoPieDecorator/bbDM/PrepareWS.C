@@ -484,7 +484,7 @@ void PrepareWS(){
   //---------------------------------------------- Signal -------------------------------------------------------------
   //-------------------------------------------------------------------------------------------------------------------
 
-  int signalpoint[]={10,50,100,150,200,250,300,350,400,450,500};
+  int signalpoint[]={50,100,150,250,300,350,400};
   Int_t  nsig = sizeof(signalpoint)/sizeof(int);
   std::vector<TString> category;
   category.push_back("2b");
@@ -492,11 +492,11 @@ void PrepareWS(){
 
   TString mps;
   for (auto is=0; is<nsig; is++){
-
     mps.Form("%d",signalpoint[is]);
     //bbDM2016_2b_SR_2HDMa_Ma750_MChi1_MA1200_tb35_st_0p7
     //addTemplate(wspace, vars, (TH1F*) fin->Get("bbNLO_pseudo_2b_Mchi_1_Mphi_"+mps ) );
-    addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_2HDMa_Ma"+mps+"_MChi1_MA1200_tb35_st_0p7" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_2HDMa_Ma"+mps+"_MChi1_MA600_tb35_st_0p7" ) );
+    //addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_2HDMa_Ma"+mps+"_MChi1_MA1200_tb35_st_0p7" ) );
 
   }
 
@@ -520,12 +520,12 @@ void PrepareWS(){
   // all other histograms
   std::vector<TString> regions;
   //regions.push_back("SR");
-  regions.push_back("TOPE");
-  regions.push_back("TOPMU");
-  regions.push_back("WE");
-  regions.push_back("WMU");
-  regions.push_back("ZEE");
-  regions.push_back("ZMUMU");
+  regions.push_back("TOPENUCR");
+  regions.push_back("TOPMUNUCR");
+  regions.push_back("WENUCR");
+  regions.push_back("WMUNUCR");
+  regions.push_back("ZEECR");
+  regions.push_back("ZMUMUCR");
 
   std::vector<TString> process;
   process.push_back("qcd");
@@ -539,15 +539,11 @@ void PrepareWS(){
 
   TString tempname;
   for (auto ir=0; ir<regions.size(); ir++){
-
     for (auto ip=0; ip<process.size(); ip++){
-
       for (auto ic=0; ic<category.size(); ic++){
-
-	tempname = regions[ir] + "_" + category[ic] + "_" + process[ip];
-	std::cout<<" saving "<<tempname<<std::endl;
-	addTemplate(wspace, vars, (TH1F*) fin->Get(tempname)  );
-
+        tempname = "bbDM2016_"+category[ic] + "_" + regions[ir] + "_" + process[ip];
+        std::cout<<" saving "<<tempname<<std::endl;
+        addTemplate(wspace, vars, (TH1F*) fin->Get(tempname)  );
       }
     }
   }
