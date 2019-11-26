@@ -509,9 +509,9 @@ void PrepareWS(){
     addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_"+mps+"_ma_150" ) );
   }
 
-  /*  
-  addTemplate(wspace, vars, (TH1F*) fin->Get("SR_2b_data_obs" ) );
-  */
+  
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+  
 
 
   /*
@@ -533,7 +533,7 @@ void PrepareWS(){
   
   // all other histograms 
   std::vector<TString> regions; 
-  //regions.push_back("SR");
+  regions.push_back("SR");
   regions.push_back("TOPE");
   regions.push_back("TOPMU");
   regions.push_back("WE");
@@ -544,8 +544,8 @@ void PrepareWS(){
   
   std::vector<TString> process;
   
-  //process.push_back("diboson");
-  //process.push_back("gjets");
+  process.push_back("diboson");
+  process.push_back("gjets");
   process.push_back("qcd");
   process.push_back("zjets");
   process.push_back("smh");
