@@ -15,7 +15,7 @@ parser.add_option("-e", "--ele", action="store_true", dest="plotEleRegs")
 parser.add_option("-p", "--pho", action="store_true", dest="plotPhoRegs")
 parser.add_option("-q", "--qcd", action="store_true", dest="plotQCDRegs")
 parser.add_option("-v", "--verbose", action="store_true", dest="verbose")
-parser.add_argument("-y", "--year", dest="year", default="Year")
+parser.add_option("-y", "--year", dest="year", default="Year")
 
 (options, args) = parser.parse_args()
 
@@ -61,9 +61,9 @@ print ("Using dataset "+dtset)
 
 runOn2016 = False
 runOn2017 = False
-if args.year=='2016':
+if options.year=='2016':
     runOn2016=True
-elif args.year=='2017':
+elif options.year=='2017':
     runOn2017=True
 else:
     print('Please provide on which year you want to run?')
@@ -554,14 +554,14 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     VVLegend    =   "DIBOSON "
     QCDLegend   =   "QCD "
 
-    x1_l = 0.95; dx_l = 0.31
-    y1_l = 0.93; dy_l = 0.21
+    x1_l = 0.96; dx_l = 0.40
+    y1_l = 0.94; dy_l = 0.21
     x0_l = x1_l-dx_l
     y0_l = y1_l-dy_l
 
     legend = ROOT.TLegend(x0_l,y0_l,x1_l, y1_l,"", "brNDC")
     legend.SetNColumns(2)
-    legend.SetTextSize(0.020);
+    legend.SetTextSize(0.0265);
     legend.SetBorderSize(0);
     legend.SetLineColor(1);
     legend.SetLineStyle(1);
@@ -597,7 +597,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     t2b = ROOT.TLatex(0.22,0.88,'');
     t2b.SetTextSize(0.03);
 
-    t2d = ROOT.TLatex(0.40,0.9,str(histolabel));
+    t2d = ROOT.TLatex(0.30,0.85,str(histolabel));
     t2d.SetTextSize(0.045);
 
     t2a.SetTextAlign(12);

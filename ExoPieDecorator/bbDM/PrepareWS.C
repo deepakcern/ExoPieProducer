@@ -497,8 +497,8 @@ void PrepareWS(){
     //addTemplate(wspace, vars, (TH1F*) fin->Get("bbNLO_pseudo_2b_Mchi_1_Mphi_"+mps ) );
     addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_2HDMa_Ma"+mps+"_MChi1_MA600_tb35_st_0p7" ) );
     //addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_2HDMa_Ma"+mps+"_MChi1_MA1200_tb35_st_0p7" ) );
-
   }
+  addTemplate(wspace, vars, (TH1F*) fin->Get("bbDM2016_2b_SR_data_obs" ) );
 
   /*
   addTemplate(wspace, vars, (TH1F*) fin->Get("SR_2b_data_obs" ) );
@@ -519,7 +519,7 @@ void PrepareWS(){
 
   // all other histograms
   std::vector<TString> regions;
-  //regions.push_back("SR");
+  regions.push_back("SR");
   regions.push_back("TOPENUCR");
   regions.push_back("TOPMUNUCR");
   regions.push_back("WENUCR");
@@ -528,9 +528,10 @@ void PrepareWS(){
   regions.push_back("ZMUMUCR");
 
   std::vector<TString> process;
+  process.push_back("diboson");
+  process.push_back("gjets");
   process.push_back("qcd");
   process.push_back("zjets");
-  process.push_back("gjets");
   process.push_back("wjets");
   process.push_back("dyjets");
   process.push_back("tt");
