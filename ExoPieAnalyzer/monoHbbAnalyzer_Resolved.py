@@ -170,18 +170,6 @@ def runbbdm(txtfile):
     df_out_Zmumu_resolved = out.df_out_Zmumu_resolved
     df_out_Zee_resolved   = out.df_out_Zee_resolved
 
-
-    df_out_SBand_boosted= out.df_out_SBand_boosted
-    df_out_Tope_boosted = out.df_out_Tope_boosted
-    df_out_Topmu_boosted= out.df_out_Topmu_boosted
-    df_out_We_boosted   = out.df_out_We_boosted
-    df_out_Wmu_boosted  = out.df_out_Wmu_boosted
-    df_out_Zmumu_boosted= out.df_out_Zmumu_boosted
-    df_out_Zee_boosted  = out.df_out_Zee_boosted
-    df_out_TopWmu_boosted = out.df_out_TopWmu_boosted
-    df_out_TopWe_boosted  = out.df_out_TopWe_boosted
-
-
     #outputfilename = args.outputfile
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
@@ -240,7 +228,6 @@ def runbbdm(txtfile):
             if ieve%1000==0: print "Processed",ieve,"Events"
 
             isBoostedSR=False
-            isBoostedSBand=False
             isBoostedCRWenu=False
             isBoostedCRWmunu=False
             isBoostedCRZee=False
@@ -289,14 +276,13 @@ def runbbdm(txtfile):
             AK4JET COLLECTION FOR BOOSTED CATEGORY
             -----------------------------------------------------------------------------
             '''
-            #if ep_THINnJet < 2: continue
+            if ep_THINnJet < 2: continue
        
             ak4jetpt  = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
 
-            nBjets_notiso_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)]
-            nBjets_notiso = len(nBjets_notiso_index)
+            nBjets_notiso = len([ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)])
 
             ak4_pt30_eta4p5  = [True for ij in range(ep_THINnJet)] #pt > 30 and eta < 4.5 is already applied at skimmer level
             fjet_pt200_eta_2p5 = [True for ij in range(ep_nfjet)] #pt > 200 and eta < 2.5 is already applied at skimmer level
@@ -337,7 +323,6 @@ def runbbdm(txtfile):
 		h_mass  = InvMass(ep_THINjetPx[jet1Index], ep_THINjetPy[jet1Index], ep_THINjetPz[jet1Index], ep_THINjetEnergy[jet1Index],ep_THINjetPx[jet2Index], ep_THINjetPy[jet2Index], ep_THINjetPz[jet2Index],ep_THINjetEnergy[jet2Index])
                 #print 'jet1Index',jet1Index,'jet2Index',jet2Index
                 #print 'jet1Index_list',jet1Index_list,'jet2Index_list',jet2Index_list
-                #print 'nBjets_notiso_index',nBjets_notiso_index,'jet1Index',jet1Index,'jet2Index',jet2Index
 
             #print 'h_mass',h_mass
 
@@ -451,6 +436,7 @@ def runbbdm(txtfile):
                 min_ak4jet_MET_dPhi_R  = min([DeltaPhi(ep_pfMetCorrPhi,ak4jetphi[ijet]) for ijet in range(ep_THINnJet)])
 
 
+
             '''
             ------------------------------------------------------------------------------
              GET REGION[SR/CR] BASED ON PROPERTIES OF EVENT
@@ -464,14 +450,13 @@ def runbbdm(txtfile):
                      ZeeRecoil,minDPhi_ak4jet_ZeeRecoil,ZeeMass,ZmumuRecoil,minDPhi_ak4jet_ZmumuRecoil,ZmumuMass,\
                      Werecoil,minDPhi_ak4jet_Werecoil, WeMass,Wmurecoil, minDPhi_ak4jet_Wmurecoil, WmuMass)
 
-            if region_boosted['boosted_signal'] and mettrigdecision:  isBoostedSR      = True
-            if region_boosted['boosted_SBand']  and mettrigdecision  : isBoostedSBand    = True
-            if region_boosted['boosted_te']     and eletrigdecision:  isBoostedCRTope  = True
-            if region_boosted['boosted_tm']     and mettrigdecision:  isBoostedCRTopmu = True
-            if region_boosted['boosted_wen']    and eletrigdecision:  isBoostedCRWenu  = True
-            if region_boosted['boosted_wmn']    and mettrigdecision:  isBoostedCRWmunu = True
-            if region_boosted['boosted_zee']    and eletrigdecision:  isBoostedCRZee   = True
-            if region_boosted['boosted_zmm'] and mettrigdecision:  isBoostedCRZmumu = True
+            if region_boosted['boosted_signal'] :  isBoostedSR      = True
+            if region_boosted['boosted_te']     :  isBoostedCRTope  = True
+            if region_boosted['boosted_tm']     :  isBoostedCRTopmu = True
+            if region_boosted['boosted_wen']    :  isBoostedCRWenu  = True
+            if region_boosted['boosted_wmn']    :  isBoostedCRWmunu = True
+            if region_boosted['boosted_zee']    :  isBoostedCRZee   = True
+            if region_boosted['boosted_zmm']    :  isBoostedCRZmumu = True
 
             '''
             getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho,\
@@ -516,8 +501,7 @@ def runbbdm(txtfile):
 
 	    PUweight=wgt.puweight(ep_pu_nTrueInt)
             commanweight = btagweight*ewkweight*toppTweight*PUweight
-            commanweight_nobtag = ewkweight*toppTweight*PUweight
-            #print 'ewkweight',ewkweight
+
 	    additional_jets=ep_THINnJet-2
 
             '''
@@ -677,239 +661,6 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
                                            },
                                                 ignore_index=True)
-
-            '''
-            --------------------------------------------------------------------------------
-            SIGNAL REGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-            jet1pT=jet1Eta=jet1Phi= -9999.0
-            if nJets_cleaned > 0:
-                jet1pT           = ak4jetpt[pass_ak4jet_index_cleaned[0]]
-                jet1Eta          = ak4jeteta[pass_ak4jet_index_cleaned[0]]
-                jet1Phi          = ak4jetphi[pass_ak4jet_index_cleaned[0]]
-
-            if isBoostedSR:
-                fjet_index           = pass_nfjetIndex[0]
-                min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
-
-                weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
-                if not isData: weight = commanweight_nobtag*weightMET
-                #print 'weight', weight
-                df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-            '''
-            --------------------------------------------------------------------------------
-            SIDEBAND CONTROL REGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-            if isBoostedSBand:
-                #print 'mini_AK8jet_MET_dPhi', mini_AK8jet_MET_dPhi
-                fjet_index           = FatJet_SBand_index[0]
-                min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
-
-                weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
-                if not isData: weight = commanweight_nobtag*weightMET
-                #print 'weight', weight
-                df_out_SBand_boosted = df_out_SBand_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-
-            '''
-            --------------------------------------------------------------------------------
-            TOP EleREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-            if isBoostedCRTope:
-                fjet_index           = pass_nfjetIndex[0]
-                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Werecoil
-                ele1_index           = ele_tight_index[0]
-                ele_trig = True
-                weightele=wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
-
-                if not isData: weight = commanweight_nobtag*weightele
-                #print 'weight Tope', weight
-
-                #print 'nPho', nPho
-                df_out_Tope_boosted  = df_out_Tope_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_Recoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
-                                                'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-            '''
-            --------------------------------------------------------------------------------
-            TOP MuREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-
-            if isBoostedCRTopmu:
-                fjet_index           = pass_nfjetIndex[0]
-                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Wmurecoil
-                muon1_index          = muon_tight_index[0]
-
-
-                weightRecoil=wgt.getMETtrig_First(Wmurecoil)
-                if not isData: weight = commanweight_nobtag*weightRecoil
-                #print 'weight Topmu', weight
-
-                df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_Recoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
-                                                'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-            '''
-            --------------------------------------------------------------------------------
-            W EleREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-            if isBoostedCRWenu:
-                fjet_index           = pass_nfjetIndex[0]
-                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Werecoil
-                ele1_index           = ele_tight_index[0]
-                ele_trig=True
-                weightele=wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
-
-                if not isData: weight = commanweight_nobtag*weightele
-                
-
-                df_out_We_boosted  = df_out_We_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_Recoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
-                                                'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-            
-
-            '''
-            --------------------------------------------------------------------------------
-            W MuREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-
-            if isBoostedCRWmunu:
-                fjet_index           = pass_nfjetIndex[0]
-                min_dPhi_ak4_Recoil  = minDPhi_ak4jet_Wmurecoil
-                muon1_index          = muon_tight_index[0]
-
-                weightRecoil=wgt.getMETtrig_First(Wmurecoil)
-                if not isData: weight = commanweight_nobtag*weightRecoil
-
-
-
-                df_out_Wmu_boosted  = df_out_Wmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_Recoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
-                                                'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-
-            '''
-            --------------------------------------------------------------------------------
-            ZCR MuREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-
-            if isBoostedCRZmumu:
-                fjet_index           = FatJet_ZCR_index[0]#pass_nfjetIndex[0]
-
-                ZpT = math.sqrt( (ep_muPx[0] + ep_muPx[1])**2 + (ep_muPy[0]+ep_muPy[1])**2 )
-
-                weightRecoil=wgt.getMETtrig_First(ZmumuRecoil)
-                if not isData: weight = commanweight_nobtag*weightRecoil
-
-
-
-                df_out_Zmumu_boosted  = df_out_Zmumu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':ZmumuRecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':minDPhi_ak4jet_ZmumuRecoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':ZmumuRecoil_dPhi,
-                                                'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
-                                                'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
-                                                'Zmass':ZmumuMass,'ZpT':ZpT,
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-
-            '''
-            --------------------------------------------------------------------------------
-            ZCR EleREGION BOOSTED
-            --------------------------------------------------------------------------------
-            '''
-
-
-            if isBoostedCRZee:
-                fjet_index           = FatJet_ZCR_index[0]#pass_nfjetIndex[0]
-                ele1_index           = ele_loose_index[0]
-                ele2_index           = ele_loose_index[1]
-                ZpT = math.sqrt( (ep_elePx[ele1_index] + ep_elePx[ele2_index])**2 + (ep_elePy[ele1_index]+ep_elePy[ele2_index])**2 )
-
-                ele_trig = True
-                no_ele_trig = False
-                weightele=(wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T'))*(wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],no_ele_trig,'L'))
-                if not isData: weight = commanweight_nobtag*weightele
-
-
-
-                df_out_Zee_boosted    = df_out_Zee_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
-                                                'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'Njets_PassID':ep_THINnJet,
-                                                'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
-                                                'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],
-                                                'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':minDPhi_ak4jet_ZeeRecoil,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':ZeeRecoil_dPhi,
-                                                'lep1_pT':elept[0],'lep1_eta':eleeta[0],'lep1_Phi':elephi[0],
-                                                'lep2_pT':elept[1],'lep2_eta':eleeta[1],'lep2_Phi':elephi[1],
-                                                'Zmass':ZeeMass,'ZpT':ZpT,
-                                                'weight':weight
-                                           },
-                                                ignore_index=True)
-
-
     outfilenameis=outfilename
     #result = df_out_Tope_boosted.empty
     #if not result:df_out_Tope_boosted.fillna(0.0)
@@ -921,18 +672,6 @@ def runbbdm(txtfile):
     df_out_Wmu_resolved.to_root(outfilenameis, key='monoHbb_Wmu_resolved',mode='a')
     df_out_Zmumu_resolved.to_root(outfilenameis, key='monoHbb_Zmumu_resolved',mode='a')
     df_out_Zee_resolved.to_root(outfilenameis, key='monoHbb_Zee_resolved',mode='a')
-
-
-    df_out_SR_boosted.to_root(outfilenameis, key='monoHbb_SR_boosted',mode='a')
-    df_out_SBand_boosted.to_root(outfilenameis, key='monoHbb_SBand_boosted',mode='a')
-    df_out_Tope_boosted.to_root(outfilenameis, key='monoHbb_Tope_boosted', mode='a')
-    df_out_Topmu_boosted.to_root(outfilenameis, key='monoHbb_Topmu_boosted', mode='a')
-    df_out_We_boosted.to_root(outfilenameis, key='monoHbb_We_boosted', mode='a')
-    df_out_Wmu_boosted.to_root(outfilenameis, key='monoHbb_Wmu_boosted', mode='a')
-    df_out_Zmumu_boosted.to_root(outfilenameis, key='monoHbb_Zmumu_boosted', mode='a')
-    df_out_Zee_boosted.to_root(outfilenameis, key='monoHbb_Zee_boosted', mode='a')
-    df_out_TopWmu_boosted.to_root(outfilenameis, key='monoHbb_TopWmu_boosted',mode='a')
-    df_out_TopWe_boosted.to_root(outfilenameis, key='monoHbb_TopWe_boosted',mode='a')
 
     outfile = TFile(outfilenameis,'UPDATE')
     outfile.cd()
