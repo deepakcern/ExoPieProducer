@@ -473,7 +473,37 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     c1_2.Draw();
     c1_2.cd();
     hs.Draw()
-
+    if ('MET' in hist) and ('SR' in hist):
+        sig_leg1b = ROOT.TLegend(0.23, 0.62, 0.60,0.90,'',"brNDC");
+        sig_leg1b.SetTextSize(0.030);sig_leg1b.SetBorderSize(0)
+        sig_leg1b.SetFillStyle(0);sig_leg1b.SetTextFont(42)
+        sig_leg1b.SetHeader("2HDM+a model")
+        sig_leg2b = ROOT.TLegend(0.23, 0.62, 0.60,0.90,'',"brNDC");
+        sig_leg2b.SetTextSize(0.030);sig_leg2b.SetBorderSize(0)
+        sig_leg2b.SetFillStyle(0);sig_leg2b.SetTextFont(42)
+        sig_leg2b.SetHeader("2HDM+a model")
+        mass_points = [50,250,500]
+        signal_files_name = [name for name in os.listdir(sig_path) if (('Ma50' in name) or ('Ma500' in name)) ]
+        signal_files = [ROOT.TFile(sig_path+'/'+filename,'READ') for filename in os.listdir(sig_path) if (('Ma50' in filename) or ('Ma500' in filename))]
+        total = [fname.Get('h_total_mcweight') for fname in signal_files]
+        sig_hist1b = [fname.Get('h_reg_SR_1b_MET') for fname in signal_files]
+        sig_hist2b = [fname.Get('h_reg_SR_2b_MET') for fname in signal_files]
+        sig_hist1b_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral()) for i,j,k in zip(sig_hist1b,signal_files_name,total)]
+        sig_hist2b_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral()) for i,j,k in zip(sig_hist2b,signal_files_name,total)]
+        LineStyle = [[i.SetLineStyle(2), j.SetLineStyle(2)] for i,j in zip(sig_hist1b,sig_hist2b)]
+        LineWidth = [[i.SetLineWidth(2), j.SetLineWidth(2)] for i,j in zip(sig_hist1b,sig_hist2b)]
+        LineColor = [[i.SetLineColor(n), j.SetLineColor(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(2,len(sig_hist2b)+2))]
+        MarkerColor = [[i.SetMarkerColor(n), j.SetMarkerColor(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(2,len(sig_hist2b)+2))]
+        MarkerStyle = [[i.SetMarkerStyle(n), j.SetMarkerStyle(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(len(sig_hist2b)))]
+        MarkerSize = [[i.SetMarkerSize(1.5), j.SetMarkerSize(1.5)] for i,j in zip(sig_hist1b,sig_hist2b)]
+        sig_leg1b_list = [sig_leg1b.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist1b,signal_files_name)]
+        sig_leg2b_list = [sig_leg2b.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist2b,signal_files_name)]
+        if ('1b' in hist):
+            draw_hist1b = [i.Draw("same") for i in sig_hist1b]
+            sig_leg1b.Draw()
+        if ('2b' in hist):
+            draw_hist1b = [i.Draw("same") for i in sig_hist2b]
+            sig_leg2b.Draw()
 #####================================= data section =========================
     if 'SR' in reg:
         h_data=hs.GetStack().Last()
