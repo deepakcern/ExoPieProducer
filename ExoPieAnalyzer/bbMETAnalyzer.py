@@ -112,40 +112,33 @@ def TextToList(textfile):
 #### first element is the list of rootfiles
 #### second element is the key, user to name output.root
 
-def weight_(common_weight,ep_pfMetCorrPt,ep_ZeeRecoil,ep_WenuRecoil,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,nMu,ep_muPt,ep_muEta):
-    tot_weight = -1.0; weightMET = -1.0; weightEle = -1.0; weightMu = -1.0; weightRecoil = -1.0
+def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,nMu,ep_muPt,ep_muEta):
+    tot_weight = 1.0; weightMET = 1.0; weightEle = 1.0; weightMu = 1.0; weightRecoil = 1.0
     if (nEle==0 and nMu==0):
         if ep_pfMetCorrPt > 200: weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
         tot_weight = weightMET*common_weight
-        weightEle = 1.0; weightMu = 1.0; weightRecoil = 1.0
 
     if (nEle==2 and nMu==0):
         ele_trig = True; no_ele_trig = False
         if ep_elePt[0] > 30: weightEle = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T') * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],no_ele_trig,'L')
-        #if ep_ZeeRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_ZeeRecoil)
         tot_weight = weightEle*common_weight
-        weightMET = 1.0;  weightMu = 1.0; weightRecoil = 1.0
 
     if (nEle==1 and nMu==0):
         ele_trig = True
         if ep_elePt[0] > 30: weightEle=wgt.ele_weight(ep_elePt[0],ep_eleEta[0],ele_trig,'T')
-        #if ep_WenuRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_WenuRecoil)
         tot_weight = weightEle*common_weight
-        weightMET = 1.0;  weightMu = 1.0; weightRecoil = 1.0
 
     if (nEle==0 and nMu==1):
         mu_trig = False
         if ep_muPt[0]>30: weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')
         if ep_WmunuRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_WmunuRecoil)
         tot_weight = weightMu*common_weight*weightRecoil
-        weightMET = 1.0;  weightEle = 1.0;
 
     if (nEle==0 and nMu==2):
         mu_trig = False; no_mu_trig = False
         if ep_muPt[0]>30: weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],mu_trig,'T')*wgt.mu_weight(ep_muPt[1],ep_muEta[1],no_mu_trig,'L')
         if ep_ZmumuRecoil>200: weightRecoil=wgt.getMETtrig_First(ep_ZmumuRecoil)
         tot_weight = weightMu*common_weight*weightRecoil
-        weightMET = 1.0;  weightEle = 1.0;
 
     return tot_weight,weightEle,weightMu,weightRecoil
 
@@ -370,23 +363,19 @@ def runbbdm(txtfile):
             if ep_isData:
                 weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEle = weightMu = 1.0
             else:
-
                 weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightPU = wgt.puweight(ep_pu_nTrueInt)
+                weightEWK = 1.0; weightQCD = 1.0
                 if ep_genParSample == 23 and len(ep_genParPt) > 0 :
                     weightEWK = wgt.getEWKZ(ep_genParPt[0])
                     weightQCD = wgt.getQCDZ(ep_genParPt[0])
-                elif ep_genParSample == 24 and len(ep_genParPt) > 0 :
+                if ep_genParSample == 24 and len(ep_genParPt) > 0 :
                     weightEWK = wgt.getEWKW(ep_genParPt[0])
                     weightQCD = wgt.getQCDW(ep_genParPt[0])
-                else:
-                    weightEWK = 1.0; weightQCD = 1.0
-                if ep_genParSample == 6 and len(ep_genParPt) > 0  :
+                if ep_genParSample == 6 and len(ep_genParPt) > 0:
                     weightTop = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
-                else:
-                    weightTop = 1.0
                 common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU
-                weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZeeRecoil,ep_WenuRecoil,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
+                weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
 
             if weightB==0:
                 print ('ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV')
