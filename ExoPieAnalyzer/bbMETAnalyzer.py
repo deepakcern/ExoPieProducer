@@ -166,7 +166,7 @@ def runbbdm(txtfile):
         infile_=TextToList(txtfile)
         prefix_ = '' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
         if outputdir!='.': prefix_ = outputdir+'/'
-        print "prefix_", prefix_
+        print "prefix_", p  refix_
         outfilename = prefix_+txtfile.split('/')[-1].replace('.txt','.root')#"SkimmedTree.root"
         print 'outfilename',  outfilename
 
@@ -377,10 +377,6 @@ def runbbdm(txtfile):
                 common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU
                 weight,weightEle,weightMu,weightRecoil = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
 
-            if weightB==0:
-                print ('ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV')
-                print (ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
-                print ('weight',weight, 'weightPU',weightPU,'weightB',weightB, 'weightEWK',weightEWK ,'weightQCD',weightQCD,'weightTop',weightTop,'weightEle',weightEle ,'weightMu',weightMu)
             '''
             --------------------------------------------------------------------------------
             SIGNAL REGION
