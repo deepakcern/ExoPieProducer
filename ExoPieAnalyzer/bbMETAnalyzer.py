@@ -18,8 +18,8 @@ from multiprocessing import Process
 import multiprocessing as mp
 
 
-isCondor = False
-runInteractive = True
+isCondor = True
+runInteractive = False
 testing=True
 ## from commonutils
 if isCondor:sys.path.append('ExoPieUtils/commonutils/')
