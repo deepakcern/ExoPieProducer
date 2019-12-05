@@ -439,7 +439,7 @@ def runbbdm(txtfile):
             if eletrigdecision:
                 h_reg_ZeeCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_ZeeCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, weight)
                     if (ep_ZeeRecoil > 200.):
@@ -477,7 +477,7 @@ def runbbdm(txtfile):
             if mettrigdecision:
                 h_reg_ZmumuCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_ZmumuCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, weight)
                     if (ep_ZmumuRecoil > 200. ) :
@@ -514,7 +514,7 @@ def runbbdm(txtfile):
             if eletrigdecision:
                 h_reg_WenuCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_WenuCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_WenuCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_WenuCR_2b_cutFlow.AddBinContent(3, weight)
                     if (ep_WenuRecoil > 200.) :
@@ -551,7 +551,7 @@ def runbbdm(txtfile):
             if mettrigdecision:
                 h_reg_WmunuCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_WmunuCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, weight)
                     if (ep_WmunuRecoil > 200.) :
@@ -588,10 +588,10 @@ def runbbdm(txtfile):
             if eletrigdecision:
                 h_reg_TopenuCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_TopenuCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, weight)
-                    if (ep_WenuRecoil > 200. and ep_pfMetCorrPt > 50.) :
+                    if (ep_WenuRecoil > 200. ) :
                         h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, weight)
                         h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, weight)
                         if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
@@ -625,10 +625,10 @@ def runbbdm(txtfile):
             if mettrigdecision:
                 h_reg_TopmunuCR_1b_cutFlow.AddBinContent(2, weight)
                 h_reg_TopmunuCR_2b_cutFlow.AddBinContent(2, weight)
-                if (ep_pfMetCorrPt > 50.):
+                if (ep_pfMetCorrPt > 0.):
                     h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, weight)
                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, weight)
-                    if (ep_WmunuRecoil > 200. and ep_pfMetCorrPt > 50.) :
+                    if (ep_WmunuRecoil > 200. ) :
                         h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, weight)
                         h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, weight)
                         if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
