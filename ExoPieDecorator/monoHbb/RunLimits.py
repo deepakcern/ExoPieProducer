@@ -17,9 +17,16 @@ parser.add_argument("-A", "--runasimov",  action="store_true", dest="runasimov")
 parser.add_argument("-L", "--runlimits",  action="store_true", dest="runlimits")
 parser.add_argument("-D", "--rundiagonstics",  action="store_true", dest="rundiagonstics")
 
+parser.add_argument("-c", "--createdatacards",  action="store_true", dest="createdatacards")
+
+parser.add_argument("-m", "--merged",  action="store_true", dest="merged")
+parser.add_argument("-r", "--resolved",  action="store_true", dest="resolved")
+parser.add_argument("-b", "--both",  action="store_true", dest="both")
+parser.add_argument("-C", "--combined",  action="store_true", dest="combined")
+
 
 ## integers 
-parser.add_argument("-v", "--verbose",  dest="verbose", type=int, default=-1)
+parser.add_argument("-v", "--verbose",  dest="verbose", type=int, default=0)
 parser.add_argument("-rmax", "--rmax",  dest="rmax", type=int, default=30)
 parser.add_argument("-rmin", "--rmin",  dest="rmin", type=int, default=0.0000001)
 parser.add_argument("-CL", "--CL",  dest="CL", type=int, default=0.95) ## can be used for SI interpretation but not using right now 
@@ -55,11 +62,6 @@ if args.rundiagonstics: commandpre = "combine -M FitDiagnostics "
 
 
 
-''' datacards path in a text file is converted into a list''' 
-datacardnames=args.inputdatacardpath
-datacardnameslist = [iline.rstrip() for iline in open(datacardnames)]
-
-
 
 class RunLimits:
     ''' class to perform all tasks related to the limits once datacards are prepared '''
@@ -75,23 +77,57 @@ class RunLimits:
         
     def makedatacards(self, templatecards, MA):
         
+        datacardsname = datacardtemplatename_.replace("XXXMA", str(MA))
+        os.system('rm '+datacardsname)
+        fout = open(datacardsname,"a")
+        for iline in open(templatecards):
+            iline  = iline.replace("XXXMA", str(MA))
+            #iline = iline.replace("monoHbb2017_B","monoHbb2017_R")
+            fout.write(iline)
+        fout.close()
+        return datacardsname
 
 
 
-rl = RunLimits()
+## main code, 
 
-''' following is the syntax to get all the cards using template datacard ''' 
+def main():
+    
+    print "inside main"
+    rl = RunLimits()
+    
+    ''' following is the syntax to get all the cards using template datacard ''' 
+    
+    
+    MA=[300, 400, 500, 600, 1000, 1200, 1600]
+    if args.createdatacards:
+        datacardtextfile = 'monohbb2017_datacardslist.txt'
+        os.system('rm '+datacardtextfile)
+        ftxt = open(datacardtextfile,'w')
+        for iMA in MA:
+            datacardname = rl.makedatacards('datacards_tmplate/combine_tmpl_sig2b_workspace.txt',iMA)
+            print datacardname 
+            ftxt.write(datacardname+' \n')
+        ftxt.close()
+        
+        
+    ''' following is the syntax to run all limits ''' 
+    ''' datacards path in a text file is converted into a list''' 
+    datacardnameslist=[]
+    if args.runlimits:
+        datacardnameslist = [iline.rstrip() for iline in open(args.inputdatacardpath)]
+        datacardtemplatename_ = 'datacards_monoHbb_2017/datacard_monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150.txt'
 
-rl.makedatacards('datacards_tmplate/combine_tmpl_sig2b_workspace.txt',1000)
-
-
-''' following is the syntax to run all limits ''' 
-for idc in datacardnameslist :
-    print rl.getfullcommand(commandpre, idc, command_, commandpost)
-    os.system(rl.getfullcommand(commandpre, idc, command_, commandpost))
-    print "-----------------------------------------------------------------------------------------------------------------------"
-
-
-
-
-
+        for idc in datacardnameslist :
+            print rl.getfullcommand(commandpre, idc, command_, commandpost)
+            os.system(rl.getfullcommand(commandpre, idc, command_, commandpost))
+            print "-----------------------------------------------------------------------------------------------------------------------"
+        
+if __name__ == "__main__":
+    
+    print "calling main"
+    main()
+    
+    
+    
+    

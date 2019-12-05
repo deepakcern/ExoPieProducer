@@ -507,10 +507,12 @@ void PrepareWS(){
       
     mps.Form("%d",signalpoint[is]);
     addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_"+mps+"_ma_150" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_"+mps+"_ma_150" ) );
   }
 
   
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_SR_data_obs" ) );
   
 
 
@@ -556,8 +558,8 @@ void PrepareWS(){
 
   
   std::vector<TString> category;
+  category.push_back("monoHbb2017_R_");
   category.push_back("monoHbb2017_B_");
-  //category.push_back("1b");
   
   TString tempname;
   for (auto ir=0; ir<regions.size(); ir++){
