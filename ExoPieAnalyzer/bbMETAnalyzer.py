@@ -166,7 +166,7 @@ def runbbdm(txtfile):
         infile_=TextToList(txtfile)
         prefix_ = '' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
         if outputdir!='.': prefix_ = outputdir+'/'
-        print "prefix_", p  refix_
+        print "prefix_", prefix_
         outfilename = prefix_+txtfile.split('/')[-1].replace('.txt','.root')#"SkimmedTree.root"
         print 'outfilename',  outfilename
 
