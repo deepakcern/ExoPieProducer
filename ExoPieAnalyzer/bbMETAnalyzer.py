@@ -365,7 +365,7 @@ def runbbdm(txtfile):
             else:
                 weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightPU = wgt.puweight(ep_pu_nTrueInt)
-                weightEWK = 1.0; weightQCD = 1.0
+                weightEWK = 1.0; weightQCD = 1.0; weightTop = 1.0
                 if ep_genParSample == 23 and len(ep_genParPt) > 0 :
                     weightEWK = wgt.getEWKZ(ep_genParPt[0])
                     weightQCD = wgt.getQCDZ(ep_genParPt[0])
