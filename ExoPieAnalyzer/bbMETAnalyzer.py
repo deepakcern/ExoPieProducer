@@ -360,9 +360,9 @@ def runbbdm(txtfile):
             COMMON WEIGHT CALCULATION FOR ALL REGIONS
             --------------------------------------------------------------------------------
             '''
-            weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = -999.0
+            weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = -999.0
             if ep_isData:
-                weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = 1.0
+                weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = 1.0
             else:
                 weightB = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
                 weightPU = wgt.puweight(ep_pu_nTrueInt)
