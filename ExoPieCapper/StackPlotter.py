@@ -70,6 +70,7 @@ else:
 
 if runOn2016:
     import sample_xsec_2016 as sample_xsec
+    import sig_sample_xsec_2016 as sig_sample_xsec
     luminosity = 35.82 * 1000
     luminosity_ = 35.82
 elif runOn2017:
@@ -81,38 +82,26 @@ elif runOn2017:
 datestr = str(datetime.date.today().strftime("%d%m%Y"))
 
 #path='/Users/dekumar/MEGA/Fullwork/2017_Plotting/rootFiles_Oct5'
-path='hadd_outputs_2017_14112019'
+path='hadd_outputs_2016_06122019'
+sig_path = 'signal_hists'
 #path='hadd_outputs_13112019'
 #path='/home/deepak/MEGA/Fullwork/2017_Plotting/rootFiles'
 #path='/Users/dekumar/Desktop/test/bkg_data'
 #os.system("ls "+path+" | cat > samplelist.txt")
-
+if makeMuCRplots:
+    yield_outfile = open('bbDM'+str(options.year)+'_Mu_yield.txt','w')
+if makeEleCRplots:
+    yield_outfile = open('bbDM'+str(options.year)+'_Ele_yield.txt','w')
 def set_overflow(hist):
     bin_num = hist.GetXaxis().GetNbins()
     #print (bin_num)
     hist.SetBinContent(bin_num,hist.GetBinContent(bin_num+1)+hist.GetBinContent(bin_num)) #Add overflow bin content to last bin
     hist.SetBinContent(bin_num+1,0.)
     return hist
-# bins=[200,270,345,480,1000]
 
 def setHistStyle(h_temp2,hist):
     dovarbin=False
     h_temp_=h_temp2
-    # elif 'hadrecoil' in hist or 'met' in hist:
-    #     # xv = 680.0/15.0;
-    #     bins=[200,270,345,480,1000]
-    #     dovarbin= True
-    #
-    # if dovarbin:
-    #     h_temp_=h_temp2.Rebin(len(bins)-1,"h_temp",array.array('d',bins))
-    #     h_temp_.SetBinContent(len(bins)-1,h_temp_.GetBinContent(len(bins)-1)+h_temp_.GetBinContent(len(bins))) #Add overflow bin content to last bin
-    #     h_temp_.SetBinContent(len(bins),0.)
-    #     # h_temp_.GetXaxis().SetRangeUser(200,1000)
-    #     # h_temp_.SetMarkerColor(kBlack);
-    #     # h_temp_.SetMarkerStyle(2);
-    #
-    # if not dovarbin:
-    #     h_temp_=h_temp2
     return h_temp_
 
 
@@ -364,7 +353,6 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     VVCount       =   DIBOSON.Integral();
     QCDCount      =   QCD.Integral();
 
-
     mcsum = ZJetsCount + DYJetsCount + WJetsCount + STopCount + GJetsCount + TTCount + VVCount + QCDCount
     total_hists = WJets_Hists + DYJets_Hits + ZJets_Hits + GJets_Hists + DIBOSON_Hists + STop_Hists + Top_Hists + QCD_Hists
 
@@ -411,20 +399,6 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     VVCount       =   DIBOSON.Integral();
     QCDCount      =   QCD.Integral();
 
-
-
-    print('#============================= Yeid ===========================')
-    print ('ZJetsCount',ZJetsCount   )
-    print ('DYJetsCount',DYJetsCount)
-    print ('WJetsCount',  WJetsCount)
-    print ('STopCount',STopCount)
-    print ('GJetsCount',GJetsCount)
-    print ('TTCount',TTCount)
-    print ('VVCount',VVCount)
-    print ('QCDCount',QCDCount)
-    print('#========================================================')
-
-
     if (QCDCount > 0):     hs.Add(QCD,"hist");
     if (DYJetsCount > 0):  hs.Add(DYJets,"hist");
     if (ZJetsCount > 0):   hs.Add(ZJets,"hist");
@@ -437,13 +411,11 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     hasNoEvents=False
     Stackhist = hs.GetStack().Last()
     print('hs_Integral',Stackhist.Integral())
-    print('Stackhist.GetEntries()',Stackhist.GetEntries())
     maxi = Stackhist.GetMaximum()
     Stackhist.SetLineWidth(2)
     if (Stackhist.Integral()==0):
         hasNoEvents=True
         print ('No events found! for '+hist+'\n')
-
 # =====================histogram for systematic/ statistical uncertainty ========================
 
     h_err = total_hists[0].Clone("h_err");
@@ -465,7 +437,6 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
 
     else:
         c1_2 =  ROOT.TPad("c1_2","newpad",0,0.28,1,1);
-
     c1_2.SetBottomMargin(0.09);
     c1_2.SetTopMargin(0.06);
     c1_2.SetLogy(ISLOG);
@@ -627,7 +598,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     t2b = ROOT.TLatex(0.22,0.88,'');
     t2b.SetTextSize(0.03);
 
-    t2d = ROOT.TLatex(0.30,0.85,str(histolabel));
+    t2d = ROOT.TLatex(0.30,0.90,str(histolabel));
     t2d.SetTextSize(0.045);
 
     t2a.SetTextAlign(12);
@@ -790,6 +761,16 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
     data_obs.Write();
     fshape.Write();
     fshape.Close();
+
+    bkg_list = {'ZJets':ZJets,'DYJets':DYJets,'WJets':WJets,'STop':STop,'GJets':GJets,'Top':Top,'DIBOSON':DIBOSON,'QCD':QCD,'bkgSum':Stackhist,'data_obs':h_data}
+    yield_outfile.write('region '+str(hist)+'\n')
+    for key in bkg_list:
+        binerror = 0.00
+        bkg_list[key].Rebin(bkg_list[key].GetNbinsX())
+        binerror = (bkg_list[key].GetBinError(1))
+        print(str(key)+' '+str.format('{0:.3f}',bkg_list[key].Integral())+' +/- '+ str.format('{0:.3f}', binerror)+'\n')
+        yield_outfile.write(str(key)+' '+str.format('{0:.3f}',bkg_list[key].Integral())+' +/- '+ str.format('{0:.3f}', binerror)+'\n')
+    yield_outfile.write('\n')
  #=======================================================================
 
 
@@ -860,3 +841,4 @@ for reg in regions:
         print (e)
         print ("Cannot Plot")
         pass
+yield_outfile.close()
