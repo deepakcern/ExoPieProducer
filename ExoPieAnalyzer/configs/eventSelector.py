@@ -4,7 +4,7 @@ sys.path.append('../../ExoPieUtils/commonutils/')
 
 import MathUtils as mathutil
 from MathUtils import *
-
+#import ana_weight as wgt
 
 def getSel_boosted(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho,\
                   nBjets,cleaned_ak4jets,nFatJet,nFatJet_SBand,nFatJet_ZCR,pfMet,mini_ak4jet_MET_dPhi,mini_AK8jet_MET_dPhi,\
@@ -24,12 +24,12 @@ def getSel_boosted(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho,
     cuts['boosted_zee']    = False
     cuts['boosted_zmm']    = False
     if nEle==1 and nMu==0:
-        cuts['boosted_te']         = baseline and nBjets==1 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0 and min_ak4jets_WenuRecoil_dPhi > 0.4 and pfMet > 50
-        cuts['boosted_wen']        = baseline and nBjets==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0 and min_ak4jets_WenuRecoil_dPhi > 0.4 and pfMet > 50
+        cuts['boosted_te']         = baseline and nBjets==1 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0 and pfMet > 50 #min_ak4jets_WenuRecoil_dPhi > 0.4 and pfMet > 50
+        cuts['boosted_wen']        = baseline and nBjets==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0 and pfMet > 50 #min_ak4jets_WenuRecoil_dPhi > 0.4 and pfMet > 50
 
     if nEle==0 and nMu==1:
-        cuts['boosted_tm']         = baseline and nBjets==1 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0 and min_ak4jets_WmunuRecoil_dPhi > 0.4 and pfMet > 50.
-        cuts['boosted_wmn']        = baseline and nBjets==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0 and min_ak4jets_WmunuRecoil_dPhi > 0.4 and pfMet > 50.
+        cuts['boosted_tm']         = baseline and nBjets==1 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0 and pfMet > 50 #min_ak4jets_WmunuRecoil_dPhi > 0.4 and pfMet > 50.
+        cuts['boosted_wmn']        = baseline and nBjets==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0 and pfMet > 50 #min_ak4jets_WmunuRecoil_dPhi > 0.4 and pfMet > 50.
 
     
     if nEle==2 and nMu==0:
@@ -58,6 +58,7 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
     baseline       = nak4jets >= 2 and nTau==0  #and h_mass > 100.0 and h_mass < 150.0 # and nPho==0
    
     cuts['resolved_signal'] = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 100.0 and h_mass < 150.0 and mini_ak4jet_MET_dPhi > 0.4
+    cuts['resolved_SBand'] = baseline and nMu+nEle==0 and pfMet > 200.0 and ((h_mass > 50.0 and h_mass < 100.0) or (h_mass > 150.0 and h_mass < 350.0)) and mini_ak4jet_MET_dPhi > 0.4
     cuts['resolved_tm']     = False
     cuts['resolved_te']     = False
     cuts['resolved_wmn']    = False
@@ -66,14 +67,14 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
     cuts['resolved_zmm']    = False
 
     if nEle==1 and nMu==0:
-        #print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightEle',nTightEle,'WenuRecoil',WenuRecoil,'pfMet',pfMet,'h_mass',h_mass
+        #if WenuRecoil > 200 and nBjets==2:print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightEle',nTightEle,'WenuRecoil',WenuRecoil,'pfMet',pfMet,'h_mass',h_mass
         cuts['resolved_te']         = baseline and nBjets==2 and aditionalak4jets >0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
         cuts['resolved_wen']         = baseline and nBjets==2 and aditionalak4jets ==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
         
     if nEle==0 and nMu==1:
         cuts['resolved_tm']         = baseline and nBjets==2 and aditionalak4jets >0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
         cuts['resolved_wmn']         = baseline and nBjets==2 and aditionalak4jets ==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
-        #print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightMu',nTightMu,'WenuRecoil',WmunuRecoil,'pfMet',pfMet,'h_mass',h_mass
+        #if WmunuRecoil > 200 and nBjets==2: print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightMu',nTightMu,'WmunuRecoil',WmunuRecoil,'pfMet',pfMet,'h_mass',h_mass
     
     if nEle==2 and nMu==0: 
         cuts['resolved_zee']        = baseline and nBjets==2 and nMu==0 and nEle==2 and (isTightEle[0] or isTightEle[1]) and ZeeRecoil > 200.0  and ZeeMass > 60.0 and ZeeMass < 120.0
@@ -112,3 +113,21 @@ def WRecoil_Phi_Wmass(nEle,elept,elephi,elepx_,elepy_,met_,metphi_):
         WenurecoilPhi = mathutil.ep_arctan(WenuRecoilPx,WenuRecoilPy)
     return WenuRecoilPt, WenurecoilPhi, We_mass
 
+
+
+def getweight(common_weight,pfMET,WmunuRecoil,WenuRecoil,nEle_loose,nTightEle,ele_tight_index,ep_elePt,ep_eleEta,nMu,nTightMu,muon_tight_index,ep_muPt,ep_muEta):
+    tot_weight = 1.0;weightMET = 1.0;weightEle=1.0;weightMu=1.0;weightRecoil=1.0
+
+    if (nEle_loose==1 and nTightEle==1 and nMu==0):
+        ele_trig   = True
+        weightEle  = wgt.ele_weight(ep_elePt[ele_tight_index[0]],ep_eleEta[ele_tight_index[0]],ele_trig,'T')
+        tot_weight = weightEle*common_weight
+    if (nEle_loose==0 and nMu==1 and nTightMu==1):
+        mu_trig    = False
+        weightMu   = wgt.mu_weight(ep_muPt[muon_tight_index[0]],ep_muEta[muon_tight_index[0]],mu_trig,'T')
+        if WmunuRecoil>200: weightRecoil=wgt.getMETtrig_First(WmunuRecoil)
+        tot_weight = weightMu*common_weight*weightRecoil
+    return tot_weight  
+
+
+      
