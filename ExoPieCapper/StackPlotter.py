@@ -747,22 +747,22 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin):
 
     plot=str(hist)
 
-    if not os.path.exists('plots_norm/'+datestr+'/bbDMPng/'+reg):
-        os.makedirs('plots_norm/'+datestr+'/bbDMPng/'+reg)
-    if not os.path.exists('plots_norm/'+datestr+'/bbDMPdf/'+reg):
-        os.makedirs('plots_norm/'+datestr+'/bbDMPdf/'+reg)
-    if not os.path.exists('plots_norm/'+datestr+'/bbDMRoot/'+reg):
-        os.makedirs('plots_norm/'+datestr+'/bbDMRoot/'+reg)
+    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg):
+        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg)
+    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg):
+        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg)
+    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+reg):
+        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+reg)
     if (ISLOG == 0):
-        c12.SaveAs('plots_norm/'+datestr+'/bbDMPdf/'+reg+'/'+plot+'.pdf')
-        c12.SaveAs('plots_norm/'+datestr+'/bbDMPng/'+reg+'/'+plot+'.png')
+        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg+'/'+plot+'.pdf')
+        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg+'/'+plot+'.png')
         print("Saved. \n")
     if (ISLOG == 1):
-        c12.SaveAs('plots_norm/'+datestr+'/bbDMPdf/'+reg+'/'+plot+'_log.pdf')
-        c12.SaveAs('plots_norm/'+datestr+'/bbDMPng/'+reg+'/'+plot+'_log.png')
+        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg+'/'+plot+'_log.pdf')
+        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg+'/'+plot+'_log.png')
         print("Saved. \n")
 
-    fshape = ROOT.TFile('plots_norm/'+datestr+'/bbDMRoot/'+reg+'/'+plot+'.root', "RECREATE");
+    fshape = ROOT.TFile('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+reg+'/'+plot+'.root', "RECREATE");
 
     fshape.cd()
     Stackhist.SetNameTitle("bkgSum","bkgSum")
