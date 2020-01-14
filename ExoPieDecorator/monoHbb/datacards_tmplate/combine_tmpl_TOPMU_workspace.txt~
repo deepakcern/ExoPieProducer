@@ -1,0 +1,55 @@
+# Simple counting experiment, with one signal and a few background processes 
+# First iteration of the bbDM 2016
+
+imax *  number of channels
+jmax *  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+---------------------------------------------------------------------------------------------------------------------------------
+
+## these are new shapes for the fitting model
+## shapes  process   region    path 
+
+shapes *         monoHbb2017_B_TOPMU       monoHbb_WS.root ws_monoHbb:monoHbb2017_B_TOPMU_$PROCESS ws_monoHbb:monoHbb2017_B_TOPMU_$PROCESS_$SYSTEMATIC
+
+
+#shapes signal    monoHbb2017_B_TOPMU       monoHbb_WS.root ws_monoHbb:monoHbb2017_B_TOPMU_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150 ws_monoHbb:monoHbb2017_B_TOPMU_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150_$SYSTEMATIC
+shapes data_obs  monoHbb2017_B_TOPMU       monoHbb_WS.root  ws_monoHbb:monoHbb2017_B_TOPMU_data_obs
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+#shapes ZJets   monoHbb2017_B_TOPMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_Z        ws_monoHbb:rph_sr2_Z_$SYSTEMATIC
+#shapes Top     monoHbb2017_B_TOPMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_top      ws_monoHbb:rph_sr2_top_$SYSTEMATIC
+#shapes WJets   monoHbb2017_B_TOPMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_wjets    ws_monoHbb:rph_sr2_wjets_$SYSTEMATIC
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+------------
+
+
+bin   monoHbb2017_B_TOPMU 
+observation -1
+------------
+
+
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+bin             monoHbb2017_B_TOPMU   monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU   monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU  monoHbb2017_B_TOPMU
+process             zjets  wjets    tt     singlet        qcd    dyjets  diboson gjets
+process                 1        2        3        4               5        6   7      8 
+rate                  -1       -1       -1       -1             -1       -1    -1    -1
+------------
+
+
+lumi                    lnN        1.025    1.025     1.025      1.025    1.025    1.025   1.025  1.025
+CMS2016_scale_pu        lnN        1.001    1.001     1.001      1.001    1.001    1.001   1.001  1.001
+CMS2016_eff_b           lnN         -        -          -          -         -       -     -  - 
+CMS2016_fake_b          lnN         1.05     1.05       1.05       1.05      1.05     1.05  1.05  1.05
+pdf_accept              lnN         1.01     1.01       1.01   	  1.01      1.01     1.01  1.01  1.01
+CMS2016_scale_e         lnN    	   1.01     1.01       1.01       1.01      1.01     1.01  1.01  1.01
+CMS2016_scale_m         lnN         1.01     1.01       1.01       1.01      1.01     1.01  1.01  1.01
+CMS2016_eff_t           lnN         1.03     1.03       1.03       1.03      1.03     1.03  1.03  1.03
+CMS2016_eff_met         lnN         1.04     1.04       1.04   	  1.04      1.04     1.04  1.04  1.04

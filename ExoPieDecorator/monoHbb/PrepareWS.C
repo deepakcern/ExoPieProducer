@@ -512,28 +512,24 @@ void PrepareWS(){
 
   
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPMU_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WMU_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZEE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_data_obs" ) );
+  
+  
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_SR_data_obs" ) );
-  
-
-
-  /*
-  addTemplate(wspace, vars, (TH1F*) fin->Get("SR_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Wenu_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Wenu_2b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Topenu_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Topenu_2b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Wmunu_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Wmunu_2b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Topmunu_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Topmunu_2b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Zee_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Zee_2b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Zmumu_1b_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("Zmumu_2b_data_obs" ) );
-  
-  */
-  
-  // all other histograms 
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_TOPE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_TOPMU_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_WE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_WMU_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_ZEE_data_obs" ) );
+  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_ZMUMU_data_obs" ) );
+ 
+ 
+ // all other histograms 
   std::vector<TString> regions; 
   regions.push_back("SR");
   regions.push_back("TOPE");

@@ -11,16 +11,18 @@ class RunLimits:
     ''' this class exepcts that all the steps needed to prepare the datacards and prepration of its inputs are already performed '''
     
     ''' instantiation of the class is done here ''' 
-    def __init__(self, datacardtemplatename):
+    def __init__(self, datacardtemplatename):#, runmode):
         self.datacardtemplatename_ = datacardtemplatename
+        
+        #self.runmode = runmode
         print "class instantiation done"
         
     ''' get the full command to be run for a given datacards '''
     def getfullcommand(self, commandpre, datacard, command_, commandpost):
         return commandpre+datacard+command_+commandpost
         
-    
-    def makedatacards(self, templatecards, allparams):
+        
+    def makedatacards(self, templatecards, allparams, region):
         
         ma =str(allparams[0])
         mA =str(allparams[1])
@@ -28,25 +30,32 @@ class RunLimits:
         st =(str(allparams[3])).replace(".","p")
         mdm=str(allparams[4])
         
+        ## get datacard name
         datacardsname = self.datacardtemplatename_.replace("XXXMA", mA)
         datacardsname = datacardsname.replace("BBBMa",ma)
         datacardsname = datacardsname.replace("ZZZTB",tb)
         datacardsname = datacardsname.replace("YYYSP",st)
         datacardsname = datacardsname.replace("AAAMDM",mdm)
+        datacardsname = datacardsname.replace("SR",region)
         
+        #print 'data card name is ===',datacardsname
         os.system('rm '+datacardsname)
         fout = open(datacardsname,"a")
-        for iline in open(templatecards):
+        for iline in open(templatecards): 
+
             iline  = iline.replace("XXXMA", mA)
+            if region=="SR": iline  = iline.replace("SR", region)
+            if region!="SR": iline  = iline.replace("SR_ggF", region)
             ## add other params 
-            iline = iline.replace("monoHbb2017_B","monoHbb2017_R")
+            #iline = iline.replace("monoHbb2017_B","monoHbb2017_R")
             fout.write(iline)
         fout.close()
         return datacardsname
         
+        
 
     def datacard_to_mparameters(self, name_):
-        mparameters_ = ((name_.split("SR_ggF_")[1]).replace(".log","")).split("_")
+        mparameters_ = ((name_.split("Merged_")[1]).replace(".log","")).split("_")
         mparameters_ = [mp.replace("p",".") for mp in mparameters_]
         ## ma, mA, tb, st, mdm
         return ([mparameters_[9], mparameters_[7], mparameters_[3], mparameters_[1], mparameters_[5]])
