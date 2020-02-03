@@ -7,12 +7,13 @@ rt.gStyle.SetOptStat(0)
 rt.gROOT.SetBatch(1)
 
 c = rt.TCanvas("c","c",1500, 950)
+c.SetGrid(1,1)
 c.SetLogy(1)
-#c.SetLogx(0)
-c.SetGrid(1,1);
 leg = rt.TLegend(.15, .65, .35, .890);
 
-rootfilename = 'limit_bbDM2016_2HDMa.root'
+inputstring_ = '2HDMa_MA1200_150'
+
+rootfilename = 'limit_bbDM2016_'+inputstring_+'.root'
 
 
 f = rt.TFile(rootfilename,"read")
@@ -25,14 +26,14 @@ exp2s.SetLineWidth(2)
 exp2s.SetFillColor(rt.kYellow);
 exp2s.SetLineColor(rt.kYellow)
 exp2s.GetXaxis().SetTitle("Ma [GeV]");
-exp2s.GetYaxis().SetRangeUser(.1,100)
+exp2s.GetYaxis().SetRangeUser(.1,1000)
 exp2s.GetXaxis().SetTitleOffset(1.4)
 exp2s.GetYaxis().SetTitle("95% C.L. asymptotic limit on #mu=#sigma/#sigma_{theory}");
 exp2s.GetYaxis().SetTitleOffset(1.2)
 exp2s.GetYaxis().SetNdivisions(20,5,0);
 #exp2s.GetXaxis().SetNdivisions(505);
 exp2s.GetYaxis().SetMoreLogLabels()
-#exp2s.GetXaxis().SetMoreLogLabels()
+exp2s.GetXaxis().SetMoreLogLabels()
 #exp2s.GetXaxis().SetRangeUser(30,500)
 exp2s.Draw("A 3")
 
@@ -73,6 +74,7 @@ leg.Draw("same")
 
 # line = TLine(max(xmin,exp2s.GetXaxis().GetXmin()),1,exp2s.GetXaxis().GetXmax(),1)
 c.Update()
+print (c.GetUxmin(),c.GetUxmax())
 line = rt.TLine(c.GetUxmin(),1.0,c.GetUxmax(),1.0);
 line.SetLineColor(rt.kRed)
 line.SetLineWidth(2)
@@ -83,11 +85,13 @@ latex.SetNDC();
 latex.SetTextSize(0.04);
 latex.SetTextAlign(31);
 latex.SetTextAlign(11);
-model_ = '2HDM+a'
+model_ = '2HDM+a_150'
+MA_    = '1200'
 latex.DrawLatex(0.11, 0.91, "bb+DM");
-latex.DrawLatex(0.55, 0.91, "M_{A}=600 GeV, tan#beta = 35, sin#theta = .7");
+latex.DrawLatex(0.53, 0.91, "M_{A}="+MA_+" GeV, tan#beta = 35, sin#theta = 0.7");
 
-name = "limit_"+model_
-
+name = "limit_"+inputstring_
+c.SetLogx(1)
+c.Update()
 c.SaveAs(name+".png")
 c.SaveAs(name+".pdf")
