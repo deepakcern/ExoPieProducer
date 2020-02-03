@@ -13,8 +13,9 @@
 using namespace RooFit ;
 
 /*
-BuildStatsModel.py: Package to build statistical fitting model for background estimation and limit extraction                                                                      
-Author: Raman Khurana                                                                                                                                                               Date:   26-September-2018                                                                                                                                                           
+PrepareWS.C  Package to build statistical fitting model for background estimation and limit extraction                                                                      
+Author: Raman Khurana
+Date:   26-September-2018                                                                                                                                                           
 V0:     Simple implementation of the model using transfer factors                                                                                                                   
 */
 
@@ -36,7 +37,7 @@ datahist:  use dh_wenu_wjets
 RooRealVar: rrv_wenu_wjets
 RooRealVar: rrvbc_wenu_wjets (for boncontent)
 
-RooArgList: ral_wenu_wjets
+RooArgList: ral_wenu_wjet s
 RooArgList: ralbc_wenu_wjets (for the bin content)
 
 RooParamHist: rph_wenu_wjets
@@ -88,7 +89,7 @@ RooArgList GetRooArgList(std::vector<float>  bcs, TString name){
 
   for (auto i=0; i<bcs.size(); i++){
     postfix.Form("%d", i+1);
-    RooRealVar rrv_(name+postfix,"Background yield in signal region, bin 1", bcs[i], bcs[i]/2, bcs[i]*2);
+    RooRealVar rrv_(name+postfix,"Background yield in signal region, bin 1", bcs[i]);//, bcs[i]/1.1, bcs[i]*1.1);
     ral_.addClone(rrv_);
   }
   return ral_;
@@ -105,6 +106,7 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
     postfix.Form("%d", i+1);
     // fix the naming here using some automation  and also in the next function
 
+    std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
     rrvV_.push_back(RooRealVar(name+postfix,"Background yield in signal region, bin 1", bcs[i], bcs[i]/5, bcs[i]*5));
     
   }
@@ -122,6 +124,7 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, bool setconstant
     std::cout<<" ---------- inside GetRooRealVar "<<std::endl;
     // fix the naming here using some automation 
     postfix.Form("%d", i+1);
+    std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
     RooRealVar rrv_(name+postfix, "Background yield in signal region, bin 1", bcs[i]);
     rrv_.setConstant(1);
     rrvV_.push_back(rrv_);
@@ -219,13 +222,31 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   TH1F* htf_wenu_2b_wjets = (TH1F*) h_wenu_2b_wjets->Clone();
   htf_wenu_2b_wjets->Divide(h_sr2_wjets);
   
+  
+  std::cout<<" ratio "<< htf_wenu_2b_wjets->GetBinContent(1)
+	   <<" "<<htf_wenu_2b_wjets->GetBinContent(2)
+	   <<" "<<htf_wenu_2b_wjets->GetBinContent(3)
+	   <<" "<<htf_wenu_2b_wjets->GetBinContent(4)
+	   <<std::endl
+	   <<"  SR yield =" <<h_sr2_wjets->GetBinContent(1)
+	   <<" "<<h_sr2_wjets->GetBinContent(2)
+	   <<" "<<h_sr2_wjets->GetBinContent(3)
+	   <<" "<<h_sr2_wjets->GetBinContent(4)
+	   <<std::endl
+	   <<" "<<h_wenu_2b_wjets->GetBinContent(1)
+	   <<" "<<h_wenu_2b_wjets->GetBinContent(2)
+	   <<" "<<h_wenu_2b_wjets->GetBinContent(3)
+	   <<" "<<h_wenu_2b_wjets->GetBinContent(4)
+	   <<std::endl   ;
+  
+  
   // Get bin content of each bin of this ratio histogram and save it in the RooRealVar which will be used later for the Actual Transfer Factor with effect of Nuisance parameters included 
   // idelaly each of these rooreal var in following vector should be setConstat(1) otherwise it may be treated as free parameter however it should be fixed. 
   std::vector <float> bincontents_htf_wenu_2b_wjets =  GetBinContents(htf_wenu_2b_wjets);
   
   // the rooreal vars are set to constant values instead of free values. 
   // this is an overloaded function 
-  std::vector <RooRealVar> rrv_htf_wenu_2b_wjets = GetRooRealVar(bincontents_htf_wenu_2b_wjets, true);
+  std::vector <RooRealVar> rrv_htf_wenu_2b_wjets = GetRooRealVar(bincontents_htf_wenu_2b_wjets, true, "TF_"+region_proc_sr);
   
   // the nuisance part of the code has to be updated after some more discussion. 
   std::vector<RooRealVar> nuisances;
@@ -252,12 +273,12 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   }
   */
   
-  RooFormulaVar TF1("TF1"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[0]) );
-  RooFormulaVar TF2("TF2"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[1]) );
-  RooFormulaVar TF3("TF3"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[2]) );
-  RooFormulaVar TF4("TF4"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[3]) );
-  RooFormulaVar TF5("TF5"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[4]) );
-  RooFormulaVar TF6("TF6"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[5]) );
+  RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[0]) );
+  RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[1]) );
+  RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[2]) );
+  RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[3]) );
+  //RooFormulaVar TF5("TF5"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[4]) );
+  //RooFormulaVar TF6("TF6"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[5]) );
   //RooFormulaVar TF7("TF7"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[6]) );
   
   
@@ -274,8 +295,8 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   RooFormulaVar rfv_wenu_2b_wjets2("rfv_"+region_proc_cr+"2","Background yield in control region, bin 2","@0*@1",RooArgList(TF2,rrvbc_sr2_wjets.at(1)));
   RooFormulaVar rfv_wenu_2b_wjets3("rfv_"+region_proc_cr+"3","Background yield in control region, bin 3","@0*@1",RooArgList(TF3,rrvbc_sr2_wjets.at(2)));
   RooFormulaVar rfv_wenu_2b_wjets4("rfv_"+region_proc_cr+"4","Background yield in control region, bin 4","@0*@1",RooArgList(TF4,rrvbc_sr2_wjets.at(3)));
-  RooFormulaVar rfv_wenu_2b_wjets5("rfv_"+region_proc_cr+"5","Background yield in control region, bin 5","@0*@1",RooArgList(TF5,rrvbc_sr2_wjets.at(4)));
-  RooFormulaVar rfv_wenu_2b_wjets6("rfv_"+region_proc_cr+"6","Background yield in control region, bin 6","@0*@1",RooArgList(TF6,rrvbc_sr2_wjets.at(5)));
+  //RooFormulaVar rfv_wenu_2b_wjets5("rfv_"+region_proc_cr+"5","Background yield in control region, bin 5","@0*@1",RooArgList(TF5,rrvbc_sr2_wjets.at(4)));
+  //RooFormulaVar rfv_wenu_2b_wjets6("rfv_"+region_proc_cr+"6","Background yield in control region, bin 6","@0*@1",RooArgList(TF6,rrvbc_sr2_wjets.at(5)));
   //RooFormulaVar rfv_wenu_2b_wjets7("rfv_"+region_proc_cr+"7","Background yield in control region, bin 7","@0*@1",RooArgList(TF7,rrvbc_sr2_wjets.at(6)));
 
 
@@ -302,8 +323,8 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets2);
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets3);
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets4);
-  ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets5);
-  ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets6);
+  //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets5);
+  //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets6);
   //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets7);
   
     
@@ -366,61 +387,40 @@ void PrepareWS(){
   // Open input file with all the histograms. 
   TFile* fin = OpenRootFile(inputfile);
   
-  /*
-  
-  // --------------------------------------------------------------
-  // ------------------------Signal region ------------------------
-  // --------------------------------------------------------------
-  // Get the data histogram from Signal region, this is met in our case. This is a 7 bin histogram in this case. This can be optimised later on. 
-  TH1F* h_B_sr_data = (TH1F*) fin->Get("monoHbb2017_B_SR_bkgSum");
-  
-  std::cout<<" debug 3a" <<std::endl;
-  // convert the histogram into RooDataHist
-  RooDataHist dh_B_sr_data("monoHbb2017_B_SR_data","monoHbb2017_B_SR_data",vars, h_B_sr_data);
-
-    std::cout<<" debug 3b" <<std::endl;
-    
-  // Import just created RooDataHist into the workspace. 
-  wspace.import(dh_B_sr_data);
-  std::cout<<" debug 3c" <<std::endl;
-  */
   
 
-  //the following lines create a freely floating parameter for each of our bins (in this example, there are only 7 bins, defined for our observable met.
-  // In this case we vary the normalisation in each bin of the background from N/3 to 3*N, e.g. if actual content in the histogram is 55 then we initialize
+  // this histogram is just for the binning 
+  TH1F* h_sr2_data = (TH1F*) fin->Get("monoHbb2017_B_SR_bkgSum");
+  
+  //the following lines create a freely floating parameter for each of our bins (in this example, there are only 4 bins, defined for our observable met.
+  // In this case we vary the normalisation in each bin of the background from N/3 to 3*N, 
+  // e.g. if actual content in the histogram is 55 then we initialize
   // it with 55 and vary it from 55/3 to 55*3. which is very close to freely floating. This can be checked if this works for the cases when bin content is very low, 
-  // specially in the tails. 
+  // specially in the tails and can be changed easily . 
  
-  /*
- KEY: TH1FWmunu_2b_DIBOSON;1Wmunu_2b_DIBOSON;
- KEY: TH1FWmunu_2b_ZJets;1Wmunu_2b_ZJets;
- KEY: TH1FWmunu_2b_GJets;1Wmunu_2b_GJets;
- KEY: TH1FWmunu_2b_STop;1Wmunu_2b_STop;
- KEY: TH1FWmunu_2b_Top;1Wmunu_2b_Top;
- KEY: TH1FWmunu_2b_WJets;1Wmunu_2b_WJets;
- KEY: TH1FWmunu_2b_DYJets;1Wmunu_2b_DYJets;
- KEY: TH1FWmunu_2b_QCD;1Wmunu_2b_QCD;
- KEY: TH1FWmunu_2b_data_obs;1Wmunu_2b_data_obs;
-  */
-  
-  
+   
+
   /*
     -------------------------------------------------------------------------------------------------------------------
     ---------------------------------------------- W enu CR -----------------------------------------------------------
     -------------------------------------------------------------------------------------------------------------------
    */
 
-  /*
+  
   std::cout<<" calling function for Wenu"<<std::endl;
+  
   // Get the wjets histogram in signal region
-  TH1F* h_sr2_wjets = (TH1F*) fin->Get("SR_2b_WJets");
+  TH1F* h_sr2_wjets = (TH1F*) fin->Get("monoHbb2017_B_SR_wjets");
+  
   // Get the wjets hostogram in the Wenu CR
-  TH1F* h_wenu_2b_wjets = (TH1F*) fin->Get("Wenu_2b_WJets");
+  TH1F* h_wenu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WE_wjets");
+  
+  std::cout<<" integral of wenu : "<<h_sr2_wjets->Integral() <<"  "<<h_wenu_2b_wjets->Integral()<<std::endl;
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "wenu_2b_wjets", "sr2_wjets",  fOut);
+  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "WE_wjets", "SR_wjets",  fOut);
 
 
-  *//*
+  /*
     -------------------------------------------------------------------------------------------------------------------
     ---------------------------------------------- W munu CR -----------------------------------------------------------
     -------------------------------------------------------------------------------------------------------------------
