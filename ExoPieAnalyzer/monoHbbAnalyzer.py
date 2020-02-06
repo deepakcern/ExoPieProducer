@@ -39,7 +39,7 @@ sys.path.append('configs')
 #import variables as var
 import variables as var
 import outvars as out
-import eventSelector as eventSelector_v2
+#import eventSelector as eventSelector_v2
 
 
 ## from analysisutils
@@ -51,6 +51,8 @@ year_file.close()
 
 import ana_weight as wgt
 
+
+import eventSelector as eventSelector_v2
 
 
 ######################################################################################################
@@ -184,14 +186,70 @@ def runbbdm(txtfile):
 
 
     #outputfilename = args.outputfile
+    Entrees = 0.0
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
     for infl in infile_:
 	f_tmp = TFile.Open(infl,'READ')
         h_tmp = f_tmp.Get('h_total')
+        Stree = f_tmp.Get('outTree')
+        Entrees += Stree.GetEntries()
         h_tmp_weight = f_tmp.Get('h_total_mcweight')
         h_total.Add(h_tmp)
         h_total_mcweight.Add(h_tmp_weight)
+
+
+    total_events = h_total_mcweight.Integral()
+    h_reg_WenuCR_resolved_cutFlow = TH1F("h_reg_WenuCR_resolved_cutFlow","h_reg_WenuCR_resolved_cutFlow",12,0,12)
+    h_reg_WmunuCR_resolved_cutFlow = TH1F("h_reg_WmunuCR_resolved_cutFlow","h_reg_WmunuCR_resolved_cutFlow",12,0,12)
+    
+    h_reg_TopenuCR_resolved_cutFlow = TH1F("h_reg_TopenuCR_resolved_cutFlow","h_reg_TopenuCR_resolved_cutFlow",12,0,12)
+    h_reg_TopmunuCR_resolved_cutFlow = TH1F("h_reg_TopmunuCR_resolved_cutFlow","h_reg_TopmunuCR_resolved_cutFlow",12,0,12)
+
+    h_reg_ZeeCR_resolved_cutFlow = TH1F("h_reg_ZeeCR_resolved_cutFlow","h_reg_ZeeCR_resolved_cutFlow",12,0,12)
+    h_reg_ZmumuCR_resolved_cutFlow = TH1F("h_reg_ZmumuCR_resolved_cutFlow","h_reg_ZmumuCR_resolved_cutFlow",12,0,12)
+
+
+    h_reg_WenuCR_boosted_cutFlow = TH1F("h_reg_WenuCR_boosted_cutFlow","h_reg_WenuCR_boosted_cutFlow",12,0,12)
+    h_reg_WmunuCR_boosted_cutFlow = TH1F("h_reg_WmunuCR_boosted_cutFlow","h_reg_WmunuCR_boosted_cutFlow",12,0,12)
+
+    h_reg_TopenuCR_boosted_cutFlow = TH1F("h_reg_TopenuCR_boosted_cutFlow","h_reg_TopenuCR_boosted_cutFlow",12,0,12)
+    h_reg_TopmunuCR_boosted_cutFlow = TH1F("h_reg_TopmunuCR_boosted_cutFlow","h_reg_TopmunuCR_boosted_cutFlow",12,0,12)
+
+    h_reg_ZeeCR_boosted_cutFlow = TH1F("h_reg_ZeeCR_boosted_cutFlow","h_reg_ZeeCR_boosted_cutFlow",12,0,12)
+    h_reg_ZmumuCR_boosted_cutFlow = TH1F("h_reg_ZmumuCR_boosted_cutFlow","h_reg_ZmumuCR_boosted_cutFlow",12,0,12)
+
+    h_reg_SBand_resolved_cutFlow     = TH1F("h_reg_SBand_resolved_cutFlow","h_reg_SBand_resolved_cutFlow",12,0,12)
+    h_reg_SBand_boosted_cutFlow     = TH1F("h_reg_SBand_boosted_cutFlow","h_reg_SBand_boosted_cutFlow",12,0,12)
+
+    h_reg_WenuCR_resolved_cutFlow.AddBinContent(1,total_events)
+    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(1,total_events)    
+    h_reg_WenuCR_resolved_cutFlow.AddBinContent(2,Entrees)
+    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(1,total_events)
+    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(1,total_events)
+    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(2,Entrees)
+    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_WenuCR_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_WmunuCR_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_WenuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+    h_reg_WmunuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_TopenuCR_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_TopenuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+    h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+
+
+    h_reg_SBand_resolved_cutFlow.AddBinContent(1,total_events)
+    h_reg_SBand_resolved_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_SBand_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_SBand_boosted_cutFlow.AddBinContent(2,Entrees)
+
+
 
     filename = infile_
     ieve = 0;icount = 0
@@ -201,7 +259,7 @@ def runbbdm(txtfile):
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
-            ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetPhoEF, ep_THINjetEleEF, ep_THINjetMuoEF, \
+            ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, \
             ep_THINjetCorrUnc, \
             ep_nfjet, ep_fjetPx, ep_fjetPy, ep_fjetPz, ep_fjetEnergy, \
             ep_fjetDoubleSV, ep_fjetProbQCDb, ep_fjetProbHbb, ep_fjetProbQCDc, ep_fjetProbHcc, ep_fjetProbHbbc, ep_fjetProbbbvsLight, \
@@ -219,7 +277,7 @@ def runbbdm(txtfile):
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
-                   df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, df.st_THINjetPhoEF, df.st_THINjetEleEF, df.st_THINjetMuoEF, \
+                   df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, \
                    df.st_THINjetCorrUnc, \
                    df.st_nfjet, df.st_fjetPx, df.st_fjetPy, df.st_fjetPz, df.st_fjetEnergy, \
                    df.st_fjetDoubleSV, df.st_fjetProbQCDb, df.st_fjetProbHbb, df.st_fjetProbQCDc, df.st_fjetProbHcc, df.st_fjetProbHbbc, df.st_fjetProbbbvsLight, \
@@ -459,19 +517,17 @@ def runbbdm(txtfile):
             '''
 
             mindPhi_ak4_ak8_sr = mindPhi_ak4_ak8_sb = mindPhi_ak4_ak8_zcr = 3.4
-            maxdPhi_ak4_ak8_sr = maxdPhi_ak4_ak8_sb = maxdPhi_ak4_ak8_zcr = 3.4
-            if nJets_cleaned>0 and sel_nfjets > 0:
+            if ep_THINnJet>0 and sel_nfjets > 0:
                 index = pass_nfjetIndex[0]
-		mindPhi_ak4_ak8_sr = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
-                maxdPhi_ak4_ak8_sr = max([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
-            if nJets_cleaned>0 and nFatJet_SBand >0:
+		mindPhi_ak4_ak8_sr = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in range(ep_THINnJet)])
+
+            if ep_THINnJet>0 and nFatJet_SBand >0:
                 index=FatJet_SBand_index[0]
-		mindPhi_ak4_ak8_sb = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
-                maxdPhi_ak4_ak8_sb = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
-	    if nJets_cleaned>0 and nFatJet_ZCR>0:
+		mindPhi_ak4_ak8_sb = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in range(ep_THINnJet)])
+
+	    if ep_THINnJet>0 and nFatJet_ZCR>0:
                 index = FatJet_ZCR_index[0]
-		mindPhi_ak4_ak8_zcr = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
-                maxdPhi_ak4_ak8_zcr = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in pass_ak4jet_index_cleaned])
+		mindPhi_ak4_ak8_zcr = min([DeltaPhi(fatjetphi[index],ak4jetphi[jj]) for jj in range(ep_THINnJet)])
 
             #print mindPhi_ak4_ak8_sr, mindPhi_ak4_ak8_sb, mindPhi_ak4_ak8_zcr
             '''
@@ -531,18 +587,324 @@ def runbbdm(txtfile):
             weight = PUweight = lepweight = recoilweight = recoilweight = btagweight = ewkweight = toppTweight =1.0
 
 
-            if isResolvedSR or isResolvedSBand or isResolvedCRTopmu or isResolvedCRTope or isResolvedCRWmunu or isResolvedCRWenu or isResolvedCRZmumu or isResolvedCRZee or isBoostedSR or isBoostedSBand or isBoostedCRTope or isBoostedCRTopmu or isBoostedCRWenu or isBoostedCRWmunu or isBoostedCRZee or isBoostedCRZmumu:
-            	btagweight           = wgt.getBTagSF(ep_THINnJet,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,index=False)
+            #if isResolvedSR or isResolvedSBand or isResolvedCRTopmu or isResolvedCRTope or isResolvedCRWmunu or isResolvedCRWenu or isResolvedCRZmumu or isResolvedCRZee or isBoostedSR or isBoostedSBand or isBoostedCRTope or isBoostedCRTopmu or isBoostedCRWenu or isBoostedCRWmunu or isBoostedCRZee or isBoostedCRZmumu:
+            btagweight           = wgt.getBTagSF(ep_THINnJet,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,index=False)
+            btagweight_B         = wgt.getBTagSF(pass_ak4jet_index_cleaned,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,index=True)
 
-            	if ep_genParSample   == 23 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
-            	if ep_genParSample == 24 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
-            	if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+            if ep_genParSample   == 23 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
+            if ep_genParSample == 24 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
+            if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
 
-	    	PUweight=wgt.puweight(ep_pu_nTrueInt)
-            	commanweight = btagweight*ewkweight*toppTweight*PUweight
-            	commanweight_nobtag = ewkweight*toppTweight*PUweight
+	    PUweight=wgt.puweight(ep_pu_nTrueInt)
+            commanweight = btagweight*ewkweight*toppTweight*PUweight
+            commanweight_nobtag = ewkweight*toppTweight*PUweight
             #print 'ewkweight',ewkweight
+            cut_weight =  eventSelector_v2.getweight(commanweight,ep_pfMetCorrPt,Wmurecoil,Werecoil,ep_nEle,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)
+            B_weight =  eventSelector_v2.getweight(commanweight_nobtag,ep_pfMetCorrPt,Wmurecoil,Werecoil,ep_nEle,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)            
+            #print 'cut_weight',cut_weight
+
 	    additional_jets=ep_THINnJet-2
+
+
+            if eletrigdecision:
+                h_reg_WenuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if nEle_loose==1 and nTightEle==1:
+                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if Werecoil > 200.:
+                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if nBjets_notiso==2:
+                                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if h_mass > 100 and h_mass < 150:
+                                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if additional_jets==0:
+                                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRWenu:
+                                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+
+
+
+            if mettrigdecision:
+                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if ep_nMu==1 and nTightMu==1:
+                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_nEle==0  and ep_HPSTau_n==0:
+                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if Wmurecoil > 200.:
+                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if nBjets_notiso==2:
+                                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if h_mass > 100 and h_mass < 150:
+                                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if additional_jets==0:
+                                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRWmunu:
+                                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+
+            if eletrigdecision:
+                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if nEle_loose==1 and nTightEle==1:
+                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if Werecoil > 200.:
+                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if nBjets_notiso==2:
+                                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if h_mass > 100 and h_mass < 150:
+                                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if additional_jets>0:
+                                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRTope:
+                                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+            if mettrigdecision:
+                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if ep_nMu==1 and nTightMu==1:
+                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_nEle==0  and ep_HPSTau_n==0:
+                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if Wmurecoil > 200.:
+                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if nBjets_notiso==2:
+                                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if h_mass > 100 and h_mass < 150:
+                                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if additional_jets>0:
+                                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRTopmu:
+                                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+            if mettrigdecision:
+		h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+		if ep_nMu==2 and (isTightMuons[0] or isTightMuons[1]):
+		    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+		    if ep_nEle==0  and ep_HPSTau_n==0:
+			h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+			if ep_THINnJet>=2:
+			    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+			    if ep_pfMetCorrPt > 50.0:
+				h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+				if ZmumuRecoil > 200.0:
+				    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+				    if nBjets_notiso==2:
+					h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+					if ZmumuMass > 60 and ZmumuMass < 120:
+					    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+					    if additional_jets>0:
+						h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRZmumu:
+						    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+
+
+            if eletrigdecision:
+                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if nEle_loose==2 and (isTightEles[0] or isTightEles[1]):
+                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if ZeeRecoil > 200.0:
+                                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if nBjets_notiso==2:
+                                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if ZeeMass > 60 and ZeeMass < 120:
+                                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if additional_jets>0:
+                                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                if not isBoostedCRZee:
+                                                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+
+
+            if mettrigdecision:
+                h_reg_SBand_resolved_cutFlow.AddBinContent(3, cut_weight)
+                if ep_nMu==0 and nEle_loose==0:
+                    h_reg_SBand_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    if ep_HPSTau_n==0:
+                        h_reg_SBand_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        if ep_THINnJet>=2:
+                            h_reg_SBand_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            if ep_pfMetCorrPt > 200.0:
+                                h_reg_SBand_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                if nBjets_notiso==2:
+                                    h_reg_SBand_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    if (h_mass > 50 and h_mass < 100.0) or (h_mass > 150 and h_mass < 350):
+                                        h_reg_SBand_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        if additional_jets>=0:
+                                            h_reg_SBand_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            if not isBoostedSBand:
+                                                h_reg_SBand_resolved_cutFlow.AddBinContent(11, cut_weight)
+
+
+            '''
+            ----------------------------------------
+            CutFlow for boosted category
+            -----------------------------------------
+            '''
+
+            if eletrigdecision:
+                h_reg_WenuCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if nEle_loose==1 and nTightEle==1:
+                    h_reg_WenuCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_WenuCR_boosted_cutFlow.AddBinContent(5, B_weight)
+                        if sel_nfjets==1:
+                            h_reg_WenuCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_WenuCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if Werecoil > 200.:
+                                    h_reg_WenuCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_iso==0:
+                                        h_reg_WenuCR_boosted_cutFlow.AddBinContent(9, B_weight)
+                                        if nJets_cleaned>=0:
+                                              h_reg_WenuCR_boosted_cutFlow.AddBinContent(10, B_weight)
+
+
+
+
+            if mettrigdecision:
+                h_reg_WmunuCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if ep_nMu==1 and nTightMu==1:
+                    h_reg_WmunuCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if ep_nEle==0  and ep_HPSTau_n==0:
+                        h_reg_WmunuCR_boosted_cutFlow.AddBinContent(5, B_weight)
+                        if sel_nfjets==1:
+                            h_reg_WmunuCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_WmunuCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if Wmurecoil > 200.:
+                                    h_reg_WmunuCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_iso==0:
+                                        h_reg_WmunuCR_boosted_cutFlow.AddBinContent(9, B_weight)
+                                        if nJets_cleaned>=0:
+                                             h_reg_WmunuCR_boosted_cutFlow.AddBinContent(10, B_weight)
+
+
+
+            if eletrigdecision:
+                h_reg_TopenuCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if nEle_loose==1 and nTightEle==1:
+                    h_reg_TopenuCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_TopenuCR_boosted_cutFlow.AddBinContent(5,B_weight)
+                        if sel_nfjets==1:
+                            h_reg_TopenuCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_TopenuCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if Werecoil > 200.:
+                                    h_reg_TopenuCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_iso==1:
+                                        h_reg_TopenuCR_boosted_cutFlow.AddBinContent(9, B_weight)
+                                        if nJets_cleaned>=0:
+                                              h_reg_TopenuCR_boosted_cutFlow.AddBinContent(10, B_weight)
+
+
+
+
+            if mettrigdecision:
+                h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if ep_nMu==1 and nTightMu==1:
+                    h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if nEle_loose==0  and ep_HPSTau_n==0:
+                        h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(5, B_weight)
+                        if sel_nfjets==1:
+                            h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if Wmurecoil > 200.:
+                                    h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_iso==1:
+                                        h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(9, B_weight)
+                                        if nJets_cleaned>=0:
+                                             h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(10, B_weight)
+
+
+
+
+
+            if mettrigdecision:
+                h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if ep_nMu==2 and (isTightMuons[0] or isTightMuons[1]):
+                    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if nEle_loose==0  and ep_HPSTau_n==0:
+                        h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(5, B_weight)
+                        if nFatJet_ZCR==1:
+                            h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if ZmumuRecoil > 200.0:
+                                    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_notiso==0:
+                                        h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(9, B_weight)
+					if ZmumuMass > 60 and ZmumuMass < 120:
+					    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(10, B_weight)
+                                            if nJets_cleaned>0:
+                                                h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(11, B_weight)
+                                            
+
+
+
+            if eletrigdecision:
+                h_reg_ZeeCR_boosted_cutFlow.AddBinContent(3, B_weight)
+                if nEle_loose==2 and (isTightEles[0] or isTightEles[1]):
+                    h_reg_ZeeCR_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if ep_nMu==0  and ep_HPSTau_n==0:
+                        h_reg_ZeeCR_boosted_cutFlow.AddBinContent(5, B_weight)
+                        if nFatJet_ZCR==1:
+                            h_reg_ZeeCR_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 50.0:
+                                h_reg_ZeeCR_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if ZeeRecoil > 200.0:
+                                    h_reg_ZeeCR_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nBjets_notiso==0:
+                                        h_reg_ZeeCR_boosted_cutFlow.AddBinContent(9, B_weight)
+                                        if ZeeMass > 60 and ZeeMass < 120:
+                                            h_reg_ZeeCR_boosted_cutFlow.AddBinContent(10, B_weight)
+                                            if nJets_cleaned>0:
+                                                h_reg_ZeeCR_boosted_cutFlow.AddBinContent(11, B_weight)
+
+
+
+            if mettrigdecision:
+                h_reg_SBand_boosted_cutFlow.AddBinContent(3, B_weight)
+                if ep_nMu==0 and nEle_loose==0:
+                    h_reg_SBand_boosted_cutFlow.AddBinContent(4, B_weight)
+                    if ep_HPSTau_n==0:
+                        h_reg_SBand_boosted_cutFlow.AddBinContent(5, B_weight)
+                        if nFatJet_SBand==1:
+                            h_reg_SBand_boosted_cutFlow.AddBinContent(6, B_weight)
+                            if ep_pfMetCorrPt > 200.0:
+                                h_reg_SBand_boosted_cutFlow.AddBinContent(7, B_weight)
+                                if nBjets_notiso==0:
+                                    h_reg_SBand_boosted_cutFlow.AddBinContent(8, B_weight)
+                                    if nJets_cleaned>=0:
+                                        h_reg_SBand_boosted_cutFlow.AddBinContent(9,B_weight)
+
+
+
 
             '''
             --------------------------------------------------------------------------------
@@ -743,8 +1105,8 @@ def runbbdm(txtfile):
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
-                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,'max_dphi_jets':maxdPhi_ak4_ak8_sr,
-                                                'weight':weight
+                                                'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -770,7 +1132,7 @@ def runbbdm(txtfile):
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sb,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -801,7 +1163,7 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -832,7 +1194,7 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -861,7 +1223,7 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
             
@@ -893,7 +1255,7 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -927,7 +1289,7 @@ def runbbdm(txtfile):
                                                 'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
                                                 'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
                                                 'Zmass':ZmumuMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -964,7 +1326,7 @@ def runbbdm(txtfile):
                                                 'lep1_pT':elept[0],'lep1_eta':eleeta[0],'lep1_Phi':elephi[0],
                                                 'lep2_pT':elept[1],'lep2_eta':eleeta[1],'lep2_Phi':elephi[1],
                                                 'Zmass':ZeeMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
-                                                'weight':weight
+                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
                                            },
                                                 ignore_index=True)
 
@@ -994,8 +1356,73 @@ def runbbdm(txtfile):
     df_out_TopWmu_boosted.to_root(outfilenameis, key='monoHbb_TopWmu_boosted',mode='a')
     df_out_TopWe_boosted.to_root(outfilenameis, key='monoHbb_TopWe_boosted',mode='a')
 
+    WCR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"nJets",7:"MET",8:"Recoill",9:"nBjets",10:"Mbb",11:"aditional",12:"orthogonal/extra"}
+    SR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nJets",7:"MET",8:"nBjets",9:"Mbb/SDMass",10:"aditional",11:"orthogonal/extra",12:"extra"}
+
+    WCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"nJets",7:"MET",8:"Recoill",9:"nBjets",10:"aditional",11:"extra"}
+
+    ZCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"nJets",7:"MET",8:"Recoill",9:"nBjets",10:"Zmass",11:"aditional"}
+
+    SR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nJets",7:"MET",8:"nBjets",9:"Mbb/SDMass",10:"aditional",11:"orthogonal/extra",12:"extra"}
+
+    for i in [1,2,3,4,5,6,7,8,9,10,11,12]:
+        h_reg_WenuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+        h_reg_WmunuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+        h_reg_TopenuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+        h_reg_TopmunuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+        h_reg_ZeeCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+        h_reg_ZmumuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
+	h_reg_SBand_resolved_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow[i])
+        #h_reg_SBand_boosted_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow[i])  
+      
+    for i in [1,2,3,4,5,6,7,8,9,10,11]:
+        h_reg_WenuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
+        h_reg_WmunuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
+        h_reg_TopenuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
+        h_reg_TopmunuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
+        h_reg_ZeeCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,ZCR_CutFlow_B[i])
+        h_reg_ZmumuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,ZCR_CutFlow_B[i])
+        h_reg_SBand_boosted_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow_B[i])
+
+
+    h_reg_WenuCR_resolved_cutFlow.SetEntries(1)
+    h_reg_WmunuCR_resolved_cutFlow.SetEntries(1)
+    h_reg_TopenuCR_resolved_cutFlow.SetEntries(1)
+    h_reg_TopmunuCR_resolved_cutFlow.SetEntries(1)
+    h_reg_ZeeCR_resolved_cutFlow.SetEntries(1)
+    h_reg_ZmumuCR_resolved_cutFlow.SetEntries(1)
+
+    h_reg_SBand_resolved_cutFlow.SetEntries(1)
+
+    h_reg_WenuCR_boosted_cutFlow.SetEntries(1)
+    h_reg_WmunuCR_boosted_cutFlow.SetEntries(1)
+    h_reg_TopenuCR_boosted_cutFlow.SetEntries(1)
+    h_reg_ZeeCR_boosted_cutFlow.SetEntries(1)
+    h_reg_ZmumuCR_boosted_cutFlow.SetEntries(1)
+    h_reg_SBand_boosted_cutFlow.SetEntries(1)
+
+
+
+
     outfile = TFile(outfilenameis,'UPDATE')
     outfile.cd()
+
+    h_reg_WenuCR_resolved_cutFlow.Write()
+    h_reg_WmunuCR_resolved_cutFlow.Write()
+    h_reg_TopenuCR_resolved_cutFlow.Write()
+    h_reg_TopmunuCR_resolved_cutFlow.Write()
+    h_reg_SBand_resolved_cutFlow.Write()
+    h_reg_SBand_boosted_cutFlow.Write()
+
+    h_reg_ZeeCR_resolved_cutFlow.Write()
+    h_reg_ZmumuCR_resolved_cutFlow.Write()
+
+    h_reg_WenuCR_boosted_cutFlow.Write()
+    h_reg_WmunuCR_boosted_cutFlow.Write()
+    h_reg_TopenuCR_boosted_cutFlow.Write()
+    h_reg_ZeeCR_boosted_cutFlow.Write()
+    h_reg_ZmumuCR_boosted_cutFlow.Write()
+
     h_total_mcweight.Write()
     h_total.Write()
     outfile.Write()
