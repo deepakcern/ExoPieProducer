@@ -83,6 +83,7 @@ void addTemplate(RooWorkspace& ws,  RooArgList& vars, TH1F* hist) {
 
 // following two functions do essentially same things, but instead of returning RooArgList, one return vector, becuase I couldn't find any way to get roorealvar back from the rooarglist. 
 
+/* when using this results are weird
 RooArgList GetRooArgList(std::vector<float>  bcs, TString name){
   RooArgList ral_ ;
   TString postfix;
@@ -94,7 +95,7 @@ RooArgList GetRooArgList(std::vector<float>  bcs, TString name){
   }
   return ral_;
 }
-
+*/
 
 // This function is overloaded
 std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
@@ -107,7 +108,7 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
     // fix the naming here using some automation  and also in the next function
 
     std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
-    rrvV_.push_back(RooRealVar(name+postfix,"Background yield in signal region, bin 1", bcs[i], bcs[i]/5, bcs[i]*5));
+    rrvV_.push_back(RooRealVar(name+postfix,"Background yield in signal region, bin 1", bcs[i], 0,10*bcs[i]));
     
   }
   
@@ -115,7 +116,7 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
 }
 
 
-
+/*when using this, results are very weird
 std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, bool setconstant, TString name){
   std::vector<RooRealVar> rrvV_ ;
   rrvV_.clear();
@@ -126,15 +127,15 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, bool setconstant
     postfix.Form("%d", i+1);
     std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
     RooRealVar rrv_(name+postfix, "Background yield in signal region, bin 1", bcs[i]);
-    rrv_.setConstant(1);
+    rrv_.setConstant(setconstant);
     rrvV_.push_back(rrv_);
   }
   
   return rrvV_;
 }
+*/
 
-
-
+/* when using this, results are very weird
 // I still don't know why I can't return simple RooFormulaVar from a function but the std::vector<RooFormulaVar> works fine. 
 std::vector<RooFormulaVar> GetRooFormulaVar(std::vector<RooRealVar> nuisances, std::vector <RooRealVar> rrv_htf_wenu_2b_wjets, TString name){
   std::vector<RooFormulaVar> test_;
@@ -151,13 +152,13 @@ std::vector<RooFormulaVar> GetRooFormulaVar(std::vector<RooRealVar> nuisances, s
   
 }
 
+*/
 
 
 
 
-
-/*
-1: roorealvar, here it is mer
+/* createRegion parameters are following
+1: roorealvar, here it is met
 2: background histogram in signal region
 3: background histogram in CR
 4: data histogram in signal region
@@ -174,11 +175,21 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   std::vector<float> bincontents_sr2_wjets = GetBinContents(h_sr2_wjets);
   
   // This will create the RooRealVar with a/5 to a*5 range. 
-  RooArgList ralbc_sr2_wjets  = GetRooArgList(bincontents_sr2_wjets, "ralbc_"+region_proc_sr);
+  // -- commented on 5 feb to test if adding each rrv to rooarglist work fine 
+  // -- this is now done after making vector of the RRV 
+  //RooArgList ralbc_sr2_wjets  = GetRooArgList(bincontents_sr2_wjets, "ralbc_"+region_proc_sr);
+  
+  
   
   // create a vector of RooRealVar, this is needed because I didn't find  way to retrive the RooRealVar back from the RooArgList
   std::vector<RooRealVar> rrvbc_sr2_wjets = GetRooRealVar(bincontents_sr2_wjets, "rrvbc_"+region_proc_sr);
-    
+  
+  RooArgList ralbc_sr2_wjets;
+  ralbc_sr2_wjets.add(rrvbc_sr2_wjets[0]);
+  ralbc_sr2_wjets.add(rrvbc_sr2_wjets[1]);
+  ralbc_sr2_wjets.add(rrvbc_sr2_wjets[2]);
+  ralbc_sr2_wjets.add(rrvbc_sr2_wjets[3]);
+  
   // Create a RooParametericHist which contains those yields, last argument is just for the binning, we can use the data TH1 for that
   RooParametricHist rph_sr2_wjets("rph_"+region_proc_sr, "wjets PDF in signal region",met,ralbc_sr2_wjets, *h_sr2_data);
   
@@ -244,9 +255,10 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   // idelaly each of these rooreal var in following vector should be setConstat(1) otherwise it may be treated as free parameter however it should be fixed. 
   std::vector <float> bincontents_htf_wenu_2b_wjets =  GetBinContents(htf_wenu_2b_wjets);
   
-  // the rooreal vars are set to constant values instead of free values. 
-  // this is an overloaded function 
-  std::vector <RooRealVar> rrv_htf_wenu_2b_wjets = GetRooRealVar(bincontents_htf_wenu_2b_wjets, true, "TF_"+region_proc_sr);
+  RooRealVar tf1 ("tf1_"+region_proc_cr,"tf1_"+region_proc_cr,bincontents_htf_wenu_2b_wjets[0]) ;
+  RooRealVar tf2 ("tf2_"+region_proc_cr,"tf2_"+region_proc_cr,bincontents_htf_wenu_2b_wjets[1]) ;
+  RooRealVar tf3 ("tf3_"+region_proc_cr,"tf3_"+region_proc_cr,bincontents_htf_wenu_2b_wjets[2]) ;
+  RooRealVar tf4 ("tf4_"+region_proc_cr,"tf4_"+region_proc_cr,bincontents_htf_wenu_2b_wjets[3]) ;
   
   // the nuisance part of the code has to be updated after some more discussion. 
   std::vector<RooRealVar> nuisances;
@@ -255,34 +267,11 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   nuisances.push_back(acceptance);
   
   
-  
+  RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf1));//rrv_htf_wenu_2b_wjets[0]) );
+  RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf2));//rrv_htf_wenu_2b_wjets[1]) );
+  RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf3));//rrv_htf_wenu_2b_wjets[2]) );
+  RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf4));//rrv_htf_wenu_2b_wjets[3]) );
 
-  // It crashes if I use the element of vector
-  std::vector<RooFormulaVar> rfv_tf_wenu_2b_wjets = GetRooFormulaVar(nuisances, rrv_htf_wenu_2b_wjets, "rfv_tf_wenu_2b_wjets");
-  
-  //However following work fine if I do it one by one   
-  // this is the only part which is not automatic becuase vector of RooFormulaVar is not working, Once this is done i should use the binning of TF also automatic
-  
-  
-  /*
-  RooFormulaVar TF[7];
-  TString istr; 
-  for (auto i=0; i<bincontents_htf_wenu_2b_wjets.size(); i++){
-    istr.Form("%d", i+1);
-    TF[i] = RooFormulaVar("TF"+istr+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[i])); 
-  }
-  */
-  
-  RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[0]) );
-  RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[1]) );
-  RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[2]) );
-  RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[3]) );
-  //RooFormulaVar TF5("TF5"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[4]) );
-  //RooFormulaVar TF6("TF6"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[5]) );
-  //RooFormulaVar TF7("TF7"+region_proc_cr,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,rrv_htf_wenu_2b_wjets[6]) );
-  
-  
-  std::cout<<" size of rfv_tf_wenu_2b_wjets = "<<rfv_tf_wenu_2b_wjets.size()<<std::endl;
   /*
     Then need to make each bin of the background in the control region a function of the background in the signal and the transfer factor - 
     i.e NCR=NSR x TF
@@ -295,23 +284,7 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   RooFormulaVar rfv_wenu_2b_wjets2("rfv_"+region_proc_cr+"2","Background yield in control region, bin 2","@0*@1",RooArgList(TF2,rrvbc_sr2_wjets.at(1)));
   RooFormulaVar rfv_wenu_2b_wjets3("rfv_"+region_proc_cr+"3","Background yield in control region, bin 3","@0*@1",RooArgList(TF3,rrvbc_sr2_wjets.at(2)));
   RooFormulaVar rfv_wenu_2b_wjets4("rfv_"+region_proc_cr+"4","Background yield in control region, bin 4","@0*@1",RooArgList(TF4,rrvbc_sr2_wjets.at(3)));
-  //RooFormulaVar rfv_wenu_2b_wjets5("rfv_"+region_proc_cr+"5","Background yield in control region, bin 5","@0*@1",RooArgList(TF5,rrvbc_sr2_wjets.at(4)));
-  //RooFormulaVar rfv_wenu_2b_wjets6("rfv_"+region_proc_cr+"6","Background yield in control region, bin 6","@0*@1",RooArgList(TF6,rrvbc_sr2_wjets.at(5)));
-  //RooFormulaVar rfv_wenu_2b_wjets7("rfv_"+region_proc_cr+"7","Background yield in control region, bin 7","@0*@1",RooArgList(TF7,rrvbc_sr2_wjets.at(6)));
-
-
-  /*
-  RooFormulaVar CRbin1("wjets_CR_bin1","Background yield in control region, bin 1","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[0]), rrvbc_sr2_wjets.at(0)));
-  RooFormulaVar CRbin2("wjets_CR_bin2","Background yield in control region, bin 2","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[1]),rrvbc_sr2_wjets.at(1)));
-  RooFormulaVar CRbin3("wjets_CR_bin3","Background yield in control region, bin 3","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[2]),rrvbc_sr2_wjets.at(2)));
-  RooFormulaVar CRbin4("wjets_CR_bin4","Background yield in control region, bin 4","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[3]),rrvbc_sr2_wjets.at(3)));
-  RooFormulaVar CRbin5("wjets_CR_bin5","Background yield in control region, bin 5","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[4]),rrvbc_sr2_wjets.at(4)));
-  RooFormulaVar CRbin6("wjets_CR_bin6","Background yield in control region, bin 6","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[5]),rrvbc_sr2_wjets.at(5)));
-  RooFormulaVar CRbin7("wjets_CR_bin7","Background yield in control region, bin 7","@0*@1",RooArgList((rfv_tf_wenu_2b_wjets[6]),rrvbc_sr2_wjets.at(6)));
-  */
   
-
-  std::cout<<" aftercrbin1 "<<std::endl;
 
 
   // --------------------------------------------------------------
@@ -323,37 +296,18 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets2);
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets3);
   ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets4);
-  //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets5);
-  //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets6);
-  //ral_wenu_2b_wjets.add(rfv_wenu_2b_wjets7);
-  
     
-  std::cout<<" after RooArgList wjets_CR_bins"<<std::endl;
+    
   RooParametricHist rph_wenu_2b_wjets("rph_"+region_proc_cr, "Background PDF in control region",met,ral_wenu_2b_wjets, *h_sr2_data);
-  
-  std::cout<<" after RooParametricHist"<<std::endl;
   RooAddition rph_wenu_2b_wjets_norm("rph_"+region_proc_cr+"_norm","Total Number of events from background in control region", ral_wenu_2b_wjets);
-
-  std::cout<<" after RooAddition"<<std::endl;
-
   
   wspace.import(rph_wenu_2b_wjets);
-  
-  std::cout<<" imported p_CR_wjets "<<std::endl;
   wspace.import(rph_wenu_2b_wjets_norm ,RooFit::RecycleConflictNodes());
 
-  std::cout<<" norm of imported p_CR_wjets "<<std::endl;
-
   
-  //fOut->cd();
-  //wspace.Write();  
   
-
 
 }
-
-
-
 
 
 
@@ -390,7 +344,8 @@ void PrepareWS(){
   
 
   // this histogram is just for the binning 
-  TH1F* h_sr2_data = (TH1F*) fin->Get("monoHbb2017_B_SR_bkgSum");
+  // --- commented on 5 Feb to see if the limis becomes same when using the opriginal data histogram
+  TH1F* h_sr2_data = (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs");
   
   //the following lines create a freely floating parameter for each of our bins (in this example, there are only 4 bins, defined for our observable met.
   // In this case we vary the normalisation in each bin of the background from N/3 to 3*N, 
@@ -426,12 +381,12 @@ void PrepareWS(){
     -------------------------------------------------------------------------------------------------------------------
     */
 
-  /*std::cout<<" calling function for Wmunu"<<std::endl;
+  std::cout<<" calling function for Wmunu"<<std::endl;
   // Get the wjets hostogram in the Wmunu CR
-  TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("Wmunu_2b_WJets");
+  TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WMU_wjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "wmunu_2b_wjets", "sr2_wjets",  fOut);
-  */
+  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
+  
 
   
   /*
@@ -512,6 +467,8 @@ void PrepareWS(){
 
   
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+  
+
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPE_data_obs" ) );
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPMU_data_obs" ) );
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WE_data_obs" ) );
@@ -563,7 +520,7 @@ void PrepareWS(){
     for (auto ip=0; ip<process.size(); ip++){
 
       for (auto ic=0; ic<category.size(); ic++){
-	
+	if (process[ip] == "wjets") continue ;
 	tempname = category[ic] + regions[ir] + "_" +  process[ip];
 	//tempname = regions[ir] + "_" + category[ic] + "_" + process[ip];
 	std::cout<<" saving "<<tempname<<std::endl;
