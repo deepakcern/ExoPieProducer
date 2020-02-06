@@ -448,8 +448,24 @@ def runbbdm(txtfile):
             -------------------------------------------------------------------------
             '''
 	    #skip photon veto for now
+            pho_pt  = [getPt(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
+            pho_phi = [getPhi(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
+            pho_eta = [getEta(ep_phoPx[ij], ep_phoPy[ij], ep_phoPz[ij]) for ij in range(ep_nPho)]
+            myphotons = [True for ij in range(ep_nPho)]
+            myeleBooleans = [True for ij in range(ep_nEle)]
+            mymuBooleans = [True for ij in range(ep_nMu)]
+            cleanedPho_ag_ele = []; cleanedPho_ag_mu = [];pass_pho_index_cleaned=[]
+	    if ep_nPho > 0: #and ep_nEle > 0:
+                cleanedPho_ag_ele = anautil.jetcleaning(myphotons, myeleBooleans, pho_eta, eleeta, pho_phi, elephi, 0.4)
+		cleanedPho_ag_mu  = anautil.jetcleaning(myphotons, mymuBooleans, pho_eta, mueta, pho_phi, muphi, 0.4) 
+                cleanedPhoton     = boolutil.logical_AND_List2(cleanedPho_ag_ele,cleanedPho_ag_mu)
+                pass_pho_index_cleaned = boolutil.WhereIsTrue(cleanedPhoton)
+                #print 'cleanedPho_ag_ele',cleanedPho_ag_ele, 'cleanedPho_ag_mu', cleanedPho_ag_mu
 
-            nPho = ep_nPho #len(pass_pho_index_cleaned)
+
+            nPho = len(pass_pho_index_cleaned)
+
+
 
 
             '''
