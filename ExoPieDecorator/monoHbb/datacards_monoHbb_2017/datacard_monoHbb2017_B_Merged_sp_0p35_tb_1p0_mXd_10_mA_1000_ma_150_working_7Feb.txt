@@ -1,0 +1,41 @@
+Combination of SR=datacards_monoHbb_2017/datacard_monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  WE=datacards_monoHbb_2017/datacard_monoHbb2017_B_WE_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt
+imax 2 number of bins
+jmax 8 number of processes minus 1
+kmax * number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+shapes *        SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_$PROCESS
+shapes wjets    SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_SR_wjets
+shapes signal   SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150 
+
+shapes *        WE        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_WE_$PROCESS
+shapes wjets    WE        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_WE_wjets 
+
+----------------------------------------------------------------------------------------------------------------------------------
+bin          SR     WE   
+observation  -1     -1   
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                 SR       SR       SR       SR       SR       SR       SR       SR       SR       WE       WE       WE       WE       WE       WE       WE       WE     
+process                             signal   gjets    dyjets   singlet  wjets    diboson  qcd      zjets    tt       gjets    zjets    tt       singlet  wjets    diboson  qcd      dyjets 
+process                             0        1        2        3        4        5        6        7        8        1        7        8        3        4        5        6        2      
+rate                                -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1     
+----------------------------------------------------------------------------------------------------------------------------------
+CMS2016_eff_b           lnN         1.1      -        -        -        -        -        -        -        -        -        -        -        -        -        -        -        -      
+CMS2016_eff_met         lnN         1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04   
+CMS2016_eff_t           lnN         1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03   
+CMS2016_fake_b          lnN         -        1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05     1.05   
+CMS2016_scale_e         lnN         1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01   
+CMS2016_scale_m         lnN         1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01   
+CMS2016_scale_pu        lnN         1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001    1.001  
+lumi                    lnN         1.025    1.025    1.025    1.025    -        1.025    1.025    1.025    1.025    1.025    1.025    1.025    1.025    1.025    -        1.025    1.025  
+pdf_accept              lnN         1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01     1.01   
+
+
+efficiency    param  0 1
+acceptance    param  0 1
+
+TF_SR_wjets1 flatParam
+TF_SR_wjets2 flatParam
+TF_SR_wjets3 flatParam
+TF_SR_wjets4 flatParam

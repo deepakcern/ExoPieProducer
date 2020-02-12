@@ -81,22 +81,6 @@ void addTemplate(RooWorkspace& ws,  RooArgList& vars, TH1F* hist) {
 }
 
 
-// following two functions do essentially same things, but instead of returning RooArgList, one return vector, becuase I couldn't find any way to get roorealvar back from the rooarglist. 
-
-/* when using this results are weird
-RooArgList GetRooArgList(std::vector<float>  bcs, TString name){
-  RooArgList ral_ ;
-  TString postfix;
-
-  for (auto i=0; i<bcs.size(); i++){
-    postfix.Form("%d", i+1);
-    RooRealVar rrv_(name+postfix,"Background yield in signal region, bin 1", bcs[i]);//, bcs[i]/1.1, bcs[i]*1.1);
-    ral_.addClone(rrv_);
-  }
-  return ral_;
-}
-*/
-
 // This function is overloaded
 std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
   std::vector<RooRealVar> rrvV_ ;
@@ -116,47 +100,6 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
 }
 
 
-/*when using this, results are very weird
-std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, bool setconstant, TString name){
-  std::vector<RooRealVar> rrvV_ ;
-  rrvV_.clear();
-  TString postfix;
-  for (auto i=0; i<bcs.size(); i++){
-    std::cout<<" ---------- inside GetRooRealVar "<<std::endl;
-    // fix the naming here using some automation 
-    postfix.Form("%d", i+1);
-    std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
-    RooRealVar rrv_(name+postfix, "Background yield in signal region, bin 1", bcs[i]);
-    rrv_.setConstant(setconstant);
-    rrvV_.push_back(rrv_);
-  }
-  
-  return rrvV_;
-}
-*/
-
-/* when using this, results are very weird
-// I still don't know why I can't return simple RooFormulaVar from a function but the std::vector<RooFormulaVar> works fine. 
-std::vector<RooFormulaVar> GetRooFormulaVar(std::vector<RooRealVar> nuisances, std::vector <RooRealVar> rrv_htf_wenu_2b_wjets, TString name){
-  std::vector<RooFormulaVar> test_;
-  test_.clear();
-  TString postfix;
-
-  for (auto i=0; i<rrv_htf_wenu_2b_wjets.size(); i++){
-    postfix.Form("%d", i+1);
-    // write correct naming here
-    RooFormulaVar tf(name+postfix,"Trasnfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(nuisances[0], nuisances[1], rrv_htf_wenu_2b_wjets[i]) );
-    test_.push_back(tf);
-  }
-  return test_;
-  
-}
-
-*/
-
-
-
-
 /* createRegion parameters are following
 1: roorealvar, here it is met
 2: background histogram in signal region
@@ -174,13 +117,7 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   /* Get the bin content of each bin of the histogram in a vector which can be used later */ 
   std::vector<float> bincontents_sr2_wjets = GetBinContents(h_sr2_wjets);
   
-  // This will create the RooRealVar with a/5 to a*5 range. 
-  // -- commented on 5 feb to test if adding each rrv to rooarglist work fine 
-  // -- this is now done after making vector of the RRV 
-  //RooArgList ralbc_sr2_wjets  = GetRooArgList(bincontents_sr2_wjets, "ralbc_"+region_proc_sr);
-  
-  
-  
+  // This will create the RooRealVar with 0 to 10*bin content  range. 
   // create a vector of RooRealVar, this is needed because I didn't find  way to retrive the RooRealVar back from the RooArgList
   std::vector<RooRealVar> rrvbc_sr2_wjets = GetRooRealVar(bincontents_sr2_wjets, "rrvbc_"+region_proc_sr);
   
@@ -395,29 +332,28 @@ void PrepareWS(){
     -------------------------------------------------------------------------------------------------------------------
   */
 
-  /*
+  
     std::cout<<" calling function for Top mu"<<std::endl;
-  TH1F* h_sr2_top = (TH1F*) fin->Get("SR_2b_Top");
+  TH1F* h_sr2_top = (TH1F*) fin->Get("monoHbb2017_B_SR_tt");
   // Get the top hostogram in the Top mu CR
-  TH1F* h_topmu_2b_top = (TH1F*) fin->Get("Topmunu_2b_Top");
+  TH1F* h_topmu_2b_top = (TH1F*) fin->Get("monoHbb2017_B_TOPMU_tt");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_top, h_topmu_2b_top, h_sr2_data, wspace, "topmu_2b_top", "sr2_top",  fOut);
+  createRegion(met, h_sr2_top, h_topmu_2b_top, h_sr2_data, wspace, "TOPMU_tt", "SR_tt",  fOut);
 
-  */
+  
   /*
     -------------------------------------------------------------------------------------------------------------------
     ---------------------------------------------- Top e CR -----------------------------------------------------------
     -------------------------------------------------------------------------------------------------------------------
   */
 
-  /*
+
     std::cout<<" calling function for Top e"<<std::endl;
-  //TH1F* h_sr2_top = (TH1F*) fin->Get("SR2_2b_Top");
   // Get the top hostogram in the Top mu CR
-  TH1F* h_tope_2b_top = (TH1F*) fin->Get("Topenu_2b_Top");
+  TH1F* h_tope_2b_top = (TH1F*) fin->Get("monoHbb2017_B_TOPE_tt");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_top, h_tope_2b_top, h_sr2_data, wspace, "tope_2b_top", "sr2_top",  fOut);
-  */
+  createRegion(met, h_sr2_top, h_tope_2b_top, h_sr2_data, wspace, "TOPE_tt", "SR_tt",  fOut);
+
   
   /*
     -------------------------------------------------------------------------------------------------------------------
@@ -425,14 +361,14 @@ void PrepareWS(){
     -------------------------------------------------------------------------------------------------------------------
   */
 
-  /*
+
   std::cout<<" calling function for Zmumu"<<std::endl;
-  TH1F* h_sr2_Z = (TH1F*) fin->Get("SR_2b_ZJets");
+  TH1F* h_sr2_Z = (TH1F*) fin->Get("monoHbb2017_B_SR_zjets");
   // Get the top hostogram in the Top mu CR
-  TH1F* h_Zmumu_2b_Z = (TH1F*) fin->Get("Zmumu_2b_ZJets");
+  TH1F* h_Zmumu_2b_Z = (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_dyjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_Z, h_Zmumu_2b_Z, h_sr2_data, wspace, "Zmumu_2b_Z", "sr2_Z",  fOut);
-  */
+  createRegion(met, h_sr2_Z, h_Zmumu_2b_Z, h_sr2_data, wspace, "ZMUMU_dyjets", "SR_zjets",  fOut);
+
   
   /*
     -------------------------------------------------------------------------------------------------------------------
@@ -440,12 +376,12 @@ void PrepareWS(){
     -------------------------------------------------------------------------------------------------------------------
   */  
 
-  /*
+
   // Get the top hostogram in the Top mu CR
-  TH1F* h_Zee_2b_Z = (TH1F*) fin->Get("Zee_2b_ZJets");
+  TH1F* h_Zee_2b_Z = (TH1F*) fin->Get("monoHbb2017_B_ZEE_dyjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "Zee_2b_Z", "sr2_Z",  fOut);
-  */
+  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "ZEE_dyjets", "SR_dyjets",  fOut);
+
 
   /*
     -------------------------------------------------------------------------------------------------------------------

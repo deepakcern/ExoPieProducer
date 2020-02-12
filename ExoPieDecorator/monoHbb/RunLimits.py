@@ -56,8 +56,9 @@ commandpost = " -v " + str(args.verbose) +  " --rMin "+str(args.rmin) + " --rMax
 if args.runasimov: commandlist.append(" --noFitAsimov ")
 if args.runblind: commandlist.append("  --run blind ")
 command_=""
-for ic in commandlist:  command_ = command_ + " "
+for ic in commandlist:  command_ = command_  + " " + ic
 
+print "command_ = ",command_
 
 
 

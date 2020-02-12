@@ -10,10 +10,7 @@ kmax *  number of nuisance parameters (sources of systematical uncertainties)
 ## shapes  process   region    path 
 
 shapes *         monoHbb2017_B_TOPE       monoHbb_WS.root ws_monoHbb:monoHbb2017_B_TOPE_$PROCESS ws_monoHbb:monoHbb2017_B_TOPE_$PROCESS_$SYSTEMATIC
-
-
-shapes signal    monoHbb2017_B_TOPE       monoHbb_WS.root ws_monoHbb:monoHbb2017_B_TOPE_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150 ws_monoHbb:monoHbb2017_B_TOPE_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150_$SYSTEMATIC
-shapes data_obs  monoHbb2017_B_TOPE       monoHbb_WS.root  ws_monoHbb:monoHbb2017_B_TOPE_data_obs
+shapes wjets     monoHbb2017_B_TOPE       monoHbb_WS.root ws_monoHbb:rph_TOPE_tt
 
 
 

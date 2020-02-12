@@ -1,0 +1,47 @@
+Combination of SR=datacards_monoHbb_2017/datacard_monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  WE=datacards_monoHbb_2017/datacard_monoHbb2017_B_WE_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  WMU=datacards_monoHbb_2017/datacard_monoHbb2017_B_WMU_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt
+imax 3 number of bins
+jmax 8 number of processes minus 1
+kmax 17 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes *         SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_$PROCESS ws_monoHbb:monoHbb2017_B_SR_$PROCESS_$SYSTEMATIC
+shapes data_obs  SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_data_obs
+shapes signal    SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150 ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150_$SYSTEMATIC
+shapes wjets     SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_SR_wjets
+shapes *         WE        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_WE_$PROCESS ws_monoHbb:monoHbb2017_B_WE_$PROCESS_$SYSTEMATIC
+shapes wjets     WE        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_WE_wjets
+shapes *         WMU       datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_WMU_$PROCESS ws_monoHbb:monoHbb2017_B_WMU_$PROCESS_$SYSTEMATIC
+shapes wjets     WMU       datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_WMU_wjets
+----------------------------------------------------------------------------------------------------------------------------------
+bin          SR     WE     WMU  
+observation  -1     -1     -1   
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                 SR       SR       SR       SR       SR       SR       SR       SR       WE       WE       WE       WE       WE       WE       WE       WMU      WMU      WMU      WMU      WMU      WMU      WMU    
+process                             signal   diboson  smh      singlet  wjets    qcd      zjets    tt       diboson  tt       smh      singlet  wjets    qcd      dyjets   diboson  tt       smh      singlet  wjets    qcd      dyjets 
+process                             0        1        2        3        4        5        6        7        1        7        2        3        4        5        8        1        7        2        3        4        5        8      
+rate                                -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1       -1     
+----------------------------------------------------------------------------------------------------------------------------------
+CMS2016_eff_b           lnN         1.1      -        1.1      1.1      -        -        -        1.1      -        1.1      1.1      1.1      -        -        -        -        1.1      1.1      1.1      -        -        -      
+CMS2016_eff_met         lnN         1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04     1.04   
+CMS2016_fake_b          lnN         -        1.05     1.05     1.05     1.05     1.05     1.05     1.05     -        1.05     1.05     1.05     -        -        -        -        1.05     1.05     1.05     -        -        -      
+CMS2016_scale_e         lnN         -        -        -        -        -        -        -        -        1.01     1.01     1.01     1.01     1.01     1.01     1.01     -        -        -        -        -        -        -      
+CMS2016_scale_m         lnN         -        -        -        -        -        -        -        -        -        -        -        -        -        -        -        1.02     1.02     1.02     1.02     1.02     1.02     1.02   
+CMS2016_scale_pu        lnN         1.001    1.01     1.01     1.01     -        1.01     -        -        1.001    1.001    1.001    1.001    -        1.001    1.001    1.001    1.001    1.001    1.001    -        1.001    1.001  
+ak8jet_jec              lnN         1.05     1.05     1.05     1.05     -        1.05     -        -        1.05     1.05     1.05     1.05     -        1.05     1.05     1.05     1.05     1.05     1.05     -        1.05     1.05   
+doubleb                 lnN         1.1      -        1.1      -        -        -        -        -        -        -        1.1      -        -        -        -        -        -        1.1      -        -        -        -      
+lumi                    lnN         1.025    1.025    1.025    1.025    -        1.025    -        -        1.025    1.025    1.025    1.025    -        1.025    1.025    1.025    1.025    1.025    1.025    -        1.025    1.025  
+norm_diboson            lnN         -        1.2      -        -        -        -        -        -        1.2      -        -        -        -        -        -        1.2      -        -        -        -        -        -      
+norm_stop               lnN         -        -        -        1.2      -        -        -        -        -        -        -        1.2      -        -        -        -        -        -        1.2      -        -        -      
+norm_wj                 lnN         -        -        -        -        1.2      -        -        -        -        -        -        -        1.2      -        -        -        -        -        -        1.2      -        -      
+trig_ele                lnN         -        -        -        -        -        -        -        -        1.01     1.01     1.01     1.01     1.01     1.01     1.01     -        -        -        -        -        -        -      
+trig_met                lnN         1.02     1.02     1.02     1.02     -        1.02     -        -        1.02     1.02     1.02     1.02     -        1.02     1.02     1.02     1.02     1.02     1.02     -        1.02     1.02   
+veto_tau                lnN         1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03   
+wj_hf                   lnN         -        -        -        -        1.05     -        -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -      
+zj_hf                   lnN         -        -        -        -        -        -        1.05     -        -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05   
+TF2WE_wjets   flatParam
+TF1WMU_wjets  flatParam
+TF3WE_wjets   flatParam
+TF3WMU_wjets  flatParam
+TF2WMU_wjets  flatParam
+TF4WMU_wjets  flatParam
+TF1WE_wjets   flatParam
+TF4WE_wjets   flatParam
