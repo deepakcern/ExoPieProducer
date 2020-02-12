@@ -1,4 +1,4 @@
-## analyzer code here
+## analyzer code here with systematics (using bbdm as base)
 
 The analysis code is mainly written in the monoHbbAnalyzer.py file. This will create a .root file with trees for each CR/SR.
 
