@@ -31,4 +31,5 @@ python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ### Submit Condor Jobs
 ```
 cd ExoPieProducer/ExoPieAnalyzer
+git clone git@github.com:deepakcern/CondorJobs.git
 ```
