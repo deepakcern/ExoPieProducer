@@ -27,3 +27,8 @@ Note: keep ```isCondor = False```
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ```
+
+### Submit Condor Jobs
+```
+cd ExoPieProducer/ExoPieAnalyzer
+```
