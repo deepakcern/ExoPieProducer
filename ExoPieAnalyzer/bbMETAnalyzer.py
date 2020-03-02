@@ -38,6 +38,7 @@ import analysis_utils as anautil
 sys.path.append('configs')
 import variables as var
 import outvars_bbDM as out
+import getRecoil as getRecoil
 
 ## from analysisutils
 if isCondor:sys.path.append('ExoPieUtils/scalefactortools/')
@@ -111,6 +112,13 @@ def TextToList(textfile):
 ## the input file list and key is caught in one variable as a python list,
 #### first element is the list of rootfiles
 #### second element is the key, user to name output.root
+def getJECWeight(ep_THINjetCorrUnc):
+    JECWeight_up   = 1.0
+    JECWeight_down = 1.0
+    for corr in ep_THINjetCorrUnc:
+        JECWeight_up   *= (1+corr)
+        JECWeight_down *= (1-corr)
+    return JECWeight_up, JECWeight_down
 
 def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,nMu,ep_muPt,ep_muEta):
     tot_weight = 1.0; weightMET = 1.0; weightEle = 1.0; weightMu = 1.0; weightRecoil = 1.0; weightEleTrig=1.0
@@ -367,6 +375,37 @@ def runbbdm(txtfile):
 
             '''
             -------------------------------------------------------------------------------
+            HADRONIC RECOIL
+            -------------------------------------------------------------------------------
+            '''
+            ep_WenuRecoil, ep_WenuRecoildPhi, WeMass = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, WeMassResUp = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, WeMassResDown = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, WeMassEnUp = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, WeMassEnDown = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+            ep_WmunuRecoil, ep_WmunuRecoildPhi, WmuMass = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, WmuMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilResDown, ep_WmunuRecoildPhiResDown, WmuMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnUp, ep_WmunuRecoildPhiEnUp, WmuMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnDown, ep_WmunuRecoildPhiEnDown, WmuMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+            #======   usage: ZRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)=====
+            ep_ZeeRecoil,ep_ZeeRecoil_dPhi,ZeeMass = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResUp,ep_ZeeRecoil_dPhiResUp,ZeeMassResUp = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResDown,ep_ZeeRecoil_dPhiResDown,ZeeMassResDown = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnUp,ep_ZeeRecoil_dPhiEnUp,ZeeMassEnUp = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnDown,ep_ZeeRecoil_dPhiEnDown,ZeeMassEnDown = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+
+            ep_ZmumuRecoil,ep_ZmumuRecoil_dPhi,ZmumuMass = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_ZmumuRecoilResUp,ep_ZmumuRecoil_dPhiResUp,ZmumuMassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_ZmumuRecoilResDown,ep_ZmumuRecoil_dPhiResDown,ZmumuMassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_ZmumuRecoilEnUp,ep_ZmumuRecoil_dPhiEnUp,ZmumuMassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_ZmumuRecoilEnDown,ep_ZmumuRecoil_dPhiEnDown,ZmumuMassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+            '''
+            -------------------------------------------------------------------------------
             CR VARS
             -------------------------------------------------------------------------------
             '''
@@ -382,8 +421,8 @@ def runbbdm(txtfile):
             --------------------------------------------------------------------------------
             '''
             weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = -999.0
-            weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up =  weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up =  -999.0
-            weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down =  weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down =  -999.0
+            weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up = weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up =  -999.0
+            weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down =  weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down =  -999.0
             if ep_isData:
                 weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = 1.0
                 weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up =  weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up =  1.0
@@ -404,6 +443,8 @@ def runbbdm(txtfile):
                 presel_weight = weightEWK * weightQCD * weightTop * weightPU
                 weight,weightEleTrig,ele_wgt,mu_wgt,recoil_wgt,met_wgt = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
                 weightEle=ele_wgt[0];weightMu=mu_wgt[0];weightRecoil=recoil_wgt[0];weightMET=met_wgt[0]
+                weightJEC = getJECWeight(ep_THINjetCorrUnc)
+
             '''
             --------------------------------------------------------------------------------
             SIGNAL REGION
@@ -569,7 +610,7 @@ def runbbdm(txtfile):
                     if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
                         h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        if (ep_WmunuRecoil > 200.) :
+                            if (ep_WmunuRecoil > 200.) :
                             h_reg_WmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
                             h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
                             if (min_dPhi_jet_MET > 0.5):
@@ -674,7 +715,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,
-                                                    'weightMET_up':met_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,
+                                                    'weightMET_up':met_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],
                                                     'weightMET_down':met_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
@@ -688,7 +729,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,
-                                                    'weightMET_up':met_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,
+                                                    'weightMET_up':met_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],
                                                     'weightMET_down':met_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
@@ -705,7 +746,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
                                                     'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZee')
@@ -720,7 +761,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
                                                     'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZee')
@@ -736,7 +777,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
                                                     'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZmumu')
@@ -751,7 +792,7 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
                                                     'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZmumu')
@@ -765,7 +806,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWenu')
@@ -779,7 +820,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWenu')
@@ -794,7 +835,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWmunu')
@@ -808,7 +849,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWmunu')
@@ -822,7 +863,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopenu')
@@ -836,7 +877,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopenu')
@@ -850,7 +891,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
                                                     'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopmunu')
@@ -864,7 +905,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
                                                     'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
                                                     'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
+                                                    'weight':weight,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB, 'weightEWK':weightEWK, 'weightQCD':weightQCD, 'weightTop':weightTop, 'weightPU':weightPU,'weightRecoil_up':recoil_wgt[1],'weightEle_up':ele_wgt[1],'weightMu_up':mu_wgt[1],'weightB_up':weightB_up,'weightTop_up':weightTop_up,'weightJEC_up':weightJEC[0],'weightJEC_down':weightJEC[1],'weightRecoil_down':recoil_wgt[2],'weightEle_down':ele_wgt[2],'weightMu_down':mu_wgt[2],'weightB_down':weightB_down,'weightTop_down':weightTop_down
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopmunu')
