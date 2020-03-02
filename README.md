@@ -20,3 +20,8 @@ git checkout monohbb_systematics
 git clone git@github.com:deepakcern/ExoPieProducer.git
 git checkout monohbb
 ```
+
+### Interactive Run
+```
+cd ExoPieProducer/ExoPieAnalyzer
+```
