@@ -24,4 +24,5 @@ git checkout monohbb
 ### Interactive Run
 ```
 cd ExoPieProducer/ExoPieAnalyzer
+python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ```
