@@ -1428,13 +1428,13 @@ def runbbdm(txtfile):
                 mu1_trig = False; mu2_trig = False
                 #print 'number of muons',len(mupt)
                 if isTightMuons[0] and not isData:
-		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],'T')
                     lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'L')
                     lepweight = lepweight1*lepweight2
                     lepweight_up = lep1_up*lep2_up
                     lepweight_down = lep1_down*lep2_down
                 elif isTightMuons[1] and not isData:
-		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],'L')
                     lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[0],mueta[0],'T')
                     lepweight = lepweight1*lepweight2
                     lepweight_up = lep1_up*lep2_up
