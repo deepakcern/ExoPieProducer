@@ -268,9 +268,9 @@ def runbbdm(txtfile):
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV, \
             ep_THINjetCorrUnc, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
-            ep_eleIsPassTight, ep_eleIsPassLoose, \
+            ep_eleIsPassTight, ep_eleIsPassLoose,ep_eleCharge, \
             ep_nPho, ep_phoIsPassTight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
-            ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_isTightMuon, \
+            ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_isTightMuon,ep_muCharge, \
             ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
@@ -285,9 +285,9 @@ def runbbdm(txtfile):
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, df.st_THINjetNPV, \
                    df.st_THINjetCorrUnc, \
                    df.st_nEle, df.st_elePx, df.st_elePy, df.st_elePz, df.st_eleEnergy, \
-                   df.st_eleIsPassTight, df.st_eleIsPassLoose, \
+                   df.st_eleIsPassTight, df.st_eleIsPassLoose,df.st_eleCharge, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
-                   df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
+                   df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon,df.st_muCharge, \
                    df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEletightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_tightEletightMuVeto,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
@@ -378,31 +378,31 @@ def runbbdm(txtfile):
             HADRONIC RECOIL
             -------------------------------------------------------------------------------
             '''
-            ep_WenuRecoil, ep_WenuRecoildPhi, WeMass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, WeMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, WeMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, WeMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, WeMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_WenuRecoil, ep_WenuRecoildPhi, WeMass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
+            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, WeMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, WeMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, WeMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, WeMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
-            ep_WmunuRecoil, ep_WmunuRecoildPhi, WmuMass = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, WmuMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_WmunuRecoilResDown, ep_WmunuRecoildPhiResDown, WmuMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_WmunuRecoilEnUp, ep_WmunuRecoildPhiEnUp, WmuMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_WmunuRecoilEnDown, ep_WmunuRecoildPhiEnDown, WmuMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_WmunuRecoil, ep_WmunuRecoildPhi, WmuMass = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
+            ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, WmuMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilResDown, ep_WmunuRecoildPhiResDown, WmuMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx, ep_muPy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnUp, ep_WmunuRecoildPhiEnUp, WmuMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnDown, ep_WmunuRecoildPhiEnDown, WmuMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             #======   usage: ZRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)=====
-            ep_ZeeRecoil,ep_ZeeRecoil_dPhi,ZeeMass = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_ZeeRecoilResUp,ep_ZeeRecoil_dPhiResUp,ZeeMassResUp = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_ZeeRecoilResDown,ep_ZeeRecoil_dPhiResDown,ZeeMassResDown = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_ZeeRecoilEnUp,ep_ZeeRecoil_dPhiEnUp,ZeeMassEnUp = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_ZeeRecoilEnDown,ep_ZeeRecoil_dPhiEnDown,ZeeMassEnDown = getRecoil.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_ZeeRecoil,ep_ZeeRecoil_dPhi,ZeeMass = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResUp,ep_ZeeRecoil_dPhiResUp,ZeeMassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResDown,ep_ZeeRecoil_dPhiResDown,ZeeMassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnUp,ep_ZeeRecoil_dPhiEnUp,ZeeMassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnDown,ep_ZeeRecoil_dPhiEnDown,ZeeMassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
 
             ep_ZmumuRecoil,ep_ZmumuRecoil_dPhi,ZmumuMass = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_ZmumuRecoilResUp,ep_ZmumuRecoil_dPhiResUp,ZmumuMassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_ZmumuRecoilResDown,ep_ZmumuRecoil_dPhiResDown,ZmumuMassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_ZmumuRecoilEnUp,ep_ZmumuRecoil_dPhiEnUp,ZmumuMassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_ZmumuRecoilEnDown,ep_ZmumuRecoil_dPhiEnDown,ZmumuMassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_ZmumuRecoilResUp,ep_ZmumuRecoil_dPhiResUp,ZmumuMassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
+            ep_ZmumuRecoilResDown,ep_ZmumuRecoil_dPhiResDown,ZmumuMassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_ZmumuRecoilEnUp,ep_ZmumuRecoil_dPhiEnUp,ZmumuMassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
+            ep_ZmumuRecoilEnDown,ep_ZmumuRecoil_dPhiEnDown,ZmumuMassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
             '''
             -------------------------------------------------------------------------------
