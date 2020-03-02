@@ -11,3 +11,12 @@ ExoPieProducer/ExoPieCapper: make all kind of plots needed for the AN/PAS/Slides
 
 ExoPieProducer/ExoPieDecorator: Limit model related stuff. 
 
+## Setup framework 
+
+```
+git clone git@github.com:deepakcern/ExoPieUtils.git
+git checkout monohbb_systematics
+
+git clone git@github.com:deepakcern/ExoPieProducer.git
+git checkout monohbb
+```
