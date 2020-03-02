@@ -377,7 +377,7 @@ def runbbdm(txtfile):
 
 	    nJets_cleaned = len(pass_ak4jet_index_cleaned)
 
-            Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)]
+            Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > LWP and abs(ak4jeteta[ij]) < 2.5)]
             nBjets_iso = len(Bjet_index)
 
             '''
