@@ -378,11 +378,11 @@ def runbbdm(txtfile):
             HADRONIC RECOIL
             -------------------------------------------------------------------------------
             '''
-            ep_WenuRecoil, ep_WenuRecoildPhi, WeMass = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, WeMassResUp = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, WeMassResDown = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, WeMassEnUp = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, WeMassEnDown = getRecoil.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_WenuRecoil, ep_WenuRecoildPhi, WeMass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, WeMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, WeMassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, WeMassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, WeMassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             ep_WmunuRecoil, ep_WmunuRecoildPhi, WmuMass = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
             ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, WmuMassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
