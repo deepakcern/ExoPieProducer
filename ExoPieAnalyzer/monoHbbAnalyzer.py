@@ -53,7 +53,7 @@ import ana_weight as wgt
 
 
 import eventSelector as eventSelector_v2
-
+from eventSelector import getJECWeight 
 
 ######################################################################################################
 ## All import are done before this
@@ -351,12 +351,20 @@ def runbbdm(txtfile):
             -----------------------------------------------------------------------------
             '''
             #if ep_THINnJet < 2: continue
+#            for jetCorr in ep_THINjetCorrUnc:
+#		print 'jetCorr',jetCorr
+            #print 'ep_pfMetCorrPt',ep_pfMetCorrPt
+            #print 'ep_pfMetUncJetResUp',ep_pfMetUncJetResUp
+            #print 'ep_pfMetUncJetResDown',ep_pfMetUncJetResDown
+            #print 'ep_pfMetUncJetEnUp',ep_pfMetUncJetEnUp
+            #print 'ep_pfMetUncJetEnDown',ep_pfMetUncJetEnDown
+ 
        
             ak4jetpt  = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
 
-            nBjets_notiso_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > LWP and abs(ak4jeteta[ij]) < 2.5)]
+            nBjets_notiso_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)]
             nBjets_notiso = len(nBjets_notiso_index)
 
             ak4_pt30_eta4p5  = [True for ij in range(ep_THINnJet)] #pt > 30 and eta < 4.5 is already applied at skimmer level
@@ -383,7 +391,7 @@ def runbbdm(txtfile):
 
             for firstjet in range(ep_THINnJet):
 		for secondjet in range(ep_THINnJet):
-		    if (firstjet<secondjet) and (ep_THINjetDeepCSV[firstjet] > LWP and (abs(ak4jeteta[firstjet]) < 2.5) ) and (ep_THINjetDeepCSV[secondjet] > LWP and (abs(ak4jeteta[secondjet]) < 2.5)):
+		    if (firstjet<secondjet) and (ep_THINjetDeepCSV[firstjet] > MWP and (abs(ak4jeteta[firstjet]) < 2.5) ) and (ep_THINjetDeepCSV[secondjet] > MWP and (abs(ak4jeteta[secondjet]) < 2.5)):
 		        jet1Index_list.append(firstjet)
                         jet2Index_list.append(secondjet)
                     else:continue
@@ -476,11 +484,30 @@ def runbbdm(txtfile):
 
             #======   usage: WRecoil_Phi_Wmass(nEle,elept,elephi,elepx_,elepy_,met_,metphi_) =======
 	    Werecoil, WerecoildPhi, WeMass = eventSelector_v2.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            WerecoilResUp, WerecoildPhiResUp, WeMassResUp = eventSelector_v2.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            WerecoilResDown, WerecoildPhiResDown, WeMassResDown = eventSelector_v2.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            WerecoilEnUp, WerecoildPhiEnUp, WeMassEnUp = eventSelector_v2.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            WerecoilEnDown, WerecoildPhiEnDown, WeMassEnDown = eventSelector_v2.WRecoil_Phi_Wmass(nEle_loose,elept,elephi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
             Wmurecoil, WmurecoildPhi, WmuMass = eventSelector_v2.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            WmurecoilResUp, WmurecoildPhiResUp, WmuMassResUp = eventSelector_v2.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            WmurecoilResDown, WmurecoildPhiResDown, WmuMassResDown = eventSelector_v2.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            WmurecoilEnUp, WmurecoildPhiEnUp, WmuMassEnUp = eventSelector_v2.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            WmurecoilEnDown, WmurecoildPhiEnDown, WmuMassEnDown = eventSelector_v2.WRecoil_Phi_Wmass(ep_nMu, mupt, muphi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             #======   usage: ZRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)=====
             ZeeRecoil,ZeeRecoil_dPhi,ZeeMass = eventSelector_v2.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ZeeRecoilResUp,ZeeRecoil_dPhiResUp,ZeeMassResUp = eventSelector_v2.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ZeeRecoilResDown,ZeeRecoil_dPhiResDown,ZeeMassResDown = eventSelector_v2.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ZeeRecoilEnUp,ZeeRecoil_dPhiEnUp,ZeeMassEnUp = eventSelector_v2.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ZeeRecoilEnDown,ZeeRecoil_dPhiEnDown,ZeeMassEnDown = eventSelector_v2.ZRecoil_Phi_Zmass(nEle_loose, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+
             ZmumuRecoil,ZmumuRecoil_dPhi,ZmumuMass = eventSelector_v2.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ZmumuRecoilResUp,ZmumuRecoil_dPhiResUp,ZmumuMassResUp = eventSelector_v2.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ZmumuRecoilResDown,ZmumuRecoil_dPhiResDown,ZmumuMassResDown = eventSelector_v2.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ZmumuRecoilEnUp,ZmumuRecoil_dPhiEnUp,ZmumuMassEnUp = eventSelector_v2.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ZmumuRecoilEnDown,ZmumuRecoil_dPhiEnDown,ZmumuMassEnDown = eventSelector_v2.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             '''
             -----------------------------------------------------------------------------
@@ -600,179 +627,178 @@ def runbbdm(txtfile):
             '''
             
            
-            weight = PUweight = lepweight = recoilweight = recoilweight = btagweight = ewkweight = toppTweight =1.0
+	    weight = JEC_up = JEC_down = PUweight = PUweight_up = PUweight_down = lepweight = lepweight_up = lepweight_down = recoilweight = recoil_up = recoil_down = recoilweight = btagweight = btagweight_up = btagweight_down = ewkweight = ewkweight_up = ewkweight_down = toppTweight = toppTweight_up = toppTweight_down = METweight = METweight_up = METweight_down =1.0
 
 
             #if isResolvedSR or isResolvedSBand or isResolvedCRTopmu or isResolvedCRTope or isResolvedCRWmunu or isResolvedCRWenu or isResolvedCRZmumu or isResolvedCRZee or isBoostedSR or isBoostedSBand or isBoostedCRTope or isBoostedCRTopmu or isBoostedCRWenu or isBoostedCRWmunu or isBoostedCRZee or isBoostedCRZmumu:
-            btagweight           = wgt.getBTagSF(ep_THINnJet,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,index=False)
-            btagweight_B         = wgt.getBTagSF(pass_ak4jet_index_cleaned,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,index=True)
+            btagweight,btagweight_up,btagweight_down     = wgt.getBTagSF(ep_THINnJet,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,'MWP',index=False)
+            btagweight_B,btagweight_B_up,btagweight_B_down = wgt.getBTagSF(pass_ak4jet_index_cleaned,ak4jetpt,ak4jeteta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,'LWP',index=True)
 
             if ep_genParSample   == 23 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKZ(ep_genParPt[0])*wgt.getQCDZ(ep_genParPt[0])
             if ep_genParSample == 24 and len(ep_genParPt) > 0 : ewkweight = wgt.getEWKW(ep_genParPt[0])*wgt.getQCDW(ep_genParPt[0])
-            if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
+            if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight,toppTweight_up,toppTweight_down = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
 
-	    PUweight=wgt.puweight(ep_pu_nTrueInt)
-            commanweight = btagweight*ewkweight*toppTweight*PUweight
-            commanweight_nobtag = ewkweight*toppTweight*PUweight
-            #print 'ewkweight',ewkweight
-            cut_weight =  eventSelector_v2.getweight(commanweight,ep_pfMetCorrPt,Wmurecoil,Werecoil,ep_nEle,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)
-            B_weight =  eventSelector_v2.getweight(commanweight_nobtag,ep_pfMetCorrPt,Wmurecoil,Werecoil,ep_nEle,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)            
-            #print 'cut_weight',cut_weight
-
+	    PUweight, PUweight_up, PUweight_down = wgt.puweight(ep_pu_nTrueInt)
+            commanweight = ewkweight*toppTweight*PUweight*btagweight
+            commanweight_B = ewkweight*toppTweight*PUweight*btagweight_B
+            #print 'PUweight',PUweight,'PUweight_up',PUweight_up,'PUweight_down',PUweight_down
+            R_weight =  eventSelector_v2.getweight(commanweight,ep_pfMetCorrPt,Wmurecoil,Werecoil,nEle_loose,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)
+            B_weight =  eventSelector_v2.getweight(commanweight_B,ep_pfMetCorrPt,Wmurecoil,Werecoil,nEle_loose,nTightEle,isTightEles,ele_tight_index,elept,eleeta,ep_nMu,nTightMu,isTightMuons,muon_tight_index,mupt,mueta)            
+            
 	    additional_jets=ep_THINnJet-2
 
 
             if eletrigdecision:
-                h_reg_WenuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_WenuCR_resolved_cutFlow.AddBinContent(3, R_weight)
                 if nEle_loose==1 and nTightEle==1:
-                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(4, R_weight)
                     if ep_nMu==0  and ep_HPSTau_n==0:
-                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 50.0:
-                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if Werecoil > 200.:
-                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if nBjets_notiso==2:
-                                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_WenuCR_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if h_mass > 100 and h_mass < 150:
-                                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_WenuCR_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if additional_jets==0:
-                                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_WenuCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRWenu:
-                                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+                                                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
 
 
 
             if mettrigdecision:
-                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3, R_weight)
                 if ep_nMu==1 and nTightMu==1:
-                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
-                    if ep_nEle==0  and ep_HPSTau_n==0:
-                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(4, R_weight)
+                    if nEle_loose==0  and ep_HPSTau_n==0:
+                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 50.0:
-                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if Wmurecoil > 200.:
-                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if nBjets_notiso==2:
-                                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_WmunuCR_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if h_mass > 100 and h_mass < 150:
-                                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_WmunuCR_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if additional_jets==0:
-                                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRWmunu:
-                                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+                                                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
 
             if eletrigdecision:
-                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3, R_weight)
                 if nEle_loose==1 and nTightEle==1:
-                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(4, R_weight)
                     if ep_nMu==0  and ep_HPSTau_n==0:
-                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 50.0:
-                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if Werecoil > 200.:
-                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if nBjets_notiso==2:
-                                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_TopenuCR_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if h_mass > 100 and h_mass < 150:
-                                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_TopenuCR_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if additional_jets>0:
-                                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRTope:
-                                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+                                                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
             if mettrigdecision:
-                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3, R_weight)
                 if ep_nMu==1 and nTightMu==1:
-                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
-                    if ep_nEle==0  and ep_HPSTau_n==0:
-                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(4, R_weight)
+                    if nEle_loose==0  and ep_HPSTau_n==0:
+                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 50.0:
-                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if Wmurecoil > 200.:
-                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if nBjets_notiso==2:
-                                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if h_mass > 100 and h_mass < 150:
-                                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if additional_jets>0:
-                                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRTopmu:
-                                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+                                                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
             if mettrigdecision:
-		h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+		h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3, R_weight)
 		if ep_nMu==2 and (isTightMuons[0] or isTightMuons[1]):
-		    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(4, cut_weight)
-		    if ep_nEle==0  and ep_HPSTau_n==0:
-			h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+		    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(4, R_weight)
+		    if nEle_loose==0  and ep_HPSTau_n==0:
+			h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(5, R_weight)
 			if ep_THINnJet>=2:
-			    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+			    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(6, R_weight)
 			    if ep_pfMetCorrPt > 50.0:
-				h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+				h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(7, R_weight)
 				if ZmumuRecoil > 200.0:
-				    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+				    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(8, R_weight)
 				    if nBjets_notiso==2:
-					h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+					h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(9, R_weight)
 					if ZmumuMass > 60 and ZmumuMass < 120:
-					    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+					    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(10, R_weight)
 					    if additional_jets>0:
-						h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+						h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRZmumu:
-						    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+						    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
 
 
             if eletrigdecision:
-                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3, R_weight)
                 if nEle_loose==2 and (isTightEles[0] or isTightEles[1]):
-                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(4, R_weight)
                     if ep_nMu==0  and ep_HPSTau_n==0:
-                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 50.0:
-                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if ZeeRecoil > 200.0:
-                                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if nBjets_notiso==2:
-                                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_ZeeCR_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if ZeeMass > 60 and ZeeMass < 120:
-                                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_ZeeCR_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if additional_jets>0:
-                                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(11, R_weight)
                                                 if not isBoostedCRZee:
-                                                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, cut_weight)
+                                                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(12, R_weight)
 
 
             if mettrigdecision:
-                h_reg_SBand_resolved_cutFlow.AddBinContent(3, cut_weight)
+                h_reg_SBand_resolved_cutFlow.AddBinContent(3, R_weight)
                 if ep_nMu==0 and nEle_loose==0:
-                    h_reg_SBand_resolved_cutFlow.AddBinContent(4, cut_weight)
+                    h_reg_SBand_resolved_cutFlow.AddBinContent(4, R_weight)
                     if ep_HPSTau_n==0:
-                        h_reg_SBand_resolved_cutFlow.AddBinContent(5, cut_weight)
+                        h_reg_SBand_resolved_cutFlow.AddBinContent(5, R_weight)
                         if ep_THINnJet>=2:
-                            h_reg_SBand_resolved_cutFlow.AddBinContent(6, cut_weight)
+                            h_reg_SBand_resolved_cutFlow.AddBinContent(6, R_weight)
                             if ep_pfMetCorrPt > 200.0:
-                                h_reg_SBand_resolved_cutFlow.AddBinContent(7, cut_weight)
+                                h_reg_SBand_resolved_cutFlow.AddBinContent(7, R_weight)
                                 if nBjets_notiso==2:
-                                    h_reg_SBand_resolved_cutFlow.AddBinContent(8, cut_weight)
+                                    h_reg_SBand_resolved_cutFlow.AddBinContent(8, R_weight)
                                     if (h_mass > 50 and h_mass < 100.0) or (h_mass > 150 and h_mass < 350):
-                                        h_reg_SBand_resolved_cutFlow.AddBinContent(9, cut_weight)
+                                        h_reg_SBand_resolved_cutFlow.AddBinContent(9, R_weight)
                                         if additional_jets>=0:
-                                            h_reg_SBand_resolved_cutFlow.AddBinContent(10, cut_weight)
+                                            h_reg_SBand_resolved_cutFlow.AddBinContent(10, R_weight)
                                             if not isBoostedSBand:
-                                                h_reg_SBand_resolved_cutFlow.AddBinContent(11, cut_weight)
+                                                h_reg_SBand_resolved_cutFlow.AddBinContent(11, R_weight)
 
 
             '''
@@ -805,7 +831,7 @@ def runbbdm(txtfile):
                 h_reg_WmunuCR_boosted_cutFlow.AddBinContent(3, B_weight)
                 if ep_nMu==1 and nTightMu==1:
                     h_reg_WmunuCR_boosted_cutFlow.AddBinContent(4, B_weight)
-                    if ep_nEle==0  and ep_HPSTau_n==0:
+                    if nEle_loose==0  and ep_HPSTau_n==0:
                         h_reg_WmunuCR_boosted_cutFlow.AddBinContent(5, B_weight)
                         if sel_nfjets==1:
                             h_reg_WmunuCR_boosted_cutFlow.AddBinContent(6, B_weight)
@@ -930,9 +956,13 @@ def runbbdm(txtfile):
 
 
             if  isResolvedSR:
-                METweight=wgt.getMETtrig_First(ep_pfMetCorrPt)
+		
+                if not isData:
+                        ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt)
+                        weight = commanweight_B*weightMET
+                        JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
-                if not isData: weight = METweight*commanweight
     
                 df_out_SR_resolved = df_out_SR_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
@@ -941,16 +971,21 @@ def runbbdm(txtfile):
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
                                                'DiJetMass':h_mass,'nJets':additional_jets,
-                                               'weight':weight
+                                               'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                               'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
+                                               'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                               ignore_index=True)
 
             if  isResolvedSBand:
-                METweight=wgt.getMETtrig_First(ep_pfMetCorrPt)
+                
+                if not isData:
+                        ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt)
+                        weight = commanweight_B*weightMET
+                        JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
-                if not isData: weight = METweight*commanweight
-                #print 'h_mass', h_mass
-                #print 'weight', weight, 'commanweight',commanweight,'METweight',METweight,'btagweight',btagweight,'PUweight',PUweight,'ewkweight',ewkweight,'toppTweight',toppTweight,'ewkweight',ewkweight
                 df_out_SBand_resolved = df_out_SBand_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
@@ -958,7 +993,10 @@ def runbbdm(txtfile):
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
                                                'DiJetMass':h_mass,'nJets':additional_jets,
-                                               'weight':weight
+                                               'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                               'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
+                                               'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                               ignore_index=True)
 
@@ -967,10 +1005,17 @@ def runbbdm(txtfile):
 
                 ele1_index    = ele_tight_index[0]
                 ele_trig      = True
-                lepweight     =wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
 
-                if not isData: weight = lepweight*commanweight
-                #print 'weight',weight,'PUweight',PUweight,'lepweight',lepweight,'recoilweight',recoilweight,'btagweight',btagweight,'ewkweight',ewkweight,'toppTweight',toppTweight
+                if not isData:
+                    lepIdReco,lepIdReco_up,lepIdReco_down = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
+                    lepweight = lepIdReco*lepTrigSF
+                    lepweight_up = lepIdReco_up*lepTrigSF_up
+                    lepweight_down = lepIdReco_down*lepTrigSF_down
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                    weight = lepweight*commanweight*lepTrigSF
+                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
+
                 df_out_Tope_resolved  = df_out_Tope_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
@@ -978,19 +1023,25 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'FJetMass':dummy, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
 
             if isResolvedCRTopmu:
                 muon1_index          = muon_tight_index[0]
-                recoilweight=wgt.getMETtrig_First(Wmurecoil)
+                recoilweight,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil)
                 mu_trig = False
-		lepweight=wgt.mu_weight(mupt[0],mueta[0],mu_trig,'T')
 
-                if not isData: weight = lepweight*commanweight*lepweight
-                #print 'weight',weight,'PUweight',PUweight,'lepweight',lepweight,'recoilweight',recoilweight,'btagweight',btagweight,'ewkweight',ewkweight,'toppTweight',toppTweight
+                if not isData: 
+                    lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                    weight = lepweight*commanweight*recoilweight
+                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
+
                 df_out_Topmu_resolved  = df_out_Topmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
@@ -998,7 +1049,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'FJetMass':dummy, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1006,10 +1060,17 @@ def runbbdm(txtfile):
             if isResolvedCRWenu:
                 ele1_index    = ele_tight_index[0]
                 ele_trig      = True
-                lepweight     =wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
 
-                if not isData: weight = lepweight*commanweight
-                #print 'weight',weight,'PUweight',PUweight,'lepweight',lepweight,'recoilweight',recoilweight,'btagweight',btagweight,'ewkweight',ewkweight,'toppTweight',toppTweight
+                if not isData: 
+                    lepIdReco,lepIdReco_up,lepIdReco_down = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
+                    lepweight = lepIdReco*lepTrigSF
+                    lepweight_up = lepIdReco_up*lepTrigSF_up
+                    lepweight_down = lepIdReco_down*lepTrigSF_down
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+		    weight = lepweight*commanweight*lepTrigSF
+                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
+
                 df_out_We_resolved  = df_out_We_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
@@ -1017,18 +1078,24 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'FJetMass':dummy, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
             if isResolvedCRWmunu:
                 muon1_index          = muon_tight_index[0]
-                recoilweight=wgt.getMETtrig_First(Wmurecoil)
+                recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(Wmurecoil)
                 mu_trig = False
-                lepweight=wgt.mu_weight(mupt[0],mueta[0],mu_trig,'T')
 
-                if not isData: weight = lepweight*commanweight*lepweight
-                #print 'weight',weight,'PUweight',PUweight,'lepweight',lepweight,'recoilweight',recoilweight,'btagweight',btagweight,'ewkweight',ewkweight,'toppTweight',toppTweight
+                if not isData: 
+                    lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                    weight = lepweight*commanweight*recoilweight
+                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
+
                 df_out_Wmu_resolved  = df_out_Wmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
@@ -1036,7 +1103,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'FJetMass':dummy, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1046,14 +1116,28 @@ def runbbdm(txtfile):
                 ele1_trig = True; ele2_trig = False
                 ele1_loose = ele_loose_index[0]
                 ele2_loose = ele_loose_index[1]
-                if isTightEles[0]:lepweight=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],ele1_trig,'T'))*(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],ele2_trig,'L'))
-                if isTightEles[1]:lepweight=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],ele2_trig,'L'))*(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],ele1_trig,'T'))
+                if isTightEles[0] and not isData:
+		    lepweight1,lep1_up,lep1_down          = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+		    lepweight2,lep2_up,lep2_down          = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
+                    lepweight                             = lepweight1*lepweight2
+                    lepweight_up                          = lep1_up*lep2_up*lepTrigSF_up
+                    lepweight_down                        = lep1_down*lep2_down*lepTrigSF_down
+
+                elif isTightEles[1] and not isData:
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
+		    lepweight1,lep1_up,lep1_down=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+		    lepweight2,lep2_up,lep2_down=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+		    lepweight = lepweight1*lepweight2
+                    lepweight_up                          = lep1_up*lep2_up*lepTrigSF_up
+                    lepweight_down                        = lep1_down*lep2_down*lepTrigSF_down
 
                 ZpT = math.sqrt( (ep_elePx[0] + ep_elePx[0])**2 + (ep_elePy[1]+ep_elePy[1])**2 )
 
-                if not isData: weight = lepweight*commanweight
-
-
+                if not isData: 
+		    weight = lepweight*commanweight
+                    ewkweight_up=ewkweight*1.5; ewkweight_down=ewkweight*0.5
+                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
                 df_out_Zee_resolved    = df_out_Zee_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'Njets_PassID':ep_THINnJet,
@@ -1064,7 +1148,10 @@ def runbbdm(txtfile):
                                                 'lep1_pT':elept[ele1_loose],'lep1_eta':eleeta[ele1_loose],'lep1_Phi':elephi[ele1_loose],
                                                 'lep2_pT':elept[ele2_loose],'lep2_eta':eleeta[ele2_loose],'lep2_Phi':elephi[ele2_loose],
                                                 'Zmass':ZeeMass,'ZpT':ZpT,
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1073,15 +1160,23 @@ def runbbdm(txtfile):
             if isResolvedCRZmumu:
                 mu1_trig = False; mu2_trig = False
 		#print 'number of muons',len(mupt)
-                if isTightMuons[0]:lepweight=wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')*wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')
-                if isTightMuons[1]:lepweight=wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')*wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')
+                if isTightMuons[0]:
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    lepweight = lepweight1*lepweight2
+                elif isTightMuons[1]:
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    lepweight = lepweight1*lepweight2
 
                 ZpT          = math.sqrt( (ep_muPx[0] + ep_muPx[1])**2 + (ep_muPy[0]+ep_muPy[1])**2 )
-                recoilweight = wgt.getMETtrig_First(ZmumuRecoil)
+                recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(ZmumuRecoil)
+                ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
 
                 if not isData: weight = lepweight*commanweight*recoilweight
 
 
+                JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
                 df_out_Zmumu_resolved  = df_out_Zmumu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZmumuRecoil ,'Njets_PassID':ep_THINnJet,
@@ -1092,7 +1187,10 @@ def runbbdm(txtfile):
                                                 'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
                                                 'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
                                                 'Zmass':ZmumuMass,'ZpT':ZpT,
-                                                'weight':weight,'puweight':PUweight,'lepweight':lepweight,'recoilweight':recoilweight,'btagweight':btagweight,'ewkweight':ewkweight,'toppTweight':toppTweight
+						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
+                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1112,17 +1210,23 @@ def runbbdm(txtfile):
                 fjet_index           = pass_nfjetIndex[0]
                 min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
+		lepweight = lepweight_up = lepweight_down = 1.0
+                if not isData: 
+                        ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt)
+			weight = commanweight_B*weightMET
+                        JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
-                weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
-                if not isData: weight = commanweight_nobtag*weightMET
-                #print 'weight', weight
                 df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                               'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
+                                               'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
+                                               'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1137,18 +1241,24 @@ def runbbdm(txtfile):
                 fjet_index           = FatJet_SBand_index[0]
                 min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
+		lepweight = lepweight_up = lepweight_down = 1.0
+             
+                if not isData:
+                    weightMET,MET_up,MET_down=wgt.getMETtrig_First(ep_pfMetCorrPt)
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5 
+		    weight = commanweight_B*weightMET
+                    JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
-                weightMET=wgt.getMETtrig_First(ep_pfMetCorrPt)
-                if not isData: weight = commanweight_nobtag*weightMET
-                #print 'boosted weight', weight
-                #print  'new weight',commanweight*weightMET,'commanweight',commanweight,'METweight',weightMET,'btagweight',btagweight,'PUweight',PUweight,'ewkweight',ewkweight,'toppTweight',toppTweight,'ewkweight',ewkweight
                 df_out_SBand_boosted = df_out_SBand_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sb,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
+                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1166,11 +1276,17 @@ def runbbdm(txtfile):
 
                 ele1_index           = ele_tight_index[0]
                 ele_trig = True
-                weightele=wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
 
-                if not isData: weight = commanweight_nobtag*weightele
-                #print 'weight Tope', weight
-
+                if not isData:
+                    weightele,lep_up,lep_down             = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
+                    lepweight                             = weightele*lepTrigSF
+                    lepweight_up                          = lep_up*lepTrigSF_up
+                    lepweight_down                        = lep_down*lepTrigSF_down
+                    ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5
+                    weight                                = commanweight_B*weightele
+                    JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
+                    
                 #print 'nPho', nPho
                 df_out_Tope_boosted  = df_out_Tope_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
@@ -1179,7 +1295,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1197,11 +1316,13 @@ def runbbdm(txtfile):
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
 
                 mu_trig = False
-                lepweight=wgt.mu_weight(mupt[0],mueta[0],mu_trig,'T')
 
-                weightRecoil=wgt.getMETtrig_First(Wmurecoil)
-                if not isData: weight = commanweight_nobtag*lepweight*weightRecoil
-                #print 'weight Topmu', weight
+                if not isData: 
+                    lepweight,lepweight_up,lepweight_down      =  wgt.mu_weight(mupt[0],mueta[0],'T')
+                    recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(Wmurecoil)
+		    weight                                     = commanweight_B*lepweight*recoilweight
+                    JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
 
                 df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
@@ -1210,7 +1331,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1227,10 +1351,16 @@ def runbbdm(txtfile):
 
                 ele1_index           = ele_tight_index[0]
                 ele_trig=True
-                weightele=wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],ele_trig,'T')
 
-                if not isData: weight = commanweight_nobtag*weightele
-                 
+                if not isData:
+                    weightele,lep_up,lep_down             = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
+                    lepweight                             = weightele*lepTrigSF
+                    lepweight_up                          = lep_up*lepTrigSF_up
+                    lepweight_down                        = lep_down*lepTrigSF_down
+                    ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5 
+		    weight                                = commanweight_B*weightele
+                    JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 df_out_We_boosted  = df_out_We_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
@@ -1239,7 +1369,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
             
@@ -1258,11 +1391,12 @@ def runbbdm(txtfile):
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
 
                 mu_trig = False
-                lepweight=wgt.mu_weight(mupt[0],mueta[0],mu_trig,'T')
 
-                weightRecoil=wgt.getMETtrig_First(Wmurecoil)
-                if not isData: weight = commanweight_nobtag*lepweight*weightRecoil
-
+                if not isData: 
+                    lepweight,lepweight_up,lepweight_down=wgt.mu_weight(mupt[0],mueta[0],'T')
+		    weightRecoil,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil)
+		    weight = commanweight_B*lepweight*weightRecoil
+                    JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 df_out_Wmu_boosted  = df_out_Wmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
@@ -1271,7 +1405,10 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1290,17 +1427,29 @@ def runbbdm(txtfile):
 
                 mu1_trig = False; mu2_trig = False
                 #print 'number of muons',len(mupt)
-                if isTightMuons[0]:lepweight=wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')*wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')
-                if isTightMuons[1]:lepweight=wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')*wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')
+                if isTightMuons[0] and not isData:
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],mu1_trig,'T')
+                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    lepweight = lepweight1*lepweight2
+                    lepweight_up = lep1_up*lep2_up
+                    lepweight_down = lep1_down*lep2_down
+                elif isTightMuons[1] and not isData:
+		    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],mu2_trig,'L')
+                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    lepweight = lepweight1*lepweight2
+                    lepweight_up = lep1_up*lep2_up
+                    lepweight_down = lep1_down*lep2_down
 
 
                 if ep_fjetSDMass[fjet_index]==0: fatjet_rho = math.log((0.0001*0.0001)/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
                 else:fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
 
-                #weightRecoil=wgt.getMETtrig_First(ZmumuRecoil)
-                if not isData: weight = commanweight_nobtag*lepweight
 
-
+                if not isData:
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+		    recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(ZmumuRecoil)
+	 	    weight                                     = commanweight_B*lepweight*recoilweight
+                    JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 df_out_Zmumu_boosted  = df_out_Zmumu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZmumuRecoil ,'Njets_PassID':ep_THINnJet,
@@ -1311,7 +1460,10 @@ def runbbdm(txtfile):
                                                 'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
                                                 'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
                                                 'Zmass':ZmumuMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
@@ -1336,12 +1488,26 @@ def runbbdm(txtfile):
                 ele1_trig = True; ele2_trig = False
                 ele1_loose = ele_loose_index[0]
                 ele2_loose = ele_loose_index[1]
-                if isTightEles[0]:weightele=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],ele1_trig,'T'))*(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],ele2_trig,'L'))
-                if isTightEles[1]:weightele=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],ele2_trig,'L'))*(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],ele1_trig,'T'))
+                if isTightEles[0] and not isData:
+		    weightele1,ele1_up,ele1_down=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+                    weightele2,ele2_up,ele2_down=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
+                    lepweight = weightele1*weightele2
+                    lepweight_up = ele1_up*ele2_up*lepTrigSF_up
+                    lepweight_down = ele1_down*ele2_down*lepTrigSF_down
+                elif isTightEles[1] and not isData:
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
+		    weightele1,ele1_up,ele1_down = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+                    weightele2,ele2_up,ele2_down  = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+                    lepweight = weightele1*weightele2
+                    lepweight_up = ele1_up*ele2_up*lepTrigSF_up
+                    lepweight_down = ele1_down*ele2_down*lepTrigSF_down
 
-                if not isData: weight = commanweight_nobtag*weightele
-
-
+                
+                if not isData: 
+                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+		    weight          = commanweight_B*lepweight
+                    JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 df_out_Zee_boosted    = df_out_Zee_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'Njets_PassID':ep_THINnJet,
@@ -1352,7 +1518,10 @@ def runbbdm(txtfile):
                                                 'lep1_pT':elept[0],'lep1_eta':eleeta[0],'lep1_Phi':elephi[0],
                                                 'lep2_pT':elept[1],'lep2_eta':eleeta[1],'lep2_Phi':elephi[1],
                                                 'Zmass':ZeeMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
-                                                'weight':weight,'btagweight':btagweight_B,'dbweight':1.0
+						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
+                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
                                            },
                                                 ignore_index=True)
 
