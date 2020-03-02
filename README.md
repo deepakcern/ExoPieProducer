@@ -22,6 +22,7 @@ git checkout monohbb
 ```
 
 ### Interactive Run
+Note: keep ```isCondor = False``` 
 ```
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
