@@ -59,3 +59,6 @@ wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plott
 python StackPlotter_2017_syst.py -c B -d MET -m [muon region plots for boosted analysis]
 python StackPlotter_2017_syst.py -c B -d MET -s [signal region]
 python StackPlotter_2017_syst.py -c B -d SE -e [electron region]
+```
+change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file
+
