@@ -53,6 +53,8 @@ hadd combined_data_MET.root MET-Run2017*.root
 ```
 cd ExoPieProducer/ExoPieAnalyzer
 wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/StackPlotter_2017_syst.py
+wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/sample_xsec_2017.py
+wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/samplelist_2017.txt
 
 python StackPlotter_2017_syst.py -c B -d MET -m [muon region plots for boosted analysis]
 python StackPlotter_2017_syst.py -c B -d MET -s [signal region]
