@@ -42,6 +42,12 @@ cd CondorJobs
 cd ExoPieProducer/ExoPieAnalyzer
 python DataFrameToHisto.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
+combined data files into single file
+```
+cd OutputDirectory
+hadd combined_data_SE.root SingleElectron-Run2017*.root
+hadd combined_data_MET.root MET-Run2017*.root
+```
 ### Making Control region plots
 
 ```
