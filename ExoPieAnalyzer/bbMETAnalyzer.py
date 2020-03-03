@@ -467,7 +467,7 @@ def runbbdm(txtfile):
                                    if ep_THINnJet==2:
                                        Jet2Pt  = ep_THINjetPt[1]; Jet2Eta     = ep_THINjetEta[1]
                                        Jet2Phi = ep_THINjetPhi[1];Jet2deepCSV = ep_THINjetDeepCSV[1]
-                           if (ep_THINnJet <=3) and (ep_THINjetPt[0] > 50.) :
+                           if (ep_THINnJet <=3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.) :
                                h_reg_SR_2b_cutFlow.AddBinContent(6, presel_weight*weightMET)
                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
                                    h_reg_SR_2b_cutFlow.AddBinContent(7, weight)
@@ -507,7 +507,7 @@ def runbbdm(txtfile):
                                            h_reg_ZeeCR_1b_cutFlow.AddBinContent(9, weight)
                                            ZeeCR1bcount+=1
                                            is1bCRZee=True
-                                   if (ep_THINnJet <= 3) and (ep_THINjetPt[0] > 50.):
+                                   if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
                                            h_reg_ZeeCR_2b_cutFlow.AddBinContent(9, weight)
@@ -545,7 +545,7 @@ def runbbdm(txtfile):
                                             h_reg_ZmumuCR_1b_cutFlow.AddBinContent(9, weight)
                                             ZmumuCR1count+=1
                                             is1bCRZmumu=True
-                                    if (ep_THINnJet <=3 ) and (ep_THINjetPt[0] > 50.):
+                                    if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                         h_reg_ZmumuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
                                         if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
                                             h_reg_ZmumuCR_2b_cutFlow.AddBinContent(9, weight)
