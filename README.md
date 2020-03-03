@@ -35,3 +35,10 @@ git clone git@github.com:deepakcern/CondorJobs.git
 cd CondorJobs
 . Analyser_submitjobs.sh
 ```
+
+### Writting Histograms from Trees
+
+```
+cd ExoPieProducer/ExoPieAnalyzer
+python DataFrameToHisto.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
+```
