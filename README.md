@@ -42,3 +42,12 @@ cd CondorJobs
 cd ExoPieProducer/ExoPieAnalyzer
 python DataFrameToHisto.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
+### Making Control region plots
+
+```
+cd ExoPieProducer/ExoPieAnalyzer
+wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/StackPlotter_2017_syst.py
+
+python StackPlotter_2017_syst.py -c B -d MET -m [muon region plots for boosted analysis]
+python StackPlotter_2017_syst.py -c B -d MET -s [signal region]
+python StackPlotter_2017_syst.py -c B -d SE -e [electron region]
