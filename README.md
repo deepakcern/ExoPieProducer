@@ -33,6 +33,7 @@ Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ```
+txt files you can find here: ```https://github.com/deepakcern/CondorJobs/tree/master/Filelists```
 
 ### Submit Condor Jobs
 Note: change ```isCondor = True```
