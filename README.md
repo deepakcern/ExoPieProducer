@@ -35,6 +35,7 @@ git clone git@github.com:deepakcern/CondorJobs.git
 cd CondorJobs
 . Analyser_submitjobs.sh
 ```
+Note: Open `submit_AnalyserJobs.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
 
 ### Writting Histograms from Trees
 
