@@ -17,10 +17,10 @@ ExoPieProducer/ExoPieDecorator: Limit model related stuff.
 cmsrel CMSSW_10_3_0
 cd CMSSW_10_3_0/src
 cmsenv
-git clone git@github.com:deepakcern/ExoPieUtils.git
+git clone https://github.com/deepakcern/ExoPieUtils.git
 git checkout monohbb_systematics
 
-git clone git@github.com:deepakcern/ExoPieProducer.git
+git clone https://github.com/deepakcern/ExoPieProducer.git
 git checkout monohbb
 ```
 
