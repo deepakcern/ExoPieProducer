@@ -20,7 +20,7 @@ cmsenv
 git clone https://github.com/deepakcern/ExoPieUtils.git
 cd ExoPieUtils
 git checkout monohbb_systematics
-
+cd -
 git clone https://github.com/deepakcern/ExoPieProducer.git
 cd ExoPieProducer
 git checkout monohbb
