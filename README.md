@@ -40,7 +40,7 @@ cd CondorJobs
 . submitjobs_step2.sh
 ```
 Note: Open `MultiSubmit_step2.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
-Fielists directory is already there you can use.
+Fielists directory is already there you can use root files for now. Fielists will be updated soon for 2017/18
 
 ### Writting Histograms from Trees
 
