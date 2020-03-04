@@ -33,9 +33,9 @@ python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 cd ExoPieProducer/ExoPieAnalyzer
 git clone git@github.com:deepakcern/CondorJobs.git
 cd CondorJobs
-. Analyser_submitjobs.sh
+. submitjobs_step2.sh
 ```
-Note: Open `submit_AnalyserJobs.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
+Note: Open `MultiSubmit_step2.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
 
 ### Writting Histograms from Trees
 
