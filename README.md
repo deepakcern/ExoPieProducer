@@ -25,13 +25,14 @@ git checkout monohbb
 ```
 
 ### Interactive Run
-Note: keep ```isCondor = False``` 
+Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 ```
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ```
 
 ### Submit Condor Jobs
+Note: change ```isCondor = True```
 ```
 cd ExoPieProducer/ExoPieAnalyzer
 git clone git@github.com:deepakcern/CondorJobs.git
