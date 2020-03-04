@@ -24,6 +24,7 @@ cd -
 git clone https://github.com/deepakcern/ExoPieProducer.git
 cd ExoPieProducer
 git checkout monohbb
+cd -
 ```
 
 ### Interactive Run
