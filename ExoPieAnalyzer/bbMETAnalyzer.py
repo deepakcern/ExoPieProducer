@@ -288,7 +288,7 @@ def runbbdm(txtfile):
                df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision):
             ieve = ieve + 1
             if ieve%10000==0: print "Processed",ieve,"Events"
-            if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
+            #if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
             isSR1b=False
             is1bCRWenu=False
             is1bCRWmunu=False
@@ -342,6 +342,18 @@ def runbbdm(txtfile):
             ep_phoPt = [getPt(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
             ep_phoEta = [getEta(ep_phoPx[ij], ep_phoPy[ij], ep_phoPz[ij]) for ij in range(ep_nPho)]
             ep_phoPhi = [getPhi(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
+            myphotons = [True for ij in range(ep_nPho)]
+            myeleBooleans = [True for ij in range(ep_nEle_index)]
+            mymuBooleans = [True for ij in range(ep_nMu)]
+            cleanedPho_ag_ele = []; cleanedPho_ag_mu = [];pass_pho_index_cleaned=[]
+            if ep_nPho > 0: #and ep_nEle > 0:
+                cleanedPho_ag_ele = anautil.jetcleaning(myphotons, myeleBooleans, pho_eta, eleeta, pho_phi, elephi, 0.4)
+                cleanedPho_ag_mu  = anautil.jetcleaning(myphotons, mymuBooleans, pho_eta, mueta, pho_phi, muphi, 0.4)
+                cleanedPhoton     = boolutil.logical_AND_List2(cleanedPho_ag_ele,cleanedPho_ag_mu)
+                pass_pho_index_cleaned = boolutil.WhereIsTrue(cleanedPhoton)
+                #print 'cleanedPho_ag_ele',cleanedPho_ag_ele, 'cleanedPho_ag_mu', cleanedPho_ag_mu
+            nPho = len(pass_pho_index_cleaned)
+
 
             '''
             -------------------------------------------------------------------------------
@@ -372,11 +384,11 @@ def runbbdm(txtfile):
             -------------------------------------------------------------------------------
             '''
             #======   usage: ZRecoil_Phi_Zmass(nEle, eleCharge_, elepx_, elepy_, elepz_, elee_,met_,metphi_)=====
-            ep_ZeeRecoil,ep_ZeeRecoil_dPhi,ep_Zeemass = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
-            ep_ZeeRecoilResUp,ep_ZeeRecoil_dPhiResUp,ep_ZeemassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_ZeeRecoilResDown,ep_ZeeRecoil_dPhiResDown,ep_ZeemassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
-            ep_ZeeRecoilEnUp,ep_ZeeRecoil_dPhiEnUp,ep_ZeemassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_ZeeRecoilEnDown,ep_ZeeRecoil_dPhiEnDown,ep_ZeemassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_ZeeRecoil,ep_ZeeRecoil_dPhi,ep_Zeemass = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_index, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResUp,ep_ZeeRecoil_dPhiResUp,ep_ZeemassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_index, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilResDown,ep_ZeeRecoil_dPhiResDown,ep_ZeemassResDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_index, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetResDown, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnUp,ep_ZeeRecoil_dPhiEnUp,ep_ZeemassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_index, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_ZeeRecoilEnDown,ep_ZeeRecoil_dPhiEnDown,ep_ZeemassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nEle_index, ep_eleCharge, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             ep_ZmumuRecoil,ep_ZmumuRecoil_dPhi,ep_Zmumumass = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetCorrPt, ep_pfMetCorrPhi)
             ep_ZmumuRecoilResUp,ep_ZmumuRecoil_dPhiResUp,ep_ZmumumassResUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
@@ -384,17 +396,19 @@ def runbbdm(txtfile):
             ep_ZmumuRecoilEnUp,ep_ZmumuRecoil_dPhiEnUp,ep_ZmumumassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
             ep_ZmumuRecoilEnDown,ep_ZmumuRecoil_dPhiEnDown,ep_ZmumumassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
-            ep_WenuRecoil, ep_WenuRecoildPhi, ep_Wenumass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
-            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, ep_WenumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
-            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, ep_WenumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
-            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, ep_WenumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
-            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, ep_WenumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
+            ep_WenuRecoil, ep_WenuRecoildPhi, ep_Wenumass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
+            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, ep_WenumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, ep_WenumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, ep_WenumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, ep_WenumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
             ep_WmunuRecoil, ep_WmunuRecoildPhi, ep_Wmunumass = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
             ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, ep_WmunumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
             ep_WmunuRecoilResDown, ep_WmunuRecoildPhiResDown, ep_WmunumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx, ep_muPy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
             ep_WmunuRecoilEnUp, ep_WmunuRecoildPhiEnUp, ep_WmunumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
             ep_WmunuRecoilEnDown, ep_WmunuRecoildPhiEnDown, ep_WmunumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+
+            if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
 
             '''
             -------------------------------------------------------------------------------
@@ -420,7 +434,7 @@ def runbbdm(txtfile):
                 weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up =  weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up =  1.0
                 weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down =  weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down =  1.0
             else:
-                weightB,weightB_up,weightB_down = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV)
+                weightB,weightB_up,weightB_down = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,'MWP')
                 weightPU = wgt.puweight(ep_pu_nTrueInt)[0]
                 weightEWK = 1.0; weightQCD = 1.0; weightTop = 1.0
                 if ep_genParSample == 23 and len(ep_genParPt) > 0 :
@@ -489,7 +503,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
                     h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
-                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) :
+                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and nPho ==0:
                        h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        if (ep_ZeeRecoil > 200.):
@@ -527,7 +541,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
+                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_ZmumuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_ZmumuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_ZmumuRecoil > 200. ) :
@@ -564,7 +578,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_WenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and nPho ==0:
                         h_reg_WenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_WenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200.) :
@@ -601,7 +615,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200.) :
@@ -638,7 +652,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]):
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > 30.) and (ep_eleIsPassTight[0]) and nPho ==0:
                         h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200. ) :
@@ -675,7 +689,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]):
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200. ) :
