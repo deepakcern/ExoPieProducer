@@ -14,6 +14,9 @@ ExoPieProducer/ExoPieDecorator: Limit model related stuff.
 ## Setup framework 
 
 ```
+cmsrel CMSSW_10_3_0
+cd CMSSW_10_3_0/src
+cmsenv
 git clone git@github.com:deepakcern/ExoPieUtils.git
 git checkout monohbb_systematics
 
