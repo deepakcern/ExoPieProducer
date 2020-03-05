@@ -3,7 +3,7 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
-'st_THINjetNHadEF', 'st_THINjetCHadEF', 'st_THINjetCEmEF', 'st_THINjetPhoEF', 'st_THINjetEleEF', 'st_THINjetMuoEF', \
+'st_THINjetNHadEF', 'st_THINjetCHadEF', 'st_THINjetCEmEF', \
 'st_THINjetCorrUnc', \
 'st_nfjet', 'st_fjetPx', 'st_fjetPy', 'st_fjetPz', 'st_fjetEnergy', \
 'st_fjetDoubleSV', 'st_fjetProbQCDb', 'st_fjetProbHbb', 'st_fjetProbQCDc', 'st_fjetProbHcc', 'st_fjetProbHbbc', 'st_fjetProbbbvsLight', \
