@@ -68,6 +68,8 @@ change username.
 
 open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments
 
+
+Now add following line in `runAnalysis_step2.sh`
 ```
 export X509_USER_PROXY=$5
 voms-proxy-info -all
