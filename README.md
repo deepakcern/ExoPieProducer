@@ -63,7 +63,9 @@ to get proxy file, open ```.bashrc``` file and add:
 ```
 alias voms='voms-proxy-init --voms cms --valid 192:00 && cp -v /tmp/x509up_u104803 /afs/cern.ch/user/d/dekumar/private/x509up'
 ```
-change username
+change username. 
+
+
 open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments
 
 ```
