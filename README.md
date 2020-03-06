@@ -48,6 +48,29 @@ Fielists directory is already there you can use root files for now. Fielists wil
 
 please change output path in the file ```runAnalysis_step2.sh```
 
+#### For condor jobs on lxplus:
+if you want to submit condor jobs on lxplus, please update three files ``` submit_multi_step2.sub``` , ```MultiSubmit_step2.py``` and ```runAnalysis_step2.sh```
+
+add following lines in ```submit_multi_step2.sub```
+```
+Proxy_filename = x509up
+Proxy_path = /afs/cern.ch/user/d/dekumar/private/$(Proxy_filename)
+request_cpus = 4
++JobFlavour = "nextweek"
+```
+
+to get proxy file, open ```.bashrc``` file and add:
+```
+alias voms='voms-proxy-init --voms cms --valid 192:00 && cp -v /tmp/x509up_u104803 /afs/cern.ch/user/d/dekumar/private/x509up'
+```
+change username
+open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments
+
+```
+export X509_USER_PROXY=$5
+voms-proxy-info -all
+voms-proxy-info -all -file $5
+```
 ### Writting Histograms from Trees
 
 ```
