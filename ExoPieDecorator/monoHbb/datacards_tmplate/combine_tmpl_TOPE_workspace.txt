@@ -13,18 +13,7 @@ shapes *         monoHbb2017_B_TOPE       monoHbb_WS.root ws_monoHbb:monoHbb2017
 shapes wjets     monoHbb2017_B_TOPE       monoHbb_WS.root ws_monoHbb:rph_TOPE_tt
 
 
-
-
-----------------------------------------------------------------------------------------------------------------------------------
-#shapes ZJets   monoHbb2017_B_TOPE   monoHbb_WS.root   ws_monoHbb:rph_sr2_Z        ws_monoHbb:rph_sr2_Z_$SYSTEMATIC
-#shapes Top     monoHbb2017_B_TOPE   monoHbb_WS.root   ws_monoHbb:rph_sr2_top      ws_monoHbb:rph_sr2_top_$SYSTEMATIC
-#shapes WJets   monoHbb2017_B_TOPE   monoHbb_WS.root   ws_monoHbb:rph_sr2_wjets    ws_monoHbb:rph_sr2_wjets_$SYSTEMATIC
-----------------------------------------------------------------------------------------------------------------------------------
-
-
 ------------
-
-
 bin   monoHbb2017_B_TOPE 
 observation -1
 ------------
