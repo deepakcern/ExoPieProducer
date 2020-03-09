@@ -169,7 +169,7 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_lep1_Phi",[15,-3.14,3.14]))
         h_list.append(SetHist("h_reg_"+reg+"_nPV",[70,0,70]))
         h_list.append(SetHist("h_reg_"+reg+"_PUnPV",[70,0,70]))
-        if 'Wmunu' in reg or 'Wenu' in reg:
+        if 'munu' in reg or 'enu' in reg:
             h_list.append(SetHist("h_reg_"+reg+"_Wmass",[15,0,160]))
             h_list.append(SetHist("h_reg_"+reg+"_WpT",[15,0,700]))
         if 'Zmumu' in reg or 'Zee' in reg:
