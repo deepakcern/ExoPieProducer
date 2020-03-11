@@ -271,6 +271,8 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         #LEPTON WEIGHT SYSTEMATICS
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEle_up",[200,250,350,500,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEle_down",[200,250,350,500,1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightMu_up",[200,250,350,500,1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightMu_down",[200,250,350,500,1000]))
         #pu WEIGHT SYSTEMATICS
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPU_up",[200,250,350,500,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPU_down",[200,250,350,500,1000]))
