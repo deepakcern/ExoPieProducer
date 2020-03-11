@@ -719,201 +719,201 @@ def runbbdm(txtfile):
                                             is2bCRTopmunu=True
 
             if isSR1b:
-                df_out_SR_1b = df_out_SR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'weight':weight,'weightMET':weightMET,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightMET_up':weightMET_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'MET_Res_up':ep_pfMetUncJetResUp,'MET_En_up':ep_pfMetUncJetEnUp,'MET_En_down':ep_pfMetUncJetEnDown,'MET_Res_down':ep_pfMetUncJetResDown,'weightJEC_down':weightJEC_down,'weightMET_down':weightMET_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_SR_1b = df_out_SR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR1b')
             if isSR2b:
-                df_out_SR_2b = df_out_SR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'weight':weight,'weightMET':weightMET,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightMET_up':weightMET_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'MET_Res_up':ep_pfMetUncJetResUp,'MET_En_up':ep_pfMetUncJetEnUp,'MET_En_down':ep_pfMetUncJetEnDown,'MET_Res_down':ep_pfMetUncJetResDown,'weightJEC_down':weightJEC_down,'weightMET_down':weightMET_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_SR_2b = df_out_SR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR2b')
 
             if is1bCRZee:
-                df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_ZeeRecoilResUp,'Recoil_En_up':ep_ZeeRecoilEnUp,'Recoil_En_down':ep_ZeeRecoilEnDown,'Recoil_Res_down':ep_ZeeRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'subleadingLepPt':float(ep_elePt[1]),'subleadingLepEta':float(ep_eleEta[1]),'subleadingLepPhi':float(ep_elePhi[1]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZee')
             if is2bCRZee:
-                df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZeeRecoil ,'Zmass':ep_Zeemass,'ZpT':ZpT_ee,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'subleadingLepPt':ep_elePt[1],'subleadingLepEta':ep_eleEta[1],'subleadingLepPhi':ep_elePhi[1],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_ZeeRecoilResUp,'Recoil_En_up':ep_ZeeRecoilEnUp,'Recoil_En_down':ep_ZeeRecoilEnDown,'Recoil_Res_down':ep_ZeeRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'subleadingLepPt':float(ep_elePt[1]),'subleadingLepEta':float(ep_eleEta[1]),'subleadingLepPhi':float(ep_elePhi[1]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZee')
 
             if is1bCRZmumu:
-                df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_ZmumuRecoilResUp,'Recoil_En_up':ep_ZmumuRecoilEnUp,'Recoil_En_down':ep_ZmumuRecoilEnDown,'Recoil_Res_down':ep_ZmumuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'subleadingLepPt':float(ep_muPt[1]),'subleadingLepEta':float(ep_muEta[1]),'subleadingLepPhi':float(ep_muPhi[1]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZmumu')
             if is2bCRZmumu:
-                df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_ZmumuRecoil ,'Zmass':ep_Zmumumass,'ZpT':ZpT_mumu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'subleadingLepPt':ep_muPt[1],'subleadingLepEta':ep_muEta[1],'subleadingLepPhi':ep_muPhi[1],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_ZmumuRecoilResUp,'Recoil_En_up':ep_ZmumuRecoilEnUp,'Recoil_En_down':ep_ZmumuRecoilEnDown,'Recoil_Res_down':ep_ZmumuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'subleadingLepPt':float(ep_muPt[1]),'subleadingLepEta':float(ep_muEta[1]),'subleadingLepPhi':float(ep_muPhi[1]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZmumu')
             if is1bCRWenu:
-                df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WenuRecoilResUp,'Recoil_En_up':ep_WenuRecoilEnUp,'Recoil_En_down':ep_WenuRecoilEnDown,'Recoil_Res_down':ep_WenuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWenu')
             if is2bCRWenu:
-                df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WenuRecoilResUp,'Recoil_En_up':ep_WenuRecoilEnUp,'Recoil_En_down':ep_WenuRecoilEnDown,'Recoil_Res_down':ep_WenuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWenu')
 
             if is1bCRWmunu:
-                df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WmunuRecoilResUp,'Recoil_En_up':ep_WmunuRecoilEnUp,'Recoil_En_down':ep_WmunuRecoilEnDown,'Recoil_Res_down':ep_WmunuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWmunu')
             if is2bCRWmunu:
-                df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WmunuRecoilResUp,'Recoil_En_up':ep_WmunuRecoilEnUp,'Recoil_En_down':ep_WmunuRecoilEnDown,'Recoil_Res_down':ep_WmunuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWmunu')
             if is1bCRTopenu:
-                df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WenuRecoilResUp,'Recoil_En_up':ep_WenuRecoilEnUp,'Recoil_En_down':ep_WenuRecoilEnDown,'Recoil_Res_down':ep_WenuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopenu')
             if is2bCRTopenu:
-                df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WenuRecoil ,'Wmass':ep_Wenumass,'WpT':WpT_enu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_elePt[0],'leadingLepEta':ep_eleEta[0],'leadingLepPhi':ep_elePhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WenuRecoilResUp,'Recoil_En_up':ep_WenuRecoilEnUp,'Recoil_En_down':ep_WenuRecoilEnDown,'Recoil_Res_down':ep_WenuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopenu')
             if is1bCRTopmunu:
-                df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0],'Jet1Eta':ep_THINjetEta[0],'Jet1Phi':ep_THINjetPhi[0],'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':Jet2Pt,'Jet2Eta':Jet2Eta,'Jet2Phi':Jet2Phi,'Jet2deepCSV':Jet2deepCSV,
-                                                    'Jet3Pt':dummy,'Jet3Eta':dummy,'Jet3Phi':dummy,'Jet3deepCSV':dummy,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WmunuRecoilResUp,'Recoil_En_up':ep_WmunuRecoilEnUp,'Recoil_En_down':ep_WmunuRecoilEnDown,'Recoil_Res_down':ep_WmunuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
+                                                    'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
-                df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'nPV':ep_THINjetNPV,
-                                                    'MET':ep_pfMetCorrPt,'Recoil':ep_WmunuRecoil ,'Wmass':ep_Wmunumass,'WpT':WpT_munu,
-                                                    'dPhi_jetMET':min_dPhi_jet_MET,
-                                                    'NTau':ep_nTau_discBased_TightEleTightMuVeto,'NEle':ep_nEle_index,'NMu':ep_nMu, 'nPho':nPho,
-                                                    'Njets_PassID':ep_THINnJet,'Nbjets_PassID':nBjets,
-                                                    'Jet1Pt':ep_THINjetPt[0], 'Jet1Eta':ep_THINjetEta[0], 'Jet1Phi':ep_THINjetPhi[0], 'Jet1deepCSV':ep_THINjetDeepCSV[0],
-                                                    'Jet2Pt':ep_THINjetPt[1], 'Jet2Eta':ep_THINjetEta[1], 'Jet2Phi':ep_THINjetPhi[1], 'Jet2deepCSV':ep_THINjetDeepCSV[1],
-                                                    'Jet3Pt':Jet3Pt, 'Jet3Eta':Jet3Eta, 'Jet3Phi':Jet3Phi, 'Jet3deepCSV':Jet3deepCSV,
-                                                    'leadingLepPt':ep_muPt[0],'leadingLepEta':ep_muEta[0],'leadingLepPhi':ep_muPhi[0],
-                                                    'weight':weight,'weightRecoil':weightRecoil,'weightEle':weightEle,'weightMu':weightMu,'weightB':weightB,'weightEWK':weightEWK,'weightQCD':weightQCD,'weightTop':weightTop,'weightPU':weightPU,'weightRecoil_up':weightRecoil_up,'weightEle_up':weightEle_up,'weightMu_up':weightMu_up,'weightB_up':weightB_up,'weightEWK_up':weightEWK_up,'weightQCD_up':weightQCD_up,'weightTop_up':weightTop_up,'weightPU_up':weightPU_up,'weightJEC_up':weightJEC_up,'Recoil_Res_up':ep_WmunuRecoilResUp,'Recoil_En_up':ep_WmunuRecoilEnUp,'Recoil_En_down':ep_WmunuRecoilEnDown,'Recoil_Res_down':ep_WmunuRecoilResDown,'weightJEC_down':weightJEC_down,'weightRecoil_down':weightRecoil_down,'weightEle_down':weightEle_down,'weightMu_down':weightMu_down,'weightB_down':weightB_down,'weightEWK_down':weightEWK_down,'weightQCD_down':weightQCD_down,'weightTop_down':weightTop_down,'weightPU_down':weightPU_down
+                df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
+                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
+                                                    'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
+                                                    'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
+                                                    'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
+                                                    'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopmunu')
