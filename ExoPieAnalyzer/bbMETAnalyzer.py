@@ -448,8 +448,8 @@ def runbbdm(txtfile):
                 common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU
                 presel_weight = weightEWK * weightQCD * weightTop * weightPU
                 weight,weightEleTrig,ele_wgt,mu_wgt,recoil_wgt,met_wgt = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
-                weightEWK_up = wgt.getEWKZ(ep_genParPt[1]); weightQCD_up = wgt.getQCDZ(ep_genParPt[1])
-                weightEWK_down = wgt.getEWKZ(ep_genParPt[2]); weightQCD_down = wgt.getQCDZ(ep_genParPt[2])
+                weightEWK_up = wgt.getEWKZ(ep_genParPt[0])*1.5; weightQCD_up = wgt.getQCDZ(ep_genParPt[0])
+                weightEWK_down = wgt.getEWKZ(ep_genParPt[0])*0.5; weightQCD_down = wgt.getQCDZ(ep_genParPt[0])
                 weightEle=ele_wgt[0];weightMu=mu_wgt[0];weightRecoil=recoil_wgt[0];weightMET=met_wgt[0]
                 weightEle_up=ele_wgt[1];weightMu_up=mu_wgt[1];weightRecoil_up=recoil_wgt[1];weightMET_up=met_wgt[1]
                 weightEle_down=ele_wgt[2];weightMu_down=mu_wgt[2];weightRecoil_down=recoil_wgt[2];weightMET_down=met_wgt[2]
