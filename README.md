@@ -14,6 +14,7 @@ ExoPieProducer/ExoPieDecorator: Limit model related stuff.
 ## Setup framework 
 
 ```
+export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_3_0
 cd CMSSW_10_3_0/src
 cmsenv
