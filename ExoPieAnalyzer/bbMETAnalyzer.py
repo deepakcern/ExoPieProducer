@@ -126,7 +126,7 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
     weightMET_down = 1.0; weightEle_down = 1.0; weightMu_down = 1.0; weightRecoil_down = 1.0; weightEleTrig_down = 1.0
     if (nEle==0 and nMu==0):
         if ep_pfMetCorrPt > 200:
-            weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt)
+            weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
         tot_weight = weightMET*common_weight
 
     if (nEle>0 and nMu==0):
