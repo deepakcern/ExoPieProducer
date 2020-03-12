@@ -67,7 +67,8 @@ alias voms='voms-proxy-init --voms cms --valid 192:00 && cp -v /tmp/x509up_u1048
 change username. 
 
 
-open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments
+open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments.
+update line 19 with `submittemp.write("arguments = "+txtfile.split('/')[-1]+" "+dummy+" "+dummy+"  "+txtfile.split('/')[-1].replace('.txt','.root')+"    "+'$(Proxy_path)'+'\nqueue')`
 
 
 Now add following line in `runAnalysis_step2.sh`
