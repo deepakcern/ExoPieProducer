@@ -679,20 +679,20 @@ def runbbdm(txtfile):
             ZmumuBins_R = cutFlow_bins.diLepton_R(R_weight,isEleRegion=False)
 
             if eletrigdecision:
-                for ibin, weight in enumerate(TopeBins_B):
-                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
-                for ibin, weight in enumerate(WeBins_B):
-		    h_reg_WenuCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
-                for ibin, weight in enumerate(ZeeBins_R):
-                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
+                for ibin, iweight in enumerate(TopeBins_B):
+                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
+                for ibin, iweight in enumerate(WeBins_B):
+		    h_reg_WenuCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
+                for ibin, iweight in enumerate(ZeeBins_R):
+                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
 
             if mettrigdecision:
-		for ibin, weight in enumerate(TopmuBins_B):
-		    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
-                for ibin, weight in enumerate(WmuBins_B): 
-                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
-                for ibin, weight in enumerate(ZmumuBins_R):  
-                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3+ibin,weight)
+		for ibin, iweight in enumerate(TopmuBins_B):
+		    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
+                for ibin, iweight in enumerate(WmuBins_B): 
+                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
+                for ibin, iweight in enumerate(ZmumuBins_R):  
+                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3+ibin,iweight)
 
             
             '''
