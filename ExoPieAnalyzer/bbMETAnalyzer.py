@@ -126,7 +126,7 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
     weightMET_down = 1.0; weightEle_down = 1.0; weightMu_down = 1.0; weightRecoil_down = 1.0; weightEleTrig_down = 1.0
     if (nEle==0 and nMu==0):
         if ep_pfMetCorrPt > 200:
-            weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
+            weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,'R')
         tot_weight = weightMET*common_weight
 
     if (nEle>0 and nMu==0):
@@ -150,14 +150,14 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
     if (nEle==0 and nMu==1):
         weightMu,weightMu_up,weightMu_down=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')
         if ep_WmunuRecoil>200:
-            weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_WmunuRecoil)
+            weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_WmunuRecoil,'R')
         tot_weight = weightMu*common_weight*weightRecoil
     if (nEle==0 and nMu==2):
         weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[0]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[0]
         weightMu_up=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[1]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[1]
         weightMu_down=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[2]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[2]
         if ep_ZmumuRecoil>200:
-            weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_ZmumuRecoil)
+            weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_ZmumuRecoil,'R')
         tot_weight = weightMu*common_weight*weightRecoil
 
     ele_wgt = [weightEle*weightEleTrig,weightEle_up*weightEleTrig_up,weightEle_down*weightEleTrig_down]
@@ -318,26 +318,26 @@ def runbbdm(txtfile):
             electron VARS
             -------------------------------------------------------------------------------
             '''
-            ep_nEle_ = [ij for ij in range(ep_nEle) if (ep_eleIsPassLoose[ij])]
-            ep_nEle_index = len(ep_nEle_)
-            ep_elePt  = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in ep_nEle_]
-            ep_eleEta = [getEta(ep_elePx[ij], ep_elePy[ij], ep_elePz[ij]) for ij in ep_nEle_]
-            ep_elePhi = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in ep_nEle_]
-            if era="2016":
-                ep_eleIsTight  = [ep_eleIsPassTight[ij] and (ep_elePt[ij]>30) for ij in ep_nEle_]
+            ep_nEle_       = [ij for ij in range(ep_nEle) if (ep_eleIsPassLoose[ij])]
+            ep_nEle_index  = len(ep_nEle_)
+            ep_elePt       = [getPt(ep_elePx[ij], ep_elePy[ij]) for ij in ep_nEle_]
+            ep_eleEta      = [getEta(ep_elePx[ij], ep_elePy[ij], ep_elePz[ij]) for ij in ep_nEle_]
+            ep_elePhi      = [getPhi(ep_elePx[ij], ep_elePy[ij]) for ij in ep_nEle_]
+            ep_eleIsPTight = [ep_eleIsPassTight[ij] for ij in ep_nEle_]
+            if era=="2016":
+                minElePt   = 30.0
             else:
-                ep_eleIsTight  = [ep_eleIsPassTight[ij] and (ep_elePt[ij]>35) for ij in ep_nEle_]
-            # print ([ij for ij in range(ep_nEle) if (ep_eleIsPassLoose[ij])], ep_elePt)
+                minElePt   = 35.0
+
             '''
             -------------------------------------------------------------------------------
             muon VARS
             -------------------------------------------------------------------------------
             '''
-            ep_muPt = [getPt(ep_muPx[ij], ep_muPy[ij]) for ij in range(ep_nMu)]
+            ep_muPt  = [getPt(ep_muPx[ij], ep_muPy[ij]) for ij in range(ep_nMu)]
             ep_muEta = [getEta(ep_muPx[ij], ep_muPy[ij], ep_muPz[ij]) for ij in range(ep_nMu)]
             ep_muPhi = [getPhi(ep_muPx[ij], ep_muPy[ij]) for ij in range(ep_nMu)]
-
-            ep_muIsTight  = [ep_isTightMuon[ij] and (ep_muPt[ij]>30) for ij in range(ep_nMu)]
+            minMuPt  = 30.0
             '''
 
             -------------------------------------------------------------------------------
@@ -347,6 +347,7 @@ def runbbdm(txtfile):
             ep_phoPt = [getPt(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
             ep_phoEta = [getEta(ep_phoPx[ij], ep_phoPy[ij], ep_phoPz[ij]) for ij in range(ep_nPho)]
             ep_phoPhi = [getPhi(ep_phoPx[ij], ep_phoPy[ij]) for ij in range(ep_nPho)]
+
             myphotons = [True for ij in range(ep_nPho)]
             myeleBooleans = [True for ij in range(ep_nEle_index)]
             mymuBooleans = [True for ij in range(ep_nMu)]
@@ -368,6 +369,7 @@ def runbbdm(txtfile):
             ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetEta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+
             if era=='2016':
                 ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.4)]
             else:
@@ -512,7 +514,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
                     h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
-                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_eleIsTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                        h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        if (ep_ZeeRecoil > 200.):
@@ -550,7 +552,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_ZmumuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_ZmumuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_ZmumuRecoil > 200. ) :
@@ -587,7 +589,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_WenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_eleIsTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                         h_reg_WenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_WenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200.) :
@@ -624,7 +626,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200.) :
@@ -661,7 +663,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_eleIsTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                         h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200. ) :
@@ -698,7 +700,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > 30.) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200. ) :
