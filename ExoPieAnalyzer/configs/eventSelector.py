@@ -57,7 +57,7 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
 
     baseline       = nak4jets >= 2 and nTau==0  and nPho==0 #and h_mass > 100.0 and h_mass < 150.0 # and nPho==0
    
-    cuts['resolved_signal'] = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 100.0 and h_mass < 150.0 and mini_ak4jet_MET_dPhi > 0.4
+    cuts['resolved_signal'] = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 100.0 and h_mass < 150.0 and mini_ak4jet_MET_dPhi > 0.4 and nBjets==2 and aditionalak4jets==0
     cuts['resolved_SBand'] = baseline and nMu+nEle==0 and pfMet > 200.0 and ((h_mass > 50.0 and h_mass < 100.0) or (h_mass > 150.0 and h_mass < 350.0)) and mini_ak4jet_MET_dPhi > 0.4
     cuts['resolved_tm']     = False
     cuts['resolved_te']     = False
@@ -115,9 +115,14 @@ def WRecoil_Phi_Wmass(nEle,elept,elephi,elepx_,elepy_,met_,metphi_):
 
 
 
-def getweight(pfMET,WmunuRecoil,ZmumuRecoil,nPho,nTau,nEle_loose,nTightEle,isTightEles,ele_loose_index,ele_tight_index,ep_elePt,ep_eleEta,nMu,nTightMu,isTightMuon,muon_tight_index,ep_muPt,ep_muEta):
+def getweight(pfMET,WmunuRecoil,ZmumuRecoil,nPho,nTau,nEle_loose,nTightEle,isTightEles,ele_loose_index,ele_tight_index,ep_elePt,ep_eleEta,nMu,nTightMu,isTightMuon,muon_tight_index,ep_muPt,ep_muEta,cat):
     tot_weight = 1.0;weightMET = 1.0;weightEle=1.0;weightMu=1.0;weightRecoil=0.0
 
+    '''
+    ------------------------------
+    WEIGHT FOR SINGLE ELECTRON REGION
+    -----------------------------
+    '''
     if (nPho==0 and nTau==0 and nEle_loose==1 and nTightEle==1 and nMu==0):
        
         weightEle,weightEle_up,weightEle_down  = wgt.ele_weight(ep_elePt[ele_tight_index[0]],ep_eleEta[ele_tight_index[0]],'T')
@@ -127,8 +132,9 @@ def getweight(pfMET,WmunuRecoil,ZmumuRecoil,nPho,nTau,nEle_loose,nTightEle,isTig
     elif (nPho==0 and nTau==0 and nEle_loose==0 and nMu==1 and nTightMu==1):
         
         weightMu,weightMu_up,weightMu_down   = wgt.mu_weight(ep_muPt[muon_tight_index[0]],ep_muEta[muon_tight_index[0]],'T')
-        if WmunuRecoil>10: weightRecoil,Up,down=wgt.getMETtrig_First(WmunuRecoil)
+        if WmunuRecoil>10: weightRecoil,Up,down=wgt.getMETtrig_First(WmunuRecoil,cat)
         tot_weight = weightRecoil*weightMu
+
 
     elif (nPho==0 and nTau==0 and nEle_loose==0 and nMu==2 and (isTightMuon[0] or isTightMuon[1])):
 
@@ -141,31 +147,33 @@ def getweight(pfMET,WmunuRecoil,ZmumuRecoil,nPho,nTau,nEle_loose,nTightEle,isTig
             weightMu1,weightMu1_up,weightMu1_down   = wgt.mu_weight(ep_muPt[0],ep_muEta[0],'L')
             weightMu2,weightMu2_up,weightMu2_down   = wgt.mu_weight(ep_muPt[1],ep_muEta[1],'T')
             weightMu = weightMu1*weightMu2
-        if ZmumuRecoil >10 :weightRecoil, upR, douwnR=wgt.getMETtrig_First(ZmumuRecoil)
+        if ZmumuRecoil >10 :weightRecoil, upR, douwnR=wgt.getMETtrig_First(ZmumuRecoil,cat)
        
 	tot_weight = weightRecoil*weightMu
 
-    elif (nPho==0 and nTau==0 and nEle_loose==2 and nMu==0 and (isTightEles[0] or isTightEles[1])):
-        
-        #print 'Entreed for ele'     
+
+    elif (nPho==0 and nTau==0 and nEle_loose==2 and nMu==0 and (isTightEles[0] or isTightEles[1])): 
+         
         if isTightEles[0]:
-	    weightEle1,weightEle1_up,weightEle1_down = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')
-            if isTightEles[1]:weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'T')
-            else:weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')
+	    weightEle1,weightEle1_up,weightEle1_down = wgt.ele_weight(ep_elePt[ele_loose_index[0]],ep_eleEta[ele_loose_index[0]],'T')
+            if isTightEles[1]:weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[ele_loose_index[1]],ep_eleEta[ele_loose_index[1]],'T')
+            else:weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[ele_loose_index[1]],ep_eleEta[ele_loose_index[1]],'L')
             TrigWeight,TrigWeight_up,TrigWeight_down = wgt.eletrig_weight(ep_elePt[ele_loose_index[0]],ep_eleEta[ele_loose_index[0]])
 
             weightEle=weightEle1*weightEle2*TrigWeight
             
         elif isTightEles[1]:
-	    weightEle1,weightEle1_up,weightEle1_down = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'L')
-            weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'T')
+	    weightEle1,weightEle1_up,weightEle1_down = wgt.ele_weight(ep_elePt[ele_loose_index[0]],ep_eleEta[ele_loose_index[0]],'L')
+            weightEle2,weightEle2_up,weightEle2_down = wgt.ele_weight(ep_elePt[ele_loose_index[1]],ep_eleEta[ele_loose_index[1]],'T')
             TrigWeight,TrigWeight_up,TrigWeight_down = wgt.eletrig_weight(ep_elePt[ele_loose_index[1]],ep_eleEta[ele_loose_index[1]])
 
             weightEle=weightEle1*weightEle2*TrigWeight
             
         tot_weight = weightEle
+
+
     elif( nPho==0 and nEle_loose==0 and nMu==0 and nTau==0): 
-	weightMET, weightMET_up, weightMET_down = wgt.getMETtrig_First(pfMET)
+	if pfMET>10:weightMET, weightMET_up, weightMET_down = wgt.getMETtrig_First(pfMET,cat)
         tot_weight = weightMET
     return tot_weight  
 
