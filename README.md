@@ -20,7 +20,7 @@ cd CMSSW_10_3_0/src
 cmsenv
 git clone https://github.com/deepakcern/ExoPieUtils.git
 cd ExoPieUtils
-git checkout monohbb_systematics
+git checkout test_systematics
 cd -
 git clone https://github.com/deepakcern/ExoPieProducer.git
 cd ExoPieProducer
