@@ -34,7 +34,11 @@ Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
 ```
-txt files you can find here: ```https://github.com/deepakcern/CondorJobs/tree/master/Filelists```
+txt files you can find here:
+
+`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New`
+
+merged files are here: `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New_merged`
 
 ### Submit Condor Jobs
 Note: change ```isCondor = True```
