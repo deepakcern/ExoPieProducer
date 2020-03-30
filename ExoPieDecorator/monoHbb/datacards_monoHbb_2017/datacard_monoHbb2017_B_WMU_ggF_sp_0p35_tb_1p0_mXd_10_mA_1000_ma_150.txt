@@ -14,14 +14,6 @@ shapes wjets     monoHbb2017_B_WMU       monoHbb_WS.root ws_monoHbb:rph_WMU_wjet
 
 
 
-
-----------------------------------------------------------------------------------------------------------------------------------
-#shapes ZJets   monoHbb2017_B_WMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_Z        ws_monoHbb:rph_sr2_Z_$SYSTEMATIC
-#shapes Top     monoHbb2017_B_WMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_top      ws_monoHbb:rph_sr2_top_$SYSTEMATIC
-#shapes WJets   monoHbb2017_B_WMU   monoHbb_WS.root   ws_monoHbb:rph_sr2_wjets    ws_monoHbb:rph_sr2_wjets_$SYSTEMATIC
-----------------------------------------------------------------------------------------------------------------------------------
-
-
 ------------
 
 
@@ -37,12 +29,12 @@ observation -1
 bin               monoHbb2017_B_WMU  monoHbb2017_B_WMU  monoHbb2017_B_WMU  monoHbb2017_B_WMU   monoHbb2017_B_WMU  monoHbb2017_B_WMU  monoHbb2017_B_WMU 
 process               wjets                tt                 singlet             qcd              dyjets             diboson             smh
 process                 1                  2                    3                  4                 5                  6                  7      
-rate                   -1                 -1                   -1                 -1                -1                -1                  -1    
+rate                   1                 -1                   -1                 -1                -1                -1                  -1    
 ------------
 
 doubleb                 lnN           -        -         -         -         -       -       1.10
 CMS2016_eff_b           lnN           -       1.10       1.10      -         -       -        1.10
-CMS2016_fake_b          lnN           -       1.05       1.05      -         -        -        1.05 
+CMS2016_fake_b          lnN           -       1.05       1.05      1.05      1.05    1.05     1.05 
 lumi                    lnN           -       1.025      1.025    1.025     1.025    1.025     1.025
 CMS2016_scale_pu        lnN           -       1.001      1.001     1.001     1.001    1.001      1.001
 trig_met                lnN           -       1.02       1.02      1.02     1.02      1.02        1.02        

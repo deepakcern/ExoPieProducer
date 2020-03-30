@@ -14,7 +14,11 @@ shapes *         monoHbb2017_B_SR       monoHbb_WS.root ws_monoHbb:monoHbb2017_B
 
 shapes signal    monoHbb2017_B_SR       monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150 ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_XXXMA_ma_150_$SYSTEMATIC
 shapes data_obs  monoHbb2017_B_SR       monoHbb_WS.root  ws_monoHbb:monoHbb2017_B_SR_data_obs
+
+
 shapes wjets     monoHbb2017_B_SR       monoHbb_WS.root ws_monoHbb:rph_SR_wjets
+shapes tt     monoHbb2017_B_SR           monoHbb_WS.root ws_monoHbb:rph_SR_tt
+shapes zjets     monoHbb2017_B_SR           monoHbb_WS.root ws_monoHbb:rph_SR_zjets
 
 
 
@@ -40,7 +44,7 @@ observation -1
 bin             monoHbb2017_B_SR   monoHbb2017_B_SR  monoHbb2017_B_SR  monoHbb2017_B_SR  monoHbb2017_B_SR   monoHbb2017_B_SR  monoHbb2017_B_SR monoHbb2017_B_SR
 process         signal     zjets  wjets    tt     singlet        qcd      diboson    smh
 process          0        1        2        3        4               5       6        7
-rate             -1       -1       -1       -1       -1             -1         -1    -1
+rate             -1       1       1       1       -1             -1         -1    -1
 ------------
 
 doubleb                 lnN    1.10          -        -         -         -         -       -       1.10

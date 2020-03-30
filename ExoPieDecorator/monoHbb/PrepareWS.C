@@ -456,7 +456,9 @@ void PrepareWS(){
     for (auto ip=0; ip<process.size(); ip++){
 
       for (auto ic=0; ic<category.size(); ic++){
-	if (process[ip] == "wjets") continue ;
+	if (process[ip] == "wjets" && ( (regions[ir] =="WE") || (regions[ir] =="WMU") ) ) continue ;
+	if (process[ip] == "tt" && ( (regions[ir] =="TOPE") || (regions[ir] =="TOPMU") ) ) continue ;
+	
 	tempname = category[ic] + regions[ir] + "_" +  process[ip];
 	//tempname = regions[ir] + "_" + category[ic] + "_" + process[ip];
 	std::cout<<" saving "<<tempname<<std::endl;
