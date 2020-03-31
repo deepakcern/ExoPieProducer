@@ -18,13 +18,13 @@ from multiprocessing import Process
 import multiprocessing as mp
 
 
-isCondor = True
-runInteractive = False
+isCondor = False
+runInteractive = True
 testing=True
 ## from commonutils
 if isCondor:sys.path.append('ExoPieUtils/commonutils/')
 else:sys.path.append('../../ExoPieUtils/commonutils/')
-import MathUtils as mathutil
+#import MathUtils as mathutil
 from MathUtils import *
 import BooleanUtils as boolutil
 
@@ -45,7 +45,7 @@ else:sys.path.append('../../ExoPieUtils/scalefactortools/')
 
 ##please change the era accordingly
 year_file= open("Year.py","w")
-year_file.write('era="2016"')
+year_file.write('era="2017"')
 year_file.close()
 import ana_weight as wgt
 from Year import era
@@ -259,7 +259,7 @@ def runbbdm(txtfile):
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, \
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon, \
-                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEletightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_tightEletightMuVeto,\
+                   df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, \
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision \
