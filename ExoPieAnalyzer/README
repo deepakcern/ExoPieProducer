@@ -3,6 +3,19 @@
 The analysis code is mainly written in the monoHbbAnalyzer.py file. This will create a .root file with trees for each CR/SR.
 
 
+## To run interactive on a .txt file make following changes 
+
+1. isCondor = False
+2. runInteractive = False
+3. year_file.write('era="2016"')  -- edit it accordingly 
+4. keep the list of .root file in a .txt file (say ttskim.txt)
+5. For 2017 and 18, change tight --> Tight in the zip statement 
+   * st_nTau_discBased_looseEletightMuVeto --> st_nTau_discBased_looseEleTightMuVeto  and st_nTau_discBased_tightEletightMuVeto --> st_nTau_discBased_TightEleTightMuVeto
+6. In config/varibale.py, change st_nTau_discBased_looseEletightMuVeto --> st_nTau_discBased_looseEleTightMuVeto  and st_nTau_discBased_tightEletightMuVeto --> st_nTau_discBased_TightEleTightMuVeto
+6. run the code using: 
+#### python bbMETAnalyzer.py -F -i ttskim.txt
+
+
 
 ### How to run
 ##for interactive run:
