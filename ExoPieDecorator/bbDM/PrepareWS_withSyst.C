@@ -311,8 +311,8 @@ void PrepareWS_withSyst(){
 
   std::cout<<" integral of wenu : "<<h_sr2_wjets->Integral() <<"  "<<h_wenu_2b_wjets->Integral()<<std::endl;
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_wjets, h_wenu_1b_wjets, h_sr1_data, wspace, "WE_wjets", "SR_wjets",  fOut);
-  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "WE_wjets", "SR_wjets",  fOut);
+  createRegion(met, h_sr1_wjets, h_wenu_1b_wjets, h_sr1_data, wspace, "1b_WE_wjets", "1b_SR_wjets",  fOut);
+  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "2b_WE_wjets", "1b_SR_wjets",  fOut);
 
 
   /*
@@ -326,8 +326,8 @@ void PrepareWS_withSyst(){
   TH1F* h_wmunu_1b_wjets = (TH1F*) fin->Get("bbDM2016_1b_WMUNUCR_wjets");
   TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("bbDM2016_2b_WMUNUCR_wjets");
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_wjets, h_wmunu_1b_wjets, h_sr2_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
-  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
+  createRegion(met, h_sr1_wjets, h_wmunu_1b_wjets, h_sr2_data, wspace, "1b_WMU_wjets", "1b_SR_wjets",  fOut);
+  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "2b_WMU_wjets", "2b_SR_wjets",  fOut);
 
 
 
@@ -345,8 +345,8 @@ void PrepareWS_withSyst(){
   TH1F* h_topmu_1b_top = (TH1F*) fin->Get("bbDM2016_1b_TOPMUNUCR_tt");
   TH1F* h_topmu_2b_top = (TH1F*) fin->Get("bbDM2016_2b_TOPMUNUCR_tt");
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_top, h_topmu_1b_top, h_sr1_data, wspace, "TOPMU_tt", "SR_tt",  fOut);
-  createRegion(met, h_sr2_top, h_topmu_2b_top, h_sr2_data, wspace, "TOPMU_tt", "SR_tt",  fOut);
+  createRegion(met, h_sr1_top, h_topmu_1b_top, h_sr1_data, wspace, "1b_TOPMU_tt", "1b_SR_tt",  fOut);
+  createRegion(met, h_sr2_top, h_topmu_2b_top, h_sr2_data, wspace, "2b_TOPMU_tt", "2b_SR_tt",  fOut);
 
 
   /*
@@ -361,8 +361,8 @@ void PrepareWS_withSyst(){
   TH1F* h_tope_1b_top = (TH1F*) fin->Get("bbDM2016_1b_TOPENUCR_tt");
   TH1F* h_tope_2b_top = (TH1F*) fin->Get("bbDM2016_2b_TOPENUCR_tt");
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_top, h_tope_1b_top, h_sr1_data, wspace, "TOPE_tt", "SR_tt",  fOut);
-  createRegion(met, h_sr2_top, h_tope_2b_top, h_sr2_data, wspace, "TOPE_tt", "SR_tt",  fOut);
+  createRegion(met, h_sr1_top, h_tope_1b_top, h_sr1_data, wspace, "1b_TOPE_tt", "1b_SR_tt",  fOut);
+  createRegion(met, h_sr2_top, h_tope_2b_top, h_sr2_data, wspace, "2b_TOPE_tt", "2b_SR_tt",  fOut);
 
 
   /*
@@ -379,8 +379,8 @@ void PrepareWS_withSyst(){
   TH1F* h_Zmumu_1b_Z = (TH1F*) fin->Get("bbDM2016_1b_ZMUMUCR_dyjets");
   TH1F* h_Zmumu_2b_Z = (TH1F*) fin->Get("bbDM2016_2b_ZMUMUCR_dyjets");
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_Z, h_Zmumu_1b_Z, h_sr1_data, wspace, "ZMUMU_dyjets", "SR_zjets",  fOut);
-  createRegion(met, h_sr2_Z, h_Zmumu_2b_Z, h_sr2_data, wspace, "ZMUMU_dyjets", "SR_zjets",  fOut);
+  createRegion(met, h_sr1_Z, h_Zmumu_1b_Z, h_sr1_data, wspace, "1b_ZMUMU_dyjets", "1b_SR_zjets",  fOut);
+  createRegion(met, h_sr2_Z, h_Zmumu_2b_Z, h_sr2_data, wspace, "2b_ZMUMU_dyjets", "2b_SR_zjets",  fOut);
 
 
   /*
@@ -394,8 +394,8 @@ void PrepareWS_withSyst(){
   TH1F* h_Zee_2b_Z = (TH1F*) fin->Get("bbDM2016_2b_ZEECR_dyjets");
   TH1F* h_Zee_1b_Z = (TH1F*) fin->Get("bbDM2016_1b_ZEECR_dyjets");
   // Create all the inputs needed for this CR
-  createRegion(met, h_sr1_Z, h_Zee_1b_Z, h_sr1_data, wspace, "ZEE_dyjets", "SR_dyjets",  fOut);
-  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "ZEE_dyjets", "SR_dyjets",  fOut);
+  createRegion(met, h_sr1_Z, h_Zee_1b_Z, h_sr1_data, wspace, "1b_ZEE_dyjets", "1b_SR_dyjets",  fOut);
+  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "2b_ZEE_dyjets", "2b_SR_dyjets",  fOut);
 
 
   /*
