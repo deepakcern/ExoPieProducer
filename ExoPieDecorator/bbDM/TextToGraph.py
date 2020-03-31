@@ -3,7 +3,7 @@ from array import array
 import os
 
 
-inputstring_ = ['2HDMa']
+inputstring_ = ['2HDMa_MA600_150']
 
 
 # xsec_dict={}
