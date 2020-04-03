@@ -18,7 +18,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = False
+isCondor = True
 runInteractive = False
 testing=True
 ## from commonutils
@@ -245,6 +245,11 @@ def runbbdm(txtfile):
     h_reg_WenuCR_resolved_cutFlow.AddBinContent(2,Entrees)
     h_reg_WmunuCR_resolved_cutFlow.AddBinContent(2,Entrees)
 
+    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(2,total_events)
+    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(2,total_events)
+    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(2,Entrees)
+    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(2,Entrees)
+
     h_reg_TopenuCR_resolved_cutFlow.AddBinContent(1,total_events)
     h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(1,total_events)
     h_reg_TopenuCR_resolved_cutFlow.AddBinContent(2,Entrees)
@@ -254,6 +259,11 @@ def runbbdm(txtfile):
     h_reg_WmunuCR_boosted_cutFlow.AddBinContent(1,total_events)
     h_reg_WenuCR_boosted_cutFlow.AddBinContent(2,Entrees)
     h_reg_WmunuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(2,total_events)
+    h_reg_ZeeCR_boosted_cutFlow.AddBinContent(2,total_events)
+    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(2,Entrees)
+    h_reg_ZeeCR_boosted_cutFlow.AddBinContent(2,Entrees)
 
     h_reg_TopenuCR_boosted_cutFlow.AddBinContent(1,total_events)
     h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(1,total_events)
@@ -696,26 +706,60 @@ def runbbdm(txtfile):
             ZeeBins_R   = cutFlow_bins.diLepton_R(R_weight,isEleRegion=True)
             ZmumuBins_R = cutFlow_bins.diLepton_R(R_weight,isEleRegion=False)
             SBand_R     = cutFlow_bins.SBand_R(R_weight)
-           
+
+
             if eletrigdecision:
-                for ibin, binweight in enumerate(TopeBins_B):
-                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
-                for ibin, binweight in enumerate(WeBins_B):
-		    h_reg_WenuCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
+                h_reg_TopenuCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_WenuCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_TopenuCR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_WenuCR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_ZeeCR_boosted_cutFlow.AddBinContent(3,1)
+
+                for ibin, binweight in enumerate(TopeBins_R):
+                    h_reg_TopenuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(WeBins_R):
+                    h_reg_WenuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
                 for ibin, binweight in enumerate(ZeeBins_R):
-                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
+                    h_reg_ZeeCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+
+                for ibin, binweight in enumerate(TopeBins_B):
+                    h_reg_TopenuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(WeBins_B):
+                    h_reg_WenuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(ZeeBins_B):
+                    h_reg_ZeeCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+
+
 
             if mettrigdecision:
-		for ibin, binweight in enumerate(TopmuBins_B):
-		    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
-                for ibin, binweight in enumerate(WmuBins_B): 
-                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
-                for ibin, binweight in enumerate(ZmumuBins_R):  
-                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3+ibin,binweight)
-                for ibin, binweight in enumerate(SBand_B):
-                    h_reg_SBand_boosted_cutFlow.AddBinContent(3+ibin,binweight)
+                h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_WmunuCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_SBand_resolved_cutFlow.AddBinContent(3,1)
+                h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_WmunuCR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_SBand_boosted_cutFlow.AddBinContent(3,1)
+                for ibin, binweight in enumerate(TopmuBins_R):
+                    h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(WmuBins_R):
+                    h_reg_WmunuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(ZmumuBins_R):
+                    h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
                 for ibin, binweight in enumerate(SBand_R):
-                    h_reg_SBand_resolved_cutFlow.AddBinContent(3+ibin,binweight)
+                    h_reg_SBand_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+
+                for ibin, binweight in enumerate(TopmuBins_B):
+                    h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(WmuBins_B):
+                    h_reg_WmunuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(ZmumuBins_B):
+                    h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(SBand_B):
+                    h_reg_SBand_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+
+
             '''
             --------------------------------------------------------------------------------
             SIGNAL REGION RESOLVED
