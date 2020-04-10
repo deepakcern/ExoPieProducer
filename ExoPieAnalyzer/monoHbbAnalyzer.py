@@ -1408,14 +1408,14 @@ def runbbdm(txtfile):
     df_out_TopWmu_boosted.to_root(outfilenameis, key='monoHbb_TopWmu_boosted',mode='a')
     df_out_TopWe_boosted.to_root(outfilenameis, key='monoHbb_TopWe_boosted',mode='a')
 
-    WCR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra"}
-    SR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nPho",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra"}
+    WCR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra2"}
+    SR_CutFlow = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nPho",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra2"}
 
-    WCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra"}
+    WCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Mbb",11:"extra",12:"extra2"}
 
-    ZCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Zmass",11:"extra",12:"extra"}
+    ZCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Zmass",11:"extra",12:"extra2"}
 
-    SR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nPho",7:"MET",8:"nJets",9:"nBjets",10:"extra",11:"extra",12:"extra"}
+    SR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nPho",7:"MET",8:"nJets",9:"nBjets",10:"extra",11:"extra",12:"extra2"}
 
     for i in [1,2,3,4,5,6,7,8,9,10,11,12]:
         h_reg_WenuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
@@ -1449,6 +1449,7 @@ def runbbdm(txtfile):
     h_reg_WenuCR_boosted_cutFlow.SetEntries(1)
     h_reg_WmunuCR_boosted_cutFlow.SetEntries(1)
     h_reg_TopenuCR_boosted_cutFlow.SetEntries(1)
+    h_reg_TopmunuCR_boosted_cutFlow.SetEntries(1)
     h_reg_ZeeCR_boosted_cutFlow.SetEntries(1)
     h_reg_ZmumuCR_boosted_cutFlow.SetEntries(1)
     h_reg_SBand_boosted_cutFlow.SetEntries(1)
@@ -1472,6 +1473,7 @@ def runbbdm(txtfile):
     h_reg_WenuCR_boosted_cutFlow.Write()
     h_reg_WmunuCR_boosted_cutFlow.Write()
     h_reg_TopenuCR_boosted_cutFlow.Write()
+    h_reg_TopmunuCR_boosted_cutFlow.Write()
     h_reg_ZeeCR_boosted_cutFlow.Write()
     h_reg_ZmumuCR_boosted_cutFlow.Write()
 
