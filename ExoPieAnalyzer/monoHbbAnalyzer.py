@@ -47,7 +47,7 @@ from cutFlow import cutFlow
 if isCondor:sys.path.append('ExoPieUtils/scalefactortools/')
 else:sys.path.append('../../ExoPieUtils/scalefactortools/')
 year_file= open("Year.py","w")
-year_file.write('era="2018"')
+year_file.write('era="2017"')
 year_file.close()
 
 import ana_weight as wgt
