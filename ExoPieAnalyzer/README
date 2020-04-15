@@ -12,7 +12,7 @@ The analysis code is mainly written in the monoHbbAnalyzer.py file. This will cr
 5. For 2017 and 18, change tight --> Tight in the zip statement 
    * st_nTau_discBased_looseEletightMuVeto --> st_nTau_discBased_looseEleTightMuVeto  and st_nTau_discBased_tightEletightMuVeto --> st_nTau_discBased_TightEleTightMuVeto
 6. In config/varibale.py, change st_nTau_discBased_looseEletightMuVeto --> st_nTau_discBased_looseEleTightMuVeto  and st_nTau_discBased_tightEletightMuVeto --> st_nTau_discBased_TightEleTightMuVeto
-6. run the code using: 
+7. run the code using: 
 #### python bbMETAnalyzer.py -F -i ttskim.txt
 
 
