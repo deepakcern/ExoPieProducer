@@ -1,1 +1,0 @@
-combineCards.py  combine_tmpl_sig2b.txt combine_tmpl_Topmunu2b.txt combine_tmpl_Topenu2b.txt combine_tmpl_Zmumu2b.txt combine_tmpl_Zee2b.txt combine_tmpl_Wmunu2b.txt combine_tmpl_Wenu2b.txt > testV1.txt
