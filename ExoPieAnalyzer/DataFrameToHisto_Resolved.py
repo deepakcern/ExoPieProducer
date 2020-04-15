@@ -68,33 +68,23 @@ def VarToHist(df_var,df_weight,df_weight_den,df_weight_num,HISTNAME,binning):
     #df_weight = df["weight"]
     if ApplyWeight:print 'Filling Histogram',HISTNAME, 'for Background'
     if not ApplyWeight:print 'Filling Histogram',HISTNAME, 'for Data'
-    h_var   = SetHist(HISTNAME, binning)
-    weight  = 1.0
-    scale   = 1.0
-    #print 'df_var', df_var
-    #print 'df_weight', df_weight
-    #if ApplyBWeight : print 'btagging weight is getting applied on this sample'
-    #for ij, value in enumerate(df_var):
-    #for ij in range(len(df_var)):
-    #for value, weight in zip(df_var,df_weight):
+
+    h_var  = SetHist(HISTNAME, binning)
+    weight=1.0
+    puweight= 1.0
+    btag = 1.0
     for ij in df_var.index:
         value = df_var[ij]
         weight= df_weight[ij]
-
+        #print df
         numerator   = df_weight_num[ij]
         denominator = df_weight_den[ij]
         scale       = numerator/denominator
 
-     
-        #dbweight = df["dbweight"][ij]
-        #btagweight = df["btagweight"][ij]
-
-	#if ApplyBWeight:h_var.Fill(value, weight*btagweight)
-        #else:
         if weight==0.0:scale=1.0
         if ApplyWeight: h_var.Fill(value, weight*scale)
         if not ApplyWeight:h_var.Fill(value)
-        #print 'done'
+
     '''
     for index, value in enumerate(df_var):
 	#print 'index',index,'value',value, 'weight',df_weight[index]
@@ -118,19 +108,20 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
     leppTbins = getBinRange(15,30,500)
     fjSDBins  = getBinRange(15,100,150) 
     '''
-    if 'SBand' in reg or 'SR' in reg: 
+    if 'SBand' in reg or 'SR' in reg:
+
 
         #CENTRAL AND SYSTEMATICS FOR MET HISTOGRAM
-	h_list.append(VarToHist(df["MET"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET",[200,270,345,480,1000]))
+        h_list.append(VarToHist(df["MET"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET",[200,270,345,480,1000]))
         #B-TAG SYSTEMATICS
         h_list.append(VarToHist(df["MET"], df["weight"],df["btagweight"],df["btagweight_up"],"h_reg_"+reg+"_MET_btagweight_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["MET"], df["weight"],df["btagweight"],df["btagweight_down"],"h_reg_"+reg+"_MET_btagweight_down",[200,270,345,480,1000]))
         #EWK SYSTEMATICS
         h_list.append(VarToHist(df["MET"], df["weight"],df["ewkweight"],df["ewkweight_up"],"h_reg_"+reg+"_MET_ewkweight_up",[200,270,345,480,1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"],df["ewkweight"],df["ewkweight_down"],"h_reg_"+reg+"_MET_ewkweight_down",[200,270,345,480,1000])) 
-        #Top pT REWEIGHTING 
+        h_list.append(VarToHist(df["MET"], df["weight"],df["ewkweight"],df["ewkweight_down"],"h_reg_"+reg+"_MET_ewkweight_down",[200,270,345,480,1000]))
+        #Top pT REWEIGHTING
         h_list.append(VarToHist(df["MET"], df["weight"],df["toppTweight"],df["toppTweight_up"],"h_reg_"+reg+"_MET_toppTweight_up",[200,270,345,480,1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"],df["toppTweight"],df["toppTweight_down"],"h_reg_"+reg+"_MET_toppTweight_down",[200,270,345,480,1000]))        
+        h_list.append(VarToHist(df["MET"], df["weight"],df["toppTweight"],df["toppTweight_down"],"h_reg_"+reg+"_MET_toppTweight_down",[200,270,345,480,1000]))
         #MET Trigger SYSTEMATICS
         h_list.append(VarToHist(df["MET"], df["weight"],df["METweight"],df["METweight_up"],"h_reg_"+reg+"_MET_metTrigweight_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["MET"], df["weight"],df["METweight"],df["METweight_down"],"h_reg_"+reg+"_MET_metTrigweight_down",[200,270,345,480,1000]))
@@ -140,9 +131,9 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         #pu WEIGHT SYSTEMATICS
         h_list.append(VarToHist(df["MET"], df["weight"],df["puweight"],df["puweight_up"],"h_reg_"+reg+"_MET_puweight_down",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["MET"], df["weight"],df["puweight"],df["puweight_down"],"h_reg_"+reg+"_MET_puweight_up",[200,270,345,480,1000]))
-        #JEC SYSTEMATICS 
+        #JEC SYSTEMATICS
         h_list.append(VarToHist(df["MET"], df["weight"],df["jec"],df["jec_up"],"h_reg_"+reg+"_MET_jec_up",[200,270,345,480,1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"],df["jec"],df["jec_down"],"h_reg_"+reg+"_MET_jec_down",[200,270,345,480,1000]))       
+        h_list.append(VarToHist(df["MET"], df["weight"],df["jec"],df["jec_down"],"h_reg_"+reg+"_MET_jec_down",[200,270,345,480,1000]))
         #JER SYSTEMATICS
         h_list.append(VarToHist(df["METRes_up"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET_Res_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["METRes_down"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET_Res_down",[200,270,345,480,1000]))
@@ -150,20 +141,22 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["METEn_up"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET_En_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["METEn_down"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET_En_down",[200,270,345,480,1000]))
  
-
-        h_list.append(VarToHist(df["FJetPt"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_FJetPt",[50,200,1000]))
-        h_list.append(VarToHist(df["FJetMass"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_FJetMass",[35,30,350]))#FJetMass
-        h_list.append(VarToHist(df["FJetEta"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
-        h_list.append(VarToHist(df["FJetPhi"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
-        h_list.append(VarToHist(df["FJetCSV"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetCSV",[30,0,1]))
-        h_list.append(VarToHist(df["nJets"],   df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_nJets",[10,0,10]))
-        h_list.append(VarToHist(df["min_dPhi"],df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)   min_dphi_jets
-        h_list.append(VarToHist(df["min_dphi_jets"],df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_min_dphi_jets",[50,0,4]))
-
+	#h_list.append(VarToHist(df,df["MET"], df["weight"], "h_reg_"+reg+"_MET",[200,270,345,480,1000]))
+        #h_list.append(VarToHist(df["FJetPt"], df["weight"], "h_reg_"+reg+"_FJetPt",[50,200,1000]))
+        #h_list.append(VarToHist(df["FJetMass"], df["weight"],"h_reg_"+reg+"_FJetMass",[35,30,350]))#FJetMass
+        #h_list.append(VarToHist(df["FJetEta"], df["weight"], "h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
+        #h_list.append(VarToHist(df["FJetPhi"], df["weight"], "h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
+        #h_list.append(VarToHist(df["FJetCSV"], df["weight"], "h_reg_"+reg+"_FJetCSV",[30,0,1]))
+        h_list.append(VarToHist(df["nJets"],   df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_nJets",[10,0,10]))
+        #h_list.append(VarToHist(df["min_dPhi"],   df["weight"], "h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)
+        h_list.append(VarToHist(df["Jet1Pt"],  df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Pt",[50,30,1000]))
+        h_list.append(VarToHist(df["Jet1Eta"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Eta",[30,-2.5,2.5]))
+        h_list.append(VarToHist(df["Jet1Phi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Phi",[30,-3.14,3.14])) #DiJetMass
+        h_list.append(VarToHist(df["DiJetMass"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_DiJetMass",[50,0,400]))#FJetMass
     else:
-	h_list.append(VarToHist(df["MET"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_MET",[30,0,1000]))
+	h_list.append(VarToHist(df["MET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_MET",[30,0,1000]))
         #CENTRAL AND SYSTEMATICS FOR RECOIL HISTOGRAM
-	h_list.append(VarToHist(df["RECOIL"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_Recoil",[200,270,345,480,1000]))
+        h_list.append(VarToHist(df["RECOIL"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_Recoil",[200,270,345,480,1000]))
         #B-TAG SYSTEMATICS
         h_list.append(VarToHist(df["RECOIL"], df["weight"],df["btagweight"],df["btagweight_up"],"h_reg_"+reg+"_Recoil_btagweight_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["RECOIL"], df["weight"],df["btagweight"],df["btagweight_down"],"h_reg_"+reg+"_Recoil_btagweight_down",[200,270,345,480,1000]))
@@ -192,27 +185,26 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["recoilEn_up"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_Recoil_En_up",[200,270,345,480,1000]))
         h_list.append(VarToHist(df["recoilEn_down"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_Recoil_En_down",[200,270,345,480,1000]))
 
-
-        h_list.append(VarToHist(df["FJetPt"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetPt",[15,200,1000]))
-        h_list.append(VarToHist(df["FJetMass"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_FJetMass",[100,0,500]))#FJetMass        
-        h_list.append(VarToHist(df["FJetEta"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
-        h_list.append(VarToHist(df["FJetPhi"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
-        h_list.append(VarToHist(df["FJetCSV"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_FJetCSV",[30,0,1]))
-        h_list.append(VarToHist(df["Jet1Pt"],  df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_Jet1Pt",[50,200,1000]))
-	h_list.append(VarToHist(df["Jet1Eta"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_Jet1Eta",[30,-2.5,2.5]))
-        h_list.append(VarToHist(df["Jet1Phi"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_Jet1Phi",[30,-3.14,3.14]))
-        h_list.append(VarToHist(df["nJets"],   df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_nJets",[10,0,10]))
-        h_list.append(VarToHist(df["min_dPhi"],   df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)
-        h_list.append(VarToHist(df["met_Phi"],   df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_met_Phi",[50,-4,4]))
-        h_list.append(VarToHist(df["lep1_pT"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_lep1_pT",[15,30,500]))
-        h_list.append(VarToHist(df["lep1_eta"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_lep1_eta",[30,-2.5,2.5]))
-        h_list.append(VarToHist(df["lep1_Phi"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_lep1_Phi",[30,-3.14,3.14]))       
+        #h_list.append(VarToHist(df["FJetPt"], df["weight"], "h_reg_"+reg+"_FJetPt",[15,200,1000]))
+        #h_list.append(VarToHist(df["FJetMass"], df["weight"],"h_reg_"+reg+"_FJetMass",[15,100,150]))#FJetMass        
+        #h_list.append(VarToHist(df["FJetEta"], df["weight"], "h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
+        #h_list.append(VarToHist(df["FJetPhi"], df["weight"], "h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
+        #h_list.append(VarToHist(df["FJetCSV"], df["weight"], "h_reg_"+reg+"_FJetCSV",[30,0,1]))
+        h_list.append(VarToHist(df["Jet1Pt"],  df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Pt",[50,30,1000]))
+	h_list.append(VarToHist(df["Jet1Eta"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Eta",[30,-2.5,2.5]))
+        h_list.append(VarToHist(df["Jet1Phi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet1Phi",[30,-3.14,3.14]))
+        h_list.append(VarToHist(df["nJets"],   df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_nJets",[10,0,10]))
+        h_list.append(VarToHist(df["min_dPhi"],   df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)  "_met_Phi",[50,-4,4]))
+        h_list.append(VarToHist(df["met_Phi"],   df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_met_Phi",[50,-4,4]))
+        h_list.append(VarToHist(df["lep1_pT"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep1_pT",[15,30,500]))
+        h_list.append(VarToHist(df["lep1_eta"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep1_eta",[30,-2.5,2.5]))
+        h_list.append(VarToHist(df["lep1_Phi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep1_Phi",[30,-3.14,3.14]))       
         if 'Zmumu' in reg or 'Zee' in reg:
 	    h_list.append(VarToHist(df["Zmass"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_Zmass",[15,60,120]))
-	    h_list.append(VarToHist(df["ZpT"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_ZpT",[15,0,700])) 
+	    h_list.append(VarToHist(df["ZpT"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_ZpT",[15,0,700])) 
             h_list.append(VarToHist(df["lep2_pT"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep2_pT",[15,30,500]))
-            h_list.append(VarToHist(df["lep2_eta"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_lep2_eta",[30,-2.5,2.5]))
-            h_list.append(VarToHist(df["lep2_Phi"], df["weight"], df["weight"],df["weight"],"h_reg_"+reg+"_lep2_Phi",[30,-3.14,3.14]))
+            h_list.append(VarToHist(df["lep2_eta"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep2_eta",[30,-2.5,2.5]))
+            h_list.append(VarToHist(df["lep2_Phi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep2_Phi",[30,-3.14,3.14]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
     fout = TFile(outfilename, mode)
     for ih in h_list: ih.Write()
@@ -227,9 +219,9 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
     fjSDBins  = getBinRange(15,100,150)
     '''
     if 'SBand' in reg or 'SR' in reg:
-        #CENTRAL AND SYSTEMATICS FOR MET HISTOGRAM
         h_list.append(SetHist("h_reg_"+reg+"_MET",[200,270,345,480,1000]))
-        #B-TAG SYSTEMATICS
+
+
         h_list.append(SetHist("h_reg_"+reg+"_MET_btagweight_up",[200,270,345,480,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_MET_btagweight_down",[200,270,345,480,1000]))
         #EWK SYSTEMATICS
@@ -256,17 +248,21 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_MET_En_up",[200,270,345,480,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_MET_En_down",[200,270,345,480,1000]))
 
-        h_list.append(SetHist("h_reg_"+reg+"_FJetPt",[50,200,1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetMass",[35,30,350]))#FJetMass
-        h_list.append(SetHist("h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetCSV",[30,0,1]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetPt",[50,200,1000]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetMass",[35,30,350]))#FJetMass
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetCSV",[30,0,1]))
 	h_list.append(SetHist("h_reg_"+reg+"_nJets",[10,0,10]))
-        h_list.append(SetHist("h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)   min_dphi_jets
-        h_list.append(SetHist("h_reg_"+reg+"_min_dphi_jets",[50,0,4]))
+        #h_list.append(SetHist("h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)
+        h_list.append(SetHist("h_reg_"+reg+"_Jet1Pt",[50,30,1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Jet1Eta",[30,-2.5,2.5]))
+        h_list.append(SetHist("h_reg_"+reg+"_Jet1Phi",[30,-3.14,3.14]))
+        h_list.append(SetHist("h_reg_"+reg+"_DiJetMass",[50,0,400]))
     else:
 	h_list.append(SetHist("h_reg_"+reg+"_MET",   [30,0,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil",[200,270,345,480,1000]))
+
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_btagweight_up",[200,270,345,480,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_btagweight_down",[200,270,345,480,1000]))
         #EWK SYSTEMATICS
@@ -294,13 +290,12 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_up",[200,270,345,480,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_down",[200,270,345,480,1000]))
 
-
-        h_list.append(SetHist("h_reg_"+reg+"_FJetPt",[15,200,1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetMass",[100,0,500]))#FJetMass
-        h_list.append(SetHist("h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
-        h_list.append(SetHist("h_reg_"+reg+"_FJetCSV",[30,0,1]))
-        h_list.append(SetHist("h_reg_"+reg+"_Jet1Pt",[50,200,1000]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetPt",[15,200,1000]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetMass",[15,100,150]))#FJetMass
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
+        #h_list.append(SetHist("h_reg_"+reg+"_FJetCSV",[30,0,1]))
+        h_list.append(SetHist("h_reg_"+reg+"_Jet1Pt",[50,30,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Jet1Eta",[30,-2.5,2.5]))
         h_list.append(SetHist("h_reg_"+reg+"_Jet1Phi",[30,-3.14,3.14]))
         h_list.append(SetHist("h_reg_"+reg+"_nJets",[10,0,10]))
@@ -326,39 +321,46 @@ START MAKING HISTOGRAMS
 ---------------------------------------------------------------
 '''
 
-trees =['monoHbb_SR_boosted','monoHbb_Tope_boosted','monoHbb_Topmu_boosted','monoHbb_We_boosted','monoHbb_Wmu_boosted','monoHbb_Zmumu_boosted','monoHbb_Zee_boosted','monoHbb_SBand_boosted']
+trees =['monoHbb_Tope_resolved','monoHbb_Topmu_resolved','monoHbb_We_resolved','monoHbb_Wmu_resolved','monoHbb_Zmumu_resolved','monoHbb_Zee_resolved','monoHbb_SR_resolved','monoHbb_SBand_resolved']
 # 'monoHbb_Zmumu_boosted','monoHbb_Zee_boosted'
 
 #inputFilename=infile
 filename=infile
-
 ApplyWeight = True
-
 def runFile(filename,trees):
     tf =  ROOT.TFile(filename)
     global ApplyWeight
     if 'SingleElectron' in filename or 'MET' in filename: ApplyWeight = False
     else:ApplyWeight = True
 
-    print 'ApplyWeight',ApplyWeight
-
+    #print 'ApplyWeight',ApplyWeight
     h_total = tf.Get('h_total')
     h_total_weight = tf.Get('h_total_mcweight')
+    
+    '''
+    h_reg_WenuCR_resolved_cutFlow = tf.Get('h_reg_WenuCR_resolved_cutFlow')
+    h_reg_WmunuCR_resolved_cutFlow= tf.Get('h_reg_WmunuCR_resolved_cutFlow')
+    h_reg_TopenuCR_resolved_cutFlow= tf.Get('h_reg_TopenuCR_resolved_cutFlow')
+    h_reg_TopmunuCR_resolved_cutFlow= tf.Get('h_reg_TopmunuCR_resolved_cutFlow')
+    h_reg_SBand_resolved_cutFlow= tf.Get('h_reg_SBand_resolved_cutFlow')
+    h_reg_SBand_boosted_cutFlow= tf.Get('h_reg_SBand_boosted_cutFlow')
+    '''
+    #print 'total',h_total_weight.Integral()
     outfilename = outputdir+'/'+'Output_'+filename.split('/')[-1]
     for index, tree in enumerate(trees):
+        print 'tree',tree
         tt = tf.Get(tree)
         nent = tt.GetEntries()
         
         if index==0: mode="RECREATE"
         if index>0: mode="UPDATE"
-        print 'checking tree  ',tree
+
         if nent > 0:
             df = read_root(filename,tree)
-            #df = df[df.FJetCSV < 0.86 ]
-            #df = df[df.FJetMass > 50.0]
+            df = df[df.Jet1Pt > 50.0]
+            #df = df[df.nJets <=2 ]
             HistWrtter(df, outfilename,tree,mode)
         else:
-	    print 'writing empty histograms for tree:  ',tree
             emptyHistWritter(tree,outfilename,mode)
 
     f = TFile(outfilename, "UPDATE")
@@ -366,6 +368,14 @@ def runFile(filename,trees):
     h_total_weight.Write()
     h_total.Write()
 
+    '''
+    h_reg_WenuCR_resolved_cutFlow.Write()
+    h_reg_WmunuCR_resolved_cutFlow.Write()
+    h_reg_TopenuCR_resolved_cutFlow.Write()
+    h_reg_TopmunuCR_resolved_cutFlow.Write()
+    h_reg_SBand_resolved_cutFlow.Write()
+    h_reg_SBand_boosted_cutFlow.Write()
+    '''
 
 if isfarmout:
     path=inDir
