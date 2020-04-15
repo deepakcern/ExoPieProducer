@@ -3,8 +3,7 @@ from array import array
 import os
 
 
-inputstring_ = ['2HDMa_MA600_150']
-
+inputstring_ = ['2HDMa_MA600_1b','2HDMa_MA600_2b','2HDMa_MA1200_1b','2HDMa_MA1200_2b']
 
 # xsec_dict={}
 # for iline in open('xsec.txt'):
@@ -28,7 +27,6 @@ for inputstring in inputstring_:
     errx=array('f')
 
     for line in f:
-
         #masspointstr = 'NLO_'+inputstring+'_mphi_'+line.rstrip().split()[0]+'_mchi_'+line.rstrip().split()[1]
         #xsec_ = float(xsec_dict[masspointstr] )
         med.append(float(line.rstrip().split()[0]))
