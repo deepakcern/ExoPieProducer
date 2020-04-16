@@ -26,3 +26,10 @@ For 1. i.e. make histogram use the script DataFrameToHisto.py, which save histog
 ''' python DataFrameToHisto.py ''' 
 
 ''' TreeSelector.py: it has the template to select the dataframe in one line. '''
+
+
+## Run the trigger turn on code 
+
+The macro which produce the trigger turnon curve for the Mono-H bb resolved and boosted analysis is executed using: 
+
+python METTriggerChecker.py 

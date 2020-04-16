@@ -125,7 +125,7 @@ def main():
             os.system("combineCards.py "+combostr+" > "+mergeddatacardmname+"\n")
             ## instead of datacard name write the combostr into .text file to make the combined card
         ftxt.close()
-        os.system("cp monoHbb_WS.root datacards_monoHbb_2017/monoHbb_WS.root")
+        #os.system("cp monoHbb_WS.root datacards_monoHbb_2017/monoHbb_WS.root")
 
 
     

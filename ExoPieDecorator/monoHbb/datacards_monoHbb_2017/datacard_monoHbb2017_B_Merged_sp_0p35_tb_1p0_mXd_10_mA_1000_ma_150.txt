@@ -6,9 +6,6 @@ kmax 14 number of nuisance parameters
 shapes *         SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_$PROCESS ws_monoHbb:monoHbb2017_B_SR_$PROCESS_$SYSTEMATIC
 shapes data_obs  SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_data_obs
 shapes signal    SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150 ws_monoHbb:monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150_$SYSTEMATIC
-#shapes tt        SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_SR_tt
-#shapes wjets     SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_SR_wjets
-#shapes zjets     SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:rph_SR_zjets
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          SR   
 observation  -1   
