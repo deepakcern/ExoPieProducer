@@ -477,7 +477,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 200.):
                    h_reg_SR_1b_cutFlow.AddBinContent(3, presel_weight*weightMET)
                    h_reg_SR_2b_cutFlow.AddBinContent(3, presel_weight*weightMET)
-                   if (ep_nEle_index == 0) and (ep_nMu == 0) and (nPho ==0) and (ep_nTau_DRBased_EleMuVeto==0):
+                   if (ep_nEle_index == 0) and (ep_nMu == 0) and (nPho ==0) and (ep_nTau_discBased_TightEleTightMuVeto==0):
                        h_reg_SR_1b_cutFlow.AddBinContent(4, presel_weight*weightMET)
                        h_reg_SR_2b_cutFlow.AddBinContent(4, presel_weight*weightMET)
                        if (min_dPhi_jet_MET > 0.5):
@@ -514,7 +514,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
                     h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
-                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                        h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                        if (ep_ZeeRecoil > 200.):
@@ -552,7 +552,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_ZmumuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_ZmumuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_ZmumuRecoil > 200. ) :
@@ -589,7 +589,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_WenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                         h_reg_WenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_WenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200.) :
@@ -626,7 +626,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200.) :
@@ -663,7 +663,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
+                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
                         h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
                         if (ep_WenuRecoil > 200. ) :
@@ -700,7 +700,7 @@ def runbbdm(txtfile):
                 if (ep_pfMetCorrPt > 0.):
                     h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_DRBased_EleMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
+                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
                         h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
                         if (ep_WmunuRecoil > 200. ) :
@@ -728,7 +728,7 @@ def runbbdm(txtfile):
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -740,7 +740,7 @@ def runbbdm(txtfile):
             if isSR2b:
                 df_out_SR_2b = df_out_SR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -754,7 +754,7 @@ def runbbdm(txtfile):
                 df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -769,7 +769,7 @@ def runbbdm(txtfile):
                 df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -785,7 +785,7 @@ def runbbdm(txtfile):
                 df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -800,7 +800,7 @@ def runbbdm(txtfile):
                 df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -815,7 +815,7 @@ def runbbdm(txtfile):
                 df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -829,7 +829,7 @@ def runbbdm(txtfile):
                 df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -844,7 +844,7 @@ def runbbdm(txtfile):
                 df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -858,7 +858,7 @@ def runbbdm(txtfile):
                 df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -872,7 +872,7 @@ def runbbdm(txtfile):
                 df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
@@ -886,7 +886,7 @@ def runbbdm(txtfile):
                 df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
@@ -900,7 +900,7 @@ def runbbdm(txtfile):
                 df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
                                                     'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
-                                                    'NTau':float(ep_nTau_DRBased_EleMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
+                                                    'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),

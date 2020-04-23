@@ -1,0 +1,64 @@
+# Simple counting experiment, with one signal and a few background processes
+# First iteration of the bbDM 2016
+
+imax *  number of channels
+jmax *  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+---------------------------------------------------------------------------------------------------------------------------------
+
+## these are new shapes for the fitting model
+## shapes  process   region    path
+
+shapes *         bbDM2016_1b_SR       bbDM_WS.root ws_bbDM:bbDM2016_1b_SR_$PROCESS ws_bbDM:bbDM2016_1b_SR_$PROCESS_$SYSTEMATIC
+
+shapes signal    bbDM2016_1b_SR       bbDM_WS.root ws_bbDM:bbDM2016_1b_SR_2HDMa_Ma250_MChi1_MA600_tb35_st_0p7 ws_bbDM:bbDM2016_1b_SR_2HDMa_Ma250_MChi1_MA600_tb35_st_0p7_$SYSTEMATIC
+shapes data_obs  bbDM2016_1b_SR       bbDM_WS.root  ws_bbDM:bbDM2016_1b_SR_data_obs
+shapes wjets     bbDM2016_1b_SR       bbDM_WS.root  ws_bbDM:rph_1b_SR_wjets
+shapes zjets     bbDM2016_1b_SR       bbDM_WS.root  ws_bbDM:rph_1b_SR_zjets
+shapes tt        bbDM2016_1b_SR       bbDM_WS.root  ws_bbDM:rph_1b_SR_tt
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+#shapes ZJets   bbDM2016_1b_SR   bbDM_WS.root   ws_bbDM:rph_sr1_Z        ws_bbDM:rph_sr1_Z_$SYSTEMATIC
+#shapes Top     bbDM2016_1b_SR   bbDM_WS.root   ws_bbDM:rph_sr1_top      ws_bbDM:rph_sr1_top_$SYSTEMATIC
+#shapes WJets   bbDM2016_1b_SR   bbDM_WS.root   ws_bbDM:rph_sr1_wjets    ws_bbDM:rph_sr1_wjets_$SYSTEMATIC
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+------------
+bin   bbDM2016_1b_SR
+observation -1
+------------
+
+
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+bin             bbDM2016_1b_SR   bbDM2016_1b_SR  bbDM2016_1b_SR  bbDM2016_1b_SR  bbDM2016_1b_SR   bbDM2016_1b_SR  bbDM2016_1b_SR
+process         signal     zjets    wjets    tt     singlet   qcd     diboson
+process          0          1        2       3        4        5        6
+rate            -1         1       1      1       -1       -1       -1
+------------
+
+#doubleb                lnN    1.10          -        -         -         -         -       -
+CMS2016_eff_b           lnN    1.10          -        -        1.10       1.10      -       -
+CMS2016_fake_b          lnN      -         1.05     1.05       1.05       1.05      1.05     1.05
+lumi                    lnN    1.025         -        -         -        1.025    1.025    1.025
+CMS2016_scale_pu        lnN    1.001         -        -         -        1.01     1.01     1.01
+trig_met                lnN  1.00         -        -         -        1.02      1.02      1.02
+norm_stop               lnN     -            -        -         -          1.2       -      -
+norm_diboson            lnN     -            -        -         -          -         -      1.2
+norm_wj                 lnN     -            -        1.2       -          -         -      -
+ak4jet_jec              lnN  1.05          -        -         -        1.05      1.05    1.05
+trig_ele                lnN   -            -        -         -          -          -      -   ## this is dummy for SR, it exist only for ele CRs
+veto_tau                lnN    1.03        1.03     1.03       1.03       1.03      1.03     1.03
+CMS2016_scale_e         lnN     -            -        -         -          -          -      -   ## this is dummy for SR, it exist only for ele CRs
+CMS2016_scale_m         lnN     -            -        -         -          -          -      -   ## this is dummy for SR, it exist only for mu CRs
+CMS2016_eff_met         lnN    1.04        1.04     1.04       1.04   	  1.04      1.04     1.04
+wj_hf                   lnN     -            -        1.05       -          -          -      -
+zj_hf                   lnN     -            1.05        -       -          -          -      -
+
+#pdf_accept              lnN    1.01        1.01     1.01       1.01   	  1.01      1.01     1.01
+#CMS2016_eff_t           lnN    1.03        1.03     1.03       1.03       1.03      1.03     1.03

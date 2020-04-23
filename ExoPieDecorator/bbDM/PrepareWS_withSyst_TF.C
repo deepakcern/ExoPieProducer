@@ -208,7 +208,14 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf2));//rrv_htf_wenu_2b_wjets[1]) );
   RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf3));//rrv_htf_wenu_2b_wjets[2]) );
   RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf4));//rrv_htf_wenu_2b_wjets[3]) );
-
+  TFile *tf_hist = new TFile(region_proc_cr+"_TF.root","RECREATE");
+  TH1F *tf_histo_ = new TH1F(region_proc_cr+"_TF", region_proc_cr+"_TF", 4,0,4);
+  tf_histo_->SetBinContent(1,TF1.getVal());
+  tf_histo_->SetBinContent(2,TF2.getVal());
+  tf_histo_->SetBinContent(3,TF3.getVal());
+  tf_histo_->SetBinContent(4,TF4.getVal());
+  tf_histo_->Write();
+  tf_hist->Close();
   /*
     Then need to make each bin of the background in the control region a function of the background in the signal and the transfer factor -
     i.e NCR=NSR x TF
@@ -249,13 +256,12 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
 
 
 
-void PrepareWS_withSyst(){
+void PrepareWS_withSyst_TF(){
   ///afs/cern.ch/work/p/ptiwari/public/bbDM/WCr_Split/AllMETHistos.root
   TString inputfile   = "AllMETHistos.root";
   TString outputfile  = "bbDM_WS.root";
   TString year        = "_2016";
   TString version     = "_V0";
-
   int met_low = 200;
   int met_hi = 1000;
   Double_t bins[]={200,250,350,500,1000};
