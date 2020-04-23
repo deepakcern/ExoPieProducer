@@ -1,0 +1,13 @@
+syntax; bbvX.YZ.AB
+X.YZ: this is the version of the skimmer, just copy it from there
+AB; version of the Analyzer. With each time you run the analyzer on condor increase this number by 1 and write the edit comments 
+
+Once you have pushed the code to repository 
+
+create a new tag using: 
+git tag bbv0.00.01
+
+push the new tag using: 
+git push origin bbv0.00.01
+
+bbv0.00.01; keeping this as the base tag; changes for the tau veto discriminator are done 
