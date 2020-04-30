@@ -63,7 +63,18 @@ zj_hf                   lnN     -            -        -       -          1.05   
 #CMS2016_eff_t           lnN    1.03        1.03     1.03       1.03       1.03      1.03     1.03     1.03
 
 
-TF1WE_wjets flatParam
-TF2WE_wjets flatParam
-TF3WE_wjets flatParam
-TF4WE_wjets flatParam
+#TF1WE_wjets flatParam
+#TF2WE_wjets flatParam
+#TF3WE_wjets flatParam
+#TF4WE_wjets flatParam
+
+
+tf1_WE_wjets flatParam
+tf2_WE_wjets flatParam
+tf3_WE_wjets flatParam
+tf4_WE_wjets flatParam
+
+rrvbc_SR_wjets1 flatParam
+rrvbc_SR_wjets2 flatParam
+rrvbc_SR_wjets3 flatParam
+rrvbc_SR_wjets4 flatParam

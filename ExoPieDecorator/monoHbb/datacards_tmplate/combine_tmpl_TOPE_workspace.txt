@@ -51,7 +51,18 @@ zj_hf                   lnN           -            -        -       -          1
 #pdf_accept              lnN          1.01       1.01  	  1.01       1.01     1.01  1.01  1.01
 #CMS2016_eff_t           lnN          1.03       1.03       1.03      1.03     1.03  1.03 1.03 
 
-TF1TOPE_tt flatParam
-TF2TOPE_tt flatParam
-TF3TOPE_tt flatParam
-TF4TOPE_tt flatParam
+#TF1TOPE_tt flatParam
+#TF2TOPE_tt flatParam
+#TF3TOPE_tt flatParam
+#TF4TOPE_tt flatParam
+
+
+tf1_TOPE_tt flatParam
+tf2_TOPE_tt flatParam
+tf3_TOPE_tt flatParam
+tf4_TOPE_tt flatParam
+
+rrvbc_SR_tt1 flatParam
+rrvbc_SR_tt2 flatParam
+rrvbc_SR_tt3 flatParam
+rrvbc_SR_tt4 flatParam

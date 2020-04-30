@@ -204,6 +204,7 @@ void createRegion(RooRealVar met, TH1F* h_sr2_wjets , TH1F* h_wenu_2b_wjets, TH1
   nuisances.push_back(acceptance);
   
   
+
   RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf1));//rrv_htf_wenu_2b_wjets[0]) );
   RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf2));//rrv_htf_wenu_2b_wjets[1]) );
   RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf3));//rrv_htf_wenu_2b_wjets[2]) );
@@ -292,39 +293,6 @@ void PrepareWS(){
  
    
 
-  /*
-    -------------------------------------------------------------------------------------------------------------------
-    ---------------------------------------------- W enu CR -----------------------------------------------------------
-    -------------------------------------------------------------------------------------------------------------------
-   */
-
-  
-  std::cout<<" calling function for Wenu"<<std::endl;
-  
-  // Get the wjets histogram in signal region
-  TH1F* h_sr2_wjets = (TH1F*) fin->Get("monoHbb2017_B_SR_wjets");
-  
-  // Get the wjets hostogram in the Wenu CR
-  TH1F* h_wenu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WE_wjets");
-  
-  std::cout<<" integral of wenu : "<<h_sr2_wjets->Integral() <<"  "<<h_wenu_2b_wjets->Integral()<<std::endl;
-  // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "WE_wjets", "SR_wjets",  fOut);
-
-
-  /*
-    -------------------------------------------------------------------------------------------------------------------
-    ---------------------------------------------- W munu CR -----------------------------------------------------------
-    -------------------------------------------------------------------------------------------------------------------
-    */
-
-  std::cout<<" calling function for Wmunu"<<std::endl;
-  // Get the wjets hostogram in the Wmunu CR
-  TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WMU_wjets");
-  // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
-  
-
   
   /*
     -------------------------------------------------------------------------------------------------------------------
@@ -357,6 +325,39 @@ void PrepareWS(){
   
   /*
     -------------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------- W enu CR -----------------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------
+   */
+
+
+  std::cout<<" calling function for Wenu"<<std::endl;
+  
+  // Get the wjets histogram in signal region
+  TH1F* h_sr2_wjets = (TH1F*) fin->Get("monoHbb2017_B_SR_wjets");
+  
+  // Get the wjets hostogram in the Wenu CR
+  TH1F* h_wenu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WE_wjets");
+  
+  std::cout<<" integral of wenu : "<<h_sr2_wjets->Integral() <<"  "<<h_wenu_2b_wjets->Integral()<<std::endl;
+  // Create all the inputs needed for this CR 
+  createRegion(met, h_sr2_wjets, h_wenu_2b_wjets, h_sr2_data, wspace, "WE_wjets", "SR_wjets",  fOut);
+
+
+  /*
+    -------------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------- W munu CR -----------------------------------------------------------
+    -------------------------------------------------------------------------------------------------------------------
+    */
+
+  std::cout<<" calling function for Wmunu"<<std::endl;
+  // Get the wjets hostogram in the Wmunu CR
+  TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WMU_wjets");
+  // Create all the inputs needed for this CR 
+  createRegion(met, h_sr2_wjets, h_wmunu_2b_wjets, h_sr2_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
+  
+
+  /*
+    -------------------------------------------------------------------------------------------------------------------
     ---------------------------------------------- Zmumu CR -----------------------------------------------------------
     -------------------------------------------------------------------------------------------------------------------
   */
@@ -380,7 +381,7 @@ void PrepareWS(){
   // Get the top hostogram in the Top mu CR
   TH1F* h_Zee_2b_Z = (TH1F*) fin->Get("monoHbb2017_B_ZEE_dyjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "ZEE_dyjets", "SR_dyjets",  fOut);
+  createRegion(met, h_sr2_Z, h_Zee_2b_Z, h_sr2_data, wspace, "ZEE_dyjets", "SR_zjets",  fOut);
 
 
   /*

@@ -53,7 +53,19 @@ zj_hf                   lnN     -            -        -       -          1.05   
 #pdf_accept              lnN    1.01        1.01     1.01       1.01      1.01      1.01     1.01     1.01
 #CMS2016_eff_t           lnN    1.03        1.03     1.03       1.03       1.03      1.03     1.03     1.03
 
-TF1WMU_wjets flatParam
-TF2WMU_wjets flatParam
-TF3WMU_wjets flatParam
-TF4WMU_wjets flatParam
+#TF1WMU_wjets flatParam
+#TF2WMU_wjets flatParam
+#TF3WMU_wjets flatParam
+#TF4WMU_wjets flatParam
+
+
+tf1_TOPMU_tt flatParam
+tf2_TOPMU_tt flatParam
+tf3_TOPMU_tt flatParam
+tf4_TOPMU_tt flatParam
+
+rrvbc_SR_wjets1 flatParam
+rrvbc_SR_wjets2 flatParam
+rrvbc_SR_wjets3 flatParam
+rrvbc_SR_wjets4 flatParam
+
