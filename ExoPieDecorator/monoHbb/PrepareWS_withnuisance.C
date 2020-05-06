@@ -10,6 +10,8 @@
 #include "RooWorkspace.h"
 #include "RooPlot.h"
 
+
+
 using namespace RooFit ;
 
 /*
@@ -92,7 +94,7 @@ std::vector <RooRealVar> GetRooRealVar(std::vector<float>  bcs, TString name){
     // fix the naming here using some automation  and also in the next function
 
     std::cout<<" name inside GetRooRealVar = "<<name+postfix<<std::endl;
-    rrvV_.push_back(RooRealVar(name+postfix,"Background yield in signal region, bin 1", bcs[i], 0,10*bcs[i]));
+    rrvV_.push_back(RooRealVar(name+postfix,"Background yield in signal region, bin 1", bcs[i], 0.2*bcs[i], 5*bcs[i]));
     
   }
   
@@ -141,6 +143,9 @@ std::vector<std::string> createnuisance(std::vector<float> value_,int  nbins, in
   return logN_nuisance_vec;
 }
 
+
+
+
 /* createRegion parameters are following
 1: roorealvar, here it is met
 2: background histogram in signal region
@@ -150,8 +155,15 @@ std::vector<std::string> createnuisance(std::vector<float> value_,int  nbins, in
 6: string to save names etc, as per convention, region_proc for the CR
 7: string to save names etc, as per convention, region_proc for the SR 
 8: output file
+9: nuisIndex: index of nuisance to be used from the global nuisance list defined above 
+10: full list of nuisanceNames
+11. full of of nuisanceValues 
 */
-void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg, TH1F* h_sr_data, RooWorkspace& wspace, TString region_proc_cr, TString region_proc_sr, TFile* fOut){
+void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg, 
+		  TH1F* h_sr_data, RooWorkspace& wspace, 
+		  TString region_proc_cr, TString region_proc_sr, TFile* fOut,
+		  std::vector<int> nuisIndex, std::vector<TString> nuisanceName, 
+		  std::vector<float> nuisanceValue){
   
   RooArgList vars(met);
 
@@ -200,9 +212,6 @@ void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg, TH1F* h_sr_da
   */
 
   
-  // --------------------------------------------------------------
-  // ------------------------Wjets (electrron) Control region ------
-  // --------------------------------------------------------------
   
   // create roodatahist of the background histogram in CR. 
   RooDataHist dh_cr_bkg("dh_"+region_proc_cr,"dh_"+region_proc_cr, vars, h_cr_bkg);
@@ -240,24 +249,13 @@ void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg, TH1F* h_sr_da
   RooRealVar tf3 ("tf3_"+region_proc_cr,"tf3_"+region_proc_cr,bincontents_htf_cr_bkg[2]) ;
   RooRealVar tf4 ("tf4_"+region_proc_cr,"tf4_"+region_proc_cr,bincontents_htf_cr_bkg[3]) ;
   
-  // the nuisance part of the code has to be updated after some more discussion. 
-  std::vector<RooRealVar> nuisances;
-  nuisances.clear();
-  nuisances.push_back(efficiency);
-  nuisances.push_back(acceptance);
-  
-  
-  // ------ all the nuisances log N has to be added before creating RooFormulaVar of the Transfer Factors. 
-  // ------ adding nuisance by hand, magnitue of each bin can be different as in the e.g. below 
-  std::vector<float> nuisance_val; nuisance_val.push_back(0.15); nuisance_val.push_back(0.12); nuisance_val.push_back(0.09); nuisance_val.push_back(0.06);
-  std::vector<std::string> add_logN_systematic = createnuisance(nuisance_val, 4, 1);
-  
-  for (int i =0; i<4; i++)  std::cout<<" add_logN_systematic = "<<add_logN_systematic[i]<<std::endl;
 
   // at this moment keeping this code here for add systematics on the TF, 
   // considered only two nuisances, will complete the list later on, once i know which other nuisances has to be here 
   // at least working template is here, not only string has to be added to the vector to add a new nuisance 
+
   
+  /*
   std::vector<TString> systematic_vector;
   systematic_vector.clear();
   systematic_vector.push_back("jec"); systematic_vector.push_back("btagweight");
@@ -266,20 +264,117 @@ void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg, TH1F* h_sr_da
   std::vector<TString> variation;
   variation.clear();
   variation.push_back("up"); variation.push_back("down");
- 
+  */
+  
+  // the nuisance part of the code has to be updated after some more discussion. 
+  std::vector<RooRealVar> nuisances;
+  nuisances.clear();
+  nuisances.push_back(efficiency);
+  nuisances.push_back(acceptance);
+  
+  // ------ all the nuisances log N has to be added before creating RooFormulaVar of the Transfer Factors. 
+  // ------ adding nuisance by hand, magnitue of each bin can be different as in the e.g. below 
   
   
+  std::vector<float> tf_stats_err_vector;   tf_stats_err_vector.clear();
+  tf_stats_err_vector.push_back(htf_cr_bkg->GetBinError(1) / htf_cr_bkg->GetBinContent(1) ) ;
+  tf_stats_err_vector.push_back(htf_cr_bkg->GetBinError(2) / htf_cr_bkg->GetBinContent(2) ) ;
+  tf_stats_err_vector.push_back(htf_cr_bkg->GetBinError(3) / htf_cr_bkg->GetBinContent(3) ) ;
+  tf_stats_err_vector.push_back(htf_cr_bkg->GetBinError(4) / htf_cr_bkg->GetBinContent(4) ) ;
+  
+  std::cout<<" tf stats errors "
+	   <<" "<<tf_stats_err_vector[0]
+	   <<" "<<tf_stats_err_vector[1]
+	   <<" "<<tf_stats_err_vector[2]
+	   <<" "<<tf_stats_err_vector[3]
+	   <<std::endl;
+    
+  
+  
+  int syst_counter = 0;
+  
+  TString rfv_bin1 = Form("@%d*",syst_counter++); // this is transfer factor  ,  ++ is needed so that the counter is increamented automatically after its usage 
+  TString rfv_bin2 = rfv_bin1; 
+  TString rfv_bin3 = rfv_bin1;
+  TString rfv_bin4 = rfv_bin1;
+  
+  std::vector<std::string> rfv_tf_stats_err_vector = createnuisance(tf_stats_err_vector, 4, syst_counter++);
+    
+  rfv_bin1  += rfv_tf_stats_err_vector[0] ;
+  rfv_bin2  += rfv_tf_stats_err_vector[1] ;
+  rfv_bin3  += rfv_tf_stats_err_vector[2] ;
+  rfv_bin4  += rfv_tf_stats_err_vector[3] ;
+  
+  RooRealVar rrv_stats_err_bin1("rrv_stats_err_"+region_proc_cr+"_bin1", "rrv_stats_err_"+region_proc_cr+"_bin1",0);
+  RooRealVar rrv_stats_err_bin2("rrv_stats_err_"+region_proc_cr+"_bin2", "rrv_stats_err_"+region_proc_cr+"_bin2",0);
+  RooRealVar rrv_stats_err_bin3("rrv_stats_err_"+region_proc_cr+"_bin3", "rrv_stats_err_"+region_proc_cr+"_bin3",0);
+  RooRealVar rrv_stats_err_bin4("rrv_stats_err_"+region_proc_cr+"_bin4", "rrv_stats_err_"+region_proc_cr+"_bin4",0);
+  
+  RooArgList ral_bin1;
+  RooArgList ral_bin2;
+  RooArgList ral_bin3;
+  RooArgList ral_bin4;
+  
+  
+  ral_bin1.add(tf1);
+  ral_bin2.add(tf2);
+  ral_bin3.add(tf3);
+  ral_bin4.add(tf4);
 
-  RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf1));
+
+  ral_bin1.add(rrv_stats_err_bin1);
+  ral_bin2.add(rrv_stats_err_bin2);
+  ral_bin3.add(rrv_stats_err_bin3);
+  ral_bin4.add(rrv_stats_err_bin4);
+  
+  
+  RooRealVar* rrv_syst;
+  //RooRealVar* rrv_syst_bin2;
+  //RooRealVar* rrv_syst_bin3;
+  //RooRealVar* rrv_syst_bin4;
+  for (int isys=0; isys < (int) nuisIndex.size(); isys++){
+    std::vector<std::string> add_logN_systematic = createnuisance(nuisanceValue[nuisIndex[isys]], 4, syst_counter++);
+    //for (int i =0; i<4; i++)  std::cout<<" add_logN_systematic = "<<add_logN_systematic[i]<<std::endl;
+    rfv_bin1 += "*"+add_logN_systematic[0];
+    rfv_bin2 += "*"+add_logN_systematic[1];
+    rfv_bin3 += "*"+add_logN_systematic[2];
+    rfv_bin4 += "*"+add_logN_systematic[3];
+    
+    std::cout<<" bin 1 stats unc "<< rfv_bin1<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
+    std::cout<<" bin 2 stats unc "<< rfv_bin2<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
+    std::cout<<" bin 3 stats unc "<< rfv_bin3<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
+    std::cout<<" bin 4 stats unc "<< rfv_bin4<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
+    
+    rrv_syst = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]], "rrv_"+nuisanceName[nuisIndex[isys]], 0);
+    //rrv_bin2 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", 0);
+    //rrv_bin3 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin3", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin3", 0);
+    //rrv_bin4 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin4", 0);
+    
+    ral_bin1.add(*rrv_syst);
+    ral_bin2.add(*rrv_syst);
+    ral_bin3.add(*rrv_syst);
+    ral_bin4.add(*rrv_syst); // it has to be pointer for some reason, otherwise it gives seg fault, not sure yet, why? 
+    
+  }
+  
+  std::cout<<" bins already included in the lists "<<ral_bin1<<std::endl;
+  /*
+    RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf1));
   RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf2));
   RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf3));
   RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor","@2*TMath::Power(1.01,@0)*TMath::Power(1.02,@1)",RooArgList(efficiency,acceptance,tf4));
+  */
 
+  std::cout<<" RAL = "<<ral_bin1<<std::endl;
+  RooFormulaVar TF1("TF1"+region_proc_cr,"Transfer factor",rfv_bin1, ral_bin1); //RooArgList(efficiency,acceptance,tf2,tf3));
+  RooFormulaVar TF2("TF2"+region_proc_cr,"Transfer factor",rfv_bin2, ral_bin2);
+  RooFormulaVar TF3("TF3"+region_proc_cr,"Transfer factor",rfv_bin3, ral_bin3);
+  RooFormulaVar TF4("TF4"+region_proc_cr,"Transfer factor",rfv_bin4, ral_bin4);
   /*
     Then need to make each bin of the background in the control region a function of the background in the signal and the transfer factor - 
     i.e NCR=NSR x TF
   */
-  
+  std::cout<<" TF done "<<std::endl;
   
   
 
@@ -357,7 +452,17 @@ void PrepareWS_withnuisance(){
   // specially in the tails and can be changed easily . 
  
    
-
+  
+  std::vector <TString> nuisanceName;
+  std::vector <float> nuisanceValue;
+  
+  nuisanceName.clear();    nuisanceValue.clear();
+  TString nuisancePostfix = "CMS2016_scale_";
+  nuisanceValue.clear();
+  // these number are temporary at this moment, these has to be updated 
+  nuisanceName.push_back(nuisancePostfix+"m");             nuisanceValue.push_back(0.02);  // 0 
+  nuisanceName.push_back(nuisancePostfix+"e");              nuisanceValue.push_back(0.03);  // 1 
+  nuisanceName.push_back("eletrigeff"+nuisancePostfix);          nuisanceValue.push_back(0.04);  // 2 
   
   /*
     -------------------------------------------------------------------------------------------------------------------
@@ -366,12 +471,24 @@ void PrepareWS_withnuisance(){
   */
 
   
-    std::cout<<" calling function for Top mu"<<std::endl;
+      
+
+  std::cout<<" calling function for Top mu"<<std::endl;
   TH1F* h_sr_top = (TH1F*) fin->Get("monoHbb2017_B_SR_tt");
   // Get the top hostogram in the Top mu CR
   TH1F* h_topmu_2b_top = (TH1F*) fin->Get("monoHbb2017_B_TOPMU_tt");
+  
+  
+  
+  
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_top, h_topmu_2b_top, h_sr_data, wspace, "TOPMU_tt", "SR_tt",  fOut);
+  // list of systematics for Top mu CR 
+  std::vector<int> nuisIndex; nuisIndex.clear(); // this is the index of nuisances which are to be used for mu CR 
+  nuisIndex.push_back(0); // muon efficiency 
+  
+
+  // mu efficiency for Top mu CR 
+  createRegion(met, h_sr_top, h_topmu_2b_top, h_sr_data, wspace, "TOPMU_tt", "SR_tt",  fOut, nuisIndex, nuisanceName, nuisanceValue);
 
   
   /*
@@ -381,11 +498,14 @@ void PrepareWS_withnuisance(){
   */
 
 
+  nuisIndex.clear();
+  nuisIndex.push_back(1); 
+  nuisIndex.push_back(2); 
     std::cout<<" calling function for Top e"<<std::endl;
   // Get the top hostogram in the Top mu CR
   TH1F* h_tope_2b_top = (TH1F*) fin->Get("monoHbb2017_B_TOPE_tt");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_top, h_tope_2b_top, h_sr_data, wspace, "TOPE_tt", "SR_tt",  fOut);
+  createRegion(met, h_sr_top, h_tope_2b_top, h_sr_data, wspace, "TOPE_tt", "SR_tt",  fOut, nuisIndex, nuisanceName, nuisanceValue);
 
   
   /*
@@ -395,7 +515,12 @@ void PrepareWS_withnuisance(){
    */
 
 
-  std::cout<<" calling function for Wenu"<<std::endl;
+
+  nuisIndex.clear();
+  nuisIndex.push_back(1);
+  nuisIndex.push_back(2);
+
+    std::cout<<" calling function for Wenu"<<std::endl;
   
   // Get the wjets histogram in signal region
   TH1F* h_sr_wjets = (TH1F*) fin->Get("monoHbb2017_B_SR_wjets");
@@ -405,7 +530,7 @@ void PrepareWS_withnuisance(){
   
   std::cout<<" integral of wenu : "<<h_sr_wjets->Integral() <<"  "<<h_wenu_2b_wjets->Integral()<<std::endl;
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_wjets, h_wenu_2b_wjets, h_sr_data, wspace, "WE_wjets", "SR_wjets",  fOut);
+  createRegion(met, h_sr_wjets, h_wenu_2b_wjets, h_sr_data, wspace, "WE_wjets", "SR_wjets",  fOut, nuisIndex, nuisanceName, nuisanceValue);
 
 
   /*
@@ -414,11 +539,14 @@ void PrepareWS_withnuisance(){
     -------------------------------------------------------------------------------------------------------------------
     */
 
+  nuisIndex.clear();
+  nuisIndex.push_back(0);
+
   std::cout<<" calling function for Wmunu"<<std::endl;
   // Get the wjets hostogram in the Wmunu CR
   TH1F* h_wmunu_2b_wjets = (TH1F*) fin->Get("monoHbb2017_B_WMU_wjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_wjets, h_wmunu_2b_wjets, h_sr_data, wspace, "WMU_wjets", "SR_wjets",  fOut);
+  createRegion(met, h_sr_wjets, h_wmunu_2b_wjets, h_sr_data, wspace, "WMU_wjets", "SR_wjets",  fOut, nuisIndex, nuisanceName, nuisanceValue);
   
 
   /*
@@ -427,13 +555,15 @@ void PrepareWS_withnuisance(){
     -------------------------------------------------------------------------------------------------------------------
   */
 
-
+  nuisIndex.clear();
+  nuisIndex.push_back(0);
+  
   std::cout<<" calling function for Zmumu"<<std::endl;
   TH1F* h_sr_Z = (TH1F*) fin->Get("monoHbb2017_B_SR_zjets");
   // Get the top hostogram in the Top mu CR
   TH1F* h_Zmumu_2b_Z = (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_dyjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_Z, h_Zmumu_2b_Z, h_sr_data, wspace, "ZMUMU_dyjets", "SR_zjets",  fOut);
+  createRegion(met, h_sr_Z, h_Zmumu_2b_Z, h_sr_data, wspace, "ZMUMU_dyjets", "SR_zjets",  fOut, nuisIndex, nuisanceName, nuisanceValue);
 
   
   /*
@@ -442,11 +572,14 @@ void PrepareWS_withnuisance(){
     -------------------------------------------------------------------------------------------------------------------
   */  
 
+  nuisIndex.clear();
+  nuisIndex.push_back(1);
+  nuisIndex.push_back(2);
 
-  // Get the top hostogram in the Top mu CR
+    // Get the top hostogram in the Top mu CR
   TH1F* h_Zee_2b_Z = (TH1F*) fin->Get("monoHbb2017_B_ZEE_dyjets");
   // Create all the inputs needed for this CR 
-  createRegion(met, h_sr_Z, h_Zee_2b_Z, h_sr_data, wspace, "ZEE_dyjets", "SR_zjets",  fOut);
+  createRegion(met, h_sr_Z, h_Zee_2b_Z, h_sr_data, wspace, "ZEE_dyjets", "SR_zjets",  fOut, nuisIndex, nuisanceName, nuisanceValue);
 
 
   /*
