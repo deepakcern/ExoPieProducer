@@ -14,6 +14,8 @@
 
 using namespace RooFit ;
 
+
+
 /*
 PrepareWS.C  Package to build statistical fitting model for background estimation and limit extraction                                                                      
 Author: Raman Khurana
@@ -305,10 +307,15 @@ void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg,
   rfv_bin3  += rfv_tf_stats_err_vector[2] ;
   rfv_bin4  += rfv_tf_stats_err_vector[3] ;
   
-  RooRealVar rrv_stats_err_bin1("rrv_stats_err_"+region_proc_cr+"_bin1", "rrv_stats_err_"+region_proc_cr+"_bin1",0);
-  RooRealVar rrv_stats_err_bin2("rrv_stats_err_"+region_proc_cr+"_bin2", "rrv_stats_err_"+region_proc_cr+"_bin2",0);
-  RooRealVar rrv_stats_err_bin3("rrv_stats_err_"+region_proc_cr+"_bin3", "rrv_stats_err_"+region_proc_cr+"_bin3",0);
-  RooRealVar rrv_stats_err_bin4("rrv_stats_err_"+region_proc_cr+"_bin4", "rrv_stats_err_"+region_proc_cr+"_bin4",0);
+  //RooRealVar rrv_stats_err_bin1("rrv_stats_err_"+region_proc_cr+"_bin1", "rrv_stats_err_"+region_proc_cr+"_bin1",0);
+  //RooRealVar rrv_stats_err_bin2("rrv_stats_err_"+region_proc_cr+"_bin2", "rrv_stats_err_"+region_proc_cr+"_bin2",0);
+  //RooRealVar rrv_stats_err_bin3("rrv_stats_err_"+region_proc_cr+"_bin3", "rrv_stats_err_"+region_proc_cr+"_bin3",0);
+  //RooRealVar rrv_stats_err_bin4("rrv_stats_err_"+region_proc_cr+"_bin4", "rrv_stats_err_"+region_proc_cr+"_bin4",0);
+
+  RooRealVar rrv_stats_err_bin1("rrv_stats_err_"+region_proc_cr+"_bin1", "rrv_stats_err_"+region_proc_cr+"_bin1",tf_stats_err_vector[0],0,2.*tf_stats_err_vector[0]);
+  RooRealVar rrv_stats_err_bin2("rrv_stats_err_"+region_proc_cr+"_bin2", "rrv_stats_err_"+region_proc_cr+"_bin2",tf_stats_err_vector[1],0,2.*tf_stats_err_vector[1]);
+  RooRealVar rrv_stats_err_bin3("rrv_stats_err_"+region_proc_cr+"_bin3", "rrv_stats_err_"+region_proc_cr+"_bin3",tf_stats_err_vector[2],0,2.*tf_stats_err_vector[2]);
+  RooRealVar rrv_stats_err_bin4("rrv_stats_err_"+region_proc_cr+"_bin4", "rrv_stats_err_"+region_proc_cr+"_bin4",tf_stats_err_vector[3],0,2.*tf_stats_err_vector[3]);
   
   RooArgList ral_bin1;
   RooArgList ral_bin2;
@@ -345,10 +352,8 @@ void createRegion(RooRealVar met, TH1F* h_sr_bkg , TH1F* h_cr_bkg,
     std::cout<<" bin 3 stats unc "<< rfv_bin3<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
     std::cout<<" bin 4 stats unc "<< rfv_bin4<<" after including "<<nuisanceName[nuisIndex[isys]]<<std::endl;
     
-    rrv_syst = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]], "rrv_"+nuisanceName[nuisIndex[isys]], 0);
-    //rrv_bin2 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", 0);
-    //rrv_bin3 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin3", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin3", 0);
-    //rrv_bin4 = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]]+"_bin2", "rrv_"+nuisanceName[nuisIndex[isys]]+"_bin4", 0);
+    //rrv_syst = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]], "rrv_"+nuisanceName[nuisIndex[isys]], 0);
+    rrv_syst = new RooRealVar("rrv_"+nuisanceName[nuisIndex[isys]], "rrv_"+nuisanceName[nuisIndex[isys]], nuisanceValue[nuisIndex[isys]], 0., 5*nuisanceValue[nuisIndex[isys]]);
     
     ral_bin1.add(*rrv_syst);
     ral_bin2.add(*rrv_syst);
@@ -416,7 +421,7 @@ void PrepareWS_withnuisance(){
   TString outputfile  = "monoHbb_WS.root";
   TString year        = "_2017";
   TString version     = "_V0";
-  
+  bool usebkgsum = false;
   int met_low = 200;
   int met_hi = 1000;
   
@@ -601,17 +606,27 @@ void PrepareWS_withnuisance(){
   }
 
   
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
-  
-
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPE_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPMU_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WE_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WMU_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZEE_data_obs" ) );
-  addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_data_obs" ) );
-  
-  
+  if (!usebkgsum){
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+    
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPE_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPMU_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WE_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WMU_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZEE_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_data_obs" ) );
+    
+  }
+  if (usebkgsum){
+   
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_SR_data_obs" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPE_bkgSum" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_TOPMU_bkgSum" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WE_bkgSum" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_WMU_bkgSum" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZEE_bkgSum" ) );
+    addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_B_ZMUMU_bkgSum" ) );
+  }
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_SR_data_obs" ) );
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_TOPE_data_obs" ) );
   addTemplate(wspace, vars, (TH1F*) fin->Get("monoHbb2017_R_TOPMU_data_obs" ) );

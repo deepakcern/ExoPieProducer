@@ -67,3 +67,33 @@ zj_hf                   lnN     -            1.05        -       -          -   
 
 #pdf_accept              lnN    1.01        1.01     1.01       1.01   	  1.01      1.01     1.01     1.01
 #CMS2016_eff_t           lnN    1.03        1.03     1.03       1.03       1.03      1.03     1.03     1.03
+
+
+
+rrv_CMS2016_scale_e param 0.0 1
+rrv_CMS2016_scale_m param 0.0 1
+rrv_eletrigeffCMS2016_scale_ param 0.0 1
+rrv_stats_err_TOPE_tt_bin1 param 0.0 1
+rrv_stats_err_TOPE_tt_bin2 param 0.0 1
+rrv_stats_err_TOPE_tt_bin3 param 0.0 1
+rrv_stats_err_TOPE_tt_bin4 param 0.0 1
+rrv_stats_err_TOPMU_tt_bin1 param 0.0 1
+rrv_stats_err_TOPMU_tt_bin2 param 0.0 1
+rrv_stats_err_TOPMU_tt_bin3 param 0.0 1
+rrv_stats_err_TOPMU_tt_bin4 param 0.0 1
+rrv_stats_err_WE_wjets_bin1 param 0.0 1
+rrv_stats_err_WE_wjets_bin2 param 0.0 1
+rrv_stats_err_WE_wjets_bin3 param 0.0 1
+rrv_stats_err_WE_wjets_bin4 param 0.0 1
+rrv_stats_err_WMU_wjets_bin1 param 0.0 1
+rrv_stats_err_WMU_wjets_bin2 param 0.0 1
+rrv_stats_err_WMU_wjets_bin3 param 0.0 1
+rrv_stats_err_WMU_wjets_bin4 param 0.0 1
+rrv_stats_err_ZEE_dyjets_bin1 param 0.0 1
+rrv_stats_err_ZEE_dyjets_bin2 param 0.0 1
+rrv_stats_err_ZEE_dyjets_bin3 param 0.0 1
+rrv_stats_err_ZEE_dyjets_bin4 param 0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin1 param 0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin2 param 0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin3 param 0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin4 param 0.0 1

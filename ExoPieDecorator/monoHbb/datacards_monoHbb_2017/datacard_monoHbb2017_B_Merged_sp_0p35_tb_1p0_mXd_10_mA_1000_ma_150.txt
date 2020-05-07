@@ -1,7 +1,7 @@
 Combination of SR=datacards_monoHbb_2017/datacard_monoHbb2017_B_SR_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  TOPE=datacards_monoHbb_2017/datacard_monoHbb2017_B_TOPE_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  TOPMU=datacards_monoHbb_2017/datacard_monoHbb2017_B_TOPMU_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  WE=datacards_monoHbb_2017/datacard_monoHbb2017_B_WE_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  WMU=datacards_monoHbb_2017/datacard_monoHbb2017_B_WMU_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  ZEE=datacards_monoHbb_2017/datacard_monoHbb2017_B_ZEE_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt  ZMUMU=datacards_monoHbb_2017/datacard_monoHbb2017_B_ZMUMU_ggF_sp_0p35_tb_1p0_mXd_10_mA_1000_ma_150.txt
 imax 7 number of bins
 jmax 8 number of processes minus 1
-kmax 17 number of nuisance parameters
+kmax 44 number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
 shapes *         SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_$PROCESS ws_monoHbb:monoHbb2017_B_SR_$PROCESS_$SYSTEMATIC
 shapes data_obs  SR        datacards_monoHbb_2017/monoHbb_WS.root ws_monoHbb:monoHbb2017_B_SR_data_obs
@@ -47,6 +47,33 @@ trig_met                lnN         1.02     1.02     1.02     1.02     -       
 veto_tau                lnN         1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03     1.03   
 wj_hf                   lnN         -        -        -        -        1.05     -        -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        -        -        -        -        -        -      
 zj_hf                   lnN         -        -        -        -        -        -        1.05     -        -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        1.05     -        -        -        -        -        -        -        -        -        -      
+rrv_CMS2016_scale_m  param  0.0 1
+rrv_CMS2016_scale_e  param  0.0 1
+rrv_eletrigeffCMS2016_scale_  param  0.0 1
+rrv_stats_err_TOPE_tt_bin2  param  0.0 1
+rrv_stats_err_TOPE_tt_bin3  param  0.0 1
+rrv_stats_err_TOPE_tt_bin1  param  0.0 1
+rrv_stats_err_TOPE_tt_bin4  param  0.0 1
+rrv_stats_err_ZEE_dyjets_bin4  param  0.0 1
+rrv_stats_err_ZEE_dyjets_bin2  param  0.0 1
+rrv_stats_err_ZEE_dyjets_bin3  param  0.0 1
+rrv_stats_err_ZEE_dyjets_bin1  param  0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin4  param  0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin2  param  0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin3  param  0.0 1
+rrv_stats_err_ZMUMU_dyjets_bin1  param  0.0 1
+rrv_stats_err_WMU_wjets_bin4  param  0.0 1
+rrv_stats_err_WMU_wjets_bin2  param  0.0 1
+rrv_stats_err_WMU_wjets_bin3  param  0.0 1
+rrv_stats_err_WMU_wjets_bin1  param  0.0 1
+rrv_stats_err_WE_wjets_bin4  param  0.0 1
+rrv_stats_err_WE_wjets_bin1  param  0.0 1
+rrv_stats_err_WE_wjets_bin2  param  0.0 1
+rrv_stats_err_WE_wjets_bin3  param  0.0 1
+rrv_stats_err_TOPMU_tt_bin1  param  0.0 1
+rrv_stats_err_TOPMU_tt_bin2  param  0.0 1
+rrv_stats_err_TOPMU_tt_bin3  param  0.0 1
+rrv_stats_err_TOPMU_tt_bin4  param  0.0 1
 rrvbc_SR_zjets4  flatParam
 rrvbc_SR_zjets1  flatParam
 rrvbc_SR_zjets3  flatParam
