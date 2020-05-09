@@ -90,7 +90,7 @@ elif runOn2018:
 
 datestr = str(datetime.date.today().strftime("%d%m%Y"))
 
-path='hadd_outputs_2018_28012020'
+path='2016_syst'
 sig_path = 'Output_Signal_Histo_2016_10122019'
 
 if makeMuCRplots:
@@ -142,7 +142,7 @@ def ExtraText(text_,x_, y_):
 
 def myCanvas1D():
     c = ROOT.TCanvas("myCanvasName","The Canvas Title",650,600)
-    c.SetBottomMargin(0.1)
+    c.SetBottomMargin(0.050)
     c.SetRightMargin(0.050)
     c.SetLeftMargin(0.050)
     c.SetTopMargin(0.050)
@@ -165,7 +165,7 @@ def SetLegend(coordinate_=[.50,.65,.90,.90],ncol=2):
 
 def drawenergy1D(is2017, text_="Work in progress 2018", data=True):
     #pt = ROOT.TPaveText(0.0877181,0.9,0.9580537,0.96,"brNDC")
-    pt = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.99,"brNDC")
+    pt = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.96,"brNDC")
     pt.SetBorderSize(0)
     pt.SetTextAlign(12)
     pt.SetFillStyle(0)
@@ -175,10 +175,10 @@ def drawenergy1D(is2017, text_="Work in progress 2018", data=True):
     preliminarytextfize = cmstextSize * 0.7
     lumitextsize = cmstextSize *0.7
     pt.SetTextSize(cmstextSize)
-    text = pt.AddText(0.013,0.57,"#font[61]{CMS}")
+    text = pt.AddText(0.03,0.57,"#font[61]{CMS}")
 
     #pt1 = ROOT.TPaveText(0.0877181,0.9,0.9580537,0.96,"brNDC")
-    pt1 = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.99,"brNDC")
+    pt1 = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.96,"brNDC")
     pt1.SetBorderSize(0)
     pt1.SetTextAlign(12)
     pt1.SetFillStyle(0)
@@ -189,7 +189,7 @@ def drawenergy1D(is2017, text_="Work in progress 2018", data=True):
     text1 = pt1.AddText(0.15,0.4,text_)
 
     #pt2 = ROOT.TPaveText(0.0877181,0.9,0.9580537,0.96,"brNDC")
-    pt2 = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.99,"brNDC")
+    pt2 = ROOT.TPaveText(0.0877181,0.95,0.9580537,0.96,"brNDC")
     pt2.SetBorderSize(0)
     pt2.SetTextAlign(12)
     pt2.SetFillStyle(0)
@@ -204,8 +204,8 @@ def drawenergy1D(is2017, text_="Work in progress 2018", data=True):
     if is2017 and not data: pavetext = "13 TeV"
     if (not is2017) and not data: pavetext = "13 TeV"
 
-    if data: text3 = pt2.AddText(0.64,0.5,pavetext)
-    if not data: text3 = pt2.AddText(0.64,0.5,pavetext)
+    if data: text3 = pt2.AddText(0.68,0.5,pavetext)
+    if not data: text3 = pt2.AddText(0.68,0.5,pavetext)
 
     return [pt,pt1,pt2]
 
@@ -229,9 +229,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     ROOT.gStyle.SetLineWidth(1);
 
     if '_SR_1b' in hist:
-        histolabel="SR_1b"
+        histolabel="SR(1b)"
     elif '_SR_2b' in hist:
-        histolabel="SR_2b"
+        histolabel="SR(2b)"
     elif 'ZmumuCR_1b' in hist:
         histolabel="Z(#mu#mu)+1b CR"
     elif 'ZeeCR_1b' in hist:
@@ -241,9 +241,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     elif 'WenuCR_1b' in hist:
         histolabel="W(e#nu)+1b CR"
     elif 'TopmunuCR_1b' in hist:
-        histolabel="Top(#mu#nu)+1b CR"
+        histolabel="t#bar{t}(#mu#nu)+1b CR"
     elif 'TopenuCR_1b' in hist:
-        histolabel="Top(e#nu)+1b CR"
+        histolabel="t#bar{t}(e#nu)+1b CR"
     elif 'ZmumuCR_2b' in hist:
         histolabel="Z(#mu#mu)+2b CR"
     elif 'ZeeCR_2b' in hist:
@@ -253,9 +253,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     elif 'WenuCR_2b' in hist:
         histolabel="W(e#nu)+2b CR"
     elif 'TopmunuCR_2b' in hist:
-        histolabel="Top(#mu#nu)+2b CR"
+        histolabel="t#bar{t}(#mu#nu)+2b CR"
     elif 'TopenuCR_2b' in hist:
-        histolabel="Top(e#nu)+2b CR"
+        histolabel="t#bar{t}(e#nu)+2b CR"
 
     else:
         histolabel="testing"
@@ -275,18 +275,16 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     SMH = ROOT.TH1F()
 
     DYJets_Hits   = []; ZJets_Hits   = []; WJets_Hists   = []; GJets_Hists  = []; DIBOSON_Hists = []; STop_Hists   = []; Top_Hists     = []; QCD_Hists    = [];
-    MET_Hist      = []; SE_Hist      = []
+    MET_Hist = []; SE_Hist      = []
 
     count=0
     for file in files.readlines()[:]:
         myFile=path+'/'+file.rstrip()
-        #print ('running for file',myFile)
         Str=str(count)
         exec("f"+Str+"=ROOT.TFile(myFile,'READ')",locals(), globals())
         exec("h_temp=f"+Str+".Get("+"\'"+str(hist)+"\'"+")",locals(), globals())
         exec("h_total_weight=f"+Str+".Get('h_total_mcweight')",locals(), globals())
         total_events = h_total_weight.Integral()
-        #print ('selected events',h_temp.Integral())
 
         if 'WJetsToLNu_HT' in file:
             xsec = sample_xsec.getXsec(file)
@@ -463,7 +461,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         for histo in total_hists:
             histo = set_overflow(histo)
 
-    ROOT.gStyle.SetHistTopMargin(0.)
+    ROOT.gStyle.SetHistTopMargin(0.1)
 
 #============== CANVAS DECLARATION ===================
     #c12 = ROOT.TCanvas("Hist", "Hist", 0,0,1000,1000);
@@ -537,16 +535,15 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
     if(NORATIOPLOT):
         c1_2 = ROOT.TPad("c1_2","newpad",0,0.05,1,1);   #0.993);
-        c1_2.SetRightMargin(0.04);
-
+        c1_2.SetRightMargin(0.06);
     else:
         c1_2 =  ROOT.TPad("c1_2","newpad",0,0.20,1,1);
 
     c1_2.SetBottomMargin(0.09);
-    c1_2.SetTopMargin(0.06);
+    c1_2.SetTopMargin(0.08);
     c1_2.SetLeftMargin(0.12);
+    c1_2.SetRightMargin(0.06);
     c1_2.SetLogy(ISLOG);
-    #if(VARIABLEBINS){ c1_2->SetLogx(0);}
     c1_2.Draw();
     c1_2.cd();
     for h in hs:
@@ -601,7 +598,6 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     h_data.SetLineWidth(2)
     h_data.SetMarkerSize(1.3)
     h_data.SetMarkerStyle(20)
-    #h_data.Scale(35.82/41)
     h_data = SetCMSAxis(h_data)
     if(not NORATIOPLOT):
         h_data.Draw("same p e1");
@@ -629,7 +625,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
             hs.GetXaxis().SetTitleFont(42)
             hs.GetXaxis().SetLabelOffset(.01);
             hs.GetYaxis().SetTitleOffset(0.7)
-            hs.GetYaxis().SetTitle("Events");
+            hs.GetYaxis().SetTitle("Events/bin");
             hs.GetYaxis().SetTitleSize(0.08);
             hs.GetYaxis().SetTitleFont(42);
             hs.GetYaxis().SetLabelFont(42);
@@ -642,7 +638,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
             hs.GetXaxis().SetLabelFont(42);
             hs.GetXaxis().SetLabelOffset(.01);
             hs.GetXaxis().SetLabelSize(0.04);
-            hs.GetYaxis().SetTitle("Events");
+            hs.GetYaxis().SetTitle("Events/bin");
             hs.GetYaxis().SetTitleSize(0.08);
             hs.GetYaxis().SetTitleOffset(0.7);
             hs.GetYaxis().SetTitleFont(42);
@@ -655,14 +651,14 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 #=============================  legend section =========================================
     DYLegend    =   "Z(ll)+jets "
     WLegend     =   "W(l#nu)+jets "
-    GLegend     =   "G jets "
+    GLegend     =   "#gamma+jets "
     ZLegend     =   "Z(#nu#nu)+jets "
     STLegend    =   "Single t "
     TTLegend    =   "t#bar{t} "
     VVLegend    =   "WW/WZ/ZZ "
     QCDLegend   =   "QCD "
 
-    legend = SetLegend()
+    legend = SetLegend([.50,.58,.93,.92],ncol=2)
 
     if(not NORATIOPLOT):
         if 'SR' in reg:
@@ -745,9 +741,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     c1_1.SetFillColor(0);
     c1_1.SetTicky(1);
     c1_1.SetLeftMargin(0.12);
-    c1_1.SetRightMargin(0.1);
-    c1_1.SetTopMargin(0.0);
-    c1_1.SetBottomMargin(0.32);
+    c1_1.SetRightMargin(0.06);
+    c1_1.SetTopMargin(0.00);
+    c1_1.SetBottomMargin(0.42);
     c1_1.SetFrameFillStyle(0);
     c1_1.SetFrameBorderMode(0);
     c1_1.SetFrameFillStyle(0);
@@ -851,30 +847,29 @@ if makeMuCRplots:
 if makeEleCRplots:
     regions+=['ZeeCR_1b','ZeeCR_2b','TopenuCR_1b','TopenuCR_2b','WenuCR_1b','WenuCR_2b']
 
-#makeplot("reg_WenuCR_1b_Recoil",'h_reg_WenuCR_1b_Recoil','Hadronic Recoil (GeV)',200.,1000.,1,1,0,'WenuCR_1b',varBin=False)
-
+# makeplot("reg_WenuCR_1b_Recoil",'h_reg_WenuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'WenuCR_1b',varBin=False)
+# makeplot("reg_SR_2b_MET",'h_reg_SR_2b_MET','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,'SR_2b',varBin=False)
 for reg in regions:
     try:
         if 'SR_' in reg:
             makeplot("reg_"+reg+"_cutFlow",'h_reg_'+reg+'_cutFlow','CutFlow',0,7,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET','Real MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightB_up",'h_reg_'+reg+'_MET_weightB_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightB_down",'h_reg_'+reg+'_MET_weightB_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightEWK_up",'h_reg_'+reg+'_MET_weightEWK_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightEWK_down",'h_reg_'+reg+'_MET_weightEWK_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightTop_up",'h_reg_'+reg+'_MET_weightTop_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightTop_down",'h_reg_'+reg+'_MET_weightTop_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightMET_up",'h_reg_'+reg+'_MET_weightMET_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightMET_down",'h_reg_'+reg+'_MET_weightMET_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightPU_up",'h_reg_'+reg+'_MET_weightPU_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightPU_down",'h_reg_'+reg+'_MET_weightPU_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightJEC_up",'h_reg_'+reg+'_MET_weightJEC_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_weightJEC_down",'h_reg_'+reg+'_MET_weightJEC_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_Res_up",'h_reg_'+reg+'_MET_Res_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_Res_down",'h_reg_'+reg+'_MET_Res_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_En_up",'h_reg_'+reg+'_MET_En_up','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET_En_down",'h_reg_'+reg+'_MET_En_down','MET (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-
+            makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET',' p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightB_up",'h_reg_'+reg+'_MET_weightB_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightB_down",'h_reg_'+reg+'_MET_weightB_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightEWK_up",'h_reg_'+reg+'_MET_weightEWK_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightEWK_down",'h_reg_'+reg+'_MET_weightEWK_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightTop_up",'h_reg_'+reg+'_MET_weightTop_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightTop_down",'h_reg_'+reg+'_MET_weightTop_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightMET_up",'h_reg_'+reg+'_MET_weightMET_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightMET_down",'h_reg_'+reg+'_MET_weightMET_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightPU_up",'h_reg_'+reg+'_MET_weightPU_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightPU_down",'h_reg_'+reg+'_MET_weightPU_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightJEC_up",'h_reg_'+reg+'_MET_weightJEC_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_weightJEC_down",'h_reg_'+reg+'_MET_weightJEC_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_Res_up",'h_reg_'+reg+'_MET_Res_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_Res_down",'h_reg_'+reg+'_MET_Res_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_En_up",'h_reg_'+reg+'_MET_En_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET_En_down",'h_reg_'+reg+'_MET_En_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_min_dPhi",'h_reg_'+reg+'_min_dPhi','min_dPhi',0,4,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Jet1Pt",'h_reg_'+reg+'_Jet1Pt','JET1 p_{T} (GeV)',30.,800.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Jet1Eta",'h_reg_'+reg+'_Jet1Eta','JET1 #eta',-2.5,2.5,1,1,0,reg,varBin=False)
@@ -887,28 +882,28 @@ for reg in regions:
             makeplot("reg_"+reg+"_nJets",'h_reg_'+reg+'_nJets','nJets',0.,10.,1,1,0,reg,varBin=False)
         else:
             makeplot("reg_"+reg+"_cutFlow",'h_reg_'+reg+'_cutFlow','CutFlow',0,9,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET','Real MET (GeV)',0.,700.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil",'h_reg_'+reg+'_Recoil','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightB_up",'h_reg_'+reg+'_Recoil_weightB_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightB_down",'h_reg_'+reg+'_Recoil_weightB_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEWK_up",'h_reg_'+reg+'_Recoil_weightEWK_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEWK_down",'h_reg_'+reg+'_Recoil_weightEWK_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightTop_up",'h_reg_'+reg+'_Recoil_weightTop_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightTop_down",'h_reg_'+reg+'_Recoil_weightTop_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightRecoil_up",'h_reg_'+reg+'_Recoil_weightRecoil_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightRecoil_down",'h_reg_'+reg+'_Recoil_weightRecoil_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightPU_up",'h_reg_'+reg+'_Recoil_weightPU_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightPU_down",'h_reg_'+reg+'_Recoil_weightPU_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEle_up",'h_reg_'+reg+'_Recoil_weightEle_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEle_down",'h_reg_'+reg+'_Recoil_weightEle_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightMu_up",'h_reg_'+reg+'_Recoil_weightMu_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightMu_down",'h_reg_'+reg+'_Recoil_weightMu_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightJEC_up",'h_reg_'+reg+'_Recoil_weightJEC_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightJEC_down",'h_reg_'+reg+'_Recoil_weightJEC_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_Res_up",'h_reg_'+reg+'_Recoil_Res_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_Res_down",'h_reg_'+reg+'_Recoil_Res_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_En_up",'h_reg_'+reg+'_Recoil_En_up','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_Recoil_En_down",'h_reg_'+reg+'_Recoil_En_down','Hadronic Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET','Real p_{T}^{miss} (GeV)',0.,700.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil",'h_reg_'+reg+'_Recoil','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightB_up",'h_reg_'+reg+'_Recoil_weightB_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightB_down",'h_reg_'+reg+'_Recoil_weightB_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightEWK_up",'h_reg_'+reg+'_Recoil_weightEWK_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightEWK_down",'h_reg_'+reg+'_Recoil_weightEWK_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightTop_up",'h_reg_'+reg+'_Recoil_weightTop_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightTop_down",'h_reg_'+reg+'_Recoil_weightTop_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightRecoil_up",'h_reg_'+reg+'_Recoil_weightRecoil_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightRecoil_down",'h_reg_'+reg+'_Recoil_weightRecoil_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightPU_up",'h_reg_'+reg+'_Recoil_weightPU_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightPU_down",'h_reg_'+reg+'_Recoil_weightPU_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightEle_up",'h_reg_'+reg+'_Recoil_weightEle_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightEle_down",'h_reg_'+reg+'_Recoil_weightEle_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightMu_up",'h_reg_'+reg+'_Recoil_weightMu_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightMu_down",'h_reg_'+reg+'_Recoil_weightMu_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightJEC_up",'h_reg_'+reg+'_Recoil_weightJEC_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_weightJEC_down",'h_reg_'+reg+'_Recoil_weightJEC_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_Res_up",'h_reg_'+reg+'_Recoil_Res_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_Res_down",'h_reg_'+reg+'_Recoil_Res_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_En_up",'h_reg_'+reg+'_Recoil_En_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_Recoil_En_down",'h_reg_'+reg+'_Recoil_En_down','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_min_dPhi",'h_reg_'+reg+'_min_dPhi','min_dPhi',0,4,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Jet1Pt",'h_reg_'+reg+'_Jet1Pt','JET1 p_{T} (GeV)',30.,800.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Jet1Eta",'h_reg_'+reg+'_Jet1Eta','JET1 #eta',-2.5,2.5,1,1,0,reg,varBin=False)
