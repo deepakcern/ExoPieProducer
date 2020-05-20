@@ -1,0 +1,5 @@
+syntax: monohbb_vXY: only the last two digits XY will change, prefix is the branch name 
+
+monohbb_v00: this is the base version for setup_2017_2016 branch
+
+monohbb_v01: * fixed switching weight for 2017 and 2018 [change the position of creating year.py file and importing SFs modules]

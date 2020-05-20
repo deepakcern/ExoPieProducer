@@ -32,7 +32,7 @@ cd -
 Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-python monoHbbAnalyzer.py -F -i pathOfInputTxtFile
+python monoHbbAnalyzer.py -y 2017 -F -i pathOfInputTxtFile
 ```
 txt files you can find here:
 
