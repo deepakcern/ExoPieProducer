@@ -11,3 +11,7 @@ push the new tag using:
 git push origin bbv0.00.01
 
 bbv0.00.01; keeping this as the base tag; changes for the tau veto discriminator are done 
+
+bbvXX.YY.01: * configured for year 2018: condor submission 
+	    * changed the condor flag 
+	    * changed the year varibale for 2018
