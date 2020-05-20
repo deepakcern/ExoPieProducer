@@ -46,7 +46,7 @@ else:sys.path.append('../../ExoPieUtils/scalefactortools/')
 
 ##please change the era accordingly
 year_file= open("Year.py","w")
-year_file.write('era="2017"')
+year_file.write('era="2018"')
 year_file.close()
 import ana_weight as wgt
 from Year import era
