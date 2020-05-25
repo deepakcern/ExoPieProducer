@@ -15,3 +15,5 @@ bbv0.00.01; keeping this as the base tag; changes for the tau veto discriminator
 bbvXX.YY.01: * configured for year 2018: condor submission 
 	    * changed the condor flag 
 	    * changed the year varibale for 2018
+	    
+bbvXX.YY.02: *  added the met phi and recoil phi variables 
