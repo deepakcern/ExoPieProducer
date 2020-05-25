@@ -67,6 +67,7 @@ parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
 parser.add_argument("-D", "--outputdir", dest="outputdir")
 parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
 parser.add_argument("-T", "--testing", action="store_true",  dest="testing")
+parser.add_argument("-y", "--year", dest="year", default="Year")
 
 args = parser.parse_args()
 
