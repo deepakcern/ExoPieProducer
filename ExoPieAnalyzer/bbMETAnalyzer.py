@@ -100,6 +100,7 @@ elif args.year=='2018':
 else:
     print 'please provide year'
     sys.exit()
+year_file.close()
 
 if isfarmout:
     infile  = args.inputfile
