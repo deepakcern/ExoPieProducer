@@ -141,6 +141,7 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["nPV"],df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_nPV",[70,0,70]))
         h_list.append(VarToHist(df["nPV"],df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_PUnPV",[70,0,70]))
         h_list.append(VarToHist(df["dPhi_jetMET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))
+        h_list.append(VarToHist(df["METPhi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_METPhi",[15,-3.14,3.14]))
 
     else:
         h_list.append(VarToHist(df["MET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_MET",[30,0,1000]))
@@ -188,6 +189,8 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df["Jet2deepCSV"],df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_Jet2deepCSV",[15,0,1.1]))
         h_list.append(VarToHist(df["nPV"],df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_nPV",[70,0,70]))
         h_list.append(VarToHist(df["nPV"],df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_PUnPV",[70,0,70]))
+        h_list.append(VarToHist(df["METPhi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_METPhi",[15,-3.14,3.14]))
+        h_list.append(VarToHist(df["RecoilPhi"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_RecoilPhi",[15,-3.14,3.14]))
         h_list.append(VarToHist(df["dPhi_jetMET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))#min_dPhi)
         h_list.append(VarToHist(df["leadingLepPt"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep1_pT",[15,30,500]))
         h_list.append(VarToHist(df["leadingLepEta"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_lep1_eta",[30,-2.5,2.5]))
@@ -252,6 +255,7 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_nPV",[70,0,70]))
         h_list.append(SetHist("h_reg_"+reg+"_PUnPV",[70,0,70]))
         h_list.append(SetHist("h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))
+        h_list.append(SetHist("h_reg_"+reg+"_METPhi",[15,-3.14,3.14]))
 
     else:
         h_list.append(SetHist("h_reg_"+reg+"_MET",   [30,0,1000]))
@@ -298,6 +302,8 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_nJets",[10,0,10]))
         h_list.append(SetHist("h_reg_"+reg+"_NEle",[10,0,10]))
         h_list.append(SetHist("h_reg_"+reg+"_NMu",[10,0,10]))
+        h_list.append(SetHist("h_reg_"+reg+"_METPhi",[15,-3.14,3.14]))
+        h_list.append(SetHist("h_reg_"+reg+"_RecoilPhi",[15,-3.14,3.14]))
         h_list.append(SetHist("h_reg_"+reg+"_min_dPhi",[15,0.5,3.2]))#mini_dPhi)
         h_list.append(SetHist("h_reg_"+reg+"_lep1_pT",[15,30,500]))
         h_list.append(SetHist("h_reg_"+reg+"_lep1_eta",[30,-2.5,2.5]))

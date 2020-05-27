@@ -44,12 +44,8 @@ import getRecoil as getRecoil
 if isCondor:sys.path.append('ExoPieUtils/scalefactortools/')
 else:sys.path.append('../../ExoPieUtils/scalefactortools/')
 
-##please change the era accordingly
+
 year_file= open("Year.py","w")
-year_file.write('era="2018"')
-year_file.close()
-import ana_weight as wgt
-from Year import era
 
 
 ######################################################################################################
@@ -71,6 +67,7 @@ parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
 parser.add_argument("-D", "--outputdir", dest="outputdir")
 parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
 parser.add_argument("-T", "--testing", action="store_true",  dest="testing")
+parser.add_argument("-y", "--year", dest="year", default="Year")
 
 args = parser.parse_args()
 
@@ -91,6 +88,19 @@ runOnTxt=False
 if args.runOnTXT:
     runOnTxt = True
 
+if args.year=='2016':
+    print 'code is running for 2016'
+    year_file.write('era="2016"')
+elif args.year=='2017':
+    print 'code is running for 2017'
+    year_file.write('era="2017"')
+elif args.year=='2018':
+    print 'code is running for 2018'
+    year_file.write('era="2018"')
+else:
+    print 'please provide year'
+    sys.exit()
+year_file.close()
 
 if isfarmout:
     infile  = args.inputfile
@@ -98,11 +108,14 @@ if isfarmout:
 else: print "No file is provided for farmout"
 
 
+import ana_weight as wgt
+from Year import era
+
 outputdir = '.'
 if args.outputdir:
     outputdir = str(args.outputdir)
 
-infilename = "NCUGlobalTuples.root"
+infilename = "ExoPieTuples.root"
 
 outDir=outputdir
 
@@ -253,6 +266,7 @@ def runbbdm(txtfile):
 
     for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
         for ep_runId, ep_lumiSection, ep_eventId, \
+        ep_prefiringweight,ep_prefiringweightup,ep_prefiringweightdown,\
         ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
         ep_WenuPhi, ep_WmunuPhi, ep_ZeePhi, ep_ZmumuPhi, \
         ep_ZeeRecoil, ep_ZmumuRecoil, ep_WenuRecoil, ep_WmunuRecoil, \
@@ -270,6 +284,7 @@ def runbbdm(txtfile):
         ep_THINjetNPV, \
         ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
         in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
+               df.st_prefiringweight,df.st_prefiringweightup,df.st_prefiringweightdown,\
                df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
                df.WenuPhi, df.WmunuPhi, df.ZeePhi, df.ZmumuPhi, \
                df.ZeeRecoil, df.ZmumuRecoil, df.WenuRecoil, df.WmunuRecoil, \
@@ -403,17 +418,17 @@ def runbbdm(txtfile):
             ep_ZmumuRecoilEnUp,ep_ZmumuRecoil_dPhiEnUp,ep_ZmumumassEnUp = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
             ep_ZmumuRecoilEnDown,ep_ZmumuRecoil_dPhiEnDown,ep_ZmumumassEnDown = getRecoil.ZRecoil_Phi_Zmass(ep_nMu, ep_muCharge, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
-            ep_WenuRecoil, ep_WenuRecoildPhi, ep_Wenumass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
-            ep_WenuRecoilResUp, ep_WenuRecoildPhiResUp, ep_WenumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
-            ep_WenuRecoilResDown, ep_WenuRecoildPhiResDown, ep_WenumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
-            ep_WenuRecoilEnUp, ep_WenuRecoildPhiEnUp, ep_WenumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
-            ep_WenuRecoilEnDown, ep_WenuRecoildPhiEnDown, ep_WenumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
+            ep_WenuRecoil, ep_WenuRecoil_dPhi, ep_Wenumass = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
+            ep_WenuRecoilResUp, ep_WenuRecoil_dPhiResUp, ep_WenumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilResDown, ep_WenuRecoil_dPhiResDown, ep_WenumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnUp, ep_WenuRecoil_dPhiEnUp, ep_WenumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnUp,ep_pfMetCorrPhi)
+            ep_WenuRecoilEnDown, ep_WenuRecoil_dPhiEnDown, ep_WenumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nEle_index,ep_elePt,ep_elePhi,ep_elePx,ep_elePy,ep_pfMetUncJetEnDown,ep_pfMetCorrPhi)
 
-            ep_WmunuRecoil, ep_WmunuRecoildPhi, ep_Wmunumass = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
-            ep_WmunuRecoilResUp, ep_WmunuRecoildPhiResUp, ep_WmunumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
-            ep_WmunuRecoilResDown, ep_WmunuRecoildPhiResDown, ep_WmunumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx, ep_muPy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
-            ep_WmunuRecoilEnUp, ep_WmunuRecoildPhiEnUp, ep_WmunumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
-            ep_WmunuRecoilEnDown, ep_WmunuRecoildPhiEnDown, ep_WmunumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
+            ep_WmunuRecoil, ep_WmunuRecoil_dPhi, ep_Wmunumass = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetCorrPt,ep_pfMetCorrPhi)
+            ep_WmunuRecoilResUp, ep_WmunuRecoil_dPhiResUp, ep_WmunumassResUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx,ep_muPy,ep_pfMetUncJetResUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilResDown, ep_WmunuRecoil_dPhiResDown, ep_WmunumassResDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi,ep_muPx, ep_muPy,ep_pfMetUncJetResDown,ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnUp, ep_WmunuRecoil_dPhiEnUp, ep_WmunumassEnUp = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnUp, ep_pfMetCorrPhi)
+            ep_WmunuRecoilEnDown, ep_WmunuRecoil_dPhiEnDown, ep_WmunumassEnDown = getRecoil.WRecoil_Phi_Wmass(ep_nMu,ep_muPt,ep_muPhi, ep_muPx, ep_muPy,ep_pfMetUncJetEnDown, ep_pfMetCorrPhi)
 
             if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
 
@@ -433,13 +448,13 @@ def runbbdm(txtfile):
             COMMON WEIGHT CALCULATION FOR ALL REGIONS
             --------------------------------------------------------------------------------
             '''
-            weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = -999.0
-            weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up = weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up = weightPU_up = weightJEC_up =  1.0
-            weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down = weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down = weightPU_down = weightJEC_down =  1.0
+            weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = weightPrefire = -999.0
+            weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up = weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up = weightPU_up = weightJEC_up = weightPrefire_up =  1.0
+            weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down = weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down = weightPU_down = weightJEC_down = weightPrefire_down =  1.0
             if ep_isData:
-                weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = 1.0
-                weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up = weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up = weightPU_up = weightJEC_up =  1.0
-                weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down = weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down = weightPU_down = weightJEC_down = 1.0
+                weight = presel_weight = weightPU = weightB = weightEWK = weightQCD = weightTop = weightEleTrig = weightEle = weightMu = weightMET = weightRecoil = weightPrefire = 1.0
+                weightB_up =  weightEWK_up =  weightQCD_up =  weightTop_up = weightJEC_up = weightEleTrig_up =  weightEle_up =  weightMu_up =  weightMET_up =  weightRecoil_up = weightPU_up = weightJEC_up = weightPrefire_up =  1.0
+                weightB_down =  weightEWK_down =  weightQCD_down =  weightTop_down = weightJEC_down = weightEleTrig_down =  weightEle_down =  weightMu_down =  weightMET_down =  weightRecoil_down = weightPU_down = weightJEC_down = weightPrefire_down = 1.0
             else:
                 weightB,weightB_up,weightB_down = wgt.getBTagSF(ep_THINnJet,ep_THINjetPt,ep_THINjetEta,ep_THINjetHadronFlavor,ep_THINjetDeepCSV,'MWP')
                 weightPU = wgt.puweight(ep_pu_nTrueInt)[0]
@@ -456,8 +471,11 @@ def runbbdm(txtfile):
                     weightQCD_up = wgt.getQCDW(ep_genParPt[0]); weightQCD_down = wgt.getQCDW(ep_genParPt[0])
                 if ep_genParSample == 6 and len(ep_genParPt) > 0:
                     weightTop,weightTop_up,weightTop_down = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
-                common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU
-                presel_weight = weightEWK * weightQCD * weightTop * weightPU
+                weightPrefire = ep_prefiringweight
+                weightPrefire_up = ep_prefiringweightup
+                weightPrefire_down = ep_prefiringweightdown
+                common_weight = weightB * weightEWK * weightQCD * weightTop * weightPU * weightPrefire
+                presel_weight = weightEWK * weightQCD * weightTop * weightPU * weightPrefire
                 weight,weightEleTrig,ele_wgt,mu_wgt,recoil_wgt,met_wgt = weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,ep_nEle_index,ep_elePt,ep_eleEta,ep_nMu,ep_muPt,ep_muEta)
                 weightEle=ele_wgt[0];weightMu=mu_wgt[0];weightRecoil=recoil_wgt[0];weightMET=met_wgt[0]
                 weightEle_up=ele_wgt[1];weightMu_up=mu_wgt[1];weightRecoil_up=recoil_wgt[1];weightMET_up=met_wgt[1]
@@ -727,32 +745,32 @@ def runbbdm(txtfile):
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]),'Jet1Eta':float(ep_THINjetEta[0]),'Jet1Phi':float(ep_THINjetPhi[0]),'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
-                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR1b')
             if isSR2b:
                 df_out_SR_2b = df_out_SR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'dPhi_jetMET':float(min_dPhi_jet_MET),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
                                                     'Jet1Pt':float(ep_THINjetPt[0]), 'Jet1Eta':float(ep_THINjetEta[0]), 'Jet1Phi':float(ep_THINjetPhi[0]), 'Jet1deepCSV':float(ep_THINjetDeepCSV[0]),
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
-                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightMET':float(weightMET),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightMET_up':float(weightMET_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'MET_Res_up':float(ep_pfMetUncJetResUp),'MET_En_up':float(ep_pfMetUncJetEnUp),'MET_En_down':float(ep_pfMetUncJetEnDown),'MET_Res_down':float(ep_pfMetUncJetResDown),'weightJEC_down':float(weightJEC_down),'weightMET_down':float(weightMET_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('isSR2b')
 
             if is1bCRZee:
                 df_out_ZeeCR_1b = df_out_ZeeCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_ZeeRecoil ),'RecoilPhi':float(ep_ZeeRecoil_dPhi ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -761,13 +779,13 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
                                                     'subleadingLepPt':float(ep_elePt[1]),'subleadingLepEta':float(ep_eleEta[1]),'subleadingLepPhi':float(ep_elePhi[1]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZee')
             if is2bCRZee:
                 df_out_ZeeCR_2b = df_out_ZeeCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZeeRecoil ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_ZeeRecoil ),'RecoilPhi':float(ep_ZeeRecoil_dPhi ),'Zmass':float(ep_Zeemass),'ZpT':float(ZpT_ee),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -776,14 +794,14 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
                                                     'subleadingLepPt':float(ep_elePt[1]),'subleadingLepEta':float(ep_eleEta[1]),'subleadingLepPhi':float(ep_elePhi[1]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZeeRecoilResUp),'Recoil_En_up':float(ep_ZeeRecoilEnUp),'Recoil_En_down':float(ep_ZeeRecoilEnDown),'Recoil_Res_down':float(ep_ZeeRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZee')
 
             if is1bCRZmumu:
                 df_out_ZmumuCR_1b = df_out_ZmumuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_ZmumuRecoil ),'RecoilPhi':float(ep_ZmumuRecoil_dPhi ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -792,13 +810,13 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
                                                     'subleadingLepPt':float(ep_muPt[1]),'subleadingLepEta':float(ep_muEta[1]),'subleadingLepPhi':float(ep_muPhi[1]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRZmumu')
             if is2bCRZmumu:
                 df_out_ZmumuCR_2b = df_out_ZmumuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_ZmumuRecoil ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_ZmumuRecoil ),'RecoilPhi':float(ep_ZmumuRecoil_dPhi ),'Zmass':float(ep_Zmumumass),'ZpT':float(ZpT_mumu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -807,13 +825,13 @@ def runbbdm(txtfile):
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
                                                     'subleadingLepPt':float(ep_muPt[1]),'subleadingLepEta':float(ep_muEta[1]),'subleadingLepPhi':float(ep_muPhi[1]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_ZmumuRecoilResUp),'Recoil_En_up':float(ep_ZmumuRecoilEnUp),'Recoil_En_down':float(ep_ZmumuRecoilEnDown),'Recoil_Res_down':float(ep_ZmumuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRZmumu')
             if is1bCRWenu:
                 df_out_WenuCR_1b = df_out_WenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WenuRecoil ),'RecoilPhi':float(ep_WenuRecoil_dPhi ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -821,13 +839,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWenu')
             if is2bCRWenu:
                 df_out_WenuCR_2b = df_out_WenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WenuRecoil ),'RecoilPhi':float(ep_WenuRecoil_dPhi ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -835,14 +853,14 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWenu')
 
             if is1bCRWmunu:
                 df_out_WmunuCR_1b = df_out_WmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WmunuRecoil ),'RecoilPhi':float(ep_WmunuRecoil_dPhi ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -850,13 +868,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRWmunu')
             if is2bCRWmunu:
                 df_out_WmunuCR_2b = df_out_WmunuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WmunuRecoil ),'RecoilPhi':float(ep_WmunuRecoil_dPhi ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -864,13 +882,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRWmunu')
             if is1bCRTopenu:
                 df_out_TopenuCR_1b = df_out_TopenuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WenuRecoil ),'RecoilPhi':float(ep_WenuRecoil_dPhi ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -878,13 +896,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopenu')
             if is2bCRTopenu:
                 df_out_TopenuCR_2b = df_out_TopenuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WenuRecoil ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WenuRecoil ),'RecoilPhi':float(ep_WenuRecoil_dPhi ),'Wmass':float(ep_Wenumass),'WpT':float(WpT_enu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -892,13 +910,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_elePt[0]),'leadingLepEta':float(ep_eleEta[0]),'leadingLepPhi':float(ep_elePhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WenuRecoilResUp),'Recoil_En_up':float(ep_WenuRecoilEnUp),'Recoil_En_down':float(ep_WenuRecoilEnDown),'Recoil_Res_down':float(ep_WenuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopenu')
             if is1bCRTopmunu:
                 df_out_TopmunuCR_1b = df_out_TopmunuCR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WmunuRecoil ),'RecoilPhi':float(ep_WmunuRecoil_dPhi ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -906,13 +924,13 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(Jet2Pt),'Jet2Eta':float(Jet2Eta),'Jet2Phi':float(Jet2Phi),'Jet2deepCSV':float(Jet2deepCSV),
                                                     'Jet3Pt':float(dummy),'Jet3Eta':float(dummy),'Jet3Phi':float(dummy),'Jet3deepCSV':float(dummy),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is1bCRTopmunu')
             if is2bCRTopmunu:
                 df_out_TopmunuCR_2b = df_out_TopmunuCR_2b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
-                                                    'MET':float(ep_pfMetCorrPt),'Recoil':float(ep_WmunuRecoil ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
+                                                    'MET':float(ep_pfMetCorrPt),'METPhi':float(ep_pfMetCorrPhi),'Recoil':float(ep_WmunuRecoil ),'RecoilPhi':float(ep_WmunuRecoil_dPhi ),'Wmass':float(ep_Wmunumass),'WpT':float(WpT_munu),
                                                     'dPhi_jetMET':float(min_dPhi_jet_MET),
                                                     'NTau':float(ep_nTau_discBased_TightEleTightMuVeto),'NEle':float(ep_nEle_index),'NMu':float(ep_nMu), 'nPho':float(nPho),
                                                     'Njets_PassID':float(ep_THINnJet),'Nbjets_PassID':float(nBjets),
@@ -920,7 +938,7 @@ def runbbdm(txtfile):
                                                     'Jet2Pt':float(ep_THINjetPt[1]), 'Jet2Eta':float(ep_THINjetEta[1]), 'Jet2Phi':float(ep_THINjetPhi[1]), 'Jet2deepCSV':float(ep_THINjetDeepCSV[1]),
                                                     'Jet3Pt':float(Jet3Pt), 'Jet3Eta':float(Jet3Eta), 'Jet3Phi':float(Jet3Phi), 'Jet3deepCSV':float(Jet3deepCSV),
                                                     'leadingLepPt':float(ep_muPt[0]),'leadingLepEta':float(ep_muEta[0]),'leadingLepPhi':float(ep_muPhi[0]),
-                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down)
+                                                    'weight':float(weight),'weightRecoil':float(weightRecoil),'weightEle':float(weightEle),'weightMu':float(weightMu),'weightB':float(weightB),'weightEWK':float(weightEWK),'weightQCD':float(weightQCD),'weightTop':float(weightTop),'weightPU':float(weightPU),'weightPrefire':float(weightPrefire),'weightRecoil_up':float(weightRecoil_up),'weightEle_up':float(weightEle_up),'weightMu_up':float(weightMu_up),'weightB_up':float(weightB_up),'weightEWK_up':float(weightEWK_up),'weightQCD_up':float(weightQCD_up),'weightTop_up':float(weightTop_up),'weightPU_up':float(weightPU_up),'weightPrefire_up':float(weightPrefire_up),'weightJEC_up':float(weightJEC_up),'Recoil_Res_up':float(ep_WmunuRecoilResUp),'Recoil_En_up':float(ep_WmunuRecoilEnUp),'Recoil_En_down':float(ep_WmunuRecoilEnDown),'Recoil_Res_down':float(ep_WmunuRecoilResDown),'weightJEC_down':float(weightJEC_down),'weightRecoil_down':float(weightRecoil_down),'weightEle_down':float(weightEle_down),'weightMu_down':float(weightMu_down),'weightB_down':float(weightB_down),'weightEWK_down':float(weightEWK_down),'weightQCD_down':float(weightQCD_down),'weightTop_down':float(weightTop_down),'weightPU_down':float(weightPU_down),'weightPrefire_down':float(weightPrefire_down)
                                                     },ignore_index=True
                                                    )
                 if istest: print ('is2bCRTopmunu')
