@@ -178,6 +178,34 @@ def runbbdm(txtfile):
     h_den_ZllRecoil_B    = TH1F("h_den_ZllRecoil_B","",2000,0,2000)
     h_num_ZllRecoil_B    = TH1F("h_num_ZllRecoil_B","",2000,0,2000)
 
+    h_den_WlnuRecoil_wMass40120_R   = TH1F("h_den_WlnuRecoil_wMass40120_R","",2000,0,2000)
+    h_num_WlnuRecoil_wMass40120_R   = TH1F("h_num_WlnuRecoil_wMass40120_R","",2000,0,2000)
+
+    h_den_WlnuRecoil_wMass40120_B   = TH1F("h_den_WlnuRecoil_wMass40120_B","",2000,0,2000)
+    h_num_WlnuRecoil_wMass40120_B   = TH1F("h_num_WlnuRecoil_wMass40120_B","",2000,0,2000)
+
+
+    h_den_WlnuRecoil_wMass50110_R   = TH1F("h_den_WlnuRecoil_wMass50110_R","",2000,0,2000)
+    h_num_WlnuRecoil_wMass50110_R   = TH1F("h_num_WlnuRecoil_wMass50110_R","",2000,0,2000)
+
+    h_den_WlnuRecoil_wMass50110_B   = TH1F("h_den_WlnuRecoil_wMass50110_B","",2000,0,2000)
+    h_num_WlnuRecoil_wMass50110_B   = TH1F("h_num_WlnuRecoil_wMass50110_B","",2000,0,2000)
+
+
+    h_den_min_MHT_WlnuRecoil_wMass40120_R   = TH1F("h_den_min_MHT_WlnuRecoil_wMass40120_R","",2000,0,2000)
+    h_num_min_MHT_WlnuRecoil_wMass40120_R   = TH1F("h_num_min_MHT_WlnuRecoil_wMass40120_R","",2000,0,2000)
+
+    h_den_min_MHT_WlnuRecoil_wMass40120_B   = TH1F("h_den_min_MHT_WlnuRecoil_wMass40120_B","",2000,0,2000)
+    h_num_min_MHT_WlnuRecoil_wMass40120_B   = TH1F("h_num_min_MHT_WlnuRecoil_wMass40120_B","",2000,0,2000)
+
+
+    h_den_min_MHT_WlnuRecoil_wMass50110_R   = TH1F("h_den_min_MHT_WlnuRecoil_wMass50110_R","",2000,0,2000)
+    h_num_min_MHT_WlnuRecoil_wMass50110_R   = TH1F("h_num_min_MHT_WlnuRecoil_wMass50110_R","",2000,0,2000)
+
+    h_den_min_MHT_WlnuRecoil_wMass50110_B   = TH1F("h_den_min_MHT_WlnuRecoil_wMass50110_B","",2000,0,2000)
+    h_num_min_MHT_WlnuRecoil_wMass50110_B   = TH1F("h_num_min_MHT_WlnuRecoil_wMass50110_B","",2000,0,2000)
+
+
 
     h_den_min_MHT_WlnuRecoil_R   = TH1F("h_den_min_MHT_WlnuRecoil_R","",2000,0,2000)
     h_num_min_MHT_WlnuRecoil_R   = TH1F("h_num_min_MHT_WlnuRecoil_R","",2000,0,2000)
@@ -190,6 +218,8 @@ def runbbdm(txtfile):
     h_den_min_MHT_ZllRecoil_B    = TH1F("h_den_min_MHT_ZllRecoil_B","",2000,0,2000)
     h_num_min_MHT_ZllRecoil_B    = TH1F("h_num_min_MHT_ZllRecoil_B","",2000,0,2000)
 
+    h_den_WMass_R   = TH1F("h_den_WMass_R","",250,0,250)
+    h_den_WMass_B   = TH1F("h_den_WMass_B","",250,0,250)
 
 
     passfilename = open("configs/outfilename.txt","w")
@@ -294,10 +324,10 @@ def runbbdm(txtfile):
             metdecision=False
             phodecision=False
 
-            muonFor2017 = False
+ 
 
             eletrigstatus = [( anautil.CheckFilter(trigName_, trigResult_, trig.Electrontrigger2017[itrig] ) ) for itrig in range(len(trig.Electrontrigger2017))]
-            if not muonFor2017:mutrigstatus  = [( anautil.CheckFilter(trigName_, trigResult_, trig.Muontrigger2018[itrig]     ) ) for itrig in range(len(trig.Muontrigger2018))    ]
+            if not runOn2017:mutrigstatus  = [( anautil.CheckFilter(trigName_, trigResult_, trig.Muontrigger2018[itrig]     ) ) for itrig in range(len(trig.Muontrigger2018))    ]
             else:mutrigstatus  = [( anautil.CheckFilter(trigName_, trigResult_, trig.Muontrigger2017[itrig]     ) ) for itrig in range(len(trig.Muontrigger2017))    ]
             mettrigstatus = [( anautil.CheckFilter(trigName_, trigResult_, trig.METtrigger2017[itrig]       ) ) for itrig in range(len(trig.METtrigger2017))     ]
             photrigstatus = [( anautil.CheckFilter(trigName_, trigResult_, trig.Photontrigger2017[itrig]   ) ) for itrig in range(len(trig.Photontrigger2017))  ]
@@ -307,11 +337,11 @@ def runbbdm(txtfile):
             mettrigdecision = boolutil.logical_OR(mettrigstatus)
             photrigdecision = boolutil.logical_OR(photrigstatus)
             #print 'mutrigdecision',mutrigdecision,'mettrigdecision',mettrigdecision
-            if not isData:
-                eletrigdecision = True
-                mutrigdecision = True
-                mettrigdecision = True
-                photrigdecision = True
+            #if not isData:
+            #    eletrigdecision = True
+            #    mutrigdecision = True
+            #    mettrigdecision = True
+            #    photrigdecision = True
 
 
             # ------------------------------------------------------
@@ -322,9 +352,12 @@ def runbbdm(txtfile):
             filterstatus = [anautil.CheckFilter(filterName, filterResult, filters.filters2017[ifilter]) for ifilter in range(len(filters.filters2017)) ]
 
 
-            if not isData:     filterdecision = True
-            if isData:         filterdecision  = boolutil.logical_AND(filterstatus)
+            #if not isData:     filterdecision = True
+            #if isData:         filterdecision  = boolutil.logical_AND(filterstatus)
 
+            filterdecision  = boolutil.logical_AND(filterstatus)
+	    print 'filterdecision',filterdecision,'filterstatus',filterstatus
+            print 'mettrigdecision', mettrigdecision
             if filterdecision == False: continue
 
 
@@ -345,7 +378,7 @@ def runbbdm(txtfile):
             phopt = [getPt(phopx_[ip], phopy_[ip]) for ip in range(npho_)]
             phoeta = [getEta(phopx_[ip], phopy_[ip], phopz_[ip]) for ip in range(npho_)]
 
-            pho_pt15_eta2p5_looseID = [ (phopt[ip] > 15.0) and (abs(phoeta[ip]) < 2.5) and (pholooseid_[ip])               for ip in range(npho_)]
+            pho_pt15_eta2p5_looseID = [ (phopt[ip] > 15.0) and (abs(phoeta[ip]) < 2.5) and (pholooseid_[ip])   for ip in range(npho_)]
             pass_pho_index = boolutil.WhereIsTrue(pho_pt15_eta2p5_looseID)
 
             '''
@@ -453,9 +486,13 @@ def runbbdm(txtfile):
             WenuRecoilPt  = -9999.0
             ZmumuRecoilPt = -9999.0
             ZeeRecoilPt   = -9999.0
-            
+	    Wmu_mass      = -9999.0
+            We_mass       = -9999.0     
+
             SinglelepRequiredCond = False
             DilepRequiredCond = False
+            WmassCond1 = False
+            WmassCond2 = False
             # ------------------
             # Z CR
             # ------------------
@@ -468,8 +505,8 @@ def runbbdm(txtfile):
                     zeeRecoilPx = -( met_*math.cos(metphi_) + elepx_[iele1] + elepx_[iele2])
                     zeeRecoilPy = -( met_*math.sin(metphi_) + elepy_[iele1] + elepy_[iele2])
                     ZeeRecoilPt =  math.sqrt(zeeRecoilPx**2  +  zeeRecoilPy**2)
-                    if ee_mass > 60 and ee_mass < 110:
-			DilepRequiredCond = True
+                    if ee_mass > 60 and ee_mass < 120:
+                        DilepRequiredCond = True
             ## for dimu
             if len(pass_mu_loose_index) ==2 and (len(pass_mu_tight_index)==1 or len(pass_mu_tight_index)==2):
                 imu1=pass_mu_loose_index[0]
@@ -479,8 +516,8 @@ def runbbdm(txtfile):
                     zmumuRecoilPx = -( met_*math.cos(metphi_) + mupx_[imu1] + mupx_[imu2])
                     zmumuRecoilPy = -( met_*math.sin(metphi_) + mupy_[imu1] + mupy_[imu2])
                     ZmumuRecoilPt =  math.sqrt(zmumuRecoilPx**2  +  zmumuRecoilPy**2)
-                    if mumu_mass > 60 and mumu_mass < 110:
-			DilepRequiredCond = True
+                    if mumu_mass > 60 and mumu_mass < 120:
+                        DilepRequiredCond = True
 
 
             # ------------------
@@ -488,36 +525,46 @@ def runbbdm(txtfile):
             # ------------------
             ## for Single electron
             if len(pass_ele_tight_index) == 1 and len(pass_ele_loose_index)==1:
-               ele1 = pass_ele_loose_index[0]
-               #e_mass = MT(elept[ele1],met_, DeltaPhi(elephi[ele1],metphi_)) #transverse mass defined as sqrt{2pT*MET*(1-cos(dphi)}
-               WenuRecoilPx = -( met_*math.cos(metphi_) + elepx_[ele1])
-               WenuRecoilPy = -( met_*math.sin(metphi_) + elepy_[ele1])
-               WenuRecoilPt = math.sqrt(WenuRecoilPx**2  +  WenuRecoilPy**2)
-	       SinglelepRequiredCond = True
-
+                ele1 = pass_ele_loose_index[0]
+                We_mass = MT(elept[ele1],met_, DeltaPhi(elephi[ele1],metphi_)) #transverse mass defined as sqrt{2pT*MET*(1-cos(dphi)}
+                WenuRecoilPx = -( met_*math.cos(metphi_) + elepx_[ele1])
+                WenuRecoilPy = -( met_*math.sin(metphi_) + elepy_[ele1])
+                WenuRecoilPt = math.sqrt(WenuRecoilPx**2  +  WenuRecoilPy**2)
+                SinglelepRequiredCond = True
+                if We_mass > 40 and We_mass < 120:
+                    WmassCond1 = True
+                if We_mass > 50 and We_mass < 110:
+                    WmassCond2 = True
 
             ## for Single muon
             if len(pass_mu_loose_index) == 1 and len(pass_mu_tight_index)==1:
-               mu1 = pass_mu_loose_index[0]
-               #mu_mass = MT(mupt[mu1],met_, DeltaPhi(muphi[mu1],metphi_)) #transverse mass defined as sqrt{2pT*MET*(1-cos(dphi)}
-               WmunuRecoilPx = -( met_*math.cos(metphi_) + mupx_[mu1])
-               WmunuRecoilPy = -( met_*math.sin(metphi_) + mupy_[mu1])
-               WmunuRecoilPt = math.sqrt(WmunuRecoilPx**2  +  WmunuRecoilPy**2)
-               SinglelepRequiredCond=True
+                mu1 = pass_mu_loose_index[0]
+                Wmu_mass = MT(mupt[mu1],met_, DeltaPhi(muphi[mu1],metphi_)) #transverse mass defined as sqrt{2pT*MET*(1-cos(dphi)}
+                WmunuRecoilPx = -( met_*math.cos(metphi_) + mupx_[mu1])
+                WmunuRecoilPy = -( met_*math.sin(metphi_) + mupy_[mu1])
+                WmunuRecoilPt = math.sqrt(WmunuRecoilPx**2  +  WmunuRecoilPy**2)
+                SinglelepRequiredCond=True
+                if Wmu_mass > 40 and Wmu_mass < 120:
+                    WmassCond1 = True
+                if Wmu_mass > 50 and Wmu_mass < 110:
+                    WmassCond2 = True
+
 
             JetCond = len(nJet_pt_50_index)>0 and len(pass_jet_index_cleaned) > 1
             AK8JetCond = nFatjet>0
-	    if dataset=="SE":
+            if dataset=="SE":
                 WRecoil = WenuRecoilPt
                 ZRecoil = ZeeRecoilPt
-		lepVetoCond = len(pass_mu_loose_index) == 0
+                lepVetoCond = len(pass_mu_loose_index) == 0
                 leptonTrigger = eletrigstatus
+                WMass = We_mass
 
-	    if dataset=="MET":
-		WRecoil = WmunuRecoilPt
-		ZRecoil = ZmumuRecoilPt
+            if dataset=="MET":
+                WRecoil = WmunuRecoilPt
+                ZRecoil = ZmumuRecoilPt
                 lepVetoCond = len(pass_ele_loose_index)==0
                 leptonTrigger = mutrigdecision
+                WMass = Wmu_mass
 
 
             '''
@@ -529,25 +576,46 @@ def runbbdm(txtfile):
             # histograms for WlnuRecoil 
             if mettrigdecision and leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,WRecoil])
-		h_num_WlnuRecoil_R.Fill(WRecoil)
+                h_num_WlnuRecoil_R.Fill(WRecoil)
                 h_num_min_MHT_WlnuRecoil_R.Fill(minima)
-                #print 'WRecoil',WRecoil,'AK4HT',AK4HT,'minima',minima
+
             if leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,WRecoil])
-		h_den_WlnuRecoil_R.Fill(WRecoil)
+                h_den_WlnuRecoil_R.Fill(WRecoil)
                 h_den_min_MHT_WlnuRecoil_R.Fill(minima)
-                #print 'WRecoil',WRecoil,'AK4HT',AK4HT,'minima',minima
-            # histogram for ZllRecoil 
+                h_den_WMass_R.Fill(WMass)
+
+            if mettrigdecision and leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond1:
+                minima = min([AK4HT,WRecoil])
+                h_num_WlnuRecoil_wMass40120_R.Fill(WRecoil)
+                h_num_min_MHT_WlnuRecoil_wMass40120_R.Fill(minima)
+
+            if leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond1:
+                minima = min([AK4HT,WRecoil])
+                h_den_WlnuRecoil_wMass40120_R.Fill(WRecoil)
+                h_den_min_MHT_WlnuRecoil_wMass40120_R.Fill(minima)
+
+            if mettrigdecision and leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond2:
+                minima = min([AK4HT,WRecoil])
+                h_num_WlnuRecoil_wMass50110_R.Fill(WRecoil)
+                h_num_min_MHT_WlnuRecoil_wMass40120_R.Fill(minima)
+
+            if leptonTrigger and JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond2:
+                minima = min([AK4HT,WRecoil])
+                h_den_WlnuRecoil_wMass50110_R.Fill(WRecoil)
+                h_den_min_MHT_WlnuRecoil_wMass40120_R.Fill(minima)
+
+
             if mettrigdecision and leptonTrigger and JetCond and DilepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,ZRecoil])
-		h_num_ZllRecoil_R.Fill(ZRecoil)
+                h_num_ZllRecoil_R.Fill(ZRecoil)
                 h_num_min_MHT_ZllRecoil_R.Fill(minima)
-                #print 'ZRecoil',ZRecoil,'AK4HT',AK4HT,'minima',minima
+
             if leptonTrigger and JetCond and DilepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,ZRecoil])
-		h_den_ZllRecoil_R.Fill(ZRecoil)
+                h_den_ZllRecoil_R.Fill(ZRecoil)
                 h_den_min_MHT_ZllRecoil_R.Fill(minima)
-                #print 'ZRecoil',ZRecoil,'AK4HT',AK4HT,'minima',minima
+
 
             '''
             =====================================================================================
@@ -555,7 +623,7 @@ def runbbdm(txtfile):
             =====================================================================================
             '''
 
-            # histograms for WlnuRecoil
+
             if mettrigdecision and leptonTrigger and AK8JetCond and SinglelepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,WRecoil])
                 h_num_WlnuRecoil_B.Fill(WRecoil)
@@ -565,12 +633,35 @@ def runbbdm(txtfile):
                 minima = min([AK4HT,WRecoil])
                 h_den_WlnuRecoil_B.Fill(WRecoil)
                 h_den_min_MHT_WlnuRecoil_B.Fill(minima)
+                h_den_WMass_B.Fill(WMass)
 
-            # histogram for ZllRecoil
+            if mettrigdecision and leptonTrigger and AK8JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond1:
+                minima = min([AK4HT,WRecoil])
+                h_num_WlnuRecoil_wMass40120_B.Fill(WRecoil)
+                h_num_min_MHT_WlnuRecoil_wMass40120_B.Fill(minima)
+
+            if leptonTrigger and AK8JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond1:
+                minima = min([AK4HT,WRecoil])
+                h_den_WlnuRecoil_wMass40120_B.Fill(WRecoil)
+                h_den_min_MHT_WlnuRecoil_wMass40120_B.Fill(minima)
+
+            if mettrigdecision and leptonTrigger and AK8JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond2:
+                minima = min([AK4HT,WRecoil])
+                h_num_WlnuRecoil_wMass50110_B.Fill(WRecoil)
+                h_num_min_MHT_WlnuRecoil_wMass40120_B.Fill(minima)
+
+            if leptonTrigger and AK8JetCond and SinglelepRequiredCond and lepVetoCond and WmassCond2:
+
+                minima = min([AK4HT,WRecoil])
+                h_den_WlnuRecoil_wMass50110_B.Fill(WRecoil)
+                h_den_min_MHT_WlnuRecoil_wMass40120_B.Fill(minima)
+
+
             if mettrigdecision and leptonTrigger and AK8JetCond and DilepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,ZRecoil])
                 h_num_ZllRecoil_B.Fill(ZRecoil)
                 h_num_min_MHT_ZllRecoil_B.Fill(minima)
+
             if leptonTrigger and AK8JetCond and DilepRequiredCond and lepVetoCond:
                 minima = min([AK4HT,ZRecoil])
                 h_den_ZllRecoil_B.Fill(ZRecoil)
@@ -599,6 +690,36 @@ def runbbdm(txtfile):
     h_den_min_MHT_ZllRecoil_B.Write()
     h_num_min_MHT_ZllRecoil_B.Write()
 
+
+
+    h_den_WlnuRecoil_wMass40120_R.Write()
+    h_num_WlnuRecoil_wMass40120_R.Write()
+    h_den_WlnuRecoil_wMass40120_B.Write()
+    h_num_WlnuRecoil_wMass40120_B.Write()
+
+
+    h_den_WlnuRecoil_wMass50110_R.Write()
+    h_num_WlnuRecoil_wMass50110_R.Write()
+    h_den_WlnuRecoil_wMass50110_B.Write()
+    h_num_WlnuRecoil_wMass50110_B.Write()
+
+
+
+
+    h_den_min_MHT_WlnuRecoil_wMass40120_R.Write()
+    h_num_min_MHT_WlnuRecoil_wMass40120_R.Write()
+    h_den_min_MHT_WlnuRecoil_wMass40120_B.Write()
+    h_num_min_MHT_WlnuRecoil_wMass40120_B.Write()
+
+
+    h_den_min_MHT_WlnuRecoil_wMass50110_R.Write()
+    h_num_min_MHT_WlnuRecoil_wMass50110_R.Write()
+    h_den_min_MHT_WlnuRecoil_wMass50110_B.Write()
+    h_num_min_MHT_WlnuRecoil_wMass50110_B.Write()
+
+
+    h_den_WMass_B.Write()
+    h_den_WMass_R.Write()
 
     outfile.Write()
     print "output written to ", outfilename
