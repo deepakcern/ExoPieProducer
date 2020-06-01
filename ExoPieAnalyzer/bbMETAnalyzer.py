@@ -229,6 +229,7 @@ def runbbdm(txtfile):
 
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
+    h_eventCounter = TH1F('h_eventCounter','h_eventCounter',2,0.5,2.5)
 
     h_reg_SR_1b_cutFlow  = TH1F("h_reg_SR_1b_cutFlow", "h_reg_SR_1b_cutFlow", 7,0,7)
     h_reg_SR_2b_cutFlow  = TH1F("h_reg_SR_2b_cutFlow", "h_reg_SR_2b_cutFlow", 7,0,7)
@@ -252,8 +253,10 @@ def runbbdm(txtfile):
         f_tmp = TFile.Open(infl,'READ')
         h_tmp = f_tmp.Get('h_total')
         h_tmp_weight = f_tmp.Get('h_total_mcweight')
+        h_tmp_count = f_tmp.Get('h_eventCounter')
         h_total.Add(h_tmp)
         h_total_mcweight.Add(h_tmp_weight)
+        h_eventCounter.Add(h_tmp_count)
 
     filename = infile_
     ieve = 0;icount = 0
@@ -1016,6 +1019,7 @@ def runbbdm(txtfile):
     outfile.cd()
     h_total_mcweight.Write()
     h_total.Write()
+    h_eventCounter.Write()
     h_reg_SR_1b_cutFlow.Write()
     h_reg_SR_2b_cutFlow.Write()
     h_reg_ZeeCR_1b_cutFlow.Write()
