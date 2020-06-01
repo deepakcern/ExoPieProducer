@@ -1019,6 +1019,7 @@ def runbbdm(txtfile):
     outfile.cd()
     h_total_mcweight.Write()
     h_total.Write()
+    h_eventCounter.Write()
     h_reg_SR_1b_cutFlow.Write()
     h_reg_SR_2b_cutFlow.Write()
     h_reg_ZeeCR_1b_cutFlow.Write()
