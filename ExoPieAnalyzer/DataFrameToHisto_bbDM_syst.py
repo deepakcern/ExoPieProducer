@@ -73,7 +73,7 @@ def VarToHist(df_var,df_weight,df_weight_den,df_weight_num,HISTNAME,binning):
     for ij in df_var.index:
         value = df_var[ij]
         weight= df_weight[ij]
-        prefire_wgt = df["weightPrefire"][ij]
+        #prefire_wgt = df["weightPrefire"][ij]
         #print df
         numerator   = df_weight_num[ij]
         if 'weightJEC' in HISTNAME:
@@ -83,7 +83,7 @@ def VarToHist(df_var,df_weight,df_weight_den,df_weight_num,HISTNAME,binning):
         scale       = numerator/denominator
 
         if weight==0.0:scale=1.0
-        if ApplyWeight: h_var.Fill(value, (weight*scale)/prefire_wgt)
+        if ApplyWeight: h_var.Fill(value, (weight*scale))
         if not ApplyWeight:h_var.Fill(value)
 
     return h_var
