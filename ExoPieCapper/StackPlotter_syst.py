@@ -77,15 +77,15 @@ if runOn2016:
     import sample_xsec_2016 as sample_xsec
     import sig_sample_xsec_2016 as sig_sample_xsec
     luminosity = 35.82 * 1000
-    luminosity_ = 35.82
+    luminosity_ = '{0:.2f}'.format(35.82)
 elif runOn2017:
     import sample_xsec_2017 as sample_xsec
     luminosity = 41.5 * 1000
-    luminosity_ = 41.50
+    luminosity_ = '{0:.2f}'.format(41.50)
 elif runOn2018:
     import sample_xsec_2018 as sample_xsec
     luminosity = 59.64 * 1000
-    luminosity_ = 59.64
+    luminosity_ = '{0:.2f}'.format(59.64)
 
 
 datestr = str(datetime.date.today().strftime("%d%m%Y"))
@@ -274,8 +274,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     QCD = ROOT.TH1F()
     SMH = ROOT.TH1F()
 
-    DYJets_Hits   = []; ZJets_Hits   = []; WJets_Hists   = []; GJets_Hists  = []; DIBOSON_Hists = []; STop_Hists   = []; Top_Hists     = []; QCD_Hists    = [];
-    MET_Hist = []; SE_Hist      = []
+    DYJets_Hits = []; ZJets_Hits = []; WJets_Hists = []; GJets_Hists = []
+    DIBOSON_Hists = []; STop_Hists = []; Top_Hists = []; QCD_Hists = []
+    SMH_Hists =[]; MET_Hist = []; SE_Hist = []
 
     count=0
     for file in files.readlines()[:]:
@@ -376,6 +377,17 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
                 QCD_Hists.append(h_temp2)
             else:QCD_Hists.append(h_temp)
 
+        elif 'HToBB' in file:
+            xsec = sample_xsec.getXsec(file)
+            #print ('file', file ,'xsec', xsec,'\n')
+            if (total_events > 0): normlisation=(xsec*lumi2016)/(total_events)
+            else: normlisation=0
+            h_temp.Scale(normlisation)
+            if isrebin:
+                h_temp2=setHistStyle(h_temp,hist)
+                SMH_Hists.append(h_temp2)
+            else:SMH_Hists.append(h_temp)
+
         elif 'combined_data_MET' in file:
             if isrebin:
                 h_temp2=setHistStyle(h_temp,hist)
@@ -442,6 +454,11 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         else:QCD.Add(QCD_Hists[i])
     QCD.Sumw2()
 
+    for i in range(len(SMH_Hists)):
+        if i==0:
+            SMH=SMH_Hists[i]
+        else:SMH.Add(SMH_Hists[i])
+    SMH.Sumw2()
 
 ##=================================================================
 
@@ -453,6 +470,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     TTCount       =   Top.Integral();
     VVCount       =   DIBOSON.Integral();
     QCDCount      =   QCD.Integral();
+    SMHCount      =   SMH.Integral();
 
     mcsum = ZJetsCount + DYJetsCount + WJetsCount + STopCount + GJetsCount + TTCount + VVCount + QCDCount
     total_hists = WJets_Hists + DYJets_Hits + ZJets_Hits + GJets_Hists + DIBOSON_Hists + STop_Hists + Top_Hists + QCD_Hists
@@ -500,7 +518,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     TTCount       =   Top.Integral();
     VVCount       =   DIBOSON.Integral();
     QCDCount      =   QCD.Integral();
+    SMHCount      =   SMH.Integral();
 
+    if (SMHCount > 0 ):    hs.Add(SMH,"hist");
     if (QCDCount > 0):     hs.Add(QCD,"hist");
     if (DYJetsCount > 0):  hs.Add(DYJets,"hist");
     if (ZJetsCount > 0):   hs.Add(ZJets,"hist");
@@ -657,6 +677,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     TTLegend    =   "t#bar{t} "
     VVLegend    =   "WW/WZ/ZZ "
     QCDLegend   =   "QCD "
+    SMHLegend   =   "SMH "
 
     legend = SetLegend([.50,.58,.93,.92],ncol=2)
 
@@ -673,6 +694,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     if ZJetsCount > 0:legend.AddEntry(ZJets,ZLegend,"f");
     legend.AddEntry(DYJets,DYLegend,"f");
     legend.AddEntry(QCD,QCDLegend,"f");
+    legend.AddEntry(SMH,SMHLegend,"f");
 
     legend.Draw('same')
 
@@ -924,8 +946,8 @@ for reg in regions:
             makeplot("reg_"+reg+"_nJets",'h_reg_'+reg+'_nJets','nJets',0.,10.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_NEle",'h_reg_'+reg+'_NEle','NEle',0.,10.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_NMu",'h_reg_'+reg+'_NMu','NMu',0.,10.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_nPV",'h_reg_'+reg+'_nPV','Before PU reweighting',0.,70.,1,1,0,reg,varBin=False)
-            makeplot("reg_"+reg+"_PUnPV",'h_reg_'+reg+'_PUnPV','After PU reweighting',0.,70.,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_nPV",'h_reg_'+reg+'_nPV','Before PU reweighting',0.,70.,1,0,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_PUnPV",'h_reg_'+reg+'_PUnPV','After PU reweighting',0.,70.,1,0,0,reg,varBin=False)
     except Exception as e:
         print (e)
         print ("Cannot Plot")
