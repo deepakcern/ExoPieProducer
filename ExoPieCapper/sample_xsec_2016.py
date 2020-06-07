@@ -57,11 +57,11 @@ def getXsec(samplename):
     if 'WZTo2Q2Nu_13TeV'   in samplename: Xsec = 6.4880
     if 'WZTo3LNu'          in samplename: Xsec = 4.4297
 
-    if 'ZZ_TuneCUETP8M1' in samplename: Xsec = 16.6
     if 'WW_TuneCP5_13TeV' in samplename: Xsec = 75.8
-    if 'WW_TuneCUETP8M1_13TeV' in samplename: Xsec = 118.7
     if 'WZ_TuneCP5_13TeV' in samplename: Xsec = 27.6
-    if 'WZ_TuneCUETP8M1_13TeV' in samplename: Xsec = 47.2
+    if 'WW_TuneCUETP8M1_13TeV' in samplename: Xsec = 63.40
+    if 'WZ_TuneCUETP8M1_13TeV' in samplename: Xsec = 23.43
+    if 'ZZ_TuneCUETP8M1' in samplename: Xsec = 16.6
 
     if 'ZZTo2L2Q_13TeV'    in samplename: Xsec = 3.22
     if 'ZZTo2Q2Nu_13TeV'   in samplename: Xsec = 4.04
@@ -74,5 +74,4 @@ def getXsec(samplename):
     if 'ST_tW_antitop_5f'             in samplename: Xsec = 35.85
     if 'ST_tW_top_5f'                 in samplename: Xsec = 35.85
 
-    print ('Xsec',Xsec)
     return Xsec
