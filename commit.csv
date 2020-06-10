@@ -1,13 +1,23 @@
-syntax: monohbb_vXY: only the last two digits XY will change, prefix is the branch name 
+syntax, monohbb_vXY: only the last two digits XY will change; prefix is the branch name 
 
-monohbb_v00: this is the base version for setup_2017_2016 branch
+monohbb_v00, this is the base version for setup_2017_2016 branch
+	   ,
+monohbb_v01, fixed switching weight for 2017 and 2018 [change the position of creating year.py file and importing SFs modules]
+	   ,
+	   ,
+	   ,
+	   , changing the tag name this onwards
+	   , Adding the information about the skimmer and ExoPieElement also to avoid confusion. 
+	   , Adding year postfix also 
+	   , if ExoPieElement and Skimmer is same; only the last two digits will change (just before year name) 
+	   ,
+	   ,
+	   ,
+monohbb.v06.00.00.2017 , added matching variables in Top and W region
+           ,added N2DDT variable for boosted Analysis
+           ,added boolean to switch code for analayis and N2DDT/DDB SF study
+           ,added pu_nTrueInt variable for pile-reweight plot
 
-monohbb_v01: * fixed switching weight for 2017 and 2018 [change the position of creating year.py file and importing SFs modules]
+monohbb.v06.00.01.2017 , removed njets cut in SR for N2DDT/DDB study
+           , added nPV variable
 
-monohbb_v02: *added matching variables in Top and W region
-             *added N2DDT variable for boosted Analysis
-             *added boolean to switch code for analayis and N2DDT/DDB SF study
-             *added pu_nTrueInt variable for pile-reweight plot
-
-monohbb_v03: * removed njets cut in SR for N2DDT/DDB study
-	     * added nPV variable
