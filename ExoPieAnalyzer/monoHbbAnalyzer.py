@@ -22,10 +22,10 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = False
+isCondor =True
 runInteractive = False
 testing=True
-isAnalysis = False
+isAnalysis = True
 os.system("rm -rf Year.py")
 ## from commonutils
 if isCondor:sys.path.append('ExoPieUtils/commonutils/')
@@ -290,7 +290,7 @@ def runbbdm(txtfile):
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
-            ep_THINjetDeepCSV, ep_THINjetHadronFlavor, \
+            ep_THINjetDeepCSV, ep_THINjetHadronFlavor,ep_THINjetNPV, \
             ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, \
             ep_THINjetCorrUnc,ep_RegNNCorr,TopMatching,\
             ep_nfjet, ep_fjetPx, ep_fjetPy, ep_fjetPz, ep_fjetEnergy, \
@@ -308,7 +308,7 @@ def runbbdm(txtfile):
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
-                   df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, \
+                   df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, df.st_THINjetNPV, \
                    df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, \
                    df.st_THINjetCorrUnc,df.st_THINbRegNNCorr,df.st_TopMatching,\
                    df.st_nfjet, df.st_fjetPx, df.st_fjetPy, df.st_fjetPz, df.st_fjetEnergy, \
@@ -364,7 +364,7 @@ def runbbdm(txtfile):
 
 
             if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
-            if not isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and ep_fjetSDMass[index] > 50.0)]
+            if not isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and ep_fjetSDMass[index] > 20.0)]
             FatJet_SBand_index = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5)) and ((ep_fjetSDMass[index] > 50.0) and (ep_fjetSDMass[index] < 100.0) or ((ep_fjetSDMass[index] > 150.0) and (ep_fjetSDMass[index] < 350.0) )) and (ep_fjetProbHbb[index] > 0.86)]
             FatJet_ZCR_index   = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetProbHbb[index] > 0.86))]
 
@@ -671,6 +671,7 @@ def runbbdm(txtfile):
                     qcdk      = wgt.getQCDW(ep_genParPt[0])
                 if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight,toppTweight_up,toppTweight_down = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
 
+		
                 PUweight, PUweight_up, PUweight_down = wgt.puweight(ep_pu_nTrueInt)
                 commanweight = ewkweight*qcdk*toppTweight*PUweight*btagweight
                 commanweight_B = ewkweight*qcdk*toppTweight*PUweight*btagweight_B
@@ -681,6 +682,7 @@ def runbbdm(txtfile):
                 R_weight = R_Lepweight*commanweight
                 B_weight = B_Lepweight*commanweight_B
             additional_jets=ep_THINnJet-2
+	    #print "ep_pu_nTrueInt",ep_pu_nTrueInt
             #cutFlow(nEle_loose,nEle_tight,nMu_loose,nMu_tight,nTau,Werecoil,Wmurecoil,ZeeRecoil,ZmumuRecoil,pfMet,njets,nBjets,h_mass,nAK8JetsSR,nAK8JetsSBand,nAK8JetsZCR,ZeeMass,ZmumuMass)
 
 
@@ -780,7 +782,7 @@ def runbbdm(txtfile):
 
 		#print 'SR_R','R_weight',R_weight,'weight',weight
 
-                df_out_SR_resolved = df_out_SR_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_SR_resolved = df_out_SR_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet1CSV':ep_THINjetDeepCSV[jet1Index],
@@ -804,7 +806,7 @@ def runbbdm(txtfile):
 
                 #print 'SBand_R','R_weight',R_weight,'weight',weight
 
-                df_out_SBand_resolved = df_out_SBand_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_SBand_resolved = df_out_SBand_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet1CSV':ep_THINjetDeepCSV[jet1Index],
@@ -835,7 +837,7 @@ def runbbdm(txtfile):
 
 		#print 'Tope','R_weight',R_weight,'weight',weight
 
-                df_out_Tope_resolved  = df_out_Tope_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Tope_resolved  = df_out_Tope_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -862,7 +864,7 @@ def runbbdm(txtfile):
 
 		#print 'Topmu','R_weight',R_weight,'weight',weight
 
-                df_out_Topmu_resolved  = df_out_Topmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Topmu_resolved  = df_out_Topmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -893,7 +895,7 @@ def runbbdm(txtfile):
 
                 #print 'We','R_weight',R_weight,'weight',weight
 
-                df_out_We_resolved  = df_out_We_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_We_resolved  = df_out_We_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -920,7 +922,7 @@ def runbbdm(txtfile):
                 #print 'Wmu','R_weight',R_weight,'weight',weight
 
 
-                df_out_Wmu_resolved  = df_out_Wmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Wmu_resolved  = df_out_Wmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -967,7 +969,7 @@ def runbbdm(txtfile):
 
                 #print 'Zee','R_weight',R_weight,'weight',weight
 
-                df_out_Zee_resolved    = df_out_Zee_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Zee_resolved    = df_out_Zee_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -1009,7 +1011,7 @@ def runbbdm(txtfile):
 
 		#print 'Zmumu','R_weight',R_weight,'weight',weight
 
-                df_out_Zmumu_resolved  = df_out_Zmumu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Zmumu_resolved  = df_out_Zmumu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZmumuRecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
                                                 'FJetPt':dummy, 'FJetEta':dummy, 'FJetPhi':dummy, 'FJetCSV':dummy,
@@ -1061,7 +1063,7 @@ def runbbdm(txtfile):
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SR_B','B_weight',B_weight,'weight',weight
-                df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_SR_boosted = df_out_SR_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,
@@ -1104,7 +1106,7 @@ def runbbdm(txtfile):
 
                 #print 'SBand_B','B_weight',B_weight,'weight',weight
 
-                df_out_SBand_boosted = df_out_SBand_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_SBand_boosted = df_out_SBand_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt, 'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],'N2DDT':N2DDT,
@@ -1151,7 +1153,7 @@ def runbbdm(txtfile):
 
                 #print 'Tope_B','B_weight',B_weight,'weight',weight
 
-                df_out_Tope_boosted  = df_out_Tope_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Tope_boosted  = df_out_Tope_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,
@@ -1195,7 +1197,7 @@ def runbbdm(txtfile):
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
 
                 #print 'Topmu_B','B_weight',B_weight,'weight',weight
-                df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,
@@ -1244,7 +1246,7 @@ def runbbdm(txtfile):
 
                 #print 'We_B','B_weight',B_weight,'weight',weight
 
-                df_out_We_boosted  = df_out_We_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_We_boosted  = df_out_We_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,
@@ -1289,7 +1291,7 @@ def runbbdm(txtfile):
 
                 #print 'Wmu_B','B_weight',B_weight,'weight',weight
 
-                df_out_Wmu_boosted  = df_out_Wmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Wmu_boosted  = df_out_Wmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Wmurecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,
@@ -1345,7 +1347,7 @@ def runbbdm(txtfile):
 
                 #print 'Zmumu_B','B_weight',B_weight,'weight',weight
 
-                df_out_Zmumu_boosted  = df_out_Zmumu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Zmumu_boosted  = df_out_Zmumu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZmumuRecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],'N2DDT':N2DDT,
@@ -1406,7 +1408,7 @@ def runbbdm(txtfile):
 
                 #print 'Zee_B','B_weight',B_weight,'weight',weight
 
-                df_out_Zee_boosted    = df_out_Zee_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,
+                df_out_Zee_boosted    = df_out_Zee_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'Njets_PassID':ep_THINnJet,
                                                 'Nbjets_PassID':nBjets_iso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,'st_TopMatching':TopMatching,
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],'N2DDT':N2DDT,
