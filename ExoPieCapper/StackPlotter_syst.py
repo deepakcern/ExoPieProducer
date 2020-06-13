@@ -7,79 +7,59 @@ import array
 from openpyxl import Workbook,load_workbook
 import string
 
+#command  python StackPlotter_syst.py -d <DATASET_NAME> -m -y <Year> -D <histo_DIR> -S <signal_Dir>
 usage = "usage: %prog [options] arg1 arg2"
 parser = optparse.OptionParser(usage)
 
 parser.add_option("-d", "--data", dest="datasetname")
-parser.add_option("-s", "--sr", action="store_true", dest="plotSRs")
-parser.add_option("-m", "--mu", action="store_true", dest="plotMuRegs")
-parser.add_option("-e", "--ele", action="store_true", dest="plotEleRegs")
-parser.add_option("-p", "--pho", action="store_true", dest="plotPhoRegs")
-parser.add_option("-q", "--qcd", action="store_true", dest="plotQCDRegs")
-parser.add_option("-v", "--verbose", action="store_true", dest="verbose")
+parser.add_option("-D", "--pDir", type="string", dest="rootFileDir",help="directory containing histogram")
+parser.add_option("-S", "--sigDir", type="string",dest="SIGrootFileDir",help="directory containing signal histogram")
+parser.add_option("-s", "--sr", action="store_true", dest="plotSIGNAL")
+parser.add_option("-m", "--mu", action="store_true", dest="plotMuChannels")
+parser.add_option("-e", "--ele", action="store_true", dest="plotEleChannels")
+parser.add_option("-p", "--pho", action="store_true", dest="plotPhoChannels")
+parser.add_option("-q", "--qcd", action="store_true", dest="plotQCDChannels")
 parser.add_option("-y", "--year", dest="year", default="Year")
 
 (options, args) = parser.parse_args()
 
-if options.plotSRs==None:
-    makeSRplots = False
-else:
-    makeSRplots = options.plotSRs
+if options.plotSIGNAL==None: makeSIGplots = False
+else: makeSIGplots = options.plotSIGNAL
 
-if options.plotMuRegs==None:
-    makeMuCRplots = False
-else:
-    makeMuCRplots = options.plotMuRegs
+if options.plotMuChannels==None: makeMuCHplots = False
+else: makeMuCHplots = options.plotMuChannels
 
-if options.plotEleRegs==None:
-    makeEleCRplots = False
-else:
-    makeEleCRplots = options.plotEleRegs
+if options.plotEleChannels==None: makeEleCHplots = False
+else: makeEleCHplots = options.plotEleChannels
 
-if options.plotPhoRegs==None:
-    makePhoCRplots = False
-else:
-    makePhoCRplots = options.plotPhoRegs
+if options.plotPhoChannels==None: makePhoCRplots = False
+else: makePhoCRplots = options.plotPhoChannels
 
-if options.plotQCDRegs==None:
-    makeQCDCRplots = False
-else:
-    makeQCDCRplots = options.plotQCDRegs
+if options.plotQCDChannels==None: makeQCDCRplots = False
+else: makeQCDCRplots = options.plotQCDChannels
 
-if options.verbose==None:
-    verbose = False
-else:
-    verbose = options.verbose
+if options.datasetname.upper()=="SE": dtset="SE"
+elif options.datasetname.upper()=="SP": dtset="SP"
+elif options.datasetname.upper()=="SM": dtset="SM"
+else: dtset="MET"
 
-if options.datasetname.upper()=="SE":
-    dtset="SE"
-elif options.datasetname.upper()=="SP":
-    dtset="SP"
-elif options.datasetname.upper()=="SM":
-    dtset="SM"
-else:
-    dtset="MET"
 print ("Using dataset "+dtset)
 
-runOn2016 = False
-runOn2017 = False
-runOn2018 = False
-if options.year=='2016':
-    runOn2016=True
-elif options.year=='2017':
-    runOn2017=True
-elif options.year=='2018':
-    runOn2018=True
-else:
-    print('Please provide on which year you want to run?')
+runOn2016 = False; runOn2017 = False; runOn2018 = False
+if options.year=='2016': runOn2016=True
+elif options.year=='2017': runOn2017=True
+elif options.year=='2018': runOn2018=True
+else: print('Please provide on which year you want to run?')
 
 if runOn2016:
-    import sample_xsec_2016 as sample_xsec
+    #import sample_xsec_2016 as sample_xsec
+    import sample_xsec_2016_GenXSecAnalyser as sample_xsec
     import sig_sample_xsec_2016 as sig_sample_xsec
     luminosity = 35.82 * 1000
     luminosity_ = '{0:.2f}'.format(35.82)
 elif runOn2017:
-    import sample_xsec_2017 as sample_xsec
+    #import sample_xsec_2017 as sample_xsec
+    import sample_xsec_2017_GenXSecAnalyser as sample_xsec
     luminosity = 41.5 * 1000
     luminosity_ = '{0:.2f}'.format(41.50)
 elif runOn2018:
@@ -90,12 +70,17 @@ elif runOn2018:
 
 datestr = str(datetime.date.today().strftime("%d%m%Y"))
 
-path='2016_syst'
-sig_path = 'Output_Signal_Histo_2016_10122019'
+if options.rootFileDir==None:
+    print ('Please provide histogram directory name')
+    sys.exit()
+else:
+    path=options.rootFileDir
 
-if makeMuCRplots:
+sig_path = options.SIGrootFileDir
+
+if makeMuCHplots:
     yield_outfile = open('bbDM'+str(options.year)+'_Mu_yield.txt','w')
-if makeEleCRplots:
+if makeEleCHplots:
     yield_outfile = open('bbDM'+str(options.year)+'_Ele_yield.txt','w')
 
 alpha_list = list(string.ascii_uppercase)
@@ -122,8 +107,6 @@ def SetCMSAxis(h, xoffset=1., yoffset=1.):
     h.GetXaxis().SetLabelSize(0.047)
     h.GetYaxis().SetLabelSize(0.047)
     if type(h) is ( (not ROOT.TGraphAsymmErrors) or (not ROOT.TGraph)): h.GetZaxis().SetLabelSize(0.047)
-
-
 
     h.GetXaxis().SetTitleOffset(xoffset)
     h.GetYaxis().SetTitleOffset(yoffset)
@@ -380,7 +363,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         elif 'HToBB' in file:
             xsec = sample_xsec.getXsec(file)
             #print ('file', file ,'xsec', xsec,'\n')
-            if (total_events > 0): normlisation=(xsec*lumi2016)/(total_events)
+            if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
             if isrebin:
@@ -569,42 +552,27 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     for h in hs:
         h = SetCMSAxis(h)
     hs.Draw()
-    # if  ('MET' in hist) and ('SR' in hist):
-    #     sig_leg1b = ROOT.TLegend(0.23, 0.62, 0.60,0.90,'',"brNDC");
-    #     sig_leg1b.SetTextSize(0.030);sig_leg1b.SetBorderSize(0)
-    #     sig_leg1b.SetFillStyle(0);sig_leg1b.SetTextFont(42)
-    #     sig_leg1b.SetHeader("2HDM+a model")
-    #     sig_leg2b = ROOT.TLegend(0.23, 0.62, 0.60,0.90,'',"brNDC");
-    #     sig_leg2b.SetTextSize(0.030);sig_leg2b.SetBorderSize(0)
-    #     sig_leg2b.SetFillStyle(0);sig_leg2b.SetTextFont(42)
-    #     sig_leg2b.SetHeader("2HDM+a model")
-    #     mass_points = [50,250,500]
-    #     signal_files_name = [name for name in os.listdir(sig_path) if (('Ma50' in name) or ('Ma500' in name)) ]
-    #     signal_files = [ROOT.TFile(sig_path+'/'+filename,'READ') for filename in os.listdir(sig_path) if (('Ma50' in filename) or ('Ma500' in filename))]
-    #     total = [fname.Get('h_total_mcweight') for fname in signal_files]
-    #     sig_hist1b = [fname.Get('h_reg_SR_1b_MET') for fname in signal_files]
-    #     sig_hist2b = [fname.Get('h_reg_SR_2b_MET') for fname in signal_files]
-    #
-    #     sig_hist1b_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral()) for i,j,k in zip(sig_hist1b,signal_files_name,total)]
-    #
-    #     sig_hist2b_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral()) for i,j,k in zip(sig_hist2b,signal_files_name,total)]
-    #
-    #     LineStyle = [[i.SetLineStyle(2), j.SetLineStyle(2)] for i,j in zip(sig_hist1b,sig_hist2b)]
-    #     LineWidth = [[i.SetLineWidth(2), j.SetLineWidth(2)] for i,j in zip(sig_hist1b,sig_hist2b)]
-    #     LineColor = [[i.SetLineColor(n), j.SetLineColor(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(2,len(sig_hist2b)+2))]
-    #
-    #     MarkerColor = [[i.SetMarkerColor(n), j.SetMarkerColor(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(2,len(sig_hist2b)+2))]
-    #     MarkerStyle = [[i.SetMarkerStyle(n), j.SetMarkerStyle(n)] for i,j,n in zip(sig_hist1b,sig_hist2b,range(len(sig_hist2b)))]
-    #     MarkerSize = [[i.SetMarkerSize(1.5), j.SetMarkerSize(1.5)] for i,j in zip(sig_hist1b,sig_hist2b)]
-    #
-    #     sig_leg1b_list = [sig_leg1b.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist1b,signal_files_name)]
-    #     sig_leg2b_list = [sig_leg2b.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist2b,signal_files_name)]
-    #     if ('1b' in hist):
-    #         draw_hist1b = [i.Draw("same") for i in sig_hist1b]
-    #         sig_leg1b.Draw()
-    #     if ('2b' in hist):
-    #         draw_hist1b = [i.Draw("same") for i in sig_hist2b]
-    #         sig_leg2b.Draw()
+    if makeSIGplots:
+        if  ('MET' in hist) and ('SR' in hist):
+            ma_points = [50, 200] # how many signal points you want to include
+            sig_leg = SetLegend([.50,.38,.60,.58],ncol=1)
+            sig_leg.SetHeader("2HDM+a model")
+            signal_files_name = [name for name in os.listdir(sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+
+            signal_files = [ROOT.TFile(sig_path+'/'+name,'READ') for name in os.listdir(sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+            total = [fname.Get('h_total_mcweight') for fname in signal_files]
+            sig_hist = [fname.Get(hist) for fname in signal_files]
+
+            sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral()) for i,j,k in zip(sig_hist,signal_files_name,total)]
+
+            LineStyling = [(i.SetLineStyle(n), i.SetLineWidth(3), i.SetLineColor(n)) for i,n in zip(sig_hist,range(2,len(sig_hist)+2))]
+
+            MarkerStyling = [(i.SetMarkerColor(n),i.SetMarkerStyle(n),i.SetMarkerSize(1.5)) for i,n in zip(sig_hist,range(2,len(sig_hist)+2))]
+
+            sig_leg_list = [sig_leg.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist,signal_files_name)]
+
+            draw_hist = [i.Draw("same Ehist") for i in sig_hist]
+            sig_leg.Draw()
 #####================================= data section =========================
     if 'SR' in reg:
         h_data=hs.GetStack().Last()
@@ -808,8 +776,8 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg)
     if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg):
         os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg)
-    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+reg):
-        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+reg)
+    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'):
+        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/')
     if (ISLOG == 0) and noPdfPng:
         c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg+'/'+plot+'.pdf')
         c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg+'/'+plot+'.png')
@@ -842,19 +810,26 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     data_obs=h_data
     data_obs.SetNameTitle("data_obs","data_obs");
     data_obs.Write();
+    if makeSIGplots:
+        [hist.SetNameTitle(sname.split('5f_')[-1].split('_tanb35_')[0],sname.split('5f_')[-1].split('_tanb35_')[0])for (sname, hist) in zip(signal_files_name, sig_hist)]
+        [hist.Write() for hist in sig_hist]
     fshape.Write();
     fshape.Close();
     print ('\n')
-
-    bkg_list = {'ZJets':ZJets,'DYJets':DYJets,'WJets':WJets,'STop':STop,'GJets':GJets,'Top':Top,'DIBOSON':DIBOSON,'QCD':QCD,'bkgSum':Stackhist,'data_obs':h_data}
-    yield_outfile.write('region '+str(hist)+'\n')
-    for key in bkg_list:
-        binerror = 0.00
-        bkg_list[key].Rebin(bkg_list[key].GetNbinsX())
-        binerror = (bkg_list[key].GetBinError(1))
-        print(str(key)+' '+str.format('{0:.3f}',bkg_list[key].Integral())+'pm'+ str.format('{0:.3f}', binerror)+'\n')
-        yield_outfile.write(str(key)+' '+str.format('{0:.1f}',bkg_list[key].Integral())+'+-'+ str.format('{0:.1f}', binerror)+'\n')
-    yield_outfile.write('\n')
+    noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
+    if (('MET' in hist and 'SR' in hist) or ('Recoil' in hist)) and not noYieldHisto:
+        bkg_list = {'ZJets':ZJets,'DYJets':DYJets,'WJets':WJets,'STop':STop,'GJets':GJets,'Top':Top,'DIBOSON':DIBOSON,'QCD':QCD,'SMH':SMH,'bkgSum':Stackhist,'data_obs':h_data}
+        yield_outfile.write('region '+str(hist)+'\n')
+        if makeSIGplots:
+            for (sname, hist) in zip(signal_files_name, sig_hist): bkg_list.update({sname.split('5f_')[-1].split('_tanb35_')[0]:hist})
+        yield_outfile.write('       Bin1   Bin2   Bin3   Bin4\n')
+        for key in bkg_list:
+            # binerror = 0.00
+            # bkg_list[key].Rebin(bkg_list[key].GetNbinsX())
+            # binerror = (bkg_list[key].GetBinError(1))
+            # yield_outfile.write(str(key)+' '+str.format('{0:.1f}',bkg_list[key].Integral())+'\xb1'+ str.format('{0:.1f}', binerror)+'\n')
+            yield_outfile.write(str(key)+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(2))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(2))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(3))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(3))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(4))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(4))+'\n')
+        yield_outfile.write('\n')
 
  #=======================================================================
 
@@ -863,10 +838,10 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
 regions=[]
 PUreg=[]
-if makeMuCRplots:
+if makeMuCHplots:
     regions+=['SR_1b','SR_2b','ZmumuCR_1b','ZmumuCR_2b','TopmunuCR_1b','TopmunuCR_2b','WmunuCR_1b','WmunuCR_2b']
     PUreg+=['mu_']
-if makeEleCRplots:
+if makeEleCHplots:
     regions+=['ZeeCR_1b','ZeeCR_2b','TopenuCR_1b','TopenuCR_2b','WenuCR_1b','WenuCR_2b']
 
 # makeplot("reg_WenuCR_1b_Recoil",'h_reg_WenuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'WenuCR_1b',varBin=False)
