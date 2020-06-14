@@ -22,7 +22,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor =True
+isCondor =False
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -302,7 +302,7 @@ def runbbdm(txtfile):
             ep_nPho, ep_phoIsPasepight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
             ep_nMu, ep_muPx, ep_muPy, ep_muPz, ep_muEnergy, ep_iepightMuon, ep_muCharge,\
             ep_nTau_DRBased_EleMuVeto,ep_nTau_discBased_looseElelooseMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_looseEleTightMuVeto,ep_nTau_discBased_mediumElelooseMuVeto,ep_nTau_discBased_TightEleTightMuVeto,\
-            ep_pu_nTrueInt, ep_pu_nPUVert, \
+            ep_pu_nTrueInt, ep_pu_nPUVert, ep_prefiringweight, ep_prefiringweight_up, ep_prefiringweight_down, \
             ep_THINjetNPV, \
             ep_mcweight, ep_genParPt,ep_genParSample, isData, eletrigdecision, mutrigdecision, mettrigdecision,\
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
@@ -320,7 +320,7 @@ def runbbdm(txtfile):
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy, \
                    df.st_nMu, df.st_muPx, df.st_muPy, df.st_muPz, df.st_muEnergy, df.st_isTightMuon,df.st_muCharge, \
                    df.st_nTau_DRBased_EleMuVeto,df.st_nTau_discBased_looseElelooseMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_looseEleTightMuVeto,df.st_nTau_discBased_mediumElelooseMuVeto,df.st_nTau_discBased_TightEleTightMuVeto,\
-                   df.st_pu_nTrueInt, df.st_pu_nPUVert, \
+                   df.st_pu_nTrueInt, df.st_pu_nPUVert, df.st_prefiringweight, df.st_prefiringweightup, df.st_prefiringweightdown,\
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample,df.st_isData,df.st_eletrigdecision,df.st_mutrigdecision,df.st_mettrigdecision, \
 
@@ -671,7 +671,7 @@ def runbbdm(txtfile):
                     qcdk      = wgt.getQCDW(ep_genParPt[0])
                 if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight,toppTweight_up,toppTweight_down = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
 
-		
+
                 PUweight, PUweight_up, PUweight_down = wgt.puweight(ep_pu_nTrueInt)
                 commanweight = ewkweight*qcdk*toppTweight*PUweight*btagweight
                 commanweight_B = ewkweight*qcdk*toppTweight*PUweight*btagweight_B
@@ -777,7 +777,7 @@ def runbbdm(txtfile):
                 if not isData:
                         ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                         weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
-                        weight = commanweight*weightMET
+                        weight = commanweight*weightMET*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
 		#print 'SR_R','R_weight',R_weight,'weight',weight
@@ -792,7 +792,7 @@ def runbbdm(txtfile):
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                               ignore_index=True)
 
@@ -801,7 +801,7 @@ def runbbdm(txtfile):
                 if not isData:
                         ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                         weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
-                        weight = commanweight*weightMET
+                        weight = commanweight*weightMET*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SBand_R','R_weight',R_weight,'weight',weight
@@ -816,7 +816,7 @@ def runbbdm(txtfile):
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                               ignore_index=True)
 
@@ -832,7 +832,7 @@ def runbbdm(txtfile):
                     lepweight_up = lepIdReco_up*lepTrigSF_up
                     lepweight_down = lepIdReco_down*lepTrigSF_down
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight
+                    weight = lepweight*commanweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Tope','R_weight',R_weight,'weight',weight
@@ -847,7 +847,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -859,7 +859,7 @@ def runbbdm(txtfile):
                     recoilweight,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil,cat='R')
                     lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*recoilweight
+                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Topmu','R_weight',R_weight,'weight',weight
@@ -874,7 +874,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -890,7 +890,7 @@ def runbbdm(txtfile):
                     lepweight_up = lepIdReco_up*lepTrigSF_up
                     lepweight_down = lepIdReco_down*lepTrigSF_down
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight
+                    weight = lepweight*commanweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
                 #print 'We','R_weight',R_weight,'weight',weight
@@ -905,7 +905,7 @@ def runbbdm(txtfile):
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -916,7 +916,7 @@ def runbbdm(txtfile):
                     recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(Wmurecoil,cat='R')
                     lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*recoilweight
+                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
                 #print 'Wmu','R_weight',R_weight,'weight',weight
@@ -932,7 +932,7 @@ def runbbdm(txtfile):
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -963,7 +963,7 @@ def runbbdm(txtfile):
                 ZpT = math.sqrt( (ep_elePx[0] + ep_elePx[0])**2 + (ep_elePy[1]+ep_elePy[1])**2 )
 
                 if not isData:
-                    weight = lepweight*commanweight
+                    weight = lepweight*commanweight*ep_prefiringweight
                     ewkweight_up=ewkweight*1.5; ewkweight_down=ewkweight*0.5
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
@@ -981,7 +981,7 @@ def runbbdm(txtfile):
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1006,7 +1006,7 @@ def runbbdm(txtfile):
                 if not isData:
                     recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(ZmumuRecoil,cat='R')
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*recoilweight
+                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Zmumu','R_weight',R_weight,'weight',weight
@@ -1023,7 +1023,7 @@ def runbbdm(txtfile):
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1059,7 +1059,7 @@ def runbbdm(txtfile):
                 if not isData:
                         ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                         weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
-                        weight = commanweight_B*weightMET
+                        weight = commanweight_B*weightMET*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SR_B','B_weight',B_weight,'weight',weight
@@ -1072,7 +1072,7 @@ def runbbdm(txtfile):
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                               'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1101,7 +1101,7 @@ def runbbdm(txtfile):
                 if not isData:
                     weightMET,MET_up,MET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = commanweight_B*weightMET
+                    weight = commanweight_B*weightMET*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SBand_B','B_weight',B_weight,'weight',weight
@@ -1115,7 +1115,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
                                                 'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1148,7 +1148,7 @@ def runbbdm(txtfile):
                     lepweight_up                          = lep_up*lepTrigSF_up
                     lepweight_down                        = lep_down*lepTrigSF_down
                     ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5
-                    weight                                = commanweight_B*lepweight
+                    weight                                = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'Tope_B','B_weight',B_weight,'weight',weight
@@ -1163,7 +1163,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1192,7 +1192,7 @@ def runbbdm(txtfile):
                 if not isData:
                     lepweight,lepweight_up,lepweight_down      =  wgt.mu_weight(mupt[0],mueta[0],'T')
                     recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(Wmurecoil,cat='B')
-                    weight                                     = commanweight_B*lepweight*recoilweight
+                    weight                                     = commanweight_B*lepweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
 
@@ -1207,7 +1207,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1241,7 +1241,7 @@ def runbbdm(txtfile):
                     lepweight_up                          = lep_up*lepTrigSF_up
                     lepweight_down                        = lep_down*lepTrigSF_down
                     ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5
-                    weight                                = commanweight_B*lepweight
+                    weight                                = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'We_B','B_weight',B_weight,'weight',weight
@@ -1256,7 +1256,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1286,7 +1286,7 @@ def runbbdm(txtfile):
                 if not isData:
                     lepweight,lepweight_up,lepweight_down=wgt.mu_weight(mupt[0],mueta[0],'T')
                     weightRecoil,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil,cat='B')
-                    weight = commanweight_B*lepweight*weightRecoil
+                    weight = commanweight_B*lepweight*weightRecoil*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'Wmu_B','B_weight',B_weight,'weight',weight
@@ -1301,7 +1301,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1342,7 +1342,7 @@ def runbbdm(txtfile):
                 if not isData:
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                     recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(ZmumuRecoil,cat='B')
-                    weight                                     = commanweight_B*lepweight*recoilweight
+                    weight                                     = commanweight_B*lepweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'Zmumu_B','B_weight',B_weight,'weight',weight
@@ -1359,7 +1359,7 @@ def runbbdm(txtfile):
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
@@ -1403,7 +1403,7 @@ def runbbdm(txtfile):
 
                 if not isData:
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight          = commanweight_B*lepweight
+                    weight          = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'Zee_B','B_weight',B_weight,'weight',weight
@@ -1420,7 +1420,7 @@ def runbbdm(txtfile):
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
-                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down
+                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down
                                            },
                                                 ignore_index=True)
 
