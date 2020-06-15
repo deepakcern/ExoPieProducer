@@ -14,6 +14,6 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_nPho', 'st_phoIsPassTight', 'st_phoPx', 'st_phoPy', 'st_phoPz', 'st_phoEnergy', \
 'st_nMu', 'st_muPx', 'st_muPy', 'st_muPz', 'st_muEnergy', 'st_isTightMuon','st_muCharge',\
 'st_nTau_DRBased_EleMuVeto','st_nTau_discBased_looseElelooseMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_mediumElelooseMuVeto','st_nTau_discBased_TightEleTightMuVeto',
-'st_pu_nTrueInt', 'st_pu_nPUVert', \
+'st_pu_nTrueInt', 'st_pu_nPUVert', 'st_prefiringweight', 'st_prefiringweightup', 'st_prefiringweightdown',\
 'st_THINjetNPV', \
 'mcweight','st_genParPt', 'st_genParSample','st_isData','st_eletrigdecision','st_mutrigdecision','st_mettrigdecision']

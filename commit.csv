@@ -21,3 +21,5 @@ monohbb.v06.00.00.2017 , added matching variables in Top and W region
 monohbb.v06.00.01.2017 , removed njets cut in SR for N2DDT/DDB study
            , added nPV variable
 	   , SD mass cut now > 20 GeV for N2DDT/DDB study
+
+monohbb.v06.00.02.2017 , added l1 prefire weight
