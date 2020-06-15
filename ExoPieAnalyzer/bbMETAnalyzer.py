@@ -288,7 +288,7 @@ def runbbdm(txtfile):
         ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
         in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
                df.st_prefiringweight,df.st_prefiringweightup,df.st_prefiringweightdown,\
-               df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
+               df.st_pfMetSmearPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
                df.WenuPhi, df.WmunuPhi, df.ZeePhi, df.ZmumuPhi, \
                df.ZeeRecoil, df.ZmumuRecoil, df.WenuRecoil, df.WmunuRecoil, \
                df.ZeeMass, df.ZmumuMass, df.Wenumass, df.Wmunumass, \

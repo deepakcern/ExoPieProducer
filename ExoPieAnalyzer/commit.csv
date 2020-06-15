@@ -21,3 +21,5 @@ bbvXX.YY.02: * added the met phi and recoil phi variables
 bbv04.00.00: * added prefiring weights for 2017 and 2016
 
 bbv06.00.00: * made the analyser for prefiring weight for all eras and added event counter histogram
+
+bbv06.02.00: * added the Type1smear met 

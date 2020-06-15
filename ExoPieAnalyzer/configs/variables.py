@@ -1,6 +1,6 @@
 allvars_bbDM=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_prefiringweight','st_prefiringweightup','st_prefiringweightdown',\
-'st_pfMetCorrPt', 'st_pfMetCorrPhi', 'st_pfMetUncJetResUp', 'st_pfMetUncJetResDown', 'st_pfMetUncJetEnUp', 'st_pfMetUncJetEnDown', \
+'st_pfMetSmearPt', 'st_pfMetCorrPhi', 'st_pfMetUncJetResUp', 'st_pfMetUncJetResDown', 'st_pfMetUncJetEnUp', 'st_pfMetUncJetEnDown', \
 'WenuPhi', 'WmunuPhi', 'ZeePhi', 'ZmumuPhi', \
 'ZeeRecoil', 'ZmumuRecoil', 'WenuRecoil', 'WmunuRecoil', \
 'ZeeMass', 'ZmumuMass', 'Wenumass', 'Wmunumass', \

@@ -1,0 +1,54 @@
+import os, sys
+#//--------------------------------------------------------------------------------------
+def getXsec(samplename):
+    samplename = str(samplename)
+    if 'DYJetsToLL_M-50_HT-100to200'   in samplename: Xsec  =	161
+    if 'DYJetsToLL_M-50_HT-1200to2500'   in samplename: Xsec  =	0.1927
+    if 'DYJetsToLL_M-50_HT-200to400'   in samplename: Xsec  =	48.58
+    if 'DYJetsToLL_M-50_HT-2500toInf'   in samplename: Xsec  =	0.003478
+    if 'DYJetsToLL_M-50_HT-400to600'   in samplename: Xsec  =	6.982
+    if 'DYJetsToLL_M-50_HT-600to800'   in samplename: Xsec  =	1.747
+    if 'DYJetsToLL_M-50_HT-800to1200'   in samplename: Xsec  =	0.8052
+    if 'GJets_HT-100To200'   in samplename: Xsec  =	8622
+    if 'GJets_HT-200To400'   in samplename: Xsec  =	2193
+    if 'GJets_HT-400To600'   in samplename: Xsec  =	258.5
+    if 'GJets_HT-40To100'   in samplename: Xsec  =	18620
+    if 'GJets_HT-600ToInf'   in samplename: Xsec  =	85.21
+    if 'QCD_HT1000to1500'   in samplename: Xsec  =	1094
+    if 'QCD_HT1500to2000'   in samplename: Xsec  =	98.99
+    if 'QCD_HT2000toInf'   in samplename: Xsec  =	20.23
+    if 'QCD_HT500to700'   in samplename: Xsec  =	29990
+    if 'QCD_HT700to1000'   in samplename: Xsec  =	6351
+    if 'ST_s-channel_4f_leptonDecays'   in samplename: Xsec  =	10.32
+    if 'ST_t-channel_antitop_4f_inclusiveDecays'   in samplename: Xsec  =	80.95
+    if 'ST_t-channel_top_4f_inclusiveDecays'   in samplename: Xsec  =	 136.02
+    if 'ST_tW_antitop_5f_inclusiveDecays'   in samplename: Xsec  =	38.06
+    if 'ST_tW_top_5f_inclusiveDecays'   in samplename: Xsec  =	38.09
+    if 'TTTo2L2Nu'   in samplename: Xsec  =	687.1*0.105
+    if 'TTToHadronic'   in samplename: Xsec  =	687.1*0.457
+    if 'TTToSemiLeptonic'   in samplename: Xsec  =	687.1*0.438
+    if 'WJetsToLNu_HT-100To200'   in samplename: Xsec  =	1395
+    if 'WJetsToLNu_HT-1200To2500'   in samplename: Xsec  =	1.08
+    if 'WJetsToLNu_HT-200To400'   in samplename: Xsec  =	409.3
+    if 'WJetsToLNu_HT-2500ToInf'   in samplename: Xsec  =	0.008053
+    if 'WJetsToLNu_HT-400To600'   in samplename: Xsec  =	57.91
+    if 'WJetsToLNu_HT-600To800'   in samplename: Xsec  =	12.93
+    if 'WJetsToLNu_HT-800To1200'   in samplename: Xsec  =	5.395
+    if 'WW_TuneCP5_13TeV'   in samplename: Xsec  =	75.9
+    if 'WZ_TuneCP5_13TeV'   in samplename: Xsec  =	27.57
+    if 'ZJetsToNuNu_HT-100To200'   in samplename: Xsec  =	304.5
+    if 'ZJetsToNuNu_HT-1200To2500'   in samplename: Xsec  =	0.343
+    if 'ZJetsToNuNu_HT-200To400'   in samplename: Xsec  =	91.85
+    if 'ZJetsToNuNu_HT-2500ToInf'   in samplename: Xsec  =	0.005146
+    if 'ZJetsToNuNu_HT-400To600'   in samplename: Xsec  =	13.11
+    if 'ZJetsToNuNu_HT-600To800'   in samplename: Xsec  =	3.257
+    if 'ZJetsToNuNu_HT-800To1200'   in samplename: Xsec  =	1.499
+    if 'ZZ_TuneCP5'   in samplename: Xsec  =	12.14
+
+    if 'ggZH_HToBB_ZToNuNu_M125'  in samplename: Xsec = 0.01222
+    if 'ggZH_HToBB_ZToLL_M125'    in samplename: Xsec = 0.006185
+    if 'WminusH_HToBB_WToQQ_M125' in samplename: Xsec = 0.3654
+    if 'WplusH_HToBB_WToLNu_M125' in samplename: Xsec = 0.2819
+    if 'ZH_HToBB_ZToLL_M125'      in samplename and 'ggZH_HToBB_ZToLL_M125' not in samplename:   Xsec = 0.07924
+    if 'ZH_HToBB_ZToNuNu_M125'    in samplename and 'ggZH_HToBB_ZToNuNu_M125' not in samplename: Xsec = 0.1565
+    return Xsec

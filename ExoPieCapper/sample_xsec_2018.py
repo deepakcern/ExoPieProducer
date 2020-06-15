@@ -1,6 +1,7 @@
 import os, sys
 #//--------------------------------------------------------------------------------------
 def getXsec(samplename):
+    samplename = str(samplename)
     if 'DYJetsToLL_M-50_HT-100to200'   in samplename: Xsec  = 161.000000
     if 'DYJetsToLL_M-50_HT-1200to2500'   in samplename: Xsec  = 0.192700
     if 'DYJetsToLL_M-50_HT-200to400'   in samplename: Xsec  = 48.580000
@@ -60,6 +61,5 @@ def getXsec(samplename):
     if 'WplusH_HToBB_WToLNu_M125' in samplename: Xsec = 0.2819
     if 'ZH_HToBB_ZToLL_M125'      in samplename and 'ggZH_HToBB_ZToLL_M125' not in samplename:   Xsec = 0.07924
     if 'ZH_HToBB_ZToNuNu_M125'    in samplename and 'ggZH_HToBB_ZToNuNu_M125' not in samplename: Xsec = 0.1565
-
 
     return Xsec
