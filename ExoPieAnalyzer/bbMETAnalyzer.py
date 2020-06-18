@@ -19,6 +19,12 @@ import multiprocessing as mp
 
 
 isCondor = True
+
+###swith off the CR which you do not want to run
+zee_cr = True; zmumu_cr = True;
+wenu_cr = True; wmunu_cr = True;
+topenu_cr = True; topmunu_cr = True;
+
 runInteractive = False
 testing=True
 ## from commonutils
@@ -234,20 +240,20 @@ def runbbdm(txtfile):
     h_reg_SR_1b_cutFlow  = TH1F("h_reg_SR_1b_cutFlow", "h_reg_SR_1b_cutFlow", 7,0,7)
     h_reg_SR_2b_cutFlow  = TH1F("h_reg_SR_2b_cutFlow", "h_reg_SR_2b_cutFlow", 7,0,7)
 
-    h_reg_ZeeCR_1b_cutFlow = TH1F("h_reg_ZeeCR_1b_cutFlow", "h_reg_ZeeCR_1b_cutFlow", 9,0,9)
-    h_reg_ZeeCR_2b_cutFlow = TH1F("h_reg_ZeeCR_2b_cutFlow", "h_reg_ZeeCR_2b_cutFlow", 9,0,9)
-    h_reg_ZmumuCR_1b_cutFlow = TH1F("h_reg_ZmumuCR_1b_cutFlow", "h_reg_ZmumuCR_1b_cutFlow", 9,0,9)
-    h_reg_ZmumuCR_2b_cutFlow = TH1F("h_reg_ZmumuCR_2b_cutFlow", "h_reg_ZmumuCR_2b_cutFlow", 9,0,9)
+    h_reg_ZeeCR_1b_cutFlow = TH1F("h_reg_ZeeCR_1b_cutFlow", "h_reg_ZeeCR_1b_cutFlow", 11,0,11)
+    h_reg_ZeeCR_2b_cutFlow = TH1F("h_reg_ZeeCR_2b_cutFlow", "h_reg_ZeeCR_2b_cutFlow", 11,0,11)
+    h_reg_ZmumuCR_1b_cutFlow = TH1F("h_reg_ZmumuCR_1b_cutFlow", "h_reg_ZmumuCR_1b_cutFlow", 11,0,11)
+    h_reg_ZmumuCR_2b_cutFlow = TH1F("h_reg_ZmumuCR_2b_cutFlow", "h_reg_ZmumuCR_2b_cutFlow", 11,0,11)
 
-    h_reg_WenuCR_1b_cutFlow = TH1F("h_reg_WenuCR_1b_cutFlow", "h_reg_WenuCR_1b_cutFlow", 9,0,9)
-    h_reg_WenuCR_2b_cutFlow = TH1F("h_reg_WenuCR_2b_cutFlow", "h_reg_WenuCR_2b_cutFlow", 9,0,9)
-    h_reg_WmunuCR_1b_cutFlow = TH1F("h_reg_WmunuCR_1b_cutFlow", "h_reg_WmunuCR_1b_cutFlow", 9,0,9)
-    h_reg_WmunuCR_2b_cutFlow = TH1F("h_reg_WmunuCR_2b_cutFlow", "h_reg_WmunuCR_2b_cutFlow", 9,0,9)
+    h_reg_WenuCR_1b_cutFlow = TH1F("h_reg_WenuCR_1b_cutFlow", "h_reg_WenuCR_1b_cutFlow", 11,0,11)
+    h_reg_WenuCR_2b_cutFlow = TH1F("h_reg_WenuCR_2b_cutFlow", "h_reg_WenuCR_2b_cutFlow", 11,0,11)
+    h_reg_WmunuCR_1b_cutFlow = TH1F("h_reg_WmunuCR_1b_cutFlow", "h_reg_WmunuCR_1b_cutFlow", 11,0,11)
+    h_reg_WmunuCR_2b_cutFlow = TH1F("h_reg_WmunuCR_2b_cutFlow", "h_reg_WmunuCR_2b_cutFlow", 11,0,11)
 
-    h_reg_TopenuCR_1b_cutFlow = TH1F("h_reg_TopenuCR_1b_cutFlow", "h_reg_TopenuCR_1b_cutFlow", 9,0,9)
-    h_reg_TopenuCR_2b_cutFlow = TH1F("h_reg_TopenuCR_2b_cutFlow", "h_reg_TopenuCR_2b_cutFlow", 9,0,9)
-    h_reg_TopmunuCR_1b_cutFlow = TH1F("h_reg_TopmunuCR_1b_cutFlow", "h_reg_TopmunuCR_1b_cutFlow", 9,0,9)
-    h_reg_TopmunuCR_2b_cutFlow = TH1F("h_reg_TopmunuCR_2b_cutFlow", "h_reg_TopmunuCR_2b_cutFlow", 9,0,9)
+    h_reg_TopenuCR_1b_cutFlow = TH1F("h_reg_TopenuCR_1b_cutFlow", "h_reg_TopenuCR_1b_cutFlow", 11,0,11)
+    h_reg_TopenuCR_2b_cutFlow = TH1F("h_reg_TopenuCR_2b_cutFlow", "h_reg_TopenuCR_2b_cutFlow", 11,0,11)
+    h_reg_TopmunuCR_1b_cutFlow = TH1F("h_reg_TopmunuCR_1b_cutFlow", "h_reg_TopmunuCR_1b_cutFlow", 11,0,11)
+    h_reg_TopmunuCR_2b_cutFlow = TH1F("h_reg_TopmunuCR_2b_cutFlow", "h_reg_TopmunuCR_2b_cutFlow", 11,0,11)
 
     for infl in infile_:
         f_tmp = TFile.Open(infl,'READ')
@@ -527,224 +533,265 @@ def runbbdm(txtfile):
             ZEE CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_ZeeCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_ZeeCR_2b_cutFlow.AddBinContent(1, presel_weight)
-            if eletrigdecision:
-                h_reg_ZeeCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                h_reg_ZeeCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
-                    h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
-                    if (ep_nEle_index == 2) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
-                       h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                       h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                       if (ep_ZeeRecoil > 200.):
-                           h_reg_ZeeCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                           h_reg_ZeeCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                           if (min_dPhi_jet_MET > 0.5):
-                               h_reg_ZeeCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                               h_reg_ZeeCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                               if (ep_Zeemass >= 70 and ep_Zeemass <= 110):
-                                   h_reg_ZeeCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                   h_reg_ZeeCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                   if (ep_THINnJet <= 2) and (ep_THINjetPt[0] > 50.):
-                                       h_reg_ZeeCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
-                                       if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                           h_reg_ZeeCR_1b_cutFlow.AddBinContent(9, weight)
-                                           ZeeCR1bcount+=1
-                                           is1bCRZee=True
-                                   if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
-                                       h_reg_ZeeCR_2b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
-                                       if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                           h_reg_ZeeCR_2b_cutFlow.AddBinContent(9, weight)
-                                           ZeeCR2bcount+=1
-                                           is2bCRZee=True
-
+            if zee_cr:
+                h_reg_ZeeCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_ZeeCR_2b_cutFlow.AddBinContent(1, presel_weight)
+                if eletrigdecision:
+                    h_reg_ZeeCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    h_reg_ZeeCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    if (ep_nMu == 0):
+                        h_reg_ZeeCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
+                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_ZeeCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            h_reg_ZeeCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            if (ep_nEle_index == 2) and nPho ==0:
+                               h_reg_ZeeCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                               h_reg_ZeeCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                               if (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]):
+                                   h_reg_ZeeCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                   h_reg_ZeeCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                   if (ep_ZeeRecoil > 200.):
+                                       h_reg_ZeeCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                       h_reg_ZeeCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                       if (min_dPhi_jet_MET > 0.5):
+                                           h_reg_ZeeCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                           h_reg_ZeeCR_2b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                           if (ep_Zeemass >= 70 and ep_Zeemass <= 110):
+                                               h_reg_ZeeCR_1b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                               h_reg_ZeeCR_2b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                               if (ep_THINnJet <= 2) and (ep_THINjetPt[0] > 50.):
+                                                   h_reg_ZeeCR_1b_cutFlow.AddBinContent(10, presel_weight*weightEleTrig*weightEle)
+                                                   if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                       h_reg_ZeeCR_1b_cutFlow.AddBinContent(11, weight)
+                                                       ZeeCR1bcount+=1
+                                                       is1bCRZee=True
+                                               if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
+                                                   h_reg_ZeeCR_2b_cutFlow.AddBinContent(10, presel_weight*weightEleTrig*weightEle)
+                                                   if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                       h_reg_ZeeCR_2b_cutFlow.AddBinContent(11, weight)
+                                                       ZeeCR2bcount+=1
+                                                       is2bCRZee=True
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_ZmumuCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_ZmumuCR_2b_cutFlow.AddBinContent(1, presel_weight)
-            if mettrigdecision:
-                h_reg_ZmumuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                h_reg_ZmumuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 2) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
-                        h_reg_ZmumuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        h_reg_ZmumuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        if (ep_ZmumuRecoil > 200. ) :
-                            h_reg_ZmumuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            h_reg_ZmumuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            if (min_dPhi_jet_MET > 0.5):
-                                h_reg_ZmumuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                h_reg_ZmumuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                if (ep_Zmumumass >= 70 and ep_Zmumumass <= 110):
-                                    h_reg_ZmumuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    h_reg_ZmumuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    if (ep_THINnJet <=2) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_ZmumuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                            h_reg_ZmumuCR_1b_cutFlow.AddBinContent(9, weight)
-                                            ZmumuCR1count+=1
-                                            is1bCRZmumu=True
-                                    if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_ZmumuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                            h_reg_ZmumuCR_2b_cutFlow.AddBinContent(9, weight)
-                                            ZmumuCR2count+=1
-                                            is2bCRZmumu=True
+            if zmumu_cr:
+                h_reg_ZmumuCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_ZmumuCR_2b_cutFlow.AddBinContent(1, presel_weight)
+                if mettrigdecision:
+                    h_reg_ZmumuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    h_reg_ZmumuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    if (ep_nEle_index==0) and (nPho==0):
+                        h_reg_ZmumuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
+                        h_reg_ZmumuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_ZmumuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            h_reg_ZmumuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            if (ep_nMu == 2) :
+                                h_reg_ZmumuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                h_reg_ZmumuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0])
+                                    h_reg_ZmumuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    h_reg_ZmumuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    if (ep_ZmumuRecoil > 200. ) :
+                                        h_reg_ZmumuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        h_reg_ZmumuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        if (min_dPhi_jet_MET > 0.5):
+                                            h_reg_ZmumuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            h_reg_ZmumuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            if (ep_Zmumumass >= 70 and ep_Zmumumass <= 110):
+                                                h_reg_ZmumuCR_1b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                h_reg_ZmumuCR_2b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                if (ep_THINnJet <=2) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_ZmumuCR_1b_cutFlow.AddBinContent(10, presel_weight*weightRecoil*weightMu)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                        h_reg_ZmumuCR_1b_cutFlow.AddBinContent(11, weight)
+                                                        ZmumuCR1count+=1
+                                                        is1bCRZmumu=True
+                                                if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_ZmumuCR_2b_cutFlow.AddBinContent(10, presel_weight*weightRecoil*weightMu)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                        h_reg_ZmumuCR_2b_cutFlow.AddBinContent(11, weight)
+                                                        ZmumuCR2count+=1
+                                                        is2bCRZmumu=True
             '''
             --------------------------------------------------------------------------------
             WENU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_WenuCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_WenuCR_2b_cutFlow.AddBinContent(1, presel_weight)
-            if eletrigdecision:
-                h_reg_WenuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                h_reg_WenuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_WenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    h_reg_WenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
-                        h_reg_WenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                        h_reg_WenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                        if (ep_WenuRecoil > 200.) :
-                            h_reg_WenuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                            h_reg_WenuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                            if (min_dPhi_jet_MET > 0.5):
-                                h_reg_WenuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                                h_reg_WenuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                                if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
-                                    h_reg_WenuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                    h_reg_WenuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                    if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_WenuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                            h_reg_WenuCR_1b_cutFlow.AddBinContent(9, weight)
-                                            WenuCR1bcount+=1
-                                            is1bCRWenu=True
-                                    if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_WenuCR_2b_cutFlow.AddBinContent(8, weight)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                            h_reg_WenuCR_2b_cutFlow.AddBinContent(9, weight)
-                                            WenuCR2bcount+=1
-                                            is2bCRWenu=True
+            if wenu_cr:
+                h_reg_WenuCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_WenuCR_2b_cutFlow.AddBinContent(1, presel_weight)
+                if eletrigdecision:
+                    h_reg_WenuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    h_reg_WenuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    if (ep_nMu == 0):
+                        h_reg_WenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
+                        h_reg_WenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_WenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            h_reg_WenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            if (ep_nEle_index == 1) and (nPho ==0):
+                                h_reg_WenuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                                h_reg_WenuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                                if (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]):
+                                    h_reg_WenuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                    h_reg_WenuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                    if (ep_WenuRecoil > 200.) :
+                                        h_reg_WenuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                        h_reg_WenuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                        if (min_dPhi_jet_MET > 0.5):
+                                            h_reg_WenuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                            h_reg_WenuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                            if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
+                                                h_reg_WenuCR_1b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                                h_reg_WenuCR_2b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                                if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_WenuCR_1b_cutFlow.AddBinContent(10, presel_weight*weightEleTrig*weightEle)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                        h_reg_WenuCR_1b_cutFlow.AddBinContent(11, weight)
+                                                        WenuCR1bcount+=1
+                                                        is1bCRWenu=True
+                                                if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_WenuCR_2b_cutFlow.AddBinContent(10, weight)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                        h_reg_WenuCR_2b_cutFlow.AddBinContent(11, weight)
+                                                        WenuCR2bcount+=1
+                                                        is2bCRWenu=True
             '''
             --------------------------------------------------------------------------------
             WMUNU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_WmunuCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_WmunuCR_2b_cutFlow.AddBinContent(1, presel_weight*weightRecoil)
-            if mettrigdecision:
-                h_reg_WmunuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                h_reg_WmunuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
-                        h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        if (ep_WmunuRecoil > 200.) :
-                            h_reg_WmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            if (min_dPhi_jet_MET > 0.5):
-                                h_reg_WmunuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                h_reg_WmunuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
-                                    h_reg_WmunuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_WmunuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                            h_reg_WmunuCR_1b_cutFlow.AddBinContent(9, weight)
-                                            WmunuCR1bcount+=1
-                                            is1bCRWmunu=True
-                                    if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_WmunuCR_2b_cutFlow.AddBinContent(8, weight)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                            h_reg_WmunuCR_2b_cutFlow.AddBinContent(9, weight)
-                                            WmunuCR2bcount+=1
-                                            is2bCRWmunu=True
+            if wmunu_cr:
+                h_reg_WmunuCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_WmunuCR_2b_cutFlow.AddBinContent(1, presel_weight*weightRecoil)
+                if mettrigdecision:
+                    h_reg_WmunuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    if (ep_nEle_index == 0) and nPho ==0:
+                        h_reg_WmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
+                        h_reg_WmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_WmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            h_reg_WmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            if (ep_nMu == 1):
+                                h_reg_WmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0])
+                                    h_reg_WmunuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    if (ep_WmunuRecoil > 200.) :
+                                        h_reg_WmunuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        h_reg_WmunuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        if (min_dPhi_jet_MET > 0.5):
+                                            h_reg_WmunuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            h_reg_WmunuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
+                                                h_reg_WmunuCR_1b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                h_reg_WmunuCR_2b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                if (ep_THINnJet ==1) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_WmunuCR_1b_cutFlow.AddBinContent(10, presel_weight*weightRecoil*weightMu)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                        h_reg_WmunuCR_1b_cutFlow.AddBinContent(11, weight)
+                                                        WmunuCR1bcount+=1
+                                                        is1bCRWmunu=True
+                                                if (ep_THINnJet ==2) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_WmunuCR_2b_cutFlow.AddBinContent(10, weight)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                        h_reg_WmunuCR_2b_cutFlow.AddBinContent(11, weight)
+                                                        WmunuCR2bcount+=1
+                                                        is2bCRWmunu=True
             '''
             --------------------------------------------------------------------------------
             TOPENU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_TopenuCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_TopenuCR_2b_cutFlow.AddBinContent(1, presel_weight)
-            if eletrigdecision:
-                h_reg_TopenuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                h_reg_TopenuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
-                    if (ep_nEle_index == 1) and (ep_nMu == 0) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]) and nPho ==0:
-                        h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                        h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
-                        if (ep_WenuRecoil > 200. ) :
-                            h_reg_TopenuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                            h_reg_TopenuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
-                            if (min_dPhi_jet_MET > 0.5):
-                                h_reg_TopenuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                                h_reg_TopenuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
-                                if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
-                                    h_reg_TopenuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                    h_reg_TopenuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
-                                    if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_TopenuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                            h_reg_TopenuCR_1b_cutFlow.AddBinContent(9, weight)
-                                            TopenuCR1bcount+=1
-                                            is1bCRTopenu=True
-                                    if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
-                                        h_reg_TopenuCR_2b_cutFlow.AddBinContent(8, weight)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                            h_reg_TopenuCR_2b_cutFlow.AddBinContent(9, weight)
-                                            TopenuCR2bcount+=1
-                                            is2bCRTopenu=True
+            if topenu_cr:
+                h_reg_TopenuCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_TopenuCR_2b_cutFlow.AddBinContent(1, presel_weight)
+                if eletrigdecision:
+                    h_reg_TopenuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    h_reg_TopenuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightEleTrig)
+                    if (ep_nMu == 0):
+                        h_reg_TopenuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
+                        h_reg_TopenuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightEleTrig*weightEle)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_TopenuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            h_reg_TopenuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightEleTrig*weightEle)
+                            if (ep_nEle_index == 1) and nPho ==0:
+                                h_reg_TopenuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                                h_reg_TopenuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightEleTrig*weightEle)
+                                if (ep_elePt[0] > minElePt) and (ep_eleIsPTight[0]):
+                                    h_reg_TopenuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                    h_reg_TopenuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightEleTrig*weightEle)
+                                    if (ep_WenuRecoil > 200. ) :
+                                        h_reg_TopenuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                        h_reg_TopenuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightEleTrig*weightEle)
+                                        if (min_dPhi_jet_MET > 0.5):
+                                            h_reg_TopenuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                            h_reg_TopenuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightEleTrig*weightEle)
+                                            if (ep_Wenumass >= 0 and ep_Wenumass <= 160):
+                                                h_reg_TopenuCR_1b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                                h_reg_TopenuCR_2b_cutFlow.AddBinContent(9, presel_weight*weightEleTrig*weightEle)
+                                                if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_TopenuCR_1b_cutFlow.AddBinContent(10, presel_weight*weightEleTrig*weightEle)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                        h_reg_TopenuCR_1b_cutFlow.AddBinContent(11, weight)
+                                                        TopenuCR1bcount+=1
+                                                        is1bCRTopenu=True
+                                                if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
+                                                    h_reg_TopenuCR_2b_cutFlow.AddBinContent(10, weight)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                        h_reg_TopenuCR_2b_cutFlow.AddBinContent(11, weight)
+                                                        TopenuCR2bcount+=1
+                                                        is2bCRTopenu=True
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION
             --------------------------------------------------------------------------------
             '''
-            h_reg_TopmunuCR_1b_cutFlow.AddBinContent(1, presel_weight)
-            h_reg_TopmunuCR_2b_cutFlow.AddBinContent(1, presel_weight)
-            if mettrigdecision:
-                h_reg_TopmunuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                h_reg_TopmunuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
-                if (ep_pfMetCorrPt > 0.):
-                    h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
-                    h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
-                    if (ep_nEle_index == 0) and (ep_nMu == 1) and (ep_nTau_discBased_TightEleTightMuVeto==0) and (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) and nPho ==0:
-                        h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
-                        if (ep_WmunuRecoil > 200. ) :
-                            h_reg_TopmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            h_reg_TopmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                            if (min_dPhi_jet_MET > 0.5):
-                                h_reg_TopmunuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                h_reg_TopmunuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
-                                if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
-                                    h_reg_TopmunuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    h_reg_TopmunuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
-                                    if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) :
-                                        h_reg_TopmunuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
-                                            h_reg_TopmunuCR_1b_cutFlow.AddBinContent(9, weight)
-                                            TopmunuCR1bcount+=1
-                                            is1bCRTopmunu=True
-                                    if (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) :
-                                        h_reg_TopmunuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
-                                        if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
-                                            h_reg_TopmunuCR_2b_cutFlow.AddBinContent(9, weight)
-                                            TopmunuCR2bcount+=1
-                                            is2bCRTopmunu=True
+            if topmunu_cr:
+                h_reg_TopmunuCR_1b_cutFlow.AddBinContent(1, presel_weight)
+                h_reg_TopmunuCR_2b_cutFlow.AddBinContent(1, presel_weight)
+                if mettrigdecision:
+                    h_reg_TopmunuCR_1b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    h_reg_TopmunuCR_2b_cutFlow.AddBinContent(2, presel_weight*weightRecoil)
+                    if (ep_nEle_index == 0) and nPho ==0:
+                        h_reg_TopmunuCR_1b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
+                        h_reg_TopmunuCR_2b_cutFlow.AddBinContent(3, presel_weight*weightRecoil*weightMu)
+                        if (ep_nTau_discBased_TightEleTightMuVeto==0):
+                            h_reg_TopmunuCR_1b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            h_reg_TopmunuCR_2b_cutFlow.AddBinContent(4, presel_weight*weightRecoil*weightMu)
+                            if (ep_nMu == 1):
+                                h_reg_TopmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                h_reg_TopmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
+                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]) :
+                                    h_reg_TopmunuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    h_reg_TopmunuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
+                                    if (ep_WmunuRecoil > 200. ) :
+                                        h_reg_TopmunuCR_1b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        h_reg_TopmunuCR_2b_cutFlow.AddBinContent(7, presel_weight*weightRecoil*weightMu)
+                                        if (min_dPhi_jet_MET > 0.5):
+                                            h_reg_TopmunuCR_1b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            h_reg_TopmunuCR_2b_cutFlow.AddBinContent(8, presel_weight*weightRecoil*weightMu)
+                                            if (ep_Wmunumass >= 0 and ep_Wmunumass <= 160):
+                                                h_reg_TopmunuCR_1b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                h_reg_TopmunuCR_2b_cutFlow.AddBinContent(9, presel_weight*weightRecoil*weightMu)
+                                                if (ep_THINnJet >1) and (ep_THINjetPt[0] > 50.) :
+                                                    h_reg_TopmunuCR_1b_cutFlow.AddBinContent(10, presel_weight*weightRecoil*weightMu)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets==1):
+                                                        h_reg_TopmunuCR_1b_cutFlow.AddBinContent(11, weight)
+                                                        TopmunuCR1bcount+=1
+                                                        is1bCRTopmunu=True
+                                                if (ep_THINnJet >2) and (ep_THINjetPt[0] > 50.) :
+                                                    h_reg_TopmunuCR_2b_cutFlow.AddBinContent(10, presel_weight*weightRecoil*weightMu)
+                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets==2):
+                                                        h_reg_TopmunuCR_2b_cutFlow.AddBinContent(11, weight)
+                                                        TopmunuCR2bcount+=1
+                                                        is2bCRTopmunu=True
 
             if isSR1b:
                 df_out_SR_1b = df_out_SR_1b.append({'run':float(ep_runId), 'lumi':float(ep_lumiSection), 'event':float(ep_eventId),'nPV':float(ep_THINjetNPV),
@@ -982,13 +1029,15 @@ def runbbdm(txtfile):
     print ('TopmunuCR1bcount', TopmunuCR1bcount,'TopmunuCR2bcount', TopmunuCR2bcount)
 
     cfsr_list = {1:'presel',2:'trigger',3:'MET',4:'nLep',5:'min_dPhi',6:'nJet',7:'nBjets'}
-    cfcr_list = {1:'presel',2:'trigger',3:'MET',4:'nLep',5:'Recoil',6:'min_dPhi',7:'Z/W mass',8:'nJet',9:'nBjets'}
+    #cfcr_list = {1:'presel',2:'trigger',3:'MET',4:'nLep',5:'Recoil',6:'min_dPhi',7:'Z/W mass',8:'nJet',9:'nBjets'}
+    cfcr_list = {1:'presel',2:'trigger',3:'lep_veto',4:'tau_veto',5:'sel_lep',6:'sel_lep_Pt_tight',7:'Recoil',8:'min_dPhi',9:'Z/W mass',10:'nJet',11:'nBjets'}
     for i in [1,2,3,4,5,6,7]:
         h_reg_SR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
         h_reg_SR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
+    for i in [1,2,3,4,5,6,7,8,9,10]:
+        h_reg_ZeeCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list_zee[i])
+        h_reg_ZeeCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list_zee[i])
     for i in [1,2,3,4,5,6,7,8,9]:
-        h_reg_ZeeCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
-        h_reg_ZeeCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_ZmumuCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_ZmumuCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_WenuCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
