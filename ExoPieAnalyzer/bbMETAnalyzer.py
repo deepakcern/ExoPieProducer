@@ -680,7 +680,7 @@ def runbbdm(txtfile):
                             if (ep_nMu == 1):
                                 h_reg_WmunuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
                                 h_reg_WmunuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0])
+                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]):
                                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
                                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
                                     if (ep_WmunuRecoil > 200.) :
@@ -1034,10 +1034,9 @@ def runbbdm(txtfile):
     for i in [1,2,3,4,5,6,7]:
         h_reg_SR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
         h_reg_SR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfsr_list[i])
-    for i in [1,2,3,4,5,6,7,8,9,10]:
-        h_reg_ZeeCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list_zee[i])
-        h_reg_ZeeCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list_zee[i])
-    for i in [1,2,3,4,5,6,7,8,9]:
+    for i in [1,2,3,4,5,6,7,8,9,10,11]:
+        h_reg_ZeeCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
+        h_reg_ZeeCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_ZmumuCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_ZmumuCR_2b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
         h_reg_WenuCR_1b_cutFlow.GetXaxis().SetBinLabel(i,cfcr_list[i])
