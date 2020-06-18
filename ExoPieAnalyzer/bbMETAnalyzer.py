@@ -592,7 +592,7 @@ def runbbdm(txtfile):
                             if (ep_nMu == 2) :
                                 h_reg_ZmumuCR_1b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
                                 h_reg_ZmumuCR_2b_cutFlow.AddBinContent(5, presel_weight*weightRecoil*weightMu)
-                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0])
+                                if (ep_muPt[0] > minMuPt) and (ep_isTightMuon[0]):
                                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
                                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(6, presel_weight*weightRecoil*weightMu)
                                     if (ep_ZmumuRecoil > 200. ) :
