@@ -139,7 +139,7 @@ def getJECWeight(ep_THINjetCorrUnc):
         JECWeight_down *= (1-corr)
     return JECWeight_up, JECWeight_down
 
-def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,nMu,ep_muPt,ep_muEta):
+def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_elePt,ep_eleEta,ep_eleIsPTight,nMu,ep_muPt,ep_muEta,ep_isTightMuon):
     tot_weight = 1.0; weightMET = 1.0; weightEle = 1.0; weightMu = 1.0; weightRecoil = 1.0; weightEleTrig=1.0
     weightMET_up = 1.0; weightEle_up = 1.0; weightMu_up = 1.0; weightRecoil_up = 1.0; weightEleTrig_up = 1.0
     weightMET_down = 1.0; weightEle_down = 1.0; weightMu_down = 1.0; weightRecoil_down = 1.0; weightEleTrig_down = 1.0
@@ -155,13 +155,16 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
             weightEleTrig,weightEleTrig_up,weightEleTrig_down = wgt.eletrig_weight(ep_elePt[0],ep_eleEta[0])
             tot_weight = weightEle*common_weight*weightEleTrig
         if (nEle==2):
-            weightEle = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[0] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[0]
+            if ep_eleIsPTight[1]:
+                weightEle = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[0] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'T')[0]
+                weightEle_up = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[1] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'T')[1]
+                weightEle_down = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[2] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'T')[2]
+            else:
+                weightEle = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[0] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[0]
+                weightEle_up = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[1] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[1]
+                weightEle_down = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[2] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[2]
             weightEleTrig = wgt.eletrig_weight(ep_elePt[0],ep_eleEta[0])[0]
-
-            weightEle_up = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[1] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[1]
             weightEleTrig_up = wgt.eletrig_weight(ep_elePt[0],ep_eleEta[0])[1]
-
-            weightEle_down = wgt.ele_weight(ep_elePt[0],ep_eleEta[0],'T')[2] * wgt.ele_weight(ep_elePt[1],ep_eleEta[1],'L')[2]
             weightEleTrig_down = wgt.eletrig_weight(ep_elePt[0],ep_eleEta[0])[2]
 
             tot_weight = weightEle*common_weight*weightEleTrig
@@ -172,9 +175,14 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
             weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_WmunuRecoil,'R')
         tot_weight = weightMu*common_weight*weightRecoil
     if (nEle==0 and nMu==2):
-        weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[0]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[0]
-        weightMu_up=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[1]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[1]
-        weightMu_down=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[2]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[2]
+        if ep_isTightMuon[1] and ep_muPt[1] > 20.0:
+            weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[0]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'T')[0]
+            weightMu_up=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[1]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'T')[1]
+            weightMu_down=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[2]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'T')[2]
+        else:
+            weightMu=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[0]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[0]
+            weightMu_up=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[1]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[1]
+            weightMu_down=wgt.mu_weight(ep_muPt[0],ep_muEta[0],'T')[2]*wgt.mu_weight(ep_muPt[1],ep_muEta[1],'L')[2]
         if ep_ZmumuRecoil>200:
             weightRecoil,weightRecoil_up,weightRecoil_down=wgt.getMETtrig_First(ep_ZmumuRecoil,'R')
         tot_weight = weightMu*common_weight*weightRecoil
