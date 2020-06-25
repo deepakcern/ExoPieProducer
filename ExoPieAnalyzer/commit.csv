@@ -25,3 +25,5 @@ bbv06.00.00: * made the analyser for prefiring weight for all eras and added eve
 bbv06.02.00: * added the Type1smear met
 
 bbv06.02.01: * factorised the cutflow, and added the boolean for each CR
+
+bbv06.02.02: * applied tightID sf to subleading electron if it passes tightID
