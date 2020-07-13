@@ -27,3 +27,6 @@ monohbb.v06.00.02.2017 , added l1 prefire weight
 monohbb.v06.00.03.2017 , added b jet regression  correction factor
 	   ,
 monohbb.v06.00.04.2017, added DiJetMass for resolved analysis
+	   ,
+monohbb.v06.00.05.2017, added Tau21 variable
+	   , applied Thea Correction in merged analysis
