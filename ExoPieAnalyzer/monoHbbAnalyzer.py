@@ -1043,7 +1043,7 @@ def runbbdm(txtfile):
                 if nJets_cleaned>1:jet2CSV          = ep_THINjetDeepCSV[pass_ak4jet_index_cleaned[1]]
 
             if isBoostedSR:
-                fjetIndex           = pass_nfjetIndex[0]
+                fjet_index           = pass_nfjetIndex[0]
                 min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
                 N2DDT      = ep_fjetN2b1[fjet_index] - getN2bkgEff(fatjetpt[fjet_index],fatjet_rho)
