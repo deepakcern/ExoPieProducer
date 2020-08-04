@@ -22,7 +22,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor =False
+isCondor = True
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -48,7 +48,7 @@ import outvars as out
 from cutFlow import cutFlow
 #import eventSelector as eventSelector_v2
 
-
+applyMassCor = False
 ######################################################################################################
 ## All import are done before this
 ######################################################################################################
@@ -361,10 +361,14 @@ def runbbdm(txtfile):
             fatjetpt = [getPt(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
             fatjeteta = [getEta(ep_fjetPx[ij], ep_fjetPy[ij], ep_fjetPz[ij]) for ij in range(ep_nfjet)]
             fatjetphi = [getPhi(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
-            ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
 
+            hemFatjetsVeto = [True for ij in range(ep_nfjet) if fatjeteta[ij]>-3.0) and fatjeteta[ij]<-1.3 and fatjetphi[ij]>-1.57 and fatjetphi[ij]<-0.87]
+            if hemFatjetsVeto and isData:continue
 
-            if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
+            if applyMassCor: ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
+            else:ep_fjetSDMass = ep_fjetSDMassUnCorr
+
+            if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 0.0) and (ep_fjetProbHbb[index] > 0.86)) ]
             if not isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and ep_fjetSDMass[index] > 20.0)]
             FatJet_SBand_index = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5)) and ((ep_fjetSDMass[index] > 50.0) and (ep_fjetSDMass[index] < 100.0) or ((ep_fjetSDMass[index] > 150.0) and (ep_fjetSDMass[index] < 350.0) )) and (ep_fjetProbHbb[index] > 0.86)]
             FatJet_ZCR_index   = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 50.0 and ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86))]
@@ -383,7 +387,8 @@ def runbbdm(txtfile):
             -----------------------------------------------------------------------------
             '''
 
-
+            if applyMassCor:ep_RegNNCorr = ep_RegNNCorr
+            else:ep_RegNNCorr = [1.0 for ij in range(ep_THINnJet)]
             ak4jetpt  = [getPt(ep_THINjetPx[ij]*ep_RegNNCorr[ij], ep_THINjetPy[ij]*ep_RegNNCorr[ij]) for ij in range(ep_THINnJet)]
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
@@ -400,6 +405,8 @@ def runbbdm(txtfile):
             #print 'pass_ak4jet_index_cleaned', pass_ak4jet_index_cleaned
 
             nJets_cleaned = len(pass_ak4jet_index_cleaned)
+            hemAk4jetsVeto = [True for ij in pass_ak4jet_index_cleaned if ak4jeteta[ij]>-3.0) and ak4jeteta[ij]<-1.3 and ak4jetphi[ij]>-1.57 and ak4jetphi[ij]<-0.87]
+            if hemAk4jetsVeto and isData: continue
 
             Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > LWP and abs(ak4jeteta[ij]) < 2.5)]
             nBjets_iso = len(Bjet_index)
