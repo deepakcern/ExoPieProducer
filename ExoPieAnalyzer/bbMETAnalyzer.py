@@ -408,6 +408,11 @@ def runbbdm(txtfile):
                 ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
             nBjets = len(ep_THINbjets_index)
 
+            if era=='2018':
+                hem_cut = numpy.logical_and(numpy.logical_and(
+                    ep_THINjetEta > (-3.0), ep_THINjetEta < (-1.3)), numpy.logical_and(ep_THINjetPhi > (-1.57), ep_THINjetPhi < (-0.87)))
+                if any(hem_cut): continue
+
             if len(ep_THINjetPt)==0 : continue
 
             min_dPhi_jet_MET = min([DeltaPhi(jet_phi,ep_pfMetCorrPhi) for jet_phi in ep_THINjetPhi])
