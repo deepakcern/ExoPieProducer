@@ -95,23 +95,23 @@ if args.runOnTXT:
     runOnTxt = True
 
 if args.year=='2016':
-    print 'code is running for 2016'
+    print ('code is running for 2016')
     year_file.write('era="2016"')
 elif args.year=='2017':
-    print 'code is running for 2017'
+    print ('code is running for 2017')
     year_file.write('era="2017"')
 elif args.year=='2018':
-    print 'code is running for 2018'
+    print ('code is running for 2018')
     year_file.write('era="2018"')
 else:
-    print 'please provide year'
+    print ('please provide year')
     sys.exit()
 year_file.close()
 
 if isfarmout:
     infile  = args.inputfile
 
-else: print "No file is provided for farmout"
+else: print ("No file is provided for farmout")
 
 
 import ana_weight as wgt
@@ -197,7 +197,7 @@ def weight_(common_weight,ep_pfMetCorrPt,ep_ZmumuRecoil,ep_WmunuRecoil,nEle,ep_e
 dummy = -9999.0
 def runbbdm(txtfile):
 
-    print "in main function"
+    print ("in main function")
 
     infile_=[]
     outfilename=""
@@ -205,7 +205,7 @@ def runbbdm(txtfile):
     ikey_ = ""
 
     if  runInteractive:
-        print "running for ", txtfile[0]
+        print ("running for ", txtfile[0])
         infile_  = TextToList(txtfile[0])
         key_=txtfile[1]
         outfilename= txtfile[0].split('/')[-1].replace('.root.txt','.root')#prefix+key_+".root"
@@ -217,9 +217,9 @@ def runbbdm(txtfile):
         infile_=TextToList(txtfile)
         prefix_ = '' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
         if outputdir!='.': prefix_ = outputdir+'/'
-        print "prefix_", prefix_
+        print ("prefix_", prefix_)
         outfilename = prefix_+txtfile.split('/')[-1].replace('.txt','.root')#"SkimmedTree.root"
-        print 'outfilename',  outfilename
+        print ('outfilename',  outfilename)
 
 
     ## define global dataframes
@@ -319,7 +319,7 @@ def runbbdm(txtfile):
                df.st_THINjetNPV, \
                df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision):
             ieve = ieve + 1
-            if ieve%10000==0: print "Processed",ieve,"Events"
+            if ieve%10000==0: print ("Processed",ieve,"Events")
             #if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
             isSR1b=False
             is1bCRWenu=False
@@ -409,8 +409,10 @@ def runbbdm(txtfile):
             nBjets = len(ep_THINbjets_index)
 
             if era=='2018':
+                np_THINjetEta = numpy.array(ep_THINjetEta)
+                np_THINjetPhi = numpy.array(ep_THINjetPhi)
                 hem_cut = numpy.logical_and(numpy.logical_and(
-                    ep_THINjetEta > (-3.0), ep_THINjetEta < (-1.3)), numpy.logical_and(ep_THINjetPhi > (-1.57), ep_THINjetPhi < (-0.87)))
+                    np_THINjetEta > (-3.0), np_THINjetEta < (-1.3)), numpy.logical_and(np_THINjetPhi > (-1.57), np_THINjetPhi < (-0.87)))
                 if any(hem_cut): continue
 
             if len(ep_THINjetPt)==0 : continue
@@ -1099,7 +1101,7 @@ def runbbdm(txtfile):
     outfile.Close()
 
     end = time.clock()
-    print "%.4gs" % (end-start)
+    print ("%.4gs" % (end-start))
 
 
 
@@ -1123,8 +1125,8 @@ if __name__ == '__main__':
                     pool.close()
                     pool.join()
                 except Exception as e:
-                    print e
-                    print "Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i]
+                    print (e)
+                    print ("Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i])
                     continue
 
     if runInteractive and not runOnTxt:
@@ -1148,7 +1150,7 @@ if __name__ == '__main__':
             sample_  = [txtfile, ikey]
             ## push information about one sample into global list.
             allsample.append(sample_)
-        print allsample
+        print (allsample)
         if istest:
             runbbdm(allsample[0])
         else:
