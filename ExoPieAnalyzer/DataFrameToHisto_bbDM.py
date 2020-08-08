@@ -249,14 +249,14 @@ if isfarmout:
     path=inDir
     files=glob.glob(path+'/*')
     for inputFile in files:
-        print 'running code for file:  ',inputFile
+        print ('running code for file:  ',inputFile)
         runFile(inputFile,trees)
 
 if not isfarmout:
     filename=infile
-    print 'running code for file:  ',filename
+    print ('running code for file:  ',filename)
     runFile(filename,trees)
 
 
 stop = time.clock()
-print "%.4gs" % (stop-start)
+print ("%.4gs" % (stop-start))
