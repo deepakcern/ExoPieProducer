@@ -4,7 +4,6 @@ import datetime
 import sys, optparse
 import ROOT as ROOT
 import array
-from openpyxl import Workbook,load_workbook
 import string
 
 #command  python StackPlotter_syst.py -d <DATASET_NAME> -m -y <Year> -D <histo_DIR> -S <signal_Dir>
@@ -60,10 +59,12 @@ if runOn2016:
 elif runOn2017:
     #import sample_xsec_2017 as sample_xsec
     import sample_xsec_2017_GenXSecAnalyser as sample_xsec
+    import sig_sample_xsec_2017 as sig_sample_xsec
     luminosity = 41.5 * 1000
     luminosity_ = '{0:.2f}'.format(41.50)
 elif runOn2018:
     import sample_xsec_2018 as sample_xsec
+    import sig_sample_xsec_2018 as sig_sample_xsec
     luminosity = 59.64 * 1000
     luminosity_ = '{0:.2f}'.format(59.64)
 
@@ -78,10 +79,13 @@ else:
 
 sig_path = options.SIGrootFileDir
 
+print("sig_path sig_path sig_path", sig_path)
 if makeMuCHplots:
-    yield_outfile = open('bbDM'+str(options.year)+'_Mu_yield.txt','w')
+    yield_outfile_binwise = open('bbDM'+str(options.year)+'_Mu_binwise_yield.txt', 'w')
+    yield_outfile = open('bbDM'+str(options.year)+'_Mu_yield.txt', 'w')
 if makeEleCHplots:
-    yield_outfile = open('bbDM'+str(options.year)+'_Ele_yield.txt','w')
+    yield_outfile_binwise = open('bbDM'+str(options.year) +'_Ele_binwise_yield.txt', 'w')
+    yield_outfile = open('bbDM'+str(options.year)+'_Ele_yield.txt', 'w')
 
 alpha_list = list(string.ascii_uppercase)
 
@@ -205,11 +209,11 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         files=open("samplelist_2018.txt","r")
 
 
-    ROOT.gStyle.SetOptStat(0);
-    ROOT.gStyle.SetOptTitle(0);
-    ROOT.gStyle.SetFrameLineWidth(3);
-    #gStyle->SetErrorX(0);
-    ROOT.gStyle.SetLineWidth(1);
+    ROOT.gStyle.SetOptStat(0)
+    ROOT.gStyle.SetOptTitle(0)
+    ROOT.gStyle.SetFrameLineWidth(3)
+    #gStyle->SetErrorX(0)
+    ROOT.gStyle.SetLineWidth(1)
 
     if '_SR_1b' in hist:
         histolabel="SR(1b)"
@@ -272,7 +276,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         if 'WJetsToLNu_HT' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -283,7 +287,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif 'DYJetsToLL_M-50' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -294,7 +298,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif 'ZJetsToNuNu' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -305,7 +309,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif 'GJets_HT' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -316,7 +320,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif ('WWTo' in file) or ('WZTo' in file) or ('ZZTo' in file) or ('WW_' in file) or ('ZZ_' in file) or ('WZ_' in file) :
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -325,10 +329,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
                 DIBOSON_Hists.append(h_temp2)
             else:DIBOSON_Hists.append(h_temp)
 
-
         elif ('ST_t' in file) or ('ST_s' in file):
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -337,9 +340,9 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
                 STop_Hists.append(h_temp2)
             else:STop_Hists.append(h_temp)
 
-        elif 'TTTo' in file:
+        elif ('TTTo' in file) or ('TT_TuneCUETP8M2T4' in file):
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -351,7 +354,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif 'QCD_HT' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -362,7 +365,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
         elif 'HToBB' in file:
             xsec = sample_xsec.getXsec(file)
-            #print ('file', file ,'xsec', xsec,'\n')
+            print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0): normlisation=(xsec*luminosity)/(total_events)
             else: normlisation=0
             h_temp.Scale(normlisation)
@@ -445,15 +448,15 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
 ##=================================================================
 
-    ZJetsCount    =   ZJets.Integral();
-    DYJetsCount   =   DYJets.Integral();
-    WJetsCount    =   WJets.Integral();
-    STopCount     =   STop.Integral();
-    GJetsCount    =   GJets.Integral();
-    TTCount       =   Top.Integral();
-    VVCount       =   DIBOSON.Integral();
-    QCDCount      =   QCD.Integral();
-    SMHCount      =   SMH.Integral();
+    ZJetsCount    =   ZJets.Integral()
+    DYJetsCount   =   DYJets.Integral()
+    WJetsCount    =   WJets.Integral()
+    STopCount     =   STop.Integral()
+    GJetsCount    =   GJets.Integral()
+    TTCount       =   Top.Integral()
+    VVCount       =   DIBOSON.Integral()
+    QCDCount      =   QCD.Integral()
+    SMHCount      =   SMH.Integral()
 
     mcsum = ZJetsCount + DYJetsCount + WJetsCount + STopCount + GJetsCount + TTCount + VVCount + QCDCount
     total_hists = WJets_Hists + DYJets_Hits + ZJets_Hits + GJets_Hists + DIBOSON_Hists + STop_Hists + Top_Hists + QCD_Hists
@@ -465,53 +468,53 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     ROOT.gStyle.SetHistTopMargin(0.1)
 
 #============== CANVAS DECLARATION ===================
-    #c12 = ROOT.TCanvas("Hist", "Hist", 0,0,1000,1000);
+    #c12 = ROOT.TCanvas("Hist", "Hist", 0,0,1000,1000)
     c12 = myCanvas1D()
 
 #==================Stack==============================
-    hs = ROOT.THStack("hs"," ");
+    hs = ROOT.THStack("hs"," ")
 
 #============Colors for Histos
-    DYJets.SetFillColor(ROOT.kGreen+1);
-    DYJets.SetLineWidth(0);
-    ZJets.SetFillColor(ROOT.kAzure-4);
-    ZJets.SetLineWidth(0);
-    DIBOSON.SetFillColor(ROOT.kBlue+1);
-    DIBOSON.SetLineWidth(0);
-    Top.SetFillColor(ROOT.kOrange-1);
-    Top.SetLineWidth(0);
-    WJets.SetFillColor(ROOT.kViolet-2);
-    WJets.SetLineWidth(0);
-    STop.SetFillColor(ROOT.kOrange+2);
-    STop.SetLineWidth(0);
-    GJets.SetFillColor(ROOT.kCyan-8);
-    GJets.SetLineWidth(0);
-    QCD.SetFillColor(ROOT.kGray+2);
-    QCD.SetLineWidth(0);
-    SMH.SetFillColor(ROOT.kRed-1);
-    SMH.SetLineWidth(0);
+    DYJets.SetFillColor(ROOT.kGreen+1)
+    DYJets.SetLineWidth(0)
+    ZJets.SetFillColor(ROOT.kAzure-4)
+    ZJets.SetLineWidth(0)
+    DIBOSON.SetFillColor(ROOT.kBlue+1)
+    DIBOSON.SetLineWidth(0)
+    Top.SetFillColor(ROOT.kOrange-1)
+    Top.SetLineWidth(0)
+    WJets.SetFillColor(ROOT.kViolet-2)
+    WJets.SetLineWidth(0)
+    STop.SetFillColor(ROOT.kOrange+2)
+    STop.SetLineWidth(0)
+    GJets.SetFillColor(ROOT.kCyan-8)
+    GJets.SetLineWidth(0)
+    QCD.SetFillColor(ROOT.kGray+2)
+    QCD.SetLineWidth(0)
+    SMH.SetFillColor(ROOT.kRed-1)
+    SMH.SetLineWidth(0)
 
 #=====================Stack all the histogram =========================
 
-    ZJetsCount    =   ZJets.Integral();
-    DYJetsCount   =   DYJets.Integral();
-    WJetsCount    =   WJets.Integral();
-    STopCount     =   STop.Integral();
-    GJetsCount    =   GJets.Integral();
-    TTCount       =   Top.Integral();
-    VVCount       =   DIBOSON.Integral();
-    QCDCount      =   QCD.Integral();
-    SMHCount      =   SMH.Integral();
+    ZJetsCount    =   ZJets.Integral()
+    DYJetsCount   =   DYJets.Integral()
+    WJetsCount    =   WJets.Integral()
+    STopCount     =   STop.Integral()
+    GJetsCount    =   GJets.Integral()
+    TTCount       =   Top.Integral()
+    VVCount       =   DIBOSON.Integral()
+    QCDCount      =   QCD.Integral()
+    SMHCount      =   SMH.Integral()
 
-    if (SMHCount > 0 ):    hs.Add(SMH,"hist");
-    if (QCDCount > 0):     hs.Add(QCD,"hist");
-    if (DYJetsCount > 0):  hs.Add(DYJets,"hist");
-    if (ZJetsCount > 0):   hs.Add(ZJets,"hist");
-    if (GJetsCount > 0):   hs.Add(GJets,"hist");
-    if (VVCount > 0):      hs.Add(DIBOSON,"hist");
-    if (WJetsCount > 0):   hs.Add(WJets,"hist");
-    if (STopCount > 0):    hs.Add(STop,"hist");
-    if (TTCount > 0):      hs.Add(Top,"hist");
+    if (SMHCount > 0 ):    hs.Add(SMH,"hist")
+    if (QCDCount > 0):     hs.Add(QCD,"hist")
+    if (DYJetsCount > 0):  hs.Add(DYJets,"hist")
+    if (ZJetsCount > 0):   hs.Add(ZJets,"hist")
+    if (GJetsCount > 0):   hs.Add(GJets,"hist")
+    if (VVCount > 0):      hs.Add(DIBOSON,"hist")
+    if (WJetsCount > 0):   hs.Add(WJets,"hist")
+    if (STopCount > 0):    hs.Add(STop,"hist")
+    if (TTCount > 0):      hs.Add(Top,"hist")
 
     hasNoEvents=False
     Stackhist = hs.GetStack().Last()
@@ -523,7 +526,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
 # =====================histogram for systematic/ statistical uncertainty ========================
 
-    h_err = total_hists[0].Clone("h_err");
+    h_err = total_hists[0].Clone("h_err")
     h_err.Reset()
     for i in range(len(total_hists)):
         if i==0: continue
@@ -537,23 +540,24 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     h_err.SetFillStyle(3013)
 
     if(NORATIOPLOT):
-        c1_2 = ROOT.TPad("c1_2","newpad",0,0.05,1,1);   #0.993);
-        c1_2.SetRightMargin(0.06);
+        c1_2 = ROOT.TPad("c1_2","newpad",0,0.05,1,1)   #0.993)
+        c1_2.SetRightMargin(0.06)
     else:
-        c1_2 =  ROOT.TPad("c1_2","newpad",0,0.20,1,1);
+        c1_2 =  ROOT.TPad("c1_2","newpad",0,0.20,1,1)
 
-    c1_2.SetBottomMargin(0.09);
-    c1_2.SetTopMargin(0.08);
-    c1_2.SetLeftMargin(0.12);
-    c1_2.SetRightMargin(0.06);
-    c1_2.SetLogy(ISLOG);
-    c1_2.Draw();
-    c1_2.cd();
+    c1_2.SetBottomMargin(0.09)
+    c1_2.SetTopMargin(0.08)
+    c1_2.SetLeftMargin(0.12)
+    c1_2.SetRightMargin(0.06)
+    c1_2.SetLogy(ISLOG)
+    c1_2.Draw()
+    c1_2.cd()
     for h in hs:
         h = SetCMSAxis(h)
     hs.Draw()
+    noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('_Recoil' in hist))
     if makeSIGplots:
-        if  ('MET' in hist) and ('SR' in hist):
+        if ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
             ma_points = [50, 200] # how many signal points you want to include
             sig_leg = SetLegend([.50,.38,.60,.58],ncol=1)
             sig_leg.SetHeader("2HDM+a model")
@@ -569,7 +573,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
             MarkerStyling = [(i.SetMarkerColor(n),i.SetMarkerStyle(n),i.SetMarkerSize(1.5)) for i,n in zip(sig_hist,range(2,len(sig_hist)+2))]
 
-            sig_leg_list = [sig_leg.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV","l") for his_list,filename in zip(sig_hist,signal_files_name)]
+            sig_leg_list = [sig_leg.AddEntry(his_list,"ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split('_')[8].strip('MA')+" GeV"," ") for his_list,filename in zip(sig_hist,signal_files_name)]
 
             draw_hist = [i.Draw("same Ehist") for i in sig_hist]
             sig_leg.Draw()
@@ -588,7 +592,7 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     h_data.SetMarkerStyle(20)
     h_data = SetCMSAxis(h_data)
     if(not NORATIOPLOT):
-        h_data.Draw("same p e1");
+        h_data.Draw("same p e1")
     if (ISLOG):
         if '_cutFlow' in str(hist):
             hs.SetMaximum(1000000000)
@@ -611,29 +615,29 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
             hs.GetXaxis().SetLabelSize(.03)
             hs.GetXaxis().SetTitle(str(titleX))
             hs.GetXaxis().SetTitleFont(42)
-            hs.GetXaxis().SetLabelOffset(.01);
+            hs.GetXaxis().SetLabelOffset(.01)
             hs.GetYaxis().SetTitleOffset(0.7)
-            hs.GetYaxis().SetTitle("Events/bin");
-            hs.GetYaxis().SetTitleSize(0.08);
-            hs.GetYaxis().SetTitleFont(42);
-            hs.GetYaxis().SetLabelFont(42);
-            hs.GetYaxis().SetLabelSize(.04);
+            hs.GetYaxis().SetTitle("Events/bin")
+            hs.GetYaxis().SetTitleSize(0.08)
+            hs.GetYaxis().SetTitleFont(42)
+            hs.GetYaxis().SetLabelFont(42)
+            hs.GetYaxis().SetLabelSize(.04)
         else:
             hs.GetXaxis().SetTitle(str(titleX))
-            hs.GetXaxis().SetTitleOffset(0.00);
-            hs.GetXaxis().SetTitleFont(42);
-            hs.GetXaxis().SetTitleSize(0.05);
-            hs.GetXaxis().SetLabelFont(42);
-            hs.GetXaxis().SetLabelOffset(.01);
-            hs.GetXaxis().SetLabelSize(0.04);
-            hs.GetYaxis().SetTitle("Events/bin");
-            hs.GetYaxis().SetTitleSize(0.08);
-            hs.GetYaxis().SetTitleOffset(0.7);
-            hs.GetYaxis().SetTitleFont(42);
-            hs.GetYaxis().SetLabelFont(42);
-            hs.GetYaxis().SetLabelSize(.05);
+            hs.GetXaxis().SetTitleOffset(0.00)
+            hs.GetXaxis().SetTitleFont(42)
+            hs.GetXaxis().SetTitleSize(0.05)
+            hs.GetXaxis().SetLabelFont(42)
+            hs.GetXaxis().SetLabelOffset(.01)
+            hs.GetXaxis().SetLabelSize(0.04)
+            hs.GetYaxis().SetTitle("Events/bin")
+            hs.GetYaxis().SetTitleSize(0.08)
+            hs.GetYaxis().SetTitleOffset(0.7)
+            hs.GetYaxis().SetTitleFont(42)
+            hs.GetYaxis().SetLabelFont(42)
+            hs.GetYaxis().SetLabelSize(.05)
 
-        if not isrebin: hs.GetXaxis().SetRangeUser(XMIN,XMAX);
+        if not isrebin: hs.GetXaxis().SetRangeUser(XMIN,XMAX)
         hs.GetXaxis().SetNdivisions(508)
 
 #=============================  legend section =========================================
@@ -654,26 +658,26 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
             legend.AddEntry(h_data,"bkgSum","PEL")
         else:
             legend.AddEntry(h_data,"Data","PEL")
-    legend.AddEntry(Top,TTLegend,"f");
-    legend.AddEntry(STop,STLegend,"f");
-    legend.AddEntry(WJets,WLegend,"f");
-    legend.AddEntry(DIBOSON,VVLegend,"f");
-    if GJetsCount > 0:legend.AddEntry(GJets,GLegend,"f");
-    if ZJetsCount > 0:legend.AddEntry(ZJets,ZLegend,"f");
-    legend.AddEntry(DYJets,DYLegend,"f");
-    legend.AddEntry(QCD,QCDLegend,"f");
-    legend.AddEntry(SMH,SMHLegend,"f");
+    legend.AddEntry(Top,TTLegend,"f")
+    legend.AddEntry(STop,STLegend,"f")
+    legend.AddEntry(WJets,WLegend,"f")
+    legend.AddEntry(DIBOSON,VVLegend,"f")
+    if GJetsCount > 0:legend.AddEntry(GJets,GLegend,"f")
+    if ZJetsCount > 0:legend.AddEntry(ZJets,ZLegend,"f")
+    legend.AddEntry(DYJets,DYLegend,"f")
+    legend.AddEntry(QCD,QCDLegend,"f")
+    legend.AddEntry(SMH,SMHLegend,"f")
 
     legend.Draw('same')
 
 #=================================================latex section =====================
     t2d = ExtraText(str(histolabel),0.20,0.80)
-    t2d.SetTextSize(0.06);
+    t2d.SetTextSize(0.06)
 
-    t2d.SetTextAlign(12);
-    t2d.SetNDC(ROOT.kTRUE);
-    t2d.SetTextFont(42);
-    t2d.Draw("same");
+    t2d.SetTextAlign(12)
+    t2d.SetNDC(ROOT.kTRUE)
+    t2d.SetTextFont(42)
+    t2d.Draw("same")
 
     pt = drawenergy1D(True,text_="Internal",data=True)
     for ipt in pt: ipt.Draw()
@@ -686,11 +690,11 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
 
     ratiostaterr = h_err.Clone("ratiostaterr")
     ratiostaterr.Sumw2()
-    ratiostaterr.SetStats(0);
-    ratiostaterr.SetMinimum(0);
-    ratiostaterr.SetMarkerSize();
-    ratiostaterr.SetFillColor(ROOT.kBlack);
-    ratiostaterr.SetFillStyle(3013);
+    ratiostaterr.SetStats(0)
+    ratiostaterr.SetMinimum(0)
+    ratiostaterr.SetMarkerSize()
+    ratiostaterr.SetFillColor(ROOT.kBlack)
+    ratiostaterr.SetFillStyle(3013)
     for i in range(h_err.GetNbinsX()+2):
         ratiostaterr.SetBinContent(i, 0.0)
 
@@ -706,39 +710,39 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
         c12.cd()
         DataMC    = h_data.Clone()
         DataMC.Add(Stackhist,-1)   # remove for data/mc
-        DataMCPre = h_data.Clone();
-        DataMC.Divide(Stackhist);
-        DataMC.GetYaxis().SetTitle("#frac{Data-Pred}{Pred}");
-        DataMC.GetYaxis().SetTitleSize(0.12);
-        DataMC.GetYaxis().SetTitleOffset(0.42);
-        DataMC.GetYaxis().SetTitleFont(42);
-        DataMC.GetYaxis().SetLabelSize(0.12);
-        DataMC.GetYaxis().CenterTitle();
+        DataMCPre = h_data.Clone()
+        DataMC.Divide(Stackhist)
+        DataMC.GetYaxis().SetTitle("#frac{Data-Pred}{Pred}")
+        DataMC.GetYaxis().SetTitleSize(0.12)
+        DataMC.GetYaxis().SetTitleOffset(0.42)
+        DataMC.GetYaxis().SetTitleFont(42)
+        DataMC.GetYaxis().SetLabelSize(0.12)
+        DataMC.GetYaxis().CenterTitle()
         DataMC.GetXaxis().SetTitle(str(titleX))
-        DataMC.GetXaxis().SetLabelSize(0.14);
-        DataMC.GetXaxis().SetTitleSize(0.16);
-        DataMC.GetXaxis().SetTitleOffset(1);
-        DataMC.GetXaxis().SetTitleFont(42);
-        DataMC.GetXaxis().SetTickLength(0.07);
-        DataMC.GetXaxis().SetLabelFont(42);
-        DataMC.GetYaxis().SetLabelFont(42);
+        DataMC.GetXaxis().SetLabelSize(0.14)
+        DataMC.GetXaxis().SetTitleSize(0.16)
+        DataMC.GetXaxis().SetTitleOffset(1)
+        DataMC.GetXaxis().SetTitleFont(42)
+        DataMC.GetXaxis().SetTickLength(0.07)
+        DataMC.GetXaxis().SetLabelFont(42)
+        DataMC.GetYaxis().SetLabelFont(42)
 
 
-    c1_1 = ROOT.TPad("c1_1", "newpad",0,0.00,1,0.3);
-    if (not NORATIOPLOT): c1_1.Draw();
-    c1_1.cd();
-    c1_1.Range(-7.862408,-629.6193,53.07125,486.5489);
-    c1_1.SetFillColor(0);
-    c1_1.SetTicky(1);
-    c1_1.SetLeftMargin(0.12);
-    c1_1.SetRightMargin(0.06);
-    c1_1.SetTopMargin(0.00);
-    c1_1.SetBottomMargin(0.42);
-    c1_1.SetFrameFillStyle(0);
-    c1_1.SetFrameBorderMode(0);
-    c1_1.SetFrameFillStyle(0);
-    c1_1.SetFrameBorderMode(0);
-    c1_1.SetLogy(0);
+    c1_1 = ROOT.TPad("c1_1", "newpad",0,0.00,1,0.3)
+    if (not NORATIOPLOT): c1_1.Draw()
+    c1_1.cd()
+    c1_1.Range(-7.862408,-629.6193,53.07125,486.5489)
+    c1_1.SetFillColor(0)
+    c1_1.SetTicky(1)
+    c1_1.SetLeftMargin(0.12)
+    c1_1.SetRightMargin(0.06)
+    c1_1.SetTopMargin(0.00)
+    c1_1.SetBottomMargin(0.42)
+    c1_1.SetFrameFillStyle(0)
+    c1_1.SetFrameBorderMode(0)
+    c1_1.SetFrameFillStyle(0)
+    c1_1.SetFrameBorderMode(0)
+    c1_1.SetLogy(0)
 
     if(not NORATIOPLOT):
         if (0): # if(VARIABLEBINS)
@@ -785,50 +789,55 @@ def makeplot(loc,hist,titleX,XMIN,XMAX,Rebin,ISLOG,NORATIOPLOT,reg,varBin, row=2
     if (ISLOG == 1) and noPdfPng:
         c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg+'/'+plot+'_log.pdf')
         c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg+'/'+plot+'_log.png')
-    fshape = ROOT.TFile('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+plot+'.root', "RECREATE");
+    fshape = ROOT.TFile('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'+plot+'.root', "RECREATE")
     fshape.cd()
     Stackhist.SetNameTitle("bkgSum","bkgSum")
     Stackhist.Write()
-    DIBOSON.SetNameTitle("DIBOSON","DIBOSON");
+    DIBOSON.SetNameTitle("DIBOSON","DIBOSON")
     DIBOSON.Write()
-    ZJets.SetNameTitle("ZJets","ZJets");
+    ZJets.SetNameTitle("ZJets","ZJets")
     ZJets.Write()
-    GJets.SetNameTitle("GJets","GJets");
+    GJets.SetNameTitle("GJets","GJets")
     GJets.Write()
-    QCD.SetNameTitle("QCD","QCD");
+    QCD.SetNameTitle("QCD","QCD")
     QCD.Write()
-    SMH.SetNameTitle("SMH","SMH");
-    SMH.Write();
-    STop.SetNameTitle("STop","STop");
-    STop.Write();
-    Top.SetNameTitle("Top","Top");
-    Top.Write();
-    WJets.SetNameTitle("WJets","WJets");
-    WJets.Write();
-    DYJets.SetNameTitle("DYJets","DYJets");
-    DYJets.Write();
+    SMH.SetNameTitle("SMH","SMH")
+    SMH.Write()
+    STop.SetNameTitle("STop","STop")
+    STop.Write()
+    Top.SetNameTitle("Top","Top")
+    Top.Write()
+    WJets.SetNameTitle("WJets","WJets")
+    WJets.Write()
+    DYJets.SetNameTitle("DYJets","DYJets")
+    DYJets.Write()
     data_obs=h_data
-    data_obs.SetNameTitle("data_obs","data_obs");
-    data_obs.Write();
-    if makeSIGplots:
+    data_obs.SetNameTitle("data_obs","data_obs")
+    data_obs.Write()
+    if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
         [hist.SetNameTitle(sname.split('5f_')[-1].split('_tanb35_')[0],sname.split('5f_')[-1].split('_tanb35_')[0])for (sname, hist) in zip(signal_files_name, sig_hist)]
         [hist.Write() for hist in sig_hist]
-    fshape.Write();
-    fshape.Close();
+    fshape.Write()
+    fshape.Close()
     print ('\n')
-    noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
+    #noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
     if (('MET' in hist and 'SR' in hist) or ('Recoil' in hist)) and not noYieldHisto:
         bkg_list = {'ZJets':ZJets,'DYJets':DYJets,'WJets':WJets,'STop':STop,'GJets':GJets,'Top':Top,'DIBOSON':DIBOSON,'QCD':QCD,'SMH':SMH,'bkgSum':Stackhist,'data_obs':h_data}
         yield_outfile.write('region '+str(hist)+'\n')
+        yield_outfile_binwise.write('region '+str(hist)+'\n')
         if makeSIGplots:
             for (sname, hist) in zip(signal_files_name, sig_hist): bkg_list.update({sname.split('5f_')[-1].split('_tanb35_')[0]:hist})
-        yield_outfile.write('       Bin1   Bin2   Bin3   Bin4\n')
+        yield_outfile_binwise.write('       Bin1   Bin2   Bin3   Bin4\n')
         for key in bkg_list:
-            # binerror = 0.00
-            # bkg_list[key].Rebin(bkg_list[key].GetNbinsX())
-            # binerror = (bkg_list[key].GetBinError(1))
-            # yield_outfile.write(str(key)+' '+str.format('{0:.1f}',bkg_list[key].Integral())+'\xb1'+ str.format('{0:.1f}', binerror)+'\n')
-            yield_outfile.write(str(key)+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(2))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(2))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(3))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(3))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(4))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(4))+'\n')
+            yield_outfile_binwise.write(str(key)+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(2))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(2))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(3))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(3))+'   '+str.format('{0:.1f}',bkg_list[key].GetBinContent(4))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(4))+'\n')
+        for key in bkg_list:
+            binerror = 0.00
+            bkg_list[key].Rebin(bkg_list[key].GetNbinsX())
+            binerror = (bkg_list[key].GetBinError(1))
+            print(str(key)+' '+str.format('{0:.3f}', bkg_list[key].Integral(
+            ))+' +/- ' + str.format('{0:.3f}', binerror)+'\n')
+            yield_outfile.write(str(key)+' '+str.format('{0:.1f}', bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'\n')
+        yield_outfile_binwise.write('\n')
         yield_outfile.write('\n')
 
  #=======================================================================
@@ -849,7 +858,7 @@ if makeEleCHplots:
 for reg in regions:
     try:
         if 'SR_' in reg:
-            makeplot("reg_"+reg+"_cutFlow",'h_reg_'+reg+'_cutFlow','CutFlow',0,7,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_cutFlow", 'h_reg_'+reg+'_cutFlow','CutFlow', 0, 7, 1, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET',' p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_MET_weightB_up",'h_reg_'+reg+'_MET_weightB_up','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_MET_weightB_down",'h_reg_'+reg+'_MET_weightB_down','p_{T}^{miss} (GeV)',200.,1000.,1,1,0,reg,varBin=False)
@@ -878,7 +887,7 @@ for reg in regions:
             makeplot("reg_"+reg+"_Jet2deepCSV",'h_reg_'+reg+'_Jet2deepCSV','JET2 deepCSV',0,1.2,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_nJets",'h_reg_'+reg+'_nJets','nJets',0.,10.,1,1,0,reg,varBin=False)
         else:
-            makeplot("reg_"+reg+"_cutFlow",'h_reg_'+reg+'_cutFlow','CutFlow',0,9,1,1,0,reg,varBin=False)
+            makeplot("reg_"+reg+"_cutFlow",'h_reg_'+reg+'_cutFlow','CutFlow',0,11,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_MET",'h_reg_'+reg+'_MET','Real p_{T}^{miss} (GeV)',0.,700.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Recoil",'h_reg_'+reg+'_Recoil','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
             makeplot("reg_"+reg+"_Recoil_weightB_up",'h_reg_'+reg+'_Recoil_weightB_up','Recoil (GeV)',200.,1000.,1,1,0,reg,varBin=False)
@@ -928,3 +937,5 @@ for reg in regions:
         print ("Cannot Plot")
         pass
 yield_outfile.close()
+yield_outfile_binwise.close()
+
