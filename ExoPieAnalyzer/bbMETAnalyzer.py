@@ -223,6 +223,8 @@ def runbbdm(txtfile):
 
 
     ## define global dataframes
+    df_out_preselR = out.df_out_preselR
+
     df_out_SR_1b = out.df_out_SR_1b
     df_out_SR_2b = out.df_out_SR_2b
 
@@ -244,6 +246,8 @@ def runbbdm(txtfile):
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
     h_eventCounter = TH1F('h_eventCounter','h_eventCounter',2,0.5,2.5)
+
+    h_reg_preselR_cutFlow = TH1F("h_reg_preselR_cutFlow", "h_reg_preselR_cutFlow", 7, 0, 7)
 
     h_reg_SR_1b_cutFlow  = TH1F("h_reg_SR_1b_cutFlow", "h_reg_SR_1b_cutFlow", 7,0,7)
     h_reg_SR_2b_cutFlow  = TH1F("h_reg_SR_2b_cutFlow", "h_reg_SR_2b_cutFlow", 7,0,7)
@@ -514,7 +518,7 @@ def runbbdm(txtfile):
                 weightEle_up=ele_wgt[1];weightMu_up=mu_wgt[1];weightRecoil_up=recoil_wgt[1];weightMET_up=met_wgt[1]
                 weightEle_down=ele_wgt[2];weightMu_down=mu_wgt[2];weightRecoil_down=recoil_wgt[2];weightMET_down=met_wgt[2]
                 weightJEC_up = getJECWeight(ep_THINjetCorrUnc)[0]; weightJEC_down = getJECWeight(ep_THINjetCorrUnc)[1]
-           '''
+            '''
             --------------------------------------------------------------------------------
             Preselection REGION
             --------------------------------------------------------------------------------
