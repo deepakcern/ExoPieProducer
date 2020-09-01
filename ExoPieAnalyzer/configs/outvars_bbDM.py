@@ -1,19 +1,25 @@
 from pandas import  DataFrame
 
-## SR dataframes
+## presel dataframe
+df_out_preselR = DataFrame(columns=['run', 'lumi', 'event', 'MET', 'METPhi', 'nPV',
+                                  'dPhi_jetMET', 'NTau', 'NEle', 'NMu', 'nPho', 'Njets_PassID', 'Nbjets_PassID',
+                                  'Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet1deepCSV', 'Jet2Pt', 'Jet2Eta', 'Jet2Phi', 'Jet2deepCSV',
+                                  'Jet3Pt', 'Jet3Eta', 'Jet3Phi', 'Jet3deepCSV',
+                                  'weight', 'weightMET', 'weightEle', 'weightMu', 'weightB', 'weightEWK', 'weightQCD', 'weightTop', 'weightPU', 'weightPrefire', 'weightMET_up', 'weightEle_up', 'weightMu_up', 'weightB_up', 'weightEWK_up', 'weightQCD_up', 'weightTop_up', 'weightPU_up', 'weightPrefire_up', 'weightJEC_up', 'MET_Res_up', 'MET_En_up', 'MET_En_down', 'MET_Res_down', 'weightJEC_down', 'weightMET_down', 'weightEle_down', 'weightMu_down', 'weightB_down', 'weightEWK_down', 'weightQCD_down', 'weightTop_down', 'weightPU_down', 'weightPrefire_down'])
 
+## SR dataframes
 df_out_SR_1b = DataFrame(columns=['run','lumi','event','MET','METPhi','nPV',
                                   'dPhi_jetMET','NTau','NEle','NMu','nPho','Njets_PassID','Nbjets_PassID',
                                   'Jet1Pt','Jet1Eta','Jet1Phi','Jet1deepCSV','Jet2Pt','Jet2Eta','Jet2Phi','Jet2deepCSV',
-                                  'Jet3Pt','Jet3Eta','Jet3Phi','Jet3deepCSV',
+                                  'Jet3Pt', 'Jet3Eta', 'Jet3Phi', 'Jet3deepCSV', 'isjet1EtaMatch', 'M_Jet1Jet2',
                                   'weight','weightMET','weightEle','weightMu','weightB','weightEWK','weightQCD','weightTop','weightPU','weightPrefire','weightMET_up','weightEle_up','weightMu_up','weightB_up','weightEWK_up','weightQCD_up','weightTop_up','weightPU_up','weightPrefire_up','weightJEC_up','MET_Res_up','MET_En_up','MET_En_down','MET_Res_down','weightJEC_down','weightMET_down','weightEle_down','weightMu_down','weightB_down','weightEWK_down','weightQCD_down','weightTop_down','weightPU_down','weightPrefire_down'])
 df_out_SR_2b = DataFrame(columns=['run','lumi','event','MET','METPhi','nPV',
                                   'dPhi_jetMET','NTau','NEle','NMu','nPho','Njets_PassID','Nbjets_PassID',
                                   'Jet1Pt','Jet1Eta','Jet1Phi','Jet1deepCSV','Jet2Pt','Jet2Eta','Jet2Phi','Jet2deepCSV',
-                                  'Jet3Pt','Jet3Eta','Jet3Phi','Jet3deepCSV',
+                                  'Jet3Pt', 'Jet3Eta', 'Jet3Phi', 'Jet3deepCSV', 'isjet2EtaMatch', 'M_Jet1Jet3',
                                   'weight','weightMET','weightEle','weightMu','weightB','weightEWK','weightQCD','weightTop','weightPU','weightPrefire','weightMET_up','weightEle_up','weightMu_up','weightB_up','weightEWK_up','weightQCD_up','weightTop_up','weightPU_up','weightPrefire_up','weightJEC_up','MET_Res_up','MET_En_up','MET_En_down','MET_Res_down','weightJEC_down','weightMET_down','weightEle_down','weightMu_down','weightB_down','weightEWK_down','weightQCD_down','weightTop_down','weightPU_down','weightPrefire_down'])
 
-
+## CR dataframes
 df_out_ZeeCR_1b = DataFrame(columns=['run','lumi','event','MET','METPhi','Recoil','RecoilPhi','Zmass','ZpT','nPV',
                                   'dPhi_jetMET','NTau','NEle','NMu','nPho','Njets_PassID','Nbjets_PassID',
                                   'Jet1Pt','Jet1Eta','Jet1Phi','Jet1deepCSV','Jet2Pt','Jet2Eta','Jet2Phi','Jet2deepCSV',
