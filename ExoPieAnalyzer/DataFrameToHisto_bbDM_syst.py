@@ -96,7 +96,10 @@ def getBinRange(nBins, xlow,xhigh):
 #def HistWrtter(df, inFile,treeName, mode="UPDATE"):
 def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
     h_list = []
-    reg=treeName.split('_')[1]+'_'+treeName.split('_')[2]
+    if 'preselR' in treeName:
+        reg = treeName.split('_')[1]
+    else:
+        reg = treeName.split('_')[1]+'_'+treeName.split('_')[2]
     if 'SR' in reg or 'preselR' in reg:
         #CENTRAL AND SYSTEMATICS FOR MET HISTOGRAM
         h_list.append(VarToHist(df["MET"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_MET",[200,250,350,500,1000]))
@@ -210,7 +213,10 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
 
 def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
     h_list = []
-    reg=treeName.split('_')[1]+'_'+treeName.split('_')[2]
+    if 'preselR' in treeName:
+        reg = treeName.split('_')[1]
+    else:
+        reg = treeName.split('_')[1]+'_'+treeName.split('_')[2]
     if 'SR' in reg or 'preselR' in reg:
         h_list.append(SetHist("h_reg_"+reg+"_MET",[200,250,350,500,1000]))
 
