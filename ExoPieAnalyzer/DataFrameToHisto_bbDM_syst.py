@@ -17,7 +17,7 @@ import glob
 
 
 ## ----- start of clock
-start = time.clock()
+start = time.time()
 
 
 ## ----- command line argument
@@ -186,8 +186,7 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
             h_list.append(VarToHist(df["isjet2EtaMatch"], df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [100, 0, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet3"], df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_M_Jet1Jet3", [1500, 0, 1500]))
-            
+                                    df["weight"], "h_reg_"+reg+"_M_Jet1Jet3", [1500, 0, 1500]))            
         h_list.append(VarToHist(df["Jet1Pt"],  df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_Jet1Pt", [50, 30, 1000]))
         h_list.append(VarToHist(df["Jet1Eta"], df["weight"], df["weight"],
@@ -212,7 +211,12 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                 df["weight"], "h_reg_"+reg+"_min_dPhi", [15, 0.5, 3.2]))
         h_list.append(VarToHist(df["METPhi"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_METPhi", [15, -3.14, 3.14]))
-
+        h_list.append(VarToHist(df["ratioPtJet21"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+        h_list.append(VarToHist(df["dPhiJet12"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+        h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     else:
         h_list.append(VarToHist(df["MET"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_MET", [30, 0, 1000]))
@@ -311,7 +315,7 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                 df["weight"], "h_reg_"+reg+"_lep1_eta", [30, -2.5, 2.5]))
         h_list.append(VarToHist(df["leadingLepPhi"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_lep1_Phi", [30, -3.14, 3.14]))
-        if 'munu' in reg or 'enu' in reg:
+        if ('Wmunu' in reg) or ('Wenu' in reg) or ('Topmunu' in reg) or ('Topenu' in reg):
             h_list.append(VarToHist(df["Wmass"], df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_Wmass", [15, 0, 160]))
             h_list.append(VarToHist(
@@ -327,6 +331,12 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                     df["weight"], "h_reg_"+reg+"_lep2_eta", [30, -2.5, 2.5]))
             h_list.append(VarToHist(df["subleadingLepPhi"], df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_lep2_Phi", [30, -3.14, 3.14]))
+        h_list.append(VarToHist(df["ratioPtJet21"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+        h_list.append(VarToHist(df["dPhiJet12"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+        h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
+                                df["weight"], "h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
     fout = TFile(outfilename, mode)
     for ih in h_list:
@@ -413,7 +423,9 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_PUnPV", [70, 0, 70]))
         h_list.append(SetHist("h_reg_"+reg+"_min_dPhi", [15, 0.5, 3.2]))
         h_list.append(SetHist("h_reg_"+reg+"_METPhi", [15, -3.14, 3.14]))
-
+        h_list.append(SetHist("h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+        h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+        h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     else:
         h_list.append(SetHist("h_reg_"+reg+"_MET",   [30, 0, 1000]))
         h_list.append(SetHist("h_reg_"+reg+"_Recoil",
@@ -490,7 +502,7 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_lep1_pT", [15, 30, 500]))
         h_list.append(SetHist("h_reg_"+reg+"_lep1_eta", [30, -2.5, 2.5]))
         h_list.append(SetHist("h_reg_"+reg+"_lep1_Phi", [30, -3.14, 3.14]))
-        if 'Wmunu' in reg or 'Wenu' in reg:
+        if ('Wmunu' in reg) or ('Wenu' in reg) or ('Topmunu' in reg) or ('Topenu' in reg):
             h_list.append(SetHist("h_reg_"+reg+"_Wmass", [15, 0, 160]))
             h_list.append(SetHist("h_reg_"+reg+"_WpT", [15, 0, 700]))
         if 'Zmumu' in reg or 'Zee' in reg:
@@ -499,6 +511,9 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
             h_list.append(SetHist("h_reg_"+reg+"_lep2_pT", [15, 30, 500]))
             h_list.append(SetHist("h_reg_"+reg+"_lep2_eta", [30, -2.5, 2.5]))
             h_list.append(SetHist("h_reg_"+reg+"_lep2_Phi", [30, -3.14, 3.14]))
+        h_list.append(SetHist("h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+        h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+        h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
     fout = TFile(outfilename, mode)
     for ih in h_list:
@@ -511,8 +526,7 @@ START MAKING HISTOGRAMS
 ---------------------------------------------------------------
 '''
 
-trees = ['bbDM_preselR', 'bbDM_SR_1b', 'bbDM_SR_2b', 'bbDM_ZeeCR_1b', 'bbDM_ZeeCR_2b', 'bbDM_ZmumuCR_1b', 'bbDM_ZmumuCR_2b', 'bbDM_WenuCR_1b',
-         'bbDM_WenuCR_2b', 'bbDM_WmunuCR_1b', 'bbDM_WmunuCR_2b', 'bbDM_TopenuCR_1b', 'bbDM_TopenuCR_2b', 'bbDM_TopmunuCR_1b', 'bbDM_TopmunuCR_2b']
+trees = ['bbDM_preselR', 'bbDM_SR_1b', 'bbDM_SR_2b', 'bbDM_ZeeCR_1b', 'bbDM_ZeeCR_2b', 'bbDM_ZmumuCR_1b', 'bbDM_ZmumuCR_2b', 'bbDM_WenuCR_1b', 'bbDM_WenuCR_2b', 'bbDM_WmunuCR_1b', 'bbDM_WmunuCR_2b', 'bbDM_TopenuCR_1b', 'bbDM_TopenuCR_2b', 'bbDM_TopmunuCR_1b', 'bbDM_TopmunuCR_2b']
 
 #inputFilename=infile
 filename = infile
@@ -541,14 +555,13 @@ def runFile(filename, trees):
         ApplyWeight = False
     else:
         ApplyWeight = True
-
-    print 'ApplyWeight', ApplyWeight
+    print ('ApplyWeight', ApplyWeight)
     h_total = tf.Get('h_total')
     h_total_weight = tf.Get('h_total_mcweight')
-    #print 'total',h_total_weight.Integral()
+    #print ('total',h_total_weight.Integral())
     outfilename = outputdir+'/'+'Output_'+filename.split('/')[-1]
     for index, tree in enumerate(trees):
-        #print 'tree',tree
+        #print ('tree',tree)
         tt = tf.Get(tree)
         nent = tt.GetEntries()
 
@@ -583,19 +596,17 @@ def runFile(filename, trees):
     h_total_weight.Write()
     h_total.Write()
 
-
 if isfarmout:
     path = inDir
     files = glob.glob(path+'/*')
     for inputFile in files:
-        print 'running code for file:  ', inputFile
-	runFile(inputFile, trees)
+        print ('running code for file:  ', inputFile)
+        runFile(inputFile, trees)
 
 if not isfarmout:
     filename = infile
-    print 'running code for file:  ', filename
+    print ('running code for file:  ', filename)
     runFile(filename, trees)
 
-
-stop = time.clock()
-print "%.4gs" % (stop-start)
+stop = time.time()
+print ("%.4gs" % (stop-start))
