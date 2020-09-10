@@ -331,12 +331,13 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                     df["weight"], "h_reg_"+reg+"_lep2_eta", [30, -2.5, 2.5]))
             h_list.append(VarToHist(df["subleadingLepPhi"], df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_lep2_Phi", [30, -3.14, 3.14]))
-        h_list.append(VarToHist(df["ratioPtJet21"],  df["weight"], df["weight"],
-                                df["weight"], "h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
-        h_list.append(VarToHist(df["dPhiJet12"],  df["weight"], df["weight"],
-                                df["weight"], "h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
-        h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
-                                df["weight"], "h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
+        if ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
+            h_list.append(VarToHist(df["ratioPtJet21"],  df["weight"], df["weight"],
+                                    df["weight"], "h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+            h_list.append(VarToHist(df["dPhiJet12"],  df["weight"], df["weight"],
+                                    df["weight"], "h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+            h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
+                                    df["weight"], "h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
     fout = TFile(outfilename, mode)
     for ih in h_list:
@@ -511,9 +512,10 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
             h_list.append(SetHist("h_reg_"+reg+"_lep2_pT", [15, 30, 500]))
             h_list.append(SetHist("h_reg_"+reg+"_lep2_eta", [30, -2.5, 2.5]))
             h_list.append(SetHist("h_reg_"+reg+"_lep2_Phi", [30, -3.14, 3.14]))
-        h_list.append(SetHist("h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
-        h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
-        h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
+        if ('Wmunu_1b' not in reg) and ('Wenu_1b' not in reg):
+            h_list.append(SetHist("h_reg_"+reg+"_ratioPtJet21", [100, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [100, -10, 10]))
+            h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [100, -10, 10]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
     fout = TFile(outfilename, mode)
     for ih in h_list:
