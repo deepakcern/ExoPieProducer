@@ -37,3 +37,6 @@ bbv06.04.01: * removed HEM veto from analyser
 bbv06.04.02: * no trigger applied on MC
 			 * added ratioJet21, dPhiJet12 and dEtaJet12 variabbles
 			 * added pu UP and Down
+
+bbv06.04.03: * PU sf issue fixed
+			 * PR for fix https://github.com/ExoPie/ExoPieUtils/pull/21/
