@@ -362,8 +362,8 @@ def runbbdm(txtfile):
             fatjeteta = [getEta(ep_fjetPx[ij], ep_fjetPy[ij], ep_fjetPz[ij]) for ij in range(ep_nfjet)]
             fatjetphi = [getPhi(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
 
-            hemFatjetsVeto = [True for ij in range(ep_nfjet) if fatjeteta[ij]>-3.0 and fatjeteta[ij]<-1.3 and fatjetphi[ij]>-1.57 and fatjetphi[ij]<-0.87]
-            if hemFatjetsVeto and runOn2018:continue
+            #hemFatjetsVeto = [True for ij in range(ep_nfjet) if fatjeteta[ij]>-3.0 and fatjeteta[ij]<-1.3 and fatjetphi[ij]>-1.57 and fatjetphi[ij]<-0.87]
+            #if hemFatjetsVeto and runOn2018:continue
 
             if applyMassCor: ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
             else:ep_fjetSDMass = ep_fjetSDMassUnCorr
@@ -405,8 +405,8 @@ def runbbdm(txtfile):
             #print 'pass_ak4jet_index_cleaned', pass_ak4jet_index_cleaned
 
             nJets_cleaned = len(pass_ak4jet_index_cleaned)
-            hemAk4jetsVeto = [True for ij in range(ep_THINnJet) if ak4jeteta[ij]>-3.0 and ak4jeteta[ij]<-1.3 and ak4jetphi[ij]>-1.57 and ak4jetphi[ij]<-0.87]
-            if hemAk4jetsVeto and runOn2018: continue
+            #hemAk4jetsVeto = [True for ij in range(ep_THINnJet) if ak4jeteta[ij]>-3.0 and ak4jeteta[ij]<-1.3 and ak4jetphi[ij]>-1.57 and ak4jetphi[ij]<-0.87]
+            #if hemAk4jetsVeto and runOn2018: continue
 
             Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > LWP and abs(ak4jeteta[ij]) < 2.5)]
             nBjets_iso = len(Bjet_index)
