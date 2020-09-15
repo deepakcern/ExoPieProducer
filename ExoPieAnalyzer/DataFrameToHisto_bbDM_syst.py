@@ -209,24 +209,24 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
         h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_dEtaJet12", [15, -8, 8]))
         h_list.append(VarToHist(df["rJet1PtMET"],  df["weight"], df["weight"],
-                                df["weight"], "h_reg_"+reg+"_rJet1PtMET", [20, 0, 2]))
+                                df["weight"], "h_reg_"+reg+"_rJet1PtMET", [50, 0, 50]))
         if ('SR_1b' in reg):
             h_list.append(VarToHist(df["isjet1EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet2"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('SR_2b' in reg):
             h_list.append(VarToHist(df["isjet2EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet3"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
         elif ('preselR' in reg):
             h_list.append(VarToHist(df["isjet1EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet2"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
             h_list.append(VarToHist(df["isjet2EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet3"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
     else:
@@ -351,20 +351,20 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
             h_list.append(VarToHist(df["dEtaJet12"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_dEtaJet12", [15, -8, 8]))
         h_list.append(VarToHist(df["rJet1PtMET"],  df["weight"], df["weight"],
-                                df["weight"], "h_reg_"+reg+"_rJet1PtMET", [20, 0, 2]))
+                                df["weight"], "h_reg_"+reg+"_rJet1PtMET", [50, 0, 50]))
         if ('1b' in reg) and ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
             h_list.append(VarToHist(df["isjet1EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet2"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('WmunuCR_2b' in reg or 'WenuCR_2b' in reg):
             h_list.append(VarToHist(df["isjet1EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet2"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('2b' in reg):
             h_list.append(VarToHist(df["isjet2EtaMatch"],  df["weight"], df["weight"],
-                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+                                    df["weight"], "h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(VarToHist(df["M_Jet1Jet3"],  df["weight"], df["weight"],
                                     df["weight"], "h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
     #outfilename = 'Output_'+inFile.split('/')[-1]
@@ -450,17 +450,17 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
         h_list.append(SetHist("h_reg_"+reg+"_ratioPtJet21", [20, 0, 1]))
         h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [15, -8, 8]))
         h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [15, -8, 8]))
-        h_list.append(SetHist("h_reg_"+reg+"_rJet1PtMET", [20, 0, 2]))
+        h_list.append(SetHist("h_reg_"+reg+"_rJet1PtMET", [50, 0, 50]))
         if ('SR_1b' in reg):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('SR_2b' in reg ):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
         elif ('preselR' in reg):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
-            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
     else:
         h_list.append(SetHist("h_reg_"+reg+"_MET",   [30, 0, 1000]))
@@ -551,17 +551,15 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
             h_list.append(SetHist("h_reg_"+reg+"_dPhiJet12", [15, -8, 8]))
             h_list.append(SetHist("h_reg_"+reg+"_dEtaJet12", [15, -8, 8]))
         if ('1b' in reg) and ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('WmunuCR_2b' in reg) or ('WenuCR_2b' in reg):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet1EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet2", [100, 0, 2000]))
         elif ('2b' in reg ):
-            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [10, 0, 1]))
+            h_list.append(SetHist("h_reg_"+reg+"_isjet2EtaMatch", [3, -1, 1]))
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
-
-        h_list.append(SetHist("h_reg_"+reg+"_rJet1PtMET", [20, 0, 2]))
-    #outfilename = 'Output_'+inFile.split('/')[-1]
+        h_list.append(SetHist("h_reg_"+reg+"_rJet1PtMET", [50, 0, 50]))
     fout = TFile(outfilename, mode)
     for ih in h_list:
         ih.Write()
