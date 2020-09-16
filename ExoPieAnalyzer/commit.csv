@@ -13,8 +13,8 @@ git push origin bbv0.00.01
 bbv0.00.01; keeping this as the base tag; changes for the tau veto discriminator are done
 
 bbvXX.YY.01: * configured for year 2018: condor submission
-	    * changed the condor flag
-	    * changed the year varibale for 2018
+	* changed the condor flag
+	* changed the year varibale for 2018
 
 bbvXX.YY.02: * added the met phi and recoil phi variables
 
@@ -22,4 +22,28 @@ bbv04.00.00: * added prefiring weights for 2017 and 2016
 
 bbv06.00.00: * made the analyser for prefiring weight for all eras and added event counter histogram
 
-bbv06.02.00: * added the Type1smear met 
+bbv06.02.00: * added the Type1smear met
+
+bbv06.02.01: * factorised the cutflow, and added the boolean for each CR
+
+bbv06.02.02: * applied tightID sf to subleading electron if it passes tightID
+
+bbv06.04.00: * adding Hem Veto
+
+bbv06.04.01: * removed HEM veto from analyser
+	* added preselection region
+	* added hemisphere variables for SR1 and SR2
+
+bbv06.04.02: * no trigger applied on MC
+	 	* added ratioJet21, dPhiJet12 and dEtaJet12 variabbles
+	 	* added pu UP and Down
+
+bbv06.04.03: * PU sf issue fixed & met trig for 2016
+	* PR for fix https://github.com/ExoPie/ExoPieUtils/pull/21/
+
+bbv06.04.04 * updated PU MC file and few new variables
+	* https://github.com/ExoPie/ExoPieUtils/pull/22
+
+bbv06.04.05 * updated the hemisphere variables
+	* update the btag out of bound weights
+	* https://github.com/ExoPie/ExoPieUtils/pull/22
