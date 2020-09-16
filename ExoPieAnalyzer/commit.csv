@@ -47,3 +47,6 @@ bbv06.04.04 * updated PU MC file and few new variables
 bbv06.04.05 * updated the hemisphere variables
 	* update the btag out of bound weights
 	* https://github.com/ExoPie/ExoPieUtils/pull/22
+
+bbv06.05.00 * added calo met variables
+	* added jet energy variabbles
