@@ -366,6 +366,7 @@ def runbbdm(txtfile):
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_prefiringweight, ep_prefiringweightup, ep_prefiringweightdown,\
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
+            ep_pfMetCorrSig, ep_pfpatCaloMETPt, ep_pfpatCaloMETPhi, ep_pfTRKMETPt, ep_pfTRKMETPhi, \
             ep_WenuPhi, ep_WmunuPhi, ep_ZeePhi, ep_ZmumuPhi, \
             ep_ZeeRecoil, ep_ZmumuRecoil, ep_WenuRecoil, ep_WmunuRecoil, \
             ep_Zeemass, ep_Zmumumass, ep_Wenumass, ep_Wmunumass, \
@@ -373,6 +374,8 @@ def runbbdm(txtfile):
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV, \
             ep_THINjetCorrUnc, \
+            ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetNEmEF,  \
+            ep_THINjetCMulti, ep_THINjetNMultiplicity, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
             ep_eleIsPassTight, ep_eleIsPassLoose, ep_eleCharge, \
             ep_nPho, ep_phoIsPassTight, ep_phoPx, ep_phoPy, ep_phoPz, ep_phoEnergy, \
@@ -383,7 +386,10 @@ def runbbdm(txtfile):
             ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId,
                    df.st_prefiringweight, df.st_prefiringweightup, df.st_prefiringweightdown,
-                   df.st_pfMetSmearPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown,
+                   df.st_pfMetSmearPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, 
+                   df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown,
+                   df.st_pfMetCorrSig, df.st_pfpatCaloMETPt, df.st_pfpatCaloMETPhi, 
+                   df.st_pfTRKMETPt, df.st_pfTRKMETPhi,
                    df.WenuPhi, df.WmunuPhi, df.ZeePhi, df.ZmumuPhi,
                    df.ZeeRecoil, df.ZmumuRecoil, df.WenuRecoil, df.WmunuRecoil,
                    df.ZeeMass, df.ZmumuMass, df.Wenumass, df.Wmunumass,
@@ -391,6 +397,8 @@ def runbbdm(txtfile):
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy,
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, df.st_THINjetNPV,
                    df.st_THINjetCorrUnc,
+                   df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, df.st_THINjetNEmEF, 
+                   df.st_THINjetCMulti, df.st_THINjetNMultiplicity,
                    df.st_nEle, df.st_elePx, df.st_elePy, df.st_elePz, df.st_eleEnergy,
                    df.st_eleIsPassTight, df.st_eleIsPassLoose, df.st_eleCharge,
                    df.st_nPho, df.st_phoIsPassTight, df.st_phoPx, df.st_phoPy, df.st_phoPz, df.st_phoEnergy,
@@ -543,8 +551,13 @@ def runbbdm(txtfile):
             dPhiJet12 = dummy
             dEtaJet12 = dummy
             rJet1PtMET = dummy
-
-
+            Jet2NHadEF = dummy
+            Jet2CHadEF = dummy
+            Jet2CEmEF = dummy
+            Jet2NEmEF = dummy
+            Jet2CMulti = dummy
+            Jet2NMultiplicity = dummy
+            
             '''
             -------------------------------------------------------------------------------
             HADRONIC RECOIL
@@ -598,6 +611,26 @@ def runbbdm(txtfile):
             if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0):
                 continue
 
+            '''
+            -------------------------------------------------------------------------------
+            ADDITIONAL MET VARS
+            -------------------------------------------------------------------------------
+            '''
+            delta_pfCaloSR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_pfMetCorrPt
+            delta_pfCaloZeeCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_ZeeRecoil
+            delta_pfCaloZmumuCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_ZmumuRecoil
+            delta_pfCaloWenuCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_WenuRecoil
+            delta_pfCaloWmunuCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_WmunuRecoil
+            delta_pfCaloTopenuCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_WenuRecoil
+            delta_pfCaloTopmunuCR = abs(
+                ep_pfpatCaloMETPt-ep_pfMetCorrPt)/ep_WmunuRecoil
+            
             '''
             -------------------------------------------------------------------------------
             CR VARS
@@ -720,7 +753,13 @@ def runbbdm(txtfile):
                                         if ep_THINjetEta[0]*ep_THINjetEta[1] > 0:
                                             isjet1EtaMatch = 1
                                         if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
-                                            isjet1EtaMatch = -1   
+                                            isjet1EtaMatch = -1  
+                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1] 
                                     if ep_THINnJet >= 3 :
                                         M_Jet1Jet3 = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0], ep_THINjetPx[2], ep_THINjetPy[2], ep_THINjetPz[2], ep_THINjetEnergy[2])
                                         if ep_THINjetEta[0]*ep_THINjetEta[2] > 0:
@@ -777,7 +816,13 @@ def runbbdm(txtfile):
                                         if ep_THINjetEta[0]*ep_THINjetEta[1] > 0:
                                             isjet1EtaMatch = 1
                                         if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
-                                            isjet1EtaMatch = -1   
+                                            isjet1EtaMatch = -1
+                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                            if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                 h_reg_SR_2b_cutFlow.AddBinContent(
                                     6, presel_weight*weightMET)
@@ -787,6 +832,12 @@ def runbbdm(txtfile):
                                     SR2bcount += 1
                                     rJet1PtMET = (
                                         ep_THINjetPt[0]/ep_pfMetCorrPt)
+                                    Jet2NHadEF = ep_THINjetNHadEF[1]
+                                    Jet2CHadEF = ep_THINjetCHadEF[1]
+                                    Jet2CEmEF = ep_THINjetCEmEF[1]
+                                    Jet2NEmEF = ep_THINjetNEmEF[1]
+                                    Jet2CMulti = ep_THINjetCMulti[1]
+                                    Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                     if ep_THINnJet == 3:
                                         Jet3Pt = ep_THINjetPt[2]
                                         Jet3Eta = ep_THINjetEta[2]
@@ -872,22 +923,35 @@ def runbbdm(txtfile):
                                                                 isjet1EtaMatch = 1 
                                                             if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
                                                                 isjet1EtaMatch = -1
+                                                            Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                            Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                            Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                            Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                            Jet2CMulti = ep_THINjetCMulti[1]
+                                                            Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                                if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                    h_reg_ZeeCR_2b_cutFlow.AddBinContent(
                                                        10, presel_weight*weightEleTrig*weightEle)
                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
-                                                       h_reg_ZeeCR_2b_cutFlow.AddBinContent(
-                                                           11, weight)
-                                                       ZeeCR2bcount += 1
-                                                       is2bCRZee = True
-                                                       rJet1PtMET = (
+                                                        h_reg_ZeeCR_2b_cutFlow.AddBinContent(
+                                                            11, weight)
+                                                        ZeeCR2bcount += 1
+                                                        is2bCRZee = True
+                                                        rJet1PtMET = (
                                                            ep_THINjetPt[0]/ep_pfMetCorrPt)
-                                                       if ep_THINnJet == 3:
-                                                           M_Jet1Jet3 = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0], ep_THINjetPx[2], ep_THINjetPy[2], ep_THINjetPz[2], ep_THINjetEnergy[2])
-                                                           if ep_THINjetEta[0]*ep_THINjetEta[2] > 0:
-                                                               isjet2EtaMatch = 1
-                                                           if ep_THINjetEta[0]*ep_THINjetEta[2] < 0:
-                                                               isjet2EtaMatch = -1
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
+                                                        if ep_THINnJet == 3:
+                                                            M_Jet1Jet3 = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0], ep_THINjetPx[2], ep_THINjetPy[2], ep_THINjetPz[2], ep_THINjetEnergy[2])
+                                                            if ep_THINjetEta[0]*ep_THINjetEta[2] > 0:
+                                                                isjet2EtaMatch = 1
+                                                            if ep_THINjetEta[0]*ep_THINjetEta[2] < 0:
+                                                                isjet2EtaMatch = -1
+                                                            
             '''
             --------------------------------------------------------------------------------
             ZMUMU CONTROL REGION
@@ -962,6 +1026,12 @@ def runbbdm(txtfile):
                                                                 isjet1EtaMatch = 1
                                                             if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
                                                                isjet1EtaMatch = -1
+                                                            Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                            Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                            Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                            Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                            Jet2CMulti = ep_THINjetCMulti[1]
+                                                            Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                                 if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
@@ -972,6 +1042,12 @@ def runbbdm(txtfile):
                                                         is2bCRZmumu = True
                                                         rJet1PtMET = (
                                                             ep_THINjetPt[0]/ep_pfMetCorrPt)
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                                         if ep_THINnJet == 3:
                                                             M_Jet1Jet3 = InvMass(ep_THINjetPx[0], ep_THINjetPy[0], ep_THINjetPz[0], ep_THINjetEnergy[0], ep_THINjetPx[2], ep_THINjetPy[2], ep_THINjetPz[2], ep_THINjetEnergy[2])
                                                             if ep_THINjetEta[0]*ep_THINjetEta[2] > 0:
@@ -1051,6 +1127,12 @@ def runbbdm(txtfile):
                                                             isjet1EtaMatch = 1
                                                         if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
                                                             isjet1EtaMatch = -1
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
             '''
             --------------------------------------------------------------------------------
             WMUNU CONTROL REGION
@@ -1125,6 +1207,12 @@ def runbbdm(txtfile):
                                                             isjet1EtaMatch = 1
                                                         if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
                                                             isjet1EtaMatch = -1
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
             '''
             --------------------------------------------------------------------------------
             TOPENU CONTROL REGION
@@ -1198,7 +1286,13 @@ def runbbdm(txtfile):
                                                             if ep_THINjetEta[0]*ep_THINjetEta[1] > 0:
                                                                 isjet1EtaMatch = 1
                                                             if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
-                                                                isjet1EtaMatch = -1                          
+                                                                isjet1EtaMatch = -1
+                                                            Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                            Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                            Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                            Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                            Jet2CMulti = ep_THINjetCMulti[1]
+                                                            Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                                 if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(
                                                         10, weight)
@@ -1214,6 +1308,12 @@ def runbbdm(txtfile):
                                                             isjet2EtaMatch = 1
                                                         if ep_THINjetEta[0]*ep_THINjetEta[2] < 0:
                                                             isjet2EtaMatch = -1
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
             '''
             --------------------------------------------------------------------------------
             TOPMUNU CONTROL REGION
@@ -1288,6 +1388,12 @@ def runbbdm(txtfile):
                                                                 isjet1EtaMatch = 1
                                                             if ep_THINjetEta[0]*ep_THINjetEta[1] < 0:
                                                                 isjet1EtaMatch = -1
+                                                            Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                            Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                            Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                            Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                            Jet2CMulti = ep_THINjetCMulti[1]
+                                                            Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
                                                 if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
@@ -1303,6 +1409,12 @@ def runbbdm(txtfile):
                                                             isjet2EtaMatch = 1
                                                         if ep_THINjetEta[0]*ep_THINjetEta[2] < 0:
                                                             isjet2EtaMatch = -1
+                                                        Jet2NHadEF = ep_THINjetNHadEF[1]
+                                                        Jet2CHadEF = ep_THINjetCHadEF[1]
+                                                        Jet2CEmEF = ep_THINjetCEmEF[1]
+                                                        Jet2NEmEF = ep_THINjetNEmEF[1]
+                                                        Jet2CMulti = ep_THINjetCMulti[1]
+                                                        Jet2NMultiplicity = ep_THINjetNMultiplicity[1]
             if ispreselR:
                 df_out_preselR = df_out_preselR.append({
                     'run': float(ep_runId),
@@ -1311,6 +1423,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloSR),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
@@ -1322,10 +1440,22 @@ def runbbdm(txtfile):
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
                     'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1NHadEF': float(ep_THINjetNHadEF[0]),
+                    'Jet1CHadEF': float(ep_THINjetCHadEF[0]),
+                    'Jet1CEmEF': float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF': float(ep_THINjetNEmEF[0]),
+                    'Jet1CMulti': float(ep_THINjetCMulti[0]),
+                    'Jet1NMultiplicity': float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -1383,6 +1513,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloSR),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
@@ -1393,11 +1529,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -1453,6 +1601,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloSR),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
@@ -1463,7 +1617,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -1526,6 +1686,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloZeeCR),
                     'Recoil': float(ep_ZeeRecoil),
                     'RecoilPhi': float(ep_ZeeRecoil_dPhi),
                     'Zmass': float(ep_Zeemass),
@@ -1540,11 +1706,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -1606,6 +1784,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloZeeCR),
                     'Recoil': float(ep_ZeeRecoil),
                     'RecoilPhi': float(ep_ZeeRecoil_dPhi),
                     'Zmass': float(ep_Zeemass),
@@ -1620,7 +1804,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -1687,6 +1877,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloZmumuCR),
                     'Recoil': float(ep_ZmumuRecoil),
                     'RecoilPhi': float(ep_ZmumuRecoil_dPhi),
                     'Zmass': float(ep_Zmumumass),
@@ -1701,11 +1897,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -1767,6 +1975,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloZmumuCR),
                     'Recoil': float(ep_ZmumuRecoil),
                     'RecoilPhi': float(ep_ZmumuRecoil_dPhi),
                     'Zmass': float(ep_Zmumumass),
@@ -1781,7 +1995,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -1847,6 +2067,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloWenuCR),
                     'Recoil': float(ep_WenuRecoil),
                     'RecoilPhi': float(ep_WenuRecoil_dPhi),
                     'Wmass': float(ep_Wenumass),
@@ -1861,11 +2087,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(dummy),
+                    'Jet2CHadEF':float(dummy),
+                    'Jet2CEmEF':float(dummy),
+                    'Jet2NEmEF':float(dummy),
+                    'Jet2CMulti':float(dummy),
+                    'Jet2NMultiplicity': float(dummy),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -1919,6 +2157,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloWenuCR),
                     'Recoil': float(ep_WenuRecoil),
                     'RecoilPhi': float(ep_WenuRecoil_dPhi),
                     'Wmass': float(ep_Wenumass),
@@ -1933,7 +2177,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -1997,6 +2247,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloWmunuCR),
                     'Recoil': float(ep_WmunuRecoil),
                     'RecoilPhi': float(ep_WmunuRecoil_dPhi),
                     'Wmass': float(ep_Wmunumass),
@@ -2011,11 +2267,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(dummy),
+                    'Jet2CHadEF':float(dummy),
+                    'Jet2CEmEF':float(dummy),
+                    'Jet2NEmEF':float(dummy),
+                    'Jet2CMulti':float(dummy),
+                    'Jet2NMultiplicity':float(dummy),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -2069,6 +2337,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloWmunuCR),
                     'Recoil': float(ep_WmunuRecoil),
                     'RecoilPhi': float(ep_WmunuRecoil_dPhi),
                     'Wmass': float(ep_Wmunumass),
@@ -2083,7 +2357,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -2146,6 +2426,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloTopenuCR),
                     'Recoil': float(ep_WenuRecoil),
                     'RecoilPhi': float(ep_WenuRecoil_dPhi),
                     'Wmass': float(ep_Wenumass),
@@ -2160,11 +2446,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -2223,6 +2521,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloTopenuCR),
                     'Recoil': float(ep_WenuRecoil),
                     'RecoilPhi': float(ep_WenuRecoil_dPhi),
                     'Wmass': float(ep_Wenumass),
@@ -2237,7 +2541,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -2300,6 +2610,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloTopmunuCR),
                     'Recoil': float(ep_WmunuRecoil),
                     'RecoilPhi': float(ep_WmunuRecoil_dPhi),
                     'Wmass': float(ep_Wmunumass),
@@ -2314,11 +2630,23 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(Jet2Pt),
                     'Jet2Eta': float(Jet2Eta),
                     'Jet2Phi': float(Jet2Phi),
                     'Jet2deepCSV': float(Jet2deepCSV),
+                    'Jet2NHadEF':float(Jet2NHadEF),
+                    'Jet2CHadEF':float(Jet2CHadEF),
+                    'Jet2CEmEF':float(Jet2CEmEF),
+                    'Jet2NEmEF':float(Jet2NEmEF),
+                    'Jet2CMulti':float(Jet2CMulti),
+                    'Jet2NMultiplicity':float(Jet2NMultiplicity),
                     'Jet3Pt': float(dummy),
                     'Jet3Eta': float(dummy),
                     'Jet3Phi': float(dummy),
@@ -2377,6 +2705,12 @@ def runbbdm(txtfile):
                     'nPV': float(ep_THINjetNPV),
                     'MET': float(ep_pfMetCorrPt),
                     'METPhi': float(ep_pfMetCorrPhi),
+                    'pfMetCorrSig': float( ep_pfMetCorrSig),
+                    'pfpatCaloMETPt': float( ep_pfpatCaloMETPt),
+                    'pfpatCaloMETPhi': float( ep_pfpatCaloMETPhi),
+                    'pfTRKMETPt': float( ep_pfTRKMETPt),
+                    'pfTRKMETPhi': float( ep_pfTRKMETPhi),
+                    'delta_pfCalo': float(delta_pfCaloTopmunuCR),
                     'Recoil': float(ep_WmunuRecoil),
                     'RecoilPhi': float(ep_WmunuRecoil_dPhi),
                     'Wmass': float(ep_Wmunumass),
@@ -2391,7 +2725,13 @@ def runbbdm(txtfile):
                     'Jet1Pt': float(ep_THINjetPt[0]),
                     'Jet1Eta': float(ep_THINjetEta[0]),
                     'Jet1Phi': float(ep_THINjetPhi[0]),
-                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]),
+                    'Jet1deepCSV': float(ep_THINjetDeepCSV[0]), 
+                    'Jet1NHadEF':float(ep_THINjetNHadEF[0]), 
+                    'Jet1CHadEF':float(ep_THINjetCHadEF[0]), 
+                    'Jet1CEmEF':float(ep_THINjetCEmEF[0]), 
+                    'Jet1NEmEF':float(ep_THINjetNEmEF[0]), 
+                    'Jet1CMulti':float(ep_THINjetCMulti[0]), 
+                    'Jet1NMultiplicity':float(ep_THINjetNMultiplicity[0]),
                     'Jet2Pt': float(ep_THINjetPt[1]),
                     'Jet2Eta': float(ep_THINjetEta[1]),
                     'Jet2Phi': float(ep_THINjetPhi[1]),
@@ -2465,10 +2805,8 @@ def runbbdm(txtfile):
 
     df_out_TopenuCR_1b.to_root(outfilenameis, key='bbDM_TopenuCR_1b', mode='a')
     df_out_TopenuCR_2b.to_root(outfilenameis, key='bbDM_TopenuCR_2b', mode='a')
-    df_out_TopmunuCR_1b.to_root(
-        outfilenameis, key='bbDM_TopmunuCR_1b', mode='a')
-    df_out_TopmunuCR_2b.to_root(
-        outfilenameis, key='bbDM_TopmunuCR_2b', mode='a')
+    df_out_TopmunuCR_1b.to_root(outfilenameis, key='bbDM_TopmunuCR_1b', mode='a')
+    df_out_TopmunuCR_2b.to_root(outfilenameis, key='bbDM_TopmunuCR_2b', mode='a')
 
     print('\n============SR cutflow============')
     print('SR1bcount', SR1bcount, 'SR2bcount', SR2bcount)
