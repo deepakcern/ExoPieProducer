@@ -16,13 +16,15 @@ import glob
 CODED BY RAMAN,DEEPAK
 '''
 
+dummyArr = numpy.array([0.0],dtype=numpy.float64)
+
 #import eventSelector
 ## for parallel threads in interactive running
 from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = True
+isCondor = False
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -1434,7 +1436,10 @@ def runbbdm(txtfile):
 
 
     outfilenameis=outfilename
-    #result = df_out_Tope_boosted.empty
+    for df in [df_out_SR_resolved,df_out_SBand_resolved,df_out_Tope_resolved,df_out_Topmu_resolved,df_out_We_resolved,df_out_Wmu_resolved,df_out_Zmumu_resolved,df_out_Zee_resolved,df_out_SR_boosted,df_out_SBand_boosted,df_out_Tope_boosted,df_out_Topmu_boosted,df_out_We_boosted,df_out_Wmu_boosted,df_out_Zmumu_boosted,df_out_Zee_boosted]:
+        if df.empty:
+	    for col in df.columns:
+	        df[col]=dummyArr
     #if not result:df_out_Tope_boosted.fillna(0.0)
     df_out_SR_resolved.to_root(outfilenameis, key='monoHbb_SR_resolved',mode='w')
     df_out_SBand_resolved.to_root(outfilenameis, key='monoHbb_SBand_resolved',mode='a')
