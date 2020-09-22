@@ -754,7 +754,8 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
             hs.GetYaxis().SetLabelFont(42)
             hs.GetYaxis().SetLabelSize(.05)
 
-        if not isrebin:
+        # if not isrebin:
+        if True:
             hs.GetXaxis().SetRangeUser(XMIN, XMAX)
         hs.GetXaxis().SetNdivisions(508)
 
@@ -872,7 +873,8 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
             DataMC.GetXaxis().SetMoreLogLabels()
             DataMC.GetXaxis().SetNoExponent()
             DataMC.GetXaxis().SetNdivisions(508)
-        if not isrebin:
+        # if not isrebin:
+        if True
             DataMC.GetXaxis().SetRangeUser(XMIN, XMAX)
         DataMC.SetMarkerSize(1.5)
         DataMC.SetMarkerStyle(20)
@@ -1079,16 +1081,16 @@ for reg in regions:
                          'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
             elif ('SR_2b' in reg):
                 makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
                          'Inv Mass(Jet1, Jet3)', 0, 2000, 10, 1, 0, reg, varBin=False)
             elif ('preselR' in reg):
                 makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET3#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
                          'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
                          'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',
@@ -1195,17 +1197,17 @@ for reg in regions:
                          'JET1#phi - JET2#phi', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
             if ('1b' in reg) and ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
                 makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
                          'Inv Mass(Jet1, Jet2)', 0, 2000, rebin, 1, 0, reg, varBin=False)
             elif ('WmunuCR_2b' in reg or 'WenuCR_2b' in reg):
                 makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
                          'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
             elif ('2b' in reg):
                 makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET3#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
                 makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
                          'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',

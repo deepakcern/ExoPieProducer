@@ -534,7 +534,7 @@ def runbbdm(txtfile):
 
             min_dPhi_jet_MET = min(
                 [DeltaPhi(jet_phi, ep_pfMetCorrPhi) for jet_phi in ep_THINjetPhi])
-
+            
             Jet2Pt = dummy
             Jet2Eta = dummy
             Jet2Phi = dummy
@@ -557,6 +557,8 @@ def runbbdm(txtfile):
             Jet2NEmEF = dummy
             Jet2CMulti = dummy
             Jet2NMultiplicity = dummy
+            dPhi_lep1_MET = dummy
+            dPhi_lep2_MET = dummy
             
             '''
             -------------------------------------------------------------------------------
@@ -1608,7 +1610,6 @@ def runbbdm(txtfile):
                     'pfTRKMETPhi': float( ep_pfTRKMETPhi),
                     'delta_pfCalo': float(delta_pfCaloSR),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
-                    'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
                     'nPho': float(nPho),
@@ -1697,6 +1698,8 @@ def runbbdm(txtfile):
                     'Zmass': float(ep_Zeemass),
                     'ZpT': float(ZpT_ee),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(DeltaPhi(ep_elePhi[1],ep_pfMetCorrPhi)),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -1795,6 +1798,8 @@ def runbbdm(txtfile):
                     'Zmass': float(ep_Zeemass),
                     'ZpT': float(ZpT_ee),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(DeltaPhi(ep_elePhi[1],ep_pfMetCorrPhi)),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -1888,6 +1893,8 @@ def runbbdm(txtfile):
                     'Zmass': float(ep_Zmumumass),
                     'ZpT': float(ZpT_mumu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(DeltaPhi(ep_muPhi[1],ep_pfMetCorrPhi)),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -1986,6 +1993,8 @@ def runbbdm(txtfile):
                     'Zmass': float(ep_Zmumumass),
                     'ZpT': float(ZpT_mumu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(DeltaPhi(ep_muPhi[1],ep_pfMetCorrPhi)),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2078,6 +2087,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wenumass),
                     'WpT': float(WpT_enu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2168,6 +2179,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wenumass),
                     'WpT': float(WpT_enu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2258,6 +2271,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wmunumass),
                     'WpT': float(WpT_munu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2348,6 +2363,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wmunumass),
                     'WpT': float(WpT_munu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2437,6 +2454,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wenumass),
                     'WpT': float(WpT_enu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2532,6 +2551,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wenumass),
                     'WpT': float(WpT_enu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_elePhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2621,6 +2642,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wmunumass),
                     'WpT': float(WpT_munu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
@@ -2716,6 +2739,8 @@ def runbbdm(txtfile):
                     'Wmass': float(ep_Wmunumass),
                     'WpT': float(WpT_munu),
                     'dPhi_jetMET': float(min_dPhi_jet_MET),
+                    'dPhi_lep1_MET': float(DeltaPhi(ep_muPhi[0],ep_pfMetCorrPhi)),
+                    'dPhi_lep2_MET': float(dPhi_lep2_MET),
                     'NTau': float(ep_nTau_discBased_TightEleTightMuVeto),
                     'NEle': float(ep_nEle_index),
                     'NMu': float(ep_nMu),
