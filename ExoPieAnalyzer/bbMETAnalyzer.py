@@ -506,20 +506,25 @@ def runbbdm(txtfile):
             -------------------------------------------------------------------------------
             THIN JET VARS
             -------------------------------------------------------------------------------
-            '''
-            ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij])
-                            for ij in range(ep_THINnJet)]
-            ep_THINjetEta = [getEta(
+            ''' 
+            # ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij])
+            #                 for ij in range(ep_THINnJet)]
+            ep_THINjetEta_ = [getEta(
                 ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
-            ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij])
-                             for ij in range(ep_THINnJet)]
+            # ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij])
+            #                  for ij in range(ep_THINnJet)]
 
+            ep_THINjetEta = [ij for ij in ep_THINjetEta_ if abs(ij) < 2.5]
+            ep_THINnJet = len(ep_THINjetEta)
+            ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+            ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+            ep_THINjetHadronFlavor = [ep_THINjetHadronFlavor[ij] for ij in range(ep_THINnJet)]
+            ep_THINjetDeepCSV = [ep_THINjetDeepCSV[ij] for ij in range(ep_THINnJet)]
             if era == '2016':
-                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (
-                    ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.4)]
+                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.4)]
             else:
-                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (
-                    ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
+                ep_THINbjets_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
+            
             nBjets = len(ep_THINbjets_index)
 
             # if era=='2018':
