@@ -53,3 +53,6 @@ bbv06.05.00 * added calo met variables
 
 bbv06.05.01 * adding the delta(metPhi, lep phi)
 	* abs(jet eta) < 2.5
+	* added a jet count for jeteta < 4.5 
+
+bbv07.00.00 * shifting back to st_pfMetCorrPt 
