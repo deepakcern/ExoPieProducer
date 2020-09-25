@@ -386,7 +386,7 @@ def runbbdm(txtfile):
             ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId,
                    df.st_prefiringweight, df.st_prefiringweightup, df.st_prefiringweightdown,
-                   df.st_pfMetSmearPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, 
+                   df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown,
                    df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown,
                    df.st_pfMetCorrSig, df.st_pfpatCaloMETPt, df.st_pfpatCaloMETPhi, 
                    df.st_pfTRKMETPt, df.st_pfTRKMETPhi,
