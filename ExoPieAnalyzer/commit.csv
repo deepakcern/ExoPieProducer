@@ -56,3 +56,4 @@ bbv06.05.01 * adding the delta(metPhi, lep phi)
 	* added a jet count for jeteta < 4.5 
 
 bbv07.00.00 * shifting back to st_pfMetCorrPt 
+			*fixing bbv06.05.01 issue of not properly selecting the jets with abs(jet eta) < 2.5
