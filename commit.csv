@@ -30,7 +30,9 @@ monohbb.v06.00.04.2017, added DiJetMass for resolved analysis
 	   ,
 monohbb.v06.00.05.2017, added Tau21 variable
 	   , applied Thea Correction in merged analysis
+	   ,
 monohbb.v06.00.06.2017, added metPhi variable for resolved side band and signal region
 	   , added missing variable in outvars file
 	   , filled empty tree
 	   , pileup bug is fixed for this version
+	   ,added boolean for soft drop mass correction
