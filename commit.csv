@@ -36,3 +36,5 @@ monohbb.v06.00.06.2017, added metPhi variable for resolved side band and signal 
 	   , filled empty tree
 	   , pileup bug is fixed for this version
 	   ,added boolean for soft drop mass correction
+	   ,
+monohbb.v06.00.07.2017, updated AK4Jets Collection with |eta| < 2.5
