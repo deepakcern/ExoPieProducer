@@ -5,7 +5,7 @@ import os,traceback
 import sys, optparse,argparse
 from array import array
 import math
-import numpy as numpy
+import numpy as np
 import pandas
 from root_pandas import read_root
 from pandas import  DataFrame, concat
@@ -16,7 +16,7 @@ import glob
 CODED BY RAMAN,DEEPAK
 '''
 
-dummyArr = numpy.array([0.0],dtype=numpy.float64)
+dummyArr = np.array([0.0],dtype=np.float64)
 
 #import eventSelector
 ## for parallel threads in interactive running
@@ -370,7 +370,7 @@ def runbbdm(txtfile):
             if applyMassCor: ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
             else:ep_fjetSDMass = ep_fjetSDMassUnCorr
 
-	    if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
+            if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
             if not isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and ep_fjetSDMass[index] > 20.0)]
             FatJet_SBand_index = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5)) and ((ep_fjetSDMass[index] > 50.0) and (ep_fjetSDMass[index] < 100.0) or ((ep_fjetSDMass[index] > 150.0) and (ep_fjetSDMass[index] < 350.0) )) and (ep_fjetProbHbb[index] > 0.86)]
             FatJet_ZCR_index   = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 50.0 and ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86))]
@@ -388,6 +388,18 @@ def runbbdm(txtfile):
             AK4JET COLLECTION FOR BOOSTED CATEGORY
             -----------------------------------------------------------------------------
             '''
+
+            ak4jeteta = getEta(ep_THINjetPx, ep_THINjetPy, ep_THINjetPz)
+            ak4jeteta_index=np.where(np.abs(ak4jeteta)<2.5) #SUPDATE AK4JETS COLLECTION WITH ETA < 2.5
+            ep_THINjetPx=ep_THINjetPx[ak4jeteta_index]
+            ep_THINjetPy=ep_THINjetPy[ak4jeteta_index]
+            ep_THINjetPz=ep_THINjetPz[ak4jeteta_index]
+            ep_THINjetEnergy=ep_THINjetEnergy[ak4jeteta_index]
+            ep_THINjetDeepCSV=ep_THINjetDeepCSV[ak4jeteta_index]
+            ep_THINjetHadronFlavor=ep_THINjetHadronFlavor[ak4jeteta_index]
+            ep_THINjetCorrUnc=ep_THINjetCorrUnc[ak4jeteta_index]
+            ep_RegNNCorr=ep_RegNNCorr[ak4jeteta_index]
+            ep_THINnJet=len(ep_THINjetPx)
 
             if applyMassCor:ep_RegNNCorr = ep_RegNNCorr
             else:ep_RegNNCorr = [1.0 for ij in range(ep_THINnJet)]
@@ -436,7 +448,7 @@ def runbbdm(txtfile):
             if nBjets_notiso==2:
                 jet1Index=jet1Index_list[0]
                 jet2Index=jet2Index_list[0]
-		h_mass  = InvMass(ep_THINjetPx[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPy[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPz[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetEnergy[jet1Index]*ep_RegNNCorr[jet1Index],ep_THINjetPx[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPy[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPz[jet2Index]*ep_RegNNCorr[jet2Index],ep_THINjetEnergy[jet2Index]*ep_RegNNCorr[jet2Index])
+                h_mass  = InvMass(ep_THINjetPx[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPy[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPz[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetEnergy[jet1Index]*ep_RegNNCorr[jet1Index],ep_THINjetPx[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPy[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPz[jet2Index]*ep_RegNNCorr[jet2Index],ep_THINjetEnergy[jet2Index]*ep_RegNNCorr[jet2Index])
                 #print 'jet1Index',jet1Index,'jet2Index',jet2Index
                 #print 'jet1Index_list',jet1Index_list,'jet2Index_list',jet2Index_list
                 #print 'nBjets_notiso_index',nBjets_notiso_index,'jet1Index',jet1Index,'jet2Index',jet2Index
