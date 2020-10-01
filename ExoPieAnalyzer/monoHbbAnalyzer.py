@@ -16,13 +16,15 @@ import glob
 CODED BY RAMAN,DEEPAK
 '''
 
+dummyArr = numpy.array([0.0],dtype=numpy.float64)
+
 #import eventSelector
 ## for parallel threads in interactive running
 from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor =False
+isCondor = False
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -48,7 +50,7 @@ import outvars as out
 from cutFlow import cutFlow
 #import eventSelector as eventSelector_v2
 
-
+applyMassCor = True
 ######################################################################################################
 ## All import are done before this
 ######################################################################################################
@@ -361,10 +363,14 @@ def runbbdm(txtfile):
             fatjetpt = [getPt(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
             fatjeteta = [getEta(ep_fjetPx[ij], ep_fjetPy[ij], ep_fjetPz[ij]) for ij in range(ep_nfjet)]
             fatjetphi = [getPhi(ep_fjetPx[ij], ep_fjetPy[ij]) for ij in range(ep_nfjet)]
-            ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
 
+            #hemFatjetsVeto = [True for ij in range(ep_nfjet) if fatjeteta[ij]>-3.0 and fatjeteta[ij]<-1.3 and fatjetphi[ij]>-1.57 and fatjetphi[ij]<-0.87]
+            #if hemFatjetsVeto and runOn2018:continue
 
-            if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
+            if applyMassCor: ep_fjetSDMass = [ep_fjetSDMassUnCorr[ij]*ep_SDMCorrFact[ij] for ij in range(ep_nfjet)]
+            else:ep_fjetSDMass = ep_fjetSDMassUnCorr
+
+	    if isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 100.0) and (ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86)) ]
             if not isAnalysis: pass_nfjetIndex = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and ep_fjetSDMass[index] > 20.0)]
             FatJet_SBand_index = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5)) and ((ep_fjetSDMass[index] > 50.0) and (ep_fjetSDMass[index] < 100.0) or ((ep_fjetSDMass[index] > 150.0) and (ep_fjetSDMass[index] < 350.0) )) and (ep_fjetProbHbb[index] > 0.86)]
             FatJet_ZCR_index   = [index for index in range(ep_nfjet) if ((fatjetpt[index] > 200.0) and (abs(fatjeteta[index])< 2.5) and (ep_fjetSDMass[index] > 50.0 and ep_fjetSDMass[index] < 150.0) and (ep_fjetProbHbb[index] > 0.86))]
@@ -383,7 +389,8 @@ def runbbdm(txtfile):
             -----------------------------------------------------------------------------
             '''
 
-
+            if applyMassCor:ep_RegNNCorr = ep_RegNNCorr
+            else:ep_RegNNCorr = [1.0 for ij in range(ep_THINnJet)]
             ak4jetpt  = [getPt(ep_THINjetPx[ij]*ep_RegNNCorr[ij], ep_THINjetPy[ij]*ep_RegNNCorr[ij]) for ij in range(ep_THINnJet)]
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
@@ -400,6 +407,8 @@ def runbbdm(txtfile):
             #print 'pass_ak4jet_index_cleaned', pass_ak4jet_index_cleaned
 
             nJets_cleaned = len(pass_ak4jet_index_cleaned)
+            #hemAk4jetsVeto = [True for ij in range(ep_THINnJet) if ak4jeteta[ij]>-3.0 and ak4jeteta[ij]<-1.3 and ak4jetphi[ij]>-1.57 and ak4jetphi[ij]<-0.87]
+            #if hemAk4jetsVeto and runOn2018: continue
 
             Bjet_index = [ij for ij in pass_ak4jet_index_cleaned if (ep_THINjetDeepCSV[ij] > LWP and abs(ak4jeteta[ij]) < 2.5)]
             nBjets_iso = len(Bjet_index)
@@ -789,7 +798,7 @@ def runbbdm(txtfile):
                                                'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet1CSV':ep_THINjetDeepCSV[jet1Index],
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
-                                               'DiJetMass':h_mass,'nJets':additional_jets,
+                                               'DiJetMass':h_mass,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -813,7 +822,7 @@ def runbbdm(txtfile):
                                                'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet1CSV':ep_THINjetDeepCSV[jet1Index],
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
-                                               'DiJetMass':h_mass,'nJets':additional_jets,
+                                               'DiJetMass':h_mass,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1043,7 +1052,7 @@ def runbbdm(txtfile):
                 if nJets_cleaned>1:jet2CSV          = ep_THINjetDeepCSV[pass_ak4jet_index_cleaned[1]]
 
             if isBoostedSR:
-                fjetIndex           = pass_nfjetIndex[0]
+                fjet_index           = pass_nfjetIndex[0]
                 min_dPhi_ak4_MET     = min_ak4jet_MET_dPhi
                 fatjet_rho = math.log((ep_fjetSDMass[fjet_index]*ep_fjetSDMass[fjet_index])/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
                 N2DDT      = ep_fjetN2b1[fjet_index] - getN2bkgEff(fatjetpt[fjet_index],fatjet_rho)
@@ -1427,7 +1436,10 @@ def runbbdm(txtfile):
 
 
     outfilenameis=outfilename
-    #result = df_out_Tope_boosted.empty
+    for df in [df_out_SR_resolved,df_out_SBand_resolved,df_out_Tope_resolved,df_out_Topmu_resolved,df_out_We_resolved,df_out_Wmu_resolved,df_out_Zmumu_resolved,df_out_Zee_resolved,df_out_SR_boosted,df_out_SBand_boosted,df_out_Tope_boosted,df_out_Topmu_boosted,df_out_We_boosted,df_out_Wmu_boosted,df_out_Zmumu_boosted,df_out_Zee_boosted]:
+        if df.empty:
+	    for col in df.columns:
+	        df[col]=dummyArr
     #if not result:df_out_Tope_boosted.fillna(0.0)
     df_out_SR_resolved.to_root(outfilenameis, key='monoHbb_SR_resolved',mode='w')
     df_out_SBand_resolved.to_root(outfilenameis, key='monoHbb_SBand_resolved',mode='a')
