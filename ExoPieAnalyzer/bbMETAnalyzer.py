@@ -519,12 +519,11 @@ def runbbdm(txtfile):
             ep_THINjetHadronFlavor = [ep_THINjetHadronFlavor[ij] for ij in ep_THINjetEta_index]
             ep_THINjetDeepCSV = [ep_THINjetDeepCSV[ij] for ij in ep_THINjetEta_index]
             if era == '2016':
-                ep_THINbjets_index = [ij for ij in range(len(ep_THINjetEta_index)) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta_[ij]) < 2.4)]
+                ep_THINbjets_Cond = [bool(ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.4) for ij in range(len(ep_THINjetEta_index))]
             else:
-                ep_THINbjets_index = [ij for ij in range(len(ep_THINjetEta_index)) if (ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5)]
-            
+                ep_THINbjets_Cond = [bool(ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5) for ij in range(len(ep_THINjetEta_index))]
             ep_THINnJet = len(ep_THINjetPt)
-            nBjets = len(ep_THINbjets_index)
+            nBjets = len([ij for ij in ep_THINbjets_Cond if ij])
 
             # if era=='2018':
             #     np_THINjetEta = numpy.array(ep_THINjetEta)
@@ -741,7 +740,7 @@ def runbbdm(txtfile):
                             if (ep_THINjetPt[0] > 50.):
                                 h_reg_preselR_cutFlow.AddBinContent(
                                    6, presel_weight*weightMET)
-                                if (ep_THINjetDeepCSV[0] > deepCSV_Med):
+                                if (ep_THINbjets_Cond[0]):
                                     h_reg_preselR_cutFlow.AddBinContent(
                                         7, weight)
                                     ispreselR = True
@@ -801,7 +800,7 @@ def runbbdm(txtfile):
                            if (ep_THINnJet <= 2) and (ep_THINjetPt[0] > 50.):
                                h_reg_SR_1b_cutFlow.AddBinContent(
                                    6, presel_weight*weightMET)
-                               if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                               if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                    h_reg_SR_1b_cutFlow.AddBinContent(7, weight)
                                    isSR1b = True
                                    SR1bcount += 1
@@ -812,6 +811,9 @@ def runbbdm(txtfile):
                                         Jet2Eta = ep_THINjetEta[1]
                                         Jet2Phi = ep_THINjetPhi[1]
                                         Jet2deepCSV = ep_THINjetDeepCSV[1]
+                                        if Jet2deepCSV > deepCSV_Med:
+                                            print('ep_eventId',ep_eventId)
+                                            print('Jet2deepCSV', Jet2deepCSV)
                                         ratioPtJet21 = (
                                             ep_THINjetPt[1]/ep_THINjetPt[0])
                                         dPhiJet12 = (
@@ -832,7 +834,7 @@ def runbbdm(txtfile):
                            if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                 h_reg_SR_2b_cutFlow.AddBinContent(
                                     6, presel_weight*weightMET)
-                                if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                     h_reg_SR_2b_cutFlow.AddBinContent(7, weight)
                                     isSR2b = True
                                     SR2bcount += 1
@@ -906,7 +908,7 @@ def runbbdm(txtfile):
                                                if (ep_THINnJet <= 2) and (ep_THINjetPt[0] > 50.):
                                                    h_reg_ZeeCR_1b_cutFlow.AddBinContent(
                                                        10, presel_weight*weightEleTrig*weightEle)
-                                                   if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                   if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                        h_reg_ZeeCR_1b_cutFlow.AddBinContent(
                                                            11, weight)
                                                        ZeeCR1bcount += 1
@@ -938,7 +940,7 @@ def runbbdm(txtfile):
                                                if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                    h_reg_ZeeCR_2b_cutFlow.AddBinContent(
                                                        10, presel_weight*weightEleTrig*weightEle)
-                                                   if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                   if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_ZeeCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         ZeeCR2bcount += 1
@@ -1009,7 +1011,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet <= 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_ZmumuCR_1b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                    if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                         h_reg_ZmumuCR_1b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         ZmumuCR1count += 1
@@ -1041,7 +1043,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet <= 3 and ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_ZmumuCR_2b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                    if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_ZmumuCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         ZmumuCR2count += 1
@@ -1111,7 +1113,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet == 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_WenuCR_1b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightEleTrig*weightEle)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                    if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                         h_reg_WenuCR_1b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         WenuCR1bcount += 1
@@ -1121,7 +1123,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet == 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_WenuCR_2b_cutFlow.AddBinContent(
                                                         10, weight)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                    if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_WenuCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         WenuCR2bcount += 1
@@ -1191,7 +1193,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet == 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_WmunuCR_1b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                    if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                         h_reg_WmunuCR_1b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         WmunuCR1bcount += 1
@@ -1201,7 +1203,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet == 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_WmunuCR_2b_cutFlow.AddBinContent(
                                                         10, weight)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                    if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_WmunuCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         WmunuCR2bcount += 1
@@ -1270,7 +1272,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopenuCR_1b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightEleTrig*weightEle)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                    if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                         h_reg_TopenuCR_1b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         TopenuCR1bcount += 1
@@ -1302,7 +1304,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopenuCR_2b_cutFlow.AddBinContent(
                                                         10, weight)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                    if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_TopenuCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         TopenuCR2bcount += 1
@@ -1371,7 +1373,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet > 1) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopmunuCR_1b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (nBjets == 1):
+                                                    if (ep_THINbjets_Cond[0]) and (nBjets == 1):
                                                         h_reg_TopmunuCR_1b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         TopmunuCR1bcount += 1
@@ -1403,7 +1405,7 @@ def runbbdm(txtfile):
                                                 if (ep_THINnJet > 2) and (ep_THINjetPt[0] > 50.):
                                                     h_reg_TopmunuCR_2b_cutFlow.AddBinContent(
                                                         10, presel_weight*weightRecoil*weightMu)
-                                                    if (ep_THINjetDeepCSV[0] > deepCSV_Med) and (ep_THINjetDeepCSV[1] > deepCSV_Med) and (nBjets == 2):
+                                                    if (ep_THINbjets_Cond[0]) and ep_THINbjets_Cond[1] and (nBjets == 2):
                                                         h_reg_TopmunuCR_2b_cutFlow.AddBinContent(
                                                             11, weight)
                                                         TopmunuCR2bcount += 1
