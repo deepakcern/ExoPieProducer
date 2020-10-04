@@ -484,23 +484,7 @@ def runbbdm(txtfile):
                          for ij in range(ep_nPho)]
             ep_phoPhi = [getPhi(ep_phoPx[ij], ep_phoPy[ij])
                          for ij in range(ep_nPho)]
-
-            myphotons = [True for ij in range(ep_nPho)]
-            myeleBooleans = [True for ij in range(ep_nEle_index)]
-            mymuBooleans = [True for ij in range(ep_nMu)]
-            cleanedPho_ag_ele = []
-            cleanedPho_ag_mu = []
-            pass_pho_index_cleaned = []
-            if ep_nPho > 0:  # and ep_nEle > 0:
-                cleanedPho_ag_ele = anautil.jetcleaning(
-                    myphotons, myeleBooleans, ep_phoEta, ep_eleEta, ep_phoPhi, ep_elePhi, 0.4)
-                cleanedPho_ag_mu = anautil.jetcleaning(
-                    myphotons, mymuBooleans, ep_phoEta, ep_muEta, ep_phoPhi, ep_muPhi, 0.4)
-                cleanedPhoton = boolutil.logical_AND_List2(
-                    cleanedPho_ag_ele, cleanedPho_ag_mu)
-                pass_pho_index_cleaned = boolutil.WhereIsTrue(cleanedPhoton)
-                #print 'cleanedPho_ag_ele',cleanedPho_ag_ele, 'cleanedPho_ag_mu', cleanedPho_ag_mu
-            nPho = len(pass_pho_index_cleaned)
+            nPho = ep_nPho
 
             '''
             -------------------------------------------------------------------------------
