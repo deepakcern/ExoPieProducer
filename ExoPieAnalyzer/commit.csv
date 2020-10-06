@@ -63,3 +63,4 @@ bbv07.00.01 * fixed btag application
 
 bbv07.02.00 * added functionality to run on single file\
 			* change the name of configs directory
+			* added the hem variables 
