@@ -50,7 +50,7 @@ else:
 
 import analysis_utils as anautil
 
-sys.path.append('configs')
+sys.path.append('ana_configs')
 import variables as var
 import outvars_bbDM as out
 import getRecoil as getRecoil
