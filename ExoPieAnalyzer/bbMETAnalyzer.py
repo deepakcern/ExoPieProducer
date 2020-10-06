@@ -50,7 +50,7 @@ else:
 
 import analysis_utils as anautil
 
-sys.path.append('configs')
+sys.path.append('ana_configs')
 import variables as var
 import outvars_bbDM as out
 import getRecoil as getRecoil
@@ -75,15 +75,13 @@ start = time.clock()
 ## ----- command line argument
 usage = "analyzer for bb+DM (istestging) "
 parser = argparse.ArgumentParser(description=usage)
-parser.add_argument("-i", "--inputfile",  dest="inputfile",
-                    default="myfiles.txt")
-parser.add_argument("-inDir", "--inputDir",  dest="inputDir", default=".")
-parser.add_argument("-runOnTXT", "--runOnTXT",
-                    action="store_true", dest="runOnTXT")
-parser.add_argument("-o", "--outputfile",
-                    dest="outputfile", default="out.root")
-parser.add_argument("-D", "--outputdir", dest="outputdir")
-parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
+parser.add_argument("-i", "--inputfile", dest="inputfile", default="myfiles.txt")
+parser.add_argument("-inDir", "--inputDir", dest="inputDir", default=".")
+parser.add_argument("-isMP", "--isMultiProc", action="store_true", dest="isMultiProc")
+parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
+parser.add_argument("-D", "--outputdir", dest="outputdir", default=".")
+parser.add_argument("-F", "--farmout", action="store_true", dest="farmout")
+parser.add_argument("-I", "--interact", action="store_true", dest="interact")
 parser.add_argument("-T", "--testing", action="store_true",  dest="testing")
 parser.add_argument("-y", "--year", dest="year", default="Year")
 
@@ -94,17 +92,20 @@ if args.farmout == None:
 else:
     isfarmout = args.farmout
 
+if args.interact == None:
+    runInteractive = False
+else:
+    runInteractive = args.interact
+
 if args.testing == None:
     istest = False
 else:
     istest = args.testing
 
-if args.inputDir and isfarmout:
-    dirName = args.inputDir
-
-runOnTxt = False
-if args.runOnTXT:
-    runOnTxt = True
+if args.isMultiProc == None:
+    isMultiProc = False
+else:
+    isMultiProc = args.isMultiProc
 
 if args.year == '2016':
     print('code is running for 2016')
@@ -120,10 +121,12 @@ else:
     sys.exit()
 year_file.close()
 
-if isfarmout:
+if isfarmout or runInteractive:
     infile = args.inputfile
+elif isMultiProc:
+    infile = args.inputDir
 else:
-    print("No file is provided for farmout")
+    print("No input file or input directory is provided for analyser")
 
 import ana_weight as wgt
 from Year import era
@@ -135,14 +138,8 @@ infilename = "ExoPieTuples.root"
 
 outDir = outputdir
 
-
 def TextToList(textfile):
     return([iline.rstrip() for iline in open(textfile)])
-
-## the input file list and key is caught in one variable as a python list,
-#### first element is the list of rootfiles
-#### second element is the key, user to name output.root
-
 
 def getJECWeight(ep_THINjetCorrUnc):
     JECWeight_up = 1.0
@@ -240,37 +237,34 @@ def weight_(common_weight, ep_pfMetCorrPt, ep_ZmumuRecoil, ep_WmunuRecoil, nEle,
     recoil_wgt = [weightRecoil, weightRecoil_up, weightRecoil_down]
     return tot_weight, weightEleTrig, ele_wgt, mu_wgt, recoil_wgt, met_wgt
 
-
 dummy = -9999.0
 
-
 def runbbdm(txtfile):
-
-    print("in main function")
-
+    print('txtfile', txtfile)
     infile_ = []
     outfilename = ""
     prefix = "Skimmed_"
     ikey_ = ""
 
     if runInteractive:
-        print("running for ", txtfile[0])
-        infile_ = TextToList(txtfile[0])
-        key_ = txtfile[1]
-        outfilename = txtfile[0].split(
-            '/')[-1].replace('.root.txt', '.root')  # prefix+key_+".root"
-        # print "running for ", txtfile
-        # infile_  = TextToList(txtfile)
-        # outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
+        print("running for ", txtfile)
+        infile_ = [txtfile]
+        outfilename = 'Analysis_'+txtfile
+        print('outfilename',  outfilename)
 
-    if not runInteractive:
+    if isfarmout:
         infile_ = TextToList(txtfile)
-        prefix_ = ''  # '/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
+        prefix_ = '' 
         if outputdir != '.':
             prefix_ = outputdir+'/'
         print("prefix_", prefix_)
-        # "SkimmedTree.root"
-        outfilename = prefix_+txtfile.split('/')[-1].replace('.txt', '.root')
+        outfilename = prefix_+'Analysis_'+txtfile.split('/')[-1].replace('.txt', '.root')
+        print('outfilename',  outfilename)
+    
+    if isMultiProc:
+        print("running for ", txtfile)
+        infile_ = [txtfile]
+        outfilename = 'Analysis_'+txtfile
         print('outfilename',  outfilename)
 
     ## define global dataframes
@@ -345,7 +339,6 @@ def runbbdm(txtfile):
     filename = infile_
     ieve = 0
     icount = 0
-
     preselRcount = 0.0
     SR1bcount = 0.0
     SR2bcount = 0.0
@@ -362,7 +355,17 @@ def runbbdm(txtfile):
     TopmunuCR1bcount = 0.0
     TopmunuCR2bcount = 0.0
 
-    for df in read_root(filename, 'outTree', columns=var.allvars_bbDM, chunksize=125000):
+    allvars_bbDM = var.allvars_bbDM
+    if era == '2018':
+       allvars_bbDM.append('st_isak4JetBasedHemEvent')
+       allvars_bbDM.append('st_ismetphiBasedHemEvent1')
+       allvars_bbDM.append('st_ismetphiBasedHemEvent2')
+        
+    for df in read_root(filename, 'outTree', columns=allvars_bbDM, chunksize=125000):
+        if era == '2016' or era == '2017':
+            df['st_isak4JetBasedHemEvent'] = False
+            df['st_ismetphiBasedHemEvent1'] = False
+            df['st_ismetphiBasedHemEvent2'] = False
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_prefiringweight, ep_prefiringweightup, ep_prefiringweightdown,\
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown, \
@@ -383,7 +386,8 @@ def runbbdm(txtfile):
             ep_nTau_DRBased_EleMuVeto, ep_nTau_discBased_looseElelooseMuVeto, ep_nTau_discBased_looseEleTightMuVeto, ep_nTau_discBased_mediumElelooseMuVeto, ep_nTau_discBased_TightEleTightMuVeto,\
             ep_pu_nTrueInt, ep_pu_nPUVert, \
             ep_THINjetNPV, \
-            ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision \
+            ep_mcweight, ep_genParPt, ep_genParSample, eletrigdecision, mutrigdecision, mettrigdecision, \
+            ep_isak4JetBasedHemEvent, ep_ismetphiBasedHemEvent1, ep_ismetphiBasedHemEvent2 \
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId,
                    df.st_prefiringweight, df.st_prefiringweightup, df.st_prefiringweightdown,
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown,
@@ -406,10 +410,26 @@ def runbbdm(txtfile):
                    df.st_nTau_DRBased_EleMuVeto, df.st_nTau_discBased_looseElelooseMuVeto, df.st_nTau_discBased_looseEleTightMuVeto, df.st_nTau_discBased_mediumElelooseMuVeto, df.st_nTau_discBased_TightEleTightMuVeto,
                    df.st_pu_nTrueInt, df.st_pu_nPUVert,
                    df.st_THINjetNPV,
-                   df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision):
+                   df.mcweight, df.st_genParPt, df.st_genParSample, df.st_eletrigdecision, df.st_mutrigdecision, df.st_mettrigdecision, df.st_isak4JetBasedHemEvent, df.st_ismetphiBasedHemEvent1, df.st_ismetphiBasedHemEvent2):
             ieve = ieve + 1
             if ieve % 10000 == 0:
                 print("Processed", ieve, "Events")
+
+            if ep_isak4JetBasedHemEvent:
+                ep_isak4JetBasedHemEvent = 1
+            else:
+                ep_isak4JetBasedHemEvent = 0
+                
+            if ep_ismetphiBasedHemEvent1:
+                ep_ismetphiBasedHemEvent1 = 1
+            else:
+                ep_ismetphiBasedHemEvent1 = 0
+            
+            if ep_ismetphiBasedHemEvent2:
+                ep_ismetphiBasedHemEvent1 = 1
+            else:
+                ep_ismetphiBasedHemEvent1 = 0
+
             #if (ep_pfMetCorrPt <= 200.0) and (ep_ZeeRecoil <= 200.0) and (ep_ZmumuRecoil <= 200.0) and (ep_WenuRecoil <= 200.0) and (ep_WmunuRecoil <= 200.0) : continue
             ispreselR = False
 
@@ -453,13 +473,6 @@ def runbbdm(txtfile):
                 minElePt = 30.0
             else:
                 minElePt = 35.0
-
-            # if era=='2018':
-            #     np_eleEta = numpy.array(ep_eleEta)
-            #     np_elePhi = numpy.array(ep_elePhi)
-            #     hem_cut = numpy.logical_and(numpy.logical_and(
-            #         np_eleEta > (-3.0), np_eleEta < (-1.3)), numpy.logical_and(np_elePhi > (-1.57), np_elePhi < (-0.87)))
-            #     if any(hem_cut): continue
 
             '''
             -------------------------------------------------------------------------------
@@ -508,13 +521,6 @@ def runbbdm(txtfile):
                 ep_THINbjets_Cond = [bool(ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5) for ij in range(len(ep_THINjetEta_index))]
             ep_THINnJet = len(ep_THINjetPt)
             nBjets = len([ij for ij in ep_THINbjets_Cond if ij])
-
-            # if era=='2018':
-            #     np_THINjetEta = numpy.array(ep_THINjetEta)
-            #     np_THINjetPhi = numpy.array(ep_THINjetPhi)
-            #     hem_cut = numpy.logical_and(numpy.logical_and(
-            #         np_THINjetEta > (-3.0), np_THINjetEta < (-1.3)), numpy.logical_and(np_THINjetPhi > (-1.57), np_THINjetPhi < (-0.87)))
-            #     if any(hem_cut): continue
 
             if len(ep_THINjetPt) == 0:
                 continue
@@ -795,9 +801,6 @@ def runbbdm(txtfile):
                                         Jet2Eta = ep_THINjetEta[1]
                                         Jet2Phi = ep_THINjetPhi[1]
                                         Jet2deepCSV = ep_THINjetDeepCSV[1]
-                                        if Jet2deepCSV > deepCSV_Med:
-                                            print('ep_eventId',ep_eventId)
-                                            print('Jet2deepCSV', Jet2deepCSV)
                                         ratioPtJet21 = (
                                             ep_THINjetPt[1]/ep_THINjetPt[0])
                                         dPhiJet12 = (
@@ -1494,7 +1497,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('ispreselR')
@@ -1583,7 +1589,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('isSR1b')
@@ -1667,7 +1676,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('isSR2b')
@@ -1769,7 +1781,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRZee')
@@ -1864,7 +1879,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRZee')
@@ -1966,7 +1984,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRZmumu')
@@ -2061,7 +2082,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRZmumu')
@@ -2154,7 +2178,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRWenu')
@@ -2246,7 +2273,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRWenu')
@@ -2340,7 +2370,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRWmunu')
@@ -2432,7 +2465,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRWmunu')
@@ -2530,7 +2566,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRTopenu')
@@ -2622,7 +2661,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRTopenu')
@@ -2720,7 +2762,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is1bCRTopmunu')
@@ -2812,7 +2857,10 @@ def runbbdm(txtfile):
                     'weightQCD_down': float(weightQCD_down),
                     'weightTop_down': float(weightTop_down),
                     'weightPU_down': float(weightPU_down),
-                    'weightPrefire_down': float(weightPrefire_down)
+                    'weightPrefire_down': float(weightPrefire_down),
+                    'isak4JetBasedHemEvent': int(ep_isak4JetBasedHemEvent),
+                    'ismetphiBasedHemEvent1': int(ep_ismetphiBasedHemEvent1),
+                    'ismetphiBasedHemEvent2': int(ep_ismetphiBasedHemEvent2),
                 }, ignore_index = True)
             if istest:
                 print('is2bCRTopmunu')
@@ -2923,56 +2971,22 @@ def runbbdm(txtfile):
 
 
 if __name__ == '__main__':
-    if not runInteractive:
-        txtFile = infile
-        runbbdm(txtFile)
-
-    if runInteractive and runOnTxt:
-        filesPath = dirName+'/*txt'
-        files = glob.glob(filesPath)
-        n = 8  # submit n txt files at a time, make equal to cores
-        final = [files[i * n:(i + 1) * n]
-                 for i in range((len(files) + n - 1) // n)]
+    if (isfarmout or runInteractive) and not isMultiProc:
+        runbbdm(infile)
+    if isMultiProc and not (isfarmout or runInteractive):
+        files  = [f for f in os.listdir(infile) if f.endswith(".root")]
+        n = mp.cpu_count()  # submit n txt files at a time, make equal to cores
+        final = [files[i * n:(i + 1) * n] for i in range((len(files) + n - 1) // n)]
         if istest:
             runbbdm, final[0]
         else:
             for i in range(len(final)):
                 try:
-                    pool = mp.Pool(8)
+                    pool = mp.Pool(mp.cpu_count())
                     pool.map(runbbdm, final[i])
                     pool.close()
                     pool.join()
                 except Exception as e:
                     print(e)
-                    print(
-                        "Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i])
+                    print("Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i])
                     continue
-
-    if runInteractive and not runOnTxt:
-        ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
-        inputpath = "/home/ptiwari/t3store3/CMSSW_10_3_0/src/test_syst/ExoPieProducer/ExoPieAnalyzer/testfile"
-
-        os.system('rm dirlist.txt')
-        os.system("ls -1 "+inputpath+" > dirlist.txt")
-
-        allkeys = [idir.rstrip() for idir in open('dirlist.txt')]
-        alldirs = [inputpath+"/"+idir.rstrip() for idir in open('dirlist.txt')]
-
-        pool = mp.Pool(2)
-        allsample = []
-        for ikey in allkeys:
-            dirpath = inputpath+"/"+ikey
-            txtfile = ikey+".txt"
-            os.system("find "+dirpath +
-                      "  -name \"*.root\" | grep -v \"failed\"  > "+txtfile)
-            fileList = TextToList(txtfile)
-            ## this is the list, first element is txt file with all the files and second element is the ikey (kind of sample name identifier)
-            sample_ = [txtfile, ikey]
-            ## push information about one sample into global list.
-            allsample.append(sample_)
-        print(allsample)
-        if istest:
-            runbbdm(allsample[0])
-        else:
-            pool.map(runbbdm, allsample)
-        ## this works fine but the output file name get same value becuase it is done via a text file at the moment, need to find a better way,
