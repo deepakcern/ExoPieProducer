@@ -75,15 +75,13 @@ start = time.clock()
 ## ----- command line argument
 usage = "analyzer for bb+DM (istestging) "
 parser = argparse.ArgumentParser(description=usage)
-parser.add_argument("-i", "--inputfile",  dest="inputfile",
-                    default="myfiles.txt")
-parser.add_argument("-inDir", "--inputDir",  dest="inputDir", default=".")
-parser.add_argument("-runOnTXT", "--runOnTXT",
-                    action="store_true", dest="runOnTXT")
-parser.add_argument("-o", "--outputfile",
-                    dest="outputfile", default="out.root")
-parser.add_argument("-D", "--outputdir", dest="outputdir")
-parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
+parser.add_argument("-i", "--inputfile", dest="inputfile", default="myfiles.txt")
+parser.add_argument("-inDir", "--inputDir", dest="inputDir", default=".")
+parser.add_argument("-isMP", "--isMultiProc", action="store_true", dest="isMultiProc")
+parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
+parser.add_argument("-D", "--outputdir", dest="outputdir", default=".")
+parser.add_argument("-F", "--farmout", action="store_true", dest="farmout")
+parser.add_argument("-I", "--interact", action="store_true", dest="interact")
 parser.add_argument("-T", "--testing", action="store_true",  dest="testing")
 parser.add_argument("-y", "--year", dest="year", default="Year")
 
@@ -94,17 +92,20 @@ if args.farmout == None:
 else:
     isfarmout = args.farmout
 
+if args.interact == None:
+    runInteractive = False
+else:
+    runInteractive = args.interact
+
 if args.testing == None:
     istest = False
 else:
     istest = args.testing
 
-if args.inputDir and isfarmout:
-    dirName = args.inputDir
-
-runOnTxt = False
-if args.runOnTXT:
-    runOnTxt = True
+if args.isMultiProc == None:
+    isMultiProc = False
+else:
+    isMultiProc = args.isMultiProc
 
 if args.year == '2016':
     print('code is running for 2016')
@@ -120,10 +121,12 @@ else:
     sys.exit()
 year_file.close()
 
-if isfarmout:
+if isfarmout or runInteractive:
     infile = args.inputfile
+elif isMultiProc:
+    infile = args.inputDir
 else:
-    print("No file is provided for farmout")
+    print("No input file or input directory is provided for analyser")
 
 import ana_weight as wgt
 from Year import era
@@ -135,14 +138,8 @@ infilename = "ExoPieTuples.root"
 
 outDir = outputdir
 
-
 def TextToList(textfile):
     return([iline.rstrip() for iline in open(textfile)])
-
-## the input file list and key is caught in one variable as a python list,
-#### first element is the list of rootfiles
-#### second element is the key, user to name output.root
-
 
 def getJECWeight(ep_THINjetCorrUnc):
     JECWeight_up = 1.0
@@ -240,37 +237,34 @@ def weight_(common_weight, ep_pfMetCorrPt, ep_ZmumuRecoil, ep_WmunuRecoil, nEle,
     recoil_wgt = [weightRecoil, weightRecoil_up, weightRecoil_down]
     return tot_weight, weightEleTrig, ele_wgt, mu_wgt, recoil_wgt, met_wgt
 
-
 dummy = -9999.0
 
-
 def runbbdm(txtfile):
-
-    print("in main function")
-
+    print('txtfile', txtfile)
     infile_ = []
     outfilename = ""
     prefix = "Skimmed_"
     ikey_ = ""
 
     if runInteractive:
-        print("running for ", txtfile[0])
-        infile_ = TextToList(txtfile[0])
-        key_ = txtfile[1]
-        outfilename = txtfile[0].split(
-            '/')[-1].replace('.root.txt', '.root')  # prefix+key_+".root"
-        # print "running for ", txtfile
-        # infile_  = TextToList(txtfile)
-        # outfilename= outDir+'/'+txtfile.split('/')[-1].replace('.txt','.root')#prefix+key_+".root"
+        print("running for ", txtfile)
+        infile_ = [txtfile]
+        outfilename = 'Analysis_'+txtfile
+        print('outfilename',  outfilename)
 
-    if not runInteractive:
+    if isfarmout:
         infile_ = TextToList(txtfile)
-        prefix_ = ''  # '/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
+        prefix_ = '' 
         if outputdir != '.':
             prefix_ = outputdir+'/'
         print("prefix_", prefix_)
-        # "SkimmedTree.root"
-        outfilename = prefix_+txtfile.split('/')[-1].replace('.txt', '.root')
+        outfilename = prefix_+'Analysis_'+txtfile.split('/')[-1].replace('.txt', '.root')
+        print('outfilename',  outfilename)
+    
+    if isMultiProc:
+        print("running for ", txtfile)
+        infile_ = [txtfile]
+        outfilename = 'Analysis_'+txtfile
         print('outfilename',  outfilename)
 
     ## define global dataframes
@@ -345,7 +339,6 @@ def runbbdm(txtfile):
     filename = infile_
     ieve = 0
     icount = 0
-
     preselRcount = 0.0
     SR1bcount = 0.0
     SR2bcount = 0.0
@@ -454,13 +447,6 @@ def runbbdm(txtfile):
             else:
                 minElePt = 35.0
 
-            # if era=='2018':
-            #     np_eleEta = numpy.array(ep_eleEta)
-            #     np_elePhi = numpy.array(ep_elePhi)
-            #     hem_cut = numpy.logical_and(numpy.logical_and(
-            #         np_eleEta > (-3.0), np_eleEta < (-1.3)), numpy.logical_and(np_elePhi > (-1.57), np_elePhi < (-0.87)))
-            #     if any(hem_cut): continue
-
             '''
             -------------------------------------------------------------------------------
             muon VARS
@@ -508,13 +494,6 @@ def runbbdm(txtfile):
                 ep_THINbjets_Cond = [bool(ep_THINjetDeepCSV[ij] > deepCSV_Med and abs(ep_THINjetEta[ij]) < 2.5) for ij in range(len(ep_THINjetEta_index))]
             ep_THINnJet = len(ep_THINjetPt)
             nBjets = len([ij for ij in ep_THINbjets_Cond if ij])
-
-            # if era=='2018':
-            #     np_THINjetEta = numpy.array(ep_THINjetEta)
-            #     np_THINjetPhi = numpy.array(ep_THINjetPhi)
-            #     hem_cut = numpy.logical_and(numpy.logical_and(
-            #         np_THINjetEta > (-3.0), np_THINjetEta < (-1.3)), numpy.logical_and(np_THINjetPhi > (-1.57), np_THINjetPhi < (-0.87)))
-            #     if any(hem_cut): continue
 
             if len(ep_THINjetPt) == 0:
                 continue
@@ -795,9 +774,6 @@ def runbbdm(txtfile):
                                         Jet2Eta = ep_THINjetEta[1]
                                         Jet2Phi = ep_THINjetPhi[1]
                                         Jet2deepCSV = ep_THINjetDeepCSV[1]
-                                        if Jet2deepCSV > deepCSV_Med:
-                                            print('ep_eventId',ep_eventId)
-                                            print('Jet2deepCSV', Jet2deepCSV)
                                         ratioPtJet21 = (
                                             ep_THINjetPt[1]/ep_THINjetPt[0])
                                         dPhiJet12 = (
@@ -2923,56 +2899,22 @@ def runbbdm(txtfile):
 
 
 if __name__ == '__main__':
-    if not runInteractive:
-        txtFile = infile
-        runbbdm(txtFile)
-
-    if runInteractive and runOnTxt:
-        filesPath = dirName+'/*txt'
-        files = glob.glob(filesPath)
-        n = 8  # submit n txt files at a time, make equal to cores
-        final = [files[i * n:(i + 1) * n]
-                 for i in range((len(files) + n - 1) // n)]
+    if (isfarmout or runInteractive) and not isMultiProc:
+        runbbdm(infile)
+    if isMultiProc and not (isfarmout or runInteractive):
+        files  = [f for f in os.listdir(infile) if f.endswith(".root")]
+        n = mp.cpu_count()  # submit n txt files at a time, make equal to cores
+        final = [files[i * n:(i + 1) * n] for i in range((len(files) + n - 1) // n)]
         if istest:
             runbbdm, final[0]
         else:
             for i in range(len(final)):
                 try:
-                    pool = mp.Pool(8)
+                    pool = mp.Pool(mp.cpu_count())
                     pool.map(runbbdm, final[i])
                     pool.close()
                     pool.join()
                 except Exception as e:
                     print(e)
-                    print(
-                        "Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i])
+                    print("Corrupt file inside input txt file is detected! Skipping this txt file:  ", final[i])
                     continue
-
-    if runInteractive and not runOnTxt:
-        ''' following part is for interactive running. This is still under testing because output file name can't be changed at this moment '''
-        inputpath = "/home/ptiwari/t3store3/CMSSW_10_3_0/src/test_syst/ExoPieProducer/ExoPieAnalyzer/testfile"
-
-        os.system('rm dirlist.txt')
-        os.system("ls -1 "+inputpath+" > dirlist.txt")
-
-        allkeys = [idir.rstrip() for idir in open('dirlist.txt')]
-        alldirs = [inputpath+"/"+idir.rstrip() for idir in open('dirlist.txt')]
-
-        pool = mp.Pool(2)
-        allsample = []
-        for ikey in allkeys:
-            dirpath = inputpath+"/"+ikey
-            txtfile = ikey+".txt"
-            os.system("find "+dirpath +
-                      "  -name \"*.root\" | grep -v \"failed\"  > "+txtfile)
-            fileList = TextToList(txtfile)
-            ## this is the list, first element is txt file with all the files and second element is the ikey (kind of sample name identifier)
-            sample_ = [txtfile, ikey]
-            ## push information about one sample into global list.
-            allsample.append(sample_)
-        print(allsample)
-        if istest:
-            runbbdm(allsample[0])
-        else:
-            pool.map(runbbdm, allsample)
-        ## this works fine but the output file name get same value becuase it is done via a text file at the moment, need to find a better way,

@@ -43,12 +43,10 @@ def DeltaPhi(phi1, phi2):
 ## ----- command line argument
 usage = "python DataframeToHist.py -F -inDir directoryName -D outputDir "
 parser = argparse.ArgumentParser(description=usage)
-parser.add_argument("-i", "--inputfile",  dest="inputfile",
-                    default="myfiles.root")
-parser.add_argument("-o", "--outputfile",
-                    dest="outputfile", default="out.root")
+parser.add_argument("-i", "--inputfile",  dest="inputfile", default="myfiles.root")
+parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
 parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
-parser.add_argument("-inDir", "--inputDir",  dest="inputDir", default=".")
+parser.add_argument("-inDir", "--inputDir", dest="inputDir", default=".")
 parser.add_argument("-D", "--outputdir", dest="outputdir", default=".")
 
 args = parser.parse_args()
@@ -826,9 +824,7 @@ if isfarmout:
 
     if __name__ == "__main__":
         main()
-    # for inputFile in files:
-    #     print ('running code for file:  ', inputFile)
-    #     runFile(inputFile, trees)
+
 
 if not isfarmout:
     filename = infile

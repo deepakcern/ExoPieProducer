@@ -60,3 +60,6 @@ bbv07.00.00 * shifting back to st_pfMetCorrPt
 
 bbv07.00.01 * fixed btag application
 			* removed photon clening from analyser
+
+bbv07.02.00 * added functionality to run on single file\
+			* change the name of configs directory
