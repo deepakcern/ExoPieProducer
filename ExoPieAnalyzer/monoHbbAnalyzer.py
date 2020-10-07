@@ -101,10 +101,10 @@ else:
 
 year_file.close()
 
-if isfarmout:
-    infile  = args.inputfile
+#if isfarmout:
+infile  = args.inputfile
 
-else: print "No file is provided for farmout"
+#else: print "No file is provided for farmout"
 
 
 outputdir = '.'
@@ -165,7 +165,8 @@ def runbbdm(txtfile):
 
     if  runInteractive:
         print "running for ", txtfile
-        infile_  = TextToList(txtfile)
+	infile_  = txtfile
+        if isfarmout:infile_  = TextToList(txtfile)
         #key_=txtfile[1]
 
         ''' old
@@ -177,10 +178,11 @@ def runbbdm(txtfile):
 
     print 'txtfile', txtfile
     if not runInteractive:
-	infile_=TextToList(txtfile)
-        prefix_ = '' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
-        if outputdir!='.': prefix_ = outputdir+'/'
-        print "prefix_", prefix_
+        infile_  = txtfile
+        if isfarmout:infile_  = TextToList(txtfile)
+        prefix_ = 'Analysis_' #'/eos/cms/store/group/phys_exotica/bbMET/2017_skimmedFiles/locallygenerated/'
+        if outputdir!='.': prefix_ = outputdir+'/Analysis_'
+
         outfilename = prefix_+txtfile.split('/')[-1].replace('.txt','.root')#"SkimmedTree.root"
         print 'outfilename',  outfilename
 
@@ -213,14 +215,23 @@ def runbbdm(txtfile):
     Entrees = 0.0
     h_total = TH1F('h_total','h_total',2,0,2)
     h_total_mcweight = TH1F('h_total_mcweight','h_total_mcweight',2,0,2)
-    for infl in infile_:
-	f_tmp = TFile.Open(infl,'READ')
+    if not isfarmout:
+	f_tmp = TFile.Open(infile_,'READ')
         h_tmp = f_tmp.Get('h_total')
         Stree = f_tmp.Get('outTree')
-        Entrees += Stree.GetEntries()
+        Entrees = Stree.GetEntries()
         h_tmp_weight = f_tmp.Get('h_total_mcweight')
         h_total.Add(h_tmp)
         h_total_mcweight.Add(h_tmp_weight)
+    if isfarmout:
+        for infl in infile_:
+	    f_tmp = TFile.Open(infl,'READ')
+            h_tmp = f_tmp.Get('h_total')
+            Stree = f_tmp.Get('outTree')
+            Entrees += Stree.GetEntries()
+            h_tmp_weight = f_tmp.Get('h_total_mcweight')
+            h_total.Add(h_tmp)
+            h_total_mcweight.Add(h_tmp_weight)
 
 
     total_events = h_total_mcweight.Integral()
@@ -307,6 +318,7 @@ def runbbdm(txtfile):
             ep_pu_nTrueInt, ep_pu_nPUVert, ep_prefiringweight, ep_prefiringweight_up, ep_prefiringweight_down, \
             ep_THINjetNPV, \
             ep_mcweight, ep_genParPt,ep_genParSample, isData, eletrigdecision, mutrigdecision, mettrigdecision,\
+            ep_isak4JetBasedHemEvent, ep_isak8JetBasedHemEvent, ep_ismetphiBasedHemEvent1, ep_ismetphiBasedHemEvent2,\
             in zip(df.st_runId, df.st_lumiSection, df.st_eventId, \
                    df.st_pfMetCorrPt, df.st_pfMetCorrPhi, df.st_pfMetUncJetResUp, df.st_pfMetUncJetResDown, df.st_pfMetUncJetEnUp, df.st_pfMetUncJetEnDown, \
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy, \
@@ -325,6 +337,7 @@ def runbbdm(txtfile):
                    df.st_pu_nTrueInt, df.st_pu_nPUVert, df.st_prefiringweight, df.st_prefiringweightup, df.st_prefiringweightdown,\
                    df.st_THINjetNPV, \
                    df.mcweight, df.st_genParPt, df.st_genParSample,df.st_isData,df.st_eletrigdecision,df.st_mutrigdecision,df.st_mettrigdecision, \
+                   df.st_isak4JetBasedHemEvent, df.st_isak8JetBasedHemEvent, df.st_ismetphiBasedHemEvent1, df.st_ismetphiBasedHemEvent2,\
 
             ):
 
@@ -352,7 +365,11 @@ def runbbdm(txtfile):
             isResolvedCRTopmu=False
             isResolvedSB=False
 
-
+            ep_isak4JetBasedHemEvent=int(ep_isak4JetBasedHemEvent)
+            ep_isak8JetBasedHemEvent=int(ep_isak8JetBasedHemEvent)
+            ep_ismetphiBasedHemEvent1=int(ep_ismetphiBasedHemEvent1)
+            ep_ismetphiBasedHemEvent2=int(ep_ismetphiBasedHemEvent2)
+            
             '''
             -------------------------------------------------------------------------------
             FAT JET COLLECTION
@@ -811,6 +828,8 @@ def runbbdm(txtfile):
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
                                                'DiJetMass':h_mass,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
+                                               'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                               'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -835,6 +854,8 @@ def runbbdm(txtfile):
                                                'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
                                                'Jet3Pt':dummy, 'Jet3Eta':dummy, 'Jet3Phi':dummy, 'Jet3CSV':dummy,
                                                'DiJetMass':h_mass,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
+                                               'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                               'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -866,6 +887,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'DiJetMass':h_mass, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'Wmass':WeMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -893,6 +916,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'DiJetMass':h_mass, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'Wmass':WmuMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -924,6 +949,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'DiJetMass':h_mass, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'Wmass':WeMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -951,6 +978,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet2Pt':ak4jetpt[jet2Index],'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index],
                                                 'DiJetMass':h_mass, 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':additional_jets,'min_dPhi':min_ak4jet_MET_dPhi_R,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'Wmass':WmuMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1000,6 +1029,8 @@ def runbbdm(txtfile):
                                                 'lep1_pT':elept[ele1_loose],'lep1_eta':eleeta[ele1_loose],'lep1_Phi':elephi[ele1_loose],
                                                 'lep2_pT':elept[ele2_loose],'lep2_eta':eleeta[ele2_loose],'lep2_Phi':elephi[ele2_loose],
                                                 'Zmass':ZeeMass,'ZpT':ZpT,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1042,6 +1073,8 @@ def runbbdm(txtfile):
                                                 'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
                                                 'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
                                                 'Zmass':ZmumuMass,'ZpT':ZpT,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
 						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
                                                 'btagweight':btagweight,'btagweight_up':btagweight_up,'btagweight_down':btagweight_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1091,6 +1124,8 @@ def runbbdm(txtfile):
                                                 'FJetPt':fatjetpt[fjetIndex], 'FJetEta':fatjeteta[fjetIndex], 'FJetPhi':fatjetphi[fjetIndex], 'FJetCSV':ep_fjetProbHbb[fjetIndex],'N2DDT':N2DDT,'fjetTau21':ep_fjetTau21[fjetIndex],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
                                                'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1134,6 +1169,8 @@ def runbbdm(txtfile):
                                                 'FJetPt':fatjetpt[fjet_index], 'FJetEta':fatjeteta[fjet_index], 'FJetPhi':fatjetphi[fjet_index], 'FJetCSV':ep_fjetProbHbb[fjet_index],'N2DDT':N2DDT,'fjetTau21':ep_fjetTau21[fjet_index],
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjet_index], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_dPhi_ak4_MET,'met_Phi':ep_pfMetCorrPhi,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sb,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':1.0,'lepweight_up':1.0,'lepweight_down':1.0,
                                                 'METweight':METweight,'METweight_up':METweight_up,'METweight_down':METweight_down,'METRes_up':ep_pfMetUncJetResUp[0],'METRes_down':ep_pfMetUncJetResDown[0],'METEn_up':ep_pfMetUncJetEnUp[0],'METEn_down':ep_pfMetUncJetEnDown[0],
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1182,6 +1219,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,'Wmass':WeMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1226,6 +1265,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,'Wmass':WmuMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1275,6 +1316,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WerecoildPhi,
                                                 'lep1_pT':elept[ele1_index],'lep1_eta':eleeta[ele1_index],'lep1_Phi':elephi[ele1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,'Wmass':WeMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':WerecoilResUp,'recoilRes_down':WerecoilResDown,'recoilEn_up':WerecoilEnUp,'recoilEn_down':WerecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1320,6 +1363,8 @@ def runbbdm(txtfile):
                                                 'Jet1Pt':jet1pT, 'Jet1Eta':jet1Eta, 'Jet1Phi':jet1Phi, 'Jet2Pt':dummy,'Jet2Eta':dummy, 'Jet2Phi':dummy,'isAK4jet1EtaMatch':isAK4jet1EtaMatch,'isAK4jet2EtaMatch':isAK4jet2EtaMatch,'M_Jet1AK8Jet':M_Jet1AK8Jet,'M_Jet2AK8Jet':M_Jet2AK8Jet,'Jet1CSV':jet1CSV,'Jet1CSV':jet2CSV,
                                                 'FJetMass':ep_fjetSDMass[fjetIndex], 'DiJetPt':dummy, 'DiJetEta':dummy,'nJets':nJets_cleaned,'min_dPhi':min_ak4jet_MET_dPhi,'met_Phi':ep_pfMetCorrPhi,'RECOIL_Phi':WmurecoildPhi,
                                                 'lep1_pT':mupt[muon1_index],'lep1_eta':mueta[muon1_index],'lep1_Phi':muphi[muon1_index],'FJetN2b1':ep_fjetN2b1[fjetIndex],'FJetN2b2':ep_fjetN2b2[fjetIndex],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_sr,'Wmass':WmuMass,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':WmurecoilResUp,'recoilRes_down':WmurecoilResDown,'recoilEn_up':WmurecoilEnUp,'recoilEn_down':WmurecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1378,6 +1423,8 @@ def runbbdm(txtfile):
                                                 'lep1_pT':mupt[0],'lep1_eta':mueta[0],'lep1_Phi':muphi[0],
                                                 'lep2_pT':mupt[1],'lep2_eta':mueta[1],'lep2_Phi':muphi[1],
                                                 'Zmass':ZmumuMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
                                                 'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':recoilweight,'recoilweight_up':recoil_up,'recoilweight_down':recoil_down,'recoilRes_up':ZmumuRecoilResUp,'recoilRes_down':ZmumuRecoilResDown,'recoilEn_up':ZmumuRecoilEnUp,'recoilEn_down':ZmumuRecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
@@ -1439,7 +1486,9 @@ def runbbdm(txtfile):
                                                 'lep1_pT':elept[0],'lep1_eta':eleeta[0],'lep1_Phi':elephi[0],
                                                 'lep2_pT':elept[1],'lep2_eta':eleeta[1],'lep2_Phi':elephi[1],
                                                 'Zmass':ZeeMass,'ZpT':ZpT,'FJetN2b1':ep_fjetN2b1[fjet_index],'FJetN2b2':ep_fjetN2b2[fjet_index],'FJetrho':fatjet_rho,'min_dphi_jets':mindPhi_ak4_ak8_zcr,
-						'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
+                                                'isak4JetBasedHemEvent':ep_isak4JetBasedHemEvent, 'isak8JetBasedHemEvent':ep_isak8JetBasedHemEvent,
+                                                'ismetphiBasedHemEvent1':ep_ismetphiBasedHemEvent1, 'ismetphiBasedHemEvent2':ep_ismetphiBasedHemEvent2,
+                                                'weight':weight,'puweight':PUweight,'puweight_up':PUweight_up,'puweight_down':PUweight_down,'lepweight':lepweight,'lepweight_up':lepweight_up,'lepweight_down':lepweight_down,
                                                 'recoilweight':1.0,'recoilweight_up':1.0,'recoilweight_down':1.0,'recoilRes_up':ZeeRecoilResUp,'recoilRes_down':ZeeRecoilResDown,'recoilEn_up':ZeeRecoilEnUp,'recoilEn_down':ZeeRecoilEnDown,
                                                 'btagweight':btagweight_B,'btagweight_up':btagweight_B_up,'btagweight_down':btagweight_B_down,'ewkweight':ewkweight,'ewkweight_up':ewkweight_up,'ewkweight_down':ewkweight_down,
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down

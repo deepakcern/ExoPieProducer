@@ -16,4 +16,5 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_nTau_DRBased_EleMuVeto','st_nTau_discBased_looseElelooseMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_looseEleTightMuVeto','st_nTau_discBased_mediumElelooseMuVeto','st_nTau_discBased_TightEleTightMuVeto',
 'st_pu_nTrueInt', 'st_pu_nPUVert', 'st_prefiringweight', 'st_prefiringweightup', 'st_prefiringweightdown',\
 'st_THINjetNPV', \
-'mcweight','st_genParPt', 'st_genParSample','st_isData','st_eletrigdecision','st_mutrigdecision','st_mettrigdecision']
+'mcweight','st_genParPt', 'st_genParSample','st_isData','st_eletrigdecision','st_mutrigdecision','st_mettrigdecision',\
+'st_isak4JetBasedHemEvent', 'st_isak8JetBasedHemEvent', 'st_ismetphiBasedHemEvent1', 'st_ismetphiBasedHemEvent2']
