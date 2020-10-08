@@ -376,7 +376,7 @@ def runbbdm(txtfile):
             ep_isData, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
             ep_THINjetDeepCSV, ep_THINjetHadronFlavor, ep_THINjetNPV, \
-            ep_THINjetCorrUnc, \
+            ep_THINjetCorrUnc, ep_THINPUjetIDTight,\
             ep_THINjetNHadEF, ep_THINjetCHadEF, ep_THINjetCEmEF, ep_THINjetNEmEF,  \
             ep_THINjetCMulti, ep_THINjetNMultiplicity, \
             ep_nEle, ep_elePx, ep_elePy, ep_elePz, ep_eleEnergy, \
@@ -400,7 +400,7 @@ def runbbdm(txtfile):
                    df.st_isData,
                    df.st_THINnJet, df.st_THINjetPx, df.st_THINjetPy, df.st_THINjetPz, df.st_THINjetEnergy,
                    df.st_THINjetDeepCSV, df.st_THINjetHadronFlavor, df.st_THINjetNPV,
-                   df.st_THINjetCorrUnc,
+                   df.st_THINjetCorrUnc, df.st_THINPUjetIDTight,
                    df.st_THINjetNHadEF, df.st_THINjetCHadEF, df.st_THINjetCEmEF, df.st_THINjetNEmEF, 
                    df.st_THINjetCMulti, df.st_THINjetNMultiplicity,
                    df.st_nEle, df.st_elePx, df.st_elePy, df.st_elePz, df.st_eleEnergy,
@@ -509,7 +509,7 @@ def runbbdm(txtfile):
             ep_THINjetEta_ = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
 
             JetwithEta4p5 = ep_THINnJet
-            ep_THINjetEta = [ij for ij in ep_THINjetEta_ if abs(ij) < 2.5]
+            ep_THINjetEta = [ep_THINjetEta_[i] for i in range(len(ep_THINjetEta_)) if abs(ep_THINjetEta_[i]) < 2.5]
             ep_THINjetEta_index = [i for i in range(len(ep_THINjetEta_)) if abs(ep_THINjetEta_[i]) < 2.5]
             ep_THINjetPt = [getPt(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in ep_THINjetEta_index]
             ep_THINjetPhi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in ep_THINjetEta_index]
