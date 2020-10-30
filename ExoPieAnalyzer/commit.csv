@@ -35,7 +35,7 @@ bbv06.04.01: * removed HEM veto from analyser
 	* added hemisphere variables for SR1 and SR2
 
 bbv06.04.02: * no trigger applied on MC
-	 	* added ratioJet21, dPhiJet12 and dEtaJet12 variabbles
+	 	* added ratioJet21, dPhiJet12 and dEtaJet12 variables
 	 	* added pu UP and Down
 
 bbv06.04.03: * PU sf issue fixed & met trig for 2016
@@ -49,7 +49,7 @@ bbv06.04.05 * updated the hemisphere variables
 	* https://github.com/ExoPie/ExoPieUtils/pull/22
 
 bbv06.05.00 * added calo met variables
-	* added jet energy variabbles
+	* added jet energy variables
 
 bbv06.05.01 * adding the delta(metPhi, lep phi)
 	* abs(jet eta) < 2.5
@@ -59,9 +59,13 @@ bbv07.00.00 * shifting back to st_pfMetCorrPt
 			*fixing bbv06.05.01 issue of not properly selecting the jets with abs(jet eta) < 2.5
 
 bbv07.00.01 * fixed btag application
-			* removed photon clening from analyser
+			* removed photon cleaning from analyser
 
 bbv07.02.00 * added functionality to run on single file\
 			* change the name of configs directory
 			* added the hem variables 
 			* included the PUjetID but not applied
+
+bbv07.04.00 * using fixed skim with met instead of smear_met for event selection 
+
+bbv07.04.01 * using different tag efficiency for different samples
