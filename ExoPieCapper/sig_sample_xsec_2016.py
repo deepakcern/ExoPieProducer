@@ -12,6 +12,7 @@ def getSigXsec(sig_name):
     if 'Ma250_MChi1_MA1200' in sig_name: Xsec = 1.314000
     if 'Ma250_MChi1_MA600' in sig_name: Xsec = 1.345000
     if 'Ma300_MChi1_MA600' in sig_name: Xsec = 0.747900
+    if 'Ma300_MChi1_MA1200' in sig_name: Xsec = 0.081890
     if 'Ma350_MChi1_MA1200' in sig_name: Xsec = 0.415900
     if 'Ma350_MChi1_MA600' in sig_name: Xsec = 0.448900
     if 'Ma400_MChi1_MA1200' in sig_name: Xsec = 0.251900

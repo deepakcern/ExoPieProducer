@@ -350,6 +350,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
                 normlisation = (xsec*luminosity)/(total_events)
             else:
                 normlisation = 0
+                tot_eve = 0
             h_temp.Scale(normlisation)
             if isrebin:
                 h_temp2 = setHistStyle(h_temp, hist, Rebin)
@@ -418,6 +419,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
             # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
+                tot_eve = 1/total_events
             else:
                 normlisation = 0
             h_temp.Scale(normlisation)
@@ -671,39 +673,52 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     if makeMuCHplots:
         if makeSIGplots:
             noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                        or ('_down' in hist) or ('_Recoil' in hist))
+                                or ('_down' in hist) or ('_Recoil' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
         else:
             noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                        or ('_down' in hist))
+                                or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
     elif makeEleCHplots:
         noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
                             or ('_down' in hist))
     if makeSIGplots:
         if ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
             # how many signal points you want to include
-            # ma_points = [1000, 100, 10, 150, 200, 250, 300, 350, 400, 450, 500, 50, 700, 750]
-            ma_points = [50,250]
+            ma_points = [1000, 150, 200, 250, 350, 400, 500, 700, 750]
+            #ma_points = [50,250]
             sig_leg = SetLegend([.50, .38, .60, .58], ncol=1)
             sig_leg.SetHeader("2HDM+a model")
-            signal_files_name = [name for name in os.listdir(
+            if runOn2016:
+                signal_files_name = [name for name in os.listdir(
                 sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
-
-            signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+                signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
+                    sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+                signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[4].strip('Ma')) if item.split('_')[4].strip('Ma').isdigit() else float('inf'), item))
+            if runOn2017 or runOn2018:
+                signal_files_name = [name for name in os.listdir(
+                sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
+                signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
+                sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
+                signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[-3]) if item.split('_')[-3].isdigit() else float('inf'), item))
             total = [fname.Get('h_total_mcweight') for fname in signal_files]
             sig_hist = [fname.Get(hist) for fname in signal_files]
-
-            sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral())
+            if runOn2016:
+                sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral())
                              for i, j, k in zip(sig_hist, signal_files_name, total)]
+            if runOn2017 or runOn2018:                    
+                sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec_official(j)/k.Integral()) for i, j, k in zip(sig_hist, signal_files_name, total)]
+
 
             LineStyling = [(i.SetLineStyle(n), i.SetLineWidth(6), i.SetLineColor(
                 n)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
 
             MarkerStyling = [(i.SetMarkerColor(n), i.SetMarkerStyle(n), i.SetMarkerSize(
                 1.5)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
-
-            sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split(
-                '_')[8].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
+            if runOn2016:
+                sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[4].strip('Ma')+" GeV, mA = "+filename.split(
+                '_')[6].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
+            if runOn2017 or runOn2018:
+                sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[-3]+" GeV, mA = "+filename.split(
+                '_')[-1].strip('.root')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
 
             draw_hist = [i.Draw(" same Ehist") for i in sig_hist]
             sig_leg.Draw('same')
@@ -1063,13 +1078,16 @@ PUreg = []
 if makeMuCHplots:
     regions += ['preselR', 'SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
                 'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
-    # regions += ['SR_1b', 'SR_2b']
+    # regions += ['SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
+    #             'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
+    # regions += ['ZmumuCR_1b', 'ZmumuCR_2b']
 if makeEleCHplots:
     regions += ['ZeeCR_1b', 'ZeeCR_2b', 'TopenuCR_1b',
                 'TopenuCR_2b', 'WenuCR_1b', 'WenuCR_2b']
-    # regions += ['ZeeCR_1b']
+    # regions += ['ZeeCR_1b', 'ZeeCR_2b']
 
-# makeplot("reg_WenuCR_1b_Recoil",'h_reg_WenuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'WenuCR_1b',varBin=False)
+# makeplot("reg_TopmunuCR_1b_Recoil",'h_reg_TopmunuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_1b',varBin=False)
+# makeplot("reg_TopmunuCR_2b_Recoil",'h_reg_TopmunuCR_2b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_2b',varBin=False)
 # makeplot("reg_SR_2b_MET",'h_reg_SR_2b_MET','p_{T}^{miss} (GeV)',200.,1000.,rebin,1,0,'SR_2b',varBin=False)
 for reg in regions:
     if '_2b' in reg:
@@ -1305,7 +1323,7 @@ for reg in regions:
             makeplot("reg_"+reg+"_ZpT", 'h_reg_'+reg+'_ZpT',
                      'Z candidate p_{T} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_lep2_pT", 'h_reg_'+reg+'_lep2_pT',
-                     'lepton2 p_{T}', 0, 200, rebin, 1, 0, reg, varBin=False)
+                     'lepton2 p_{T}', 0, 200, 2, 1, 0, reg, varBin=False)
         if ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
             makeplot("reg_"+reg+"_Jet2Pt", 'h_reg_'+reg+'_Jet2Pt',
                      'JET2 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
