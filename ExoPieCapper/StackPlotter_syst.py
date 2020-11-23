@@ -642,11 +642,8 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         print('No events found! for '+hist+'\n')
 
 # =====================histogram for systematic/ statistical uncertainty ========================
-    for i in range(Stackhist.GetNbinsX()+2):
-        print('Stackhist.GetBinContent('+str(i)+')', Stackhist.GetBinContent(i))
     h_stat_err = Stackhist.Clone("h_stat_err")
     h_stat_err.Sumw2()
-    print("len(total_hists)",len(total_hists))
     h_stat_err.SetFillColor(ROOT.kGray+3)
     h_stat_err.SetLineColor(ROOT.kGray+3)
     h_stat_err.SetMarkerSize(0)
@@ -672,55 +669,54 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     hs.Draw()
     if makeMuCHplots:
         if makeSIGplots:
-            noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                                or ('_down' in hist) or ('_Recoil' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
+            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('_Recoil' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
         else:
-            noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                                or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
+            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
     elif makeEleCHplots:
-        noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                            or ('_down' in hist))
+        noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
     if makeSIGplots:
         if ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
             # how many signal points you want to include
             ma_points = [1000, 150, 200, 250, 350, 400, 500, 700, 750]
-            #ma_points = [50,250]
             sig_leg = SetLegend([.50, .38, .60, .58], ncol=1)
             sig_leg.SetHeader("2HDM+a model")
             if runOn2016:
-                signal_files_name = [name for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
-                signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
-                    sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+                signal_files_name = [name for name in os.listdir(sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
                 signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[4].strip('Ma')) if item.split('_')[4].strip('Ma').isdigit() else float('inf'), item))
+                signal_files = {}
+                for name in signal_files_name:
+                    signal_files.update({name:ROOT.TFile(sig_path+'/'+name, 'READ')})                
+                total = {}
+                sig_hist = {}
+                sig_hist_list = []
+                for key in signal_files:
+                    total.update({key:signal_files[key].Get('h_total_mcweight')})
+                    sig_hist.update({key: signal_files[key].Get(hist)})
+                    sig_hist[key].Scale(luminosity*sig_sample_xsec.getSigXsec(key)/total[key].Integral())                
             if runOn2017 or runOn2018:
-                signal_files_name = [name for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
-                signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
+                signal_files_name = [name for name in os.listdir(sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
                 signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[-3]) if item.split('_')[-3].isdigit() else float('inf'), item))
-            total = [fname.Get('h_total_mcweight') for fname in signal_files]
-            sig_hist = [fname.Get(hist) for fname in signal_files]
+                signal_files = {}
+                for name in signal_files_name:
+                    signal_files.update({name:ROOT.TFile(sig_path+'/'+name, 'READ')})     
+                total = {}
+                sig_hist = {}
+                sig_hist_list = []
+                for key in signal_files:
+                    total.update({key:signal_files[key].Get('h_total_mcweight')})
+                    sig_hist.update({key: signal_files[key].Get(hist)})
+                    sig_hist_list.append(sig_hist[key].Scale(luminosity*sig_sample_xsec.getSigXsec_official(key)/total[key].Integral()))
+
+            LineStyling = [(sig_hist[i].SetLineStyle(n), sig_hist[i].SetLineWidth(
+                6), sig_hist[i].SetLineColor(n)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
+            MarkerStyling = [(sig_hist[i].SetMarkerColor(n), sig_hist[i].SetMarkerStyle(n), sig_hist[i].SetMarkerSize(1.5)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
             if runOn2016:
-                sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral())
-                             for i, j, k in zip(sig_hist, signal_files_name, total)]
-            if runOn2017 or runOn2018:                    
-                sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec_official(j)/k.Integral()) for i, j, k in zip(sig_hist, signal_files_name, total)]
-
-
-            LineStyling = [(i.SetLineStyle(n), i.SetLineWidth(6), i.SetLineColor(
-                n)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
-
-            MarkerStyling = [(i.SetMarkerColor(n), i.SetMarkerStyle(n), i.SetMarkerSize(
-                1.5)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
-            if runOn2016:
-                sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[4].strip('Ma')+" GeV, mA = "+filename.split(
-                '_')[6].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
+                sig_leg_list = [sig_leg.AddEntry(sig_hist[his_list], "ma = "+filename.split('_')[4].strip('Ma')+" GeV, mA = "+filename.split('_')[6].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
             if runOn2017 or runOn2018:
-                sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[-3]+" GeV, mA = "+filename.split(
-                '_')[-1].strip('.root')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
+                sig_leg_list = [sig_leg.AddEntry(sig_hist[his_list], "ma = "+filename.split('_')[-3]+" GeV, mA = "+filename.split('_')[-1].strip('.root')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
 
-            draw_hist = [i.Draw(" same Ehist") for i in sig_hist]
+            draw_hist = [sig_hist[i].Draw(
+                " same Ehist") for i in sig_hist]
             sig_leg.Draw('same')
 #####================================= data section =========================
     if 'SR' in reg:
@@ -730,7 +726,6 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
             h_data = SE_Hist[0]
         elif dtset == "MET":
             h_data = MET_Hist[0]
-    print('h_data.Integral()',h_data.Integral())
     h_data.Sumw2()
     h_data.SetLineColor(1)
     h_data.SetLineWidth(2)
@@ -1036,23 +1031,20 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     data_obs.SetNameTitle("data_obs", "data_obs")
     data_obs.Write()
     if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
-        [hist.SetNameTitle(sname.split('5f_')[-1].split('_tanb35_')[0], sname.split('5f_')
-                           [-1].split('_tanb35_')[0])for (sname, hist) in zip(signal_files_name, sig_hist)]
-        [hist.Write() for hist in sig_hist]
+        [sig_hist[h_key].SetNameTitle(h_key.split('5f_')[-1].split('_tanb35_')[0], h_key.split('5f_')[-1].split('_tanb35_')[0])for h_key in  sig_hist]
+        [sig_hist[h_key].Write() for h_key in sig_hist]
     fshape.Write()
     fshape.Close()
     c12.Close()
     print('\n')
-    #noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
     if (('MET' in hist and 'SR' in hist) or ('Recoil' in hist)) and not noYieldHisto:
         bkg_list = {'ZJets': ZJets, 'DYJets': DYJets, 'WJets': WJets, 'STop': STop, 'GJets': GJets,
                     'Top': Top, 'DIBOSON': DIBOSON, 'QCD': QCD, 'SMH': SMH, 'bkgSum': Stackhist, 'data_obs': h_data}
         yield_outfile.write('region '+str(hist)+'\n')
         yield_outfile_binwise.write('region '+str(hist)+'\n')
         if makeSIGplots:
-            for (sname, hist) in zip(signal_files_name, sig_hist):
-                bkg_list.update(
-                    {sname.split('5f_')[-1].split('_tanb35_')[0]: hist})
+            for h_key in sig_hist:
+                bkg_list.update({h_key.split('5f_')[-1].split('_tanb35_')[0]: sig_hist[h_key]})
         yield_outfile_binwise.write('       Bin1   Bin2   Bin3   Bin4\n')
         for key in bkg_list:
             yield_outfile_binwise.write(str(key)+'   '+str.format('{0:.1f}', bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'   '+str.format('{0:.1f}', bkg_list[key].GetBinContent(2))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(
@@ -1078,13 +1070,10 @@ PUreg = []
 if makeMuCHplots:
     regions += ['preselR', 'SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
                 'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
-    # regions += ['SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
-    #             'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
-    # regions += ['ZmumuCR_1b', 'ZmumuCR_2b']
+    
 if makeEleCHplots:
     regions += ['ZeeCR_1b', 'ZeeCR_2b', 'TopenuCR_1b',
                 'TopenuCR_2b', 'WenuCR_1b', 'WenuCR_2b']
-    # regions += ['ZeeCR_1b', 'ZeeCR_2b']
 
 # makeplot("reg_TopmunuCR_1b_Recoil",'h_reg_TopmunuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_1b',varBin=False)
 # makeplot("reg_TopmunuCR_2b_Recoil",'h_reg_TopmunuCR_2b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_2b',varBin=False)
