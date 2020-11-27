@@ -40,8 +40,11 @@ txt files you can find here:
 
 Important files to understand code:
 1- `monoHbbAnalyzer.py` main file
+
 2- `configs/eventSelector.py` event selection file
+
 3- `configs/cutFlow.py` for cutflow
+
 4-  scalefactors and other important functions are taken from ExopieUtils repo
 
 
