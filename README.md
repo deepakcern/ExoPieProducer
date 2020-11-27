@@ -38,6 +38,13 @@ txt files you can find here:
 
 `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter/`
 
+Important files to understand code:
+1- `monoHbbAnalyzer.py` main file
+2- `configs/eventSelector.py` event selection file
+3- `configs/cutFlow.py` for cutflow
+4-  scalefactors and other important functions are taken from ExopieUtils repo
+
+
 ### Submit Condor Jobs
 Note: change ```isCondor = True```
 ```
