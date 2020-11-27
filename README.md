@@ -36,9 +36,7 @@ python monoHbbAnalyzer.py -y 2017 -F -i pathOfInputTxtFile
 ```
 txt files you can find here:
 
-`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New`
-
-merged files are here: `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New_merged`
+`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter/`
 
 ### Submit Condor Jobs
 Note: change ```isCondor = True```
