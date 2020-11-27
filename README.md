@@ -44,55 +44,41 @@ merged files are here: `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skim
 Note: change ```isCondor = True```
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-git clone git@github.com:deepakcern/CondorJobs.git
+```
+copy CondorJobs directory from lxplus public area.
+```
+cp -r /afs/cern.ch/work/d/dekumar/public/monoH/Analyzer/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/CondorJobs .
 cd CondorJobs
-. submitjobs_step2.sh
-```
-Note: Open `MultiSubmit_step2.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
-Fielists directory is already there you can use root files for now. Fielists will be updated soon for 2017/18
-
-please change output path in the file ```runAnalysis_step2.sh```
-
-#### For condor jobs on lxplus:
-if you want to submit condor jobs on lxplus, please update three files ``` submit_multi_step2.sub``` , ```MultiSubmit_step2.py``` and ```runAnalysis_step2.sh```
-
-remove `use_x509userproxy = true` and add following lines in ```submit_multi_step2.sub```
-```
-Proxy_filename = x509up
-Proxy_path = /afs/cern.ch/user/d/dekumar/private/$(Proxy_filename)
-request_cpus = 4
-+JobFlavour = "nextweek"
+. submitjobs.sh
 ```
 
-And to get proxy file, open ```.bashrc``` file and add:
+Note: Open `MultiSubmit.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
+Fielists directory with txt files is already there.
+
+please change output path in the file ```runAnalysis.sh``` before submitting condor jobs
+
+To get proxy file, open ```.bashrc``` file and add:
 ```
 alias voms='voms-proxy-init --voms cms --valid 192:00 && cp -v /tmp/x509up_u104803 /afs/cern.ch/user/d/dekumar/private/x509up'
 ```
 change username. 
 
+Once all jobs are done then merge output files to get single file per sample. You can use this shell script to merge the files.
+`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/2017_AnalyserOutput/mergeFiles_2017.sh` 
 
-open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments.
-update line 19 with `submittemp.write("arguments = "+txtfile.split('/')[-1]+" "+dummy+" "+dummy+"  "+txtfile.split('/')[-1].replace('.txt','.root')+"    "+'$(Proxy_path)'+'\nqueue')`
-
-
-Now add following line in `runAnalysis_step2.sh`
-```
-export X509_USER_PROXY=$5
-voms-proxy-info -all
-voms-proxy-info -all -file $5
-```
 ### Writting Histograms from Trees
 
+#### For boosted category
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-python DataFrameToHisto.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
+python DataFrameToHisto_B_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
-combined data files into single file
+#### For boosted category
 ```
-cd OutputDirectory
-hadd combined_data_SE.root SingleElectron-Run2017*.root
-hadd combined_data_MET.root MET-Run2017*.root
+cd ExoPieProducer/ExoPieAnalyzer
+python DataFrameToHisto_R_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
+
 ### Making Control region plots
 
 ```
