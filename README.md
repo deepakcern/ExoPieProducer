@@ -93,3 +93,21 @@ python StackPlotter_2017_syst.py -c B -d MET -m [electron region]
 ```
 change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file
 
+### Making of AllMETHistos.root file [input file of limit model]
+
+```
+cd CMSSW_10_3_0/src
+mkdir LimitFile
+cd LimitFile
+cp /afs/cern.ch/work/d/dekumar/public/monoH/monoHbbPlottingFiles/CMSSW_10_3_0/src/2017/LimitFile/monoH_combinedroot_v2.py .
+cmsenv
+```
+give 3 paths inside the file:
+1-path of stack plotter output root files for boosted category
+2-path of stact plotter output root files for resolved ctegory
+3-output of DataframeTohist_Signal.py for signal sample
+
+Now run the command:
+```
+python monoH_combinedroot_v2.py
+```
