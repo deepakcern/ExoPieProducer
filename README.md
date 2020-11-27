@@ -77,6 +77,13 @@ cd ExoPieProducer/ExoPieAnalyzer
 python DataFrameToHisto_R_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
 
+#### For signale samples
+```
+cd ExoPieProducer/ExoPieAnalyzer
+python DataFrameToHisto_signal.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
+```
+
+
 ### Making Control region plots
 
 ```
@@ -91,7 +98,7 @@ python StackPlotter_2017_syst.py -c B -d MET -b [signal region]
 python StackPlotter_2017_syst.py -c B -d MET -m [electron region]
 python StackPlotter_2017_syst.py -c B -d MET -m [electron region]
 ```
-change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file
+change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file. Give path of DataFrameToHisto_B_syst.py or DataFrameToHisto_R_syst.py output root files
 
 ### Making of AllMETHistos.root file [input file of limit model]
 
