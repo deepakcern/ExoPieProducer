@@ -71,7 +71,7 @@ Once all jobs are done then merge output files to get single file per sample. Yo
 cd ExoPieProducer/ExoPieAnalyzer
 python DataFrameToHisto_B_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
-#### For boosted category
+#### For resolved category
 ```
 cd ExoPieProducer/ExoPieAnalyzer
 python DataFrameToHisto_R_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
