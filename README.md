@@ -39,6 +39,7 @@ txt files you can find here:
 `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter/`
 
 Important files to understand code:
+
 1- `monoHbbAnalyzer.py` main file
 
 2- `configs/eventSelector.py` event selection file
@@ -120,8 +121,11 @@ cp /afs/cern.ch/work/d/dekumar/public/monoH/monoHbbPlottingFiles/CMSSW_10_3_0/sr
 cmsenv
 ```
 give 3 paths inside the file:
+
 1-path of stack plotter output root files for boosted category
+
 2-path of stact plotter output root files for resolved ctegory
+
 3-output of DataframeTohist_Signal.py for signal sample
 
 Now run the command:
