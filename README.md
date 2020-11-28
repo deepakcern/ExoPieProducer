@@ -55,6 +55,7 @@ Note: change ```isCondor = True```
 cd ExoPieProducer/ExoPieAnalyzer
 git clone https://github.com/deepakcern/CondorJobs.git
 cd CondorJobs
+mv AnalysisJobs/* .
 . submitjobs.sh
 ```
 
