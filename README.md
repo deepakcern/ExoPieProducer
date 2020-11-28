@@ -96,11 +96,7 @@ python DataFrameToHisto_signal.py -F -inDir pathOfAnalyserRootFilesOutput -D Out
 ### Making Control region plots
 
 ```
-cd ExoPieProducer/ExoPieAnalyzer
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/StackPlotter_2017_syst.py
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/sample_xsec_2017_GenXSecAnalyser.py
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/samplelist_2017.txt
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/plotStyle.py
+cd ExoPieProducer/ExoPieCapper/
 
 python StackPlotter_2017_syst.py -c B -d MET -s [muon region plots for boosted analysis, use R for resolved category]
 python StackPlotter_2017_syst.py -c B -d MET -b [signal region]
