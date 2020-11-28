@@ -41,3 +41,6 @@ monohbb.v06.00.07.2017, updated AK4Jets Collection with |eta| < 2.5
 	   ,
 monohbb.v07.02.00.2017, updated command to run code on single root file
 	   , added hem effected event tag vars
+	   ,
+monohbb.v07.04.00.2017, updated DataFrameToHist macros
+	   , added plotting macros and combined root maker
