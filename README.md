@@ -18,11 +18,11 @@ export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_3_0
 cd CMSSW_10_3_0/src
 cmsenv
-git clone https://github.com/deepakcern/ExoPieUtils.git
+git clone https://github.com/ ExoPie/ExoPieUtils.git
 cd ExoPieUtils
 git checkout test_systematics
 cd -
-git clone https://github.com/deepakcern/ExoPieProducer.git
+git clone https://github.com/ ExoPie/ExoPieProducer.git
 cd ExoPieProducer
 git checkout monohbb
 cd -
