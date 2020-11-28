@@ -18,11 +18,11 @@ export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_3_0
 cd CMSSW_10_3_0/src
 cmsenv
-git clone https://github.com/ ExoPie/ExoPieUtils.git
+git clone https://github.com/ExoPie/ExoPieUtils.git
 cd ExoPieUtils
 git checkout test_systematics
 cd -
-git clone https://github.com/ ExoPie/ExoPieProducer.git
+git clone https://github.com/ExoPie/ExoPieProducer.git
 cd ExoPieProducer
 git checkout monohbb
 cd -
@@ -108,11 +108,8 @@ change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file. Giv
 ### Making of AllMETHistos.root file [input file of limit model]
 
 ```
-cd CMSSW_10_3_0/src
-mkdir LimitFile
-cd LimitFile
-cp /afs/cern.ch/work/d/dekumar/public/monoH/monoHbbPlottingFiles/CMSSW_10_3_0/src/2017/LimitFile/monoH_combinedroot_v2.py .
-cmsenv
+cd ExoPieProducer/ExoPieDecorator
+python monoH_combinedroot_v2.py 
 ```
 give 3 paths inside the file:
 
