@@ -53,10 +53,7 @@ Important files to understand code:
 Note: change ```isCondor = True```
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-```
-copy CondorJobs directory from lxplus public area.
-```
-cp -r /afs/cern.ch/work/d/dekumar/public/monoH/Analyzer/CMSSW_10_3_0/src/ExoPieProducer/ExoPieAnalyzer/CondorJobs .
+git clone https://github.com/deepakcern/CondorJobs.git
 cd CondorJobs
 . submitjobs.sh
 ```
