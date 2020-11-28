@@ -36,7 +36,7 @@ python monoHbbAnalyzer.py -y 2017 -F -i pathOfInputTxtFile
 ```
 txt files you can find here:
 
-`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter/`
+`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter_v2/`
 
 Important files to understand code:
 
