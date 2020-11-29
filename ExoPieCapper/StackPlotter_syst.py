@@ -1,3 +1,4 @@
+from uncert_binwise_v17_07_04_00 import syst_dict
 import os
 import sys
 import datetime
@@ -6,6 +7,8 @@ import optparse
 import ROOT as ROOT
 import array
 import string
+import math
+
 
 ROOT.gROOT.SetBatch(1)
 #command  python StackPlotter_syst.py -d <DATASET_NAME> -m -y <Year> -D <histo_DIR> -S <signal_Dir>
@@ -13,10 +16,9 @@ usage = "usage: %prog [options] arg1 arg2"
 parser = optparse.OptionParser(usage)
 
 parser.add_option("-d", "--data", dest="datasetname")
-parser.add_option("-D", "--pDir", type="string",
-                  dest="rootFileDir", help="directory containing histogram")
-parser.add_option("-S", "--sigDir", type="string", dest="SIGrootFileDir",
-                  help="directory containing signal histogram")
+parser.add_option("-D", "--pDir", type="string", dest="rootFileDir", help="histogram dir")
+parser.add_option("-S", "--sigDir", type="string", dest="SIGrootFileDir", help="signal histogram")
+parser.add_option("-v", "--version", type="string",dest="Version", help="version of histograms")
 parser.add_option("-s", "--sr", action="store_true", dest="plotSIGNAL")
 parser.add_option("-m", "--mu", action="store_true", dest="plotMuChannels")
 parser.add_option("-e", "--ele", action="store_true", dest="plotEleChannels")
@@ -78,12 +80,14 @@ if runOn2016:
     #import sample_xsec_2016 as sample_xsec
     import sample_xsec_2016_GenXSecAnalyser as sample_xsec
     import sig_sample_xsec_2016 as sig_sample_xsec
+    from uncert_binwise_v16_07_04_01 import syst_dict
     luminosity = 35.82 * 1000
     luminosity_ = '{0:.2f}'.format(35.82)
 elif runOn2017:
     #import sample_xsec_2017 as sample_xsec
     import sample_xsec_2017_GenXSecAnalyser as sample_xsec
     import sig_sample_xsec_2017 as sig_sample_xsec
+    from uncert_binwise_v17_07_04_00 import syst_dict
     luminosity = 41.5 * 1000
     luminosity_ = '{0:.2f}'.format(41.50)
 elif runOn2018:
@@ -95,6 +99,12 @@ elif runOn2018:
 
 datestr = str(datetime.date.today().strftime("%d%m%Y"))
 
+if options.Version == None:
+    print('Please provide which version of histograms are being plotted')
+    sys.exit()
+else:
+    histVersion = options.Version
+
 if options.rootFileDir == None:
     print('Please provide histogram directory name')
     sys.exit()
@@ -105,16 +115,15 @@ sig_path = options.SIGrootFileDir
 
 print("sig_path sig_path sig_path", sig_path)
 if makeMuCHplots:
-    yield_outfile_binwise = open(
-        'bbDM'+str(options.year)+'_Mu_binwise_yield.txt', 'w')
-    yield_outfile = open('bbDM'+str(options.year)+'_Mu_yield.txt', 'w')
+    yield_outfile_binwise = open('YieldsFiles/'+histVersion+'_Muon_binwise.txt','w')
+    yield_outfile = open('YieldsFiles/'+histVersion+'_Muon.txt','w')
 if makeEleCHplots:
-    yield_outfile_binwise = open(
-        'bbDM'+str(options.year) + '_Ele_binwise_yield.txt', 'w')
-    yield_outfile = open('bbDM'+str(options.year)+'_Ele_yield.txt', 'w')
+    yield_outfile_binwise = open('YieldsFiles/'+histVersion+'_Electron_binwise.txt','w')
+    yield_outfile = open('YieldsFiles/'+histVersion+'_Electron.txt', 'w')
 
 alpha_list = list(string.ascii_uppercase)
 
+syst_sources = ['weightB','weightEWK','weightTop','weightMET','weightEle','weightMu','weightPU','weightJEC','Res','En']
 
 def set_overflow(hist):
     bin_num = hist.GetXaxis().GetNbins()
@@ -124,16 +133,15 @@ def set_overflow(hist):
     hist.SetBinContent(bin_num+1, 0.)
     return hist
 
-
 def setHistStyle(h_temp2, hist, rebin):
     dovarbin = False
     bins = h_temp2.GetNbinsX()
     if rebin > 1:
-        if bins % rebin == 0:
+        if bins%rebin == 0:
             h_temp_ = h_temp2.Rebin(rebin)
-        elif bins % (rebin+1) == 0:
+        elif bins%(rebin+1) == 0:
             h_temp_ = h_temp2.Rebin(rebin+1)
-        elif bins % (rebin-1) == 0:
+        elif bins%(rebin-1) == 0:
             h_temp_ = h_temp2.Rebin(rebin-1)
     else:
         h_temp_ = h_temp2
@@ -337,11 +345,12 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         total_events = h_total_weight.Integral()
         if 'WJetsToLNu_HT' in file:
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
                 normlisation = 0
+                tot_eve = 0
             h_temp.Scale(normlisation)
             if isrebin:
                 h_temp2 = setHistStyle(h_temp, hist, Rebin)
@@ -351,7 +360,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif 'DYJetsToLL_M-50' in file:
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -365,7 +374,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif 'ZJetsToNuNu' in file:
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -379,7 +388,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif 'GJets_HT' in file:
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*xsec)/(total_events)
             else:
@@ -393,7 +402,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif ('WWTo' in file) or ('WZTo' in file) or ('ZZTo' in file) or ('WW_' in file) or ('ZZ_' in file) or ('WZ_' in file):
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -407,9 +416,10 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif ('ST_t' in file) or ('ST_s' in file):
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
+                tot_eve = 1/total_events
             else:
                 normlisation = 0
             h_temp.Scale(normlisation)
@@ -421,7 +431,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif ('TTTo' in file) or ('TT_TuneCUETP8M2T4' in file):
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -436,7 +446,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif ('QCD_HT' in file) or ('QCD_bEnriched_HT' in file):
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -450,7 +460,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
         elif 'HToBB' in file:
             xsec = sample_xsec.getXsec(file)
-            print('file', file, 'xsec', xsec, '\n')
+            # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
             else:
@@ -555,10 +565,9 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     QCDCount = QCD.Integral()
     SMHCount = SMH.Integral()
 
-    mcsum = ZJetsCount + DYJetsCount + WJetsCount + \
-        STopCount + GJetsCount + TTCount + VVCount + QCDCount
-    total_hists = WJets_Hists + DYJets_Hits + ZJets_Hits + \
-        GJets_Hists + DIBOSON_Hists + STop_Hists + Top_Hists + QCD_Hists
+    mcsum = ZJetsCount + DYJetsCount + WJetsCount + STopCount + GJetsCount + TTCount + VVCount + QCDCount
+    print('mcsum', mcsum)
+    total_hists = WJets_Hists + DYJets_Hits + ZJets_Hits + GJets_Hists + DIBOSON_Hists + STop_Hists + Top_Hists + QCD_Hists
 
     if '_cutFlow' not in str(hist):
         for histo in total_hists:
@@ -633,27 +642,21 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         print('No events found! for '+hist+'\n')
 
 # =====================histogram for systematic/ statistical uncertainty ========================
-
-    h_err = total_hists[0].Clone("h_err")
-    h_err.Reset()
-    for i in range(len(total_hists)):
-        if i == 0:
-            continue
-        else:
-            if (total_hists[i].Integral() > 0):
-                h_err.Add(total_hists[i])
-    h_err.Sumw2()
-    h_err.SetFillColor(ROOT.kGray+3)
-    h_err.SetLineColor(ROOT.kGray+3)
-    h_err.SetMarkerSize(0)
-    h_err.SetFillStyle(3013)
+    h_stat_err = Stackhist.Clone("h_stat_err")
+    h_stat_err.Sumw2()
+    h_stat_err.SetFillColor(ROOT.kGray+3)
+    h_stat_err.SetLineColor(ROOT.kGray+3)
+    h_stat_err.SetMarkerSize(0)
+    h_stat_err.SetFillStyle(3013)
+    h_stat_syst_err = h_stat_err.Clone("h_stat_syst_err")
+    
+# =============================================
 
     if(NORATIOPLOT):
         c1_2 = ROOT.TPad("c1_2", "newpad", 0, 0.05, 1, 1)  # 0.993)
         c1_2.SetRightMargin(0.06)
     else:
         c1_2 = ROOT.TPad("c1_2", "newpad", 0, 0.20, 1, 1)
-
     c1_2.SetBottomMargin(0.09)
     c1_2.SetTopMargin(0.08)
     c1_2.SetLeftMargin(0.12)
@@ -665,37 +668,55 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         h = SetCMSAxis(h)
     hs.Draw()
     if makeMuCHplots:
-        noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                            or ('_down' in hist) or ('_Recoil' in hist))
+        if makeSIGplots:
+            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('_Recoil' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
+        else:
+            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
     elif makeEleCHplots:
-        noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
-                            or ('_down' in hist))
+        noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
     if makeSIGplots:
         if ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
-            ma_points = [50, 200]  # how many signal points you want to include
+            # how many signal points you want to include
+            ma_points = [1000, 150, 200, 250, 350, 400, 500, 700, 750]
             sig_leg = SetLegend([.50, .38, .60, .58], ncol=1)
             sig_leg.SetHeader("2HDM+a model")
-            signal_files_name = [name for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+            if runOn2016:
+                signal_files_name = [name for name in os.listdir(sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
+                signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[4].strip('Ma')) if item.split('_')[4].strip('Ma').isdigit() else float('inf'), item))
+                signal_files = {}
+                for name in signal_files_name:
+                    signal_files.update({name:ROOT.TFile(sig_path+'/'+name, 'READ')})                
+                total = {}
+                sig_hist = {}
+                sig_hist_list = []
+                for key in signal_files:
+                    total.update({key:signal_files[key].Get('h_total_mcweight')})
+                    sig_hist.update({key: signal_files[key].Get(hist)})
+                    sig_hist[key].Scale(luminosity*sig_sample_xsec.getSigXsec(key)/total[key].Integral())                
+            if runOn2017 or runOn2018:
+                signal_files_name = [name for name in os.listdir(sig_path) for mapoint in ma_points if 'ma_'+str(mapoint)+'_' in name]
+                signal_files_name = sorted(signal_files_name, key=lambda item: (int(item.split('_')[-3]) if item.split('_')[-3].isdigit() else float('inf'), item))
+                signal_files = {}
+                for name in signal_files_name:
+                    signal_files.update({name:ROOT.TFile(sig_path+'/'+name, 'READ')})     
+                total = {}
+                sig_hist = {}
+                sig_hist_list = []
+                for key in signal_files:
+                    total.update({key:signal_files[key].Get('h_total_mcweight')})
+                    sig_hist.update({key: signal_files[key].Get(hist)})
+                    sig_hist_list.append(sig_hist[key].Scale(luminosity*sig_sample_xsec.getSigXsec_official(key)/total[key].Integral()))
 
-            signal_files = [ROOT.TFile(sig_path+'/'+name, 'READ') for name in os.listdir(
-                sig_path) for mapoint in ma_points if 'Ma'+str(mapoint)+'_' in name]
-            total = [fname.Get('h_total_mcweight') for fname in signal_files]
-            sig_hist = [fname.Get(hist) for fname in signal_files]
+            LineStyling = [(sig_hist[i].SetLineStyle(n), sig_hist[i].SetLineWidth(
+                6), sig_hist[i].SetLineColor(n)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
+            MarkerStyling = [(sig_hist[i].SetMarkerColor(n), sig_hist[i].SetMarkerStyle(n), sig_hist[i].SetMarkerSize(1.5)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
+            if runOn2016:
+                sig_leg_list = [sig_leg.AddEntry(sig_hist[his_list], "ma = "+filename.split('_')[4].strip('Ma')+" GeV, mA = "+filename.split('_')[6].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
+            if runOn2017 or runOn2018:
+                sig_leg_list = [sig_leg.AddEntry(sig_hist[his_list], "ma = "+filename.split('_')[-3]+" GeV, mA = "+filename.split('_')[-1].strip('.root')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
 
-            sig_hist_list = [i.Scale(luminosity*sig_sample_xsec.getSigXsec(j)/k.Integral())
-                             for i, j, k in zip(sig_hist, signal_files_name, total)]
-
-            LineStyling = [(i.SetLineStyle(n), i.SetLineWidth(6), i.SetLineColor(
-                n)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
-
-            MarkerStyling = [(i.SetMarkerColor(n), i.SetMarkerStyle(n), i.SetMarkerSize(
-                1.5)) for i, n in zip(sig_hist, range(2, len(sig_hist)+2))]
-
-            sig_leg_list = [sig_leg.AddEntry(his_list, "ma = "+filename.split('_')[6].strip('Ma')+" GeV, mA = "+filename.split(
-                '_')[8].strip('MA')+" GeV", "lp") for his_list, filename in zip(sig_hist, signal_files_name)]
-
-            draw_hist = [i.Draw(" same Ehist") for i in sig_hist]
+            draw_hist = [sig_hist[i].Draw(
+                " same Ehist") for i in sig_hist]
             sig_leg.Draw('same')
 #####================================= data section =========================
     if 'SR' in reg:
@@ -815,25 +836,86 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
 #============================================= statistical error section ======================
 
-    ratiostaterr = h_err.Clone("ratiostaterr")
+    ratiostaterr = h_stat_err.Clone("ratiostaterr")
     ratiostaterr.Sumw2()
     ratiostaterr.SetStats(0)
     ratiostaterr.SetMinimum(0)
     ratiostaterr.SetMarkerSize()
     ratiostaterr.SetFillColor(ROOT.kBlack)
     ratiostaterr.SetFillStyle(3013)
-    for i in range(h_err.GetNbinsX()+2):
+    for i in range(h_stat_err.GetNbinsX()+2):
         ratiostaterr.SetBinContent(i, 0.0)
+        if (h_stat_err.GetBinContent(i) > 1e-6):
 
-        if (h_err.GetBinContent(i) > 1e-6):
-            binerror = h_err.GetBinError(i)/h_err.GetBinContent(i)
+            binerror = h_stat_err.GetBinError(i)/h_stat_err.GetBinContent(i)
             ratiostaterr.SetBinError(i, binerror)
+            h_stat_err.SetBinError(i, binerror)
         else:
             ratiostaterr.SetBinError(i, 999.)
+            h_stat_err.SetBinError(i, 999.)
+#============================================= systematic error section ======================
+    if 'MET' in hist or 'Recoil' in hist:
+        ratiosysterr = h_stat_err.Clone("ratiosysterr")
+        ratiosysterr.Sumw2()
+        ratiosysterr.SetStats(0)
+        ratiosysterr.SetMinimum(0)
+        ratiosysterr.SetMarkerSize(0)
+        ratiosysterr.SetFillColor(ROOT.kBlack)
+        ratiosysterr.SetFillStyle(3013)
+        if 'SR' in reg and '_MET' in hist:
+            main_var = '_MET'
+            for i in range(h_stat_err.GetNbinsX()):
+                binerror2 = 0.0
+                ratiosysterr.SetBinContent(i, 0.0)
+                if (h_stat_err.GetBinContent(i) > 1e-6):
+                    binerror2 = (pow(h_stat_err.GetBinError(i), 2) +
+                                 pow(syst_dict['weightB_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightTop_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightMET_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightPU_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightJEC_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['Res_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['En_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2))
+                    binerror = math.sqrt(binerror2)
+                    ratiosysterr.SetBinError(i, binerror/h_stat_err.GetBinContent(i))
+                    h_stat_syst_err.SetBinError(i, binerror/h_stat_err.GetBinContent(i))
+                else:
+                    ratiosysterr.SetBinError(i, 999.)
+                    h_stat_syst_err.SetBinError(i, 999.)
+        elif 'CR' in reg and '_Recoil' in hist:
+            main_var = '_Recoil'
+            for i in range(1, h_stat_err.GetNbinsX()+1):
+                binerror2 = 0.0
+                ratiosysterr.SetBinContent(i, 0.0)
+                if (h_stat_err.GetBinContent(i) > 1e-6):
+                    binerror2 = (pow(h_stat_err.GetBinError(i), 2) +
+                                 pow(syst_dict['weightB_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightTop_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightRecoil_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightPU_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightJEC_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['Res_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['En_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightEle_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2) +
+                                 pow(syst_dict['weightMu_syst_'+reg+main_var][i-1]*h_stat_err.GetBinContent(i), 2))
+                    binerror = math.sqrt(binerror2)
+                    ratiosysterr.SetBinError(i, binerror/h_stat_err.GetBinContent(i))
+                    h_stat_syst_err.SetBinError(i, binerror/h_stat_err.GetBinContent(i))
+                else:
+                    ratiosysterr.SetBinError(i, 999.)
+                    h_stat_syst_err.SetBinError(i, 999.)
+    if 'MET' in hist or 'Recoil' in hist:
+        ratioleg.AddEntry(ratiosysterr, "stat + syst", "f")
+    else:
+        ratioleg.AddEntry(ratiostaterr, "stat", "f")
 
-    ratioleg.AddEntry(ratiostaterr, "stat", "f")
+    if(not NORATIOPLOT):
+        if 'MET' in hist or 'Recoil' in hist:
+            h_stat_err.Draw("same E2")
+        else:
+            h_stat_syst_err.Draw("same E2")
 
- #============================================= Lower Tpad Decalaration ====================================
+#============================================= Lower Tpad Decalaration ====================================
     if(not NORATIOPLOT):
         c12.cd()
         DataMC = h_data.Clone()
@@ -889,45 +971,41 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         DataMC.GetXaxis().SetNdivisions(508)
         DataMC.GetYaxis().SetNdivisions(505)
         DataMC.Draw("P e1")
-        ratiostaterr.Draw("e2 same")
+        if 'MET' in hist or 'Recoil' in hist:
+            ratiosysterr.Draw("e2 same")
+        else:
+            ratiostaterr.Draw("e2 same")
         DataMC.Draw("P e1 same")
-        line1 = ROOT.TLine(XMIN, 0.2, XMAX, 0.2)
-        line2 = ROOT.TLine(XMIN, -0.2, XMAX, -0.2)
-        line1.SetLineStyle(2)
-        line1.SetLineColor(2)
-        line1.SetLineWidth(2)
-        line2.SetLineStyle(2)
-        line2.SetLineColor(2)
-        line2.SetLineWidth(2)
-        line1.Draw("same")
-        line2.Draw("same")
+        # line1 = ROOT.TLine(XMIN, 0.2, XMAX, 0.2)
+        # line2 = ROOT.TLine(XMIN, -0.2, XMAX, -0.2)
+        # line1.SetLineStyle(2)
+        # line1.SetLineColor(2)
+        # line1.SetLineWidth(2)
+        # line2.SetLineStyle(2)
+        # line2.SetLineColor(2)
+        # line2.SetLineWidth(2)
+        # line1.Draw("same")
+        # line2.Draw("same")
         ratioleg.Draw("same")
     c12.Draw()
     plot = str(hist)
     noPdfPng = True
     if ('_up' in str(hist) or '_down' in str(hist)):
         noPdfPng = False
-    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPng/'+reg):
-        os.makedirs('plots_norm/'+datestr+'_' +
-                    str(options.year)+'/bbDMPng/'+reg)
-    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMPdf/'+reg):
-        os.makedirs('plots_norm/'+datestr+'_' +
-                    str(options.year)+'/bbDMPdf/'+reg)
-    if not os.path.exists('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/'):
-        os.makedirs('plots_norm/'+datestr+'_'+str(options.year)+'/bbDMRoot/')
+    if not os.path.exists('plots_norm/'+histVersion+'/bbDMPng/'+reg):
+        os.makedirs('plots_norm/'+histVersion+'/bbDMPng/'+reg)
+    if not os.path.exists('plots_norm/'+histVersion+'/bbDMPdf/'+reg):
+        os.makedirs('plots_norm/'+histVersion+'/bbDMPdf/'+reg)
+    if not os.path.exists('plots_norm/'+histVersion+'/bbDMRoot/'):
+        os.makedirs('plots_norm/'+histVersion+'/bbDMRoot/')
     if (ISLOG == 0) and noPdfPng:
-        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year) +
-                   '/bbDMPdf/'+reg+'/'+plot+'.pdf')
-        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year) +
-                   '/bbDMPng/'+reg+'/'+plot+'.png')
+        c12.SaveAs('plots_norm/'+histVersion+'/bbDMPdf/'+reg+'/'+plot+'.pdf')
+        c12.SaveAs('plots_norm/'+histVersion+'/bbDMPng/'+reg+'/'+plot+'.png')
         print("Saved. \n")
     if (ISLOG == 1) and noPdfPng:
-        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year) +
-                   '/bbDMPdf/'+reg+'/'+plot+'_log.pdf')
-        c12.SaveAs('plots_norm/'+datestr+'_'+str(options.year) +
-                   '/bbDMPng/'+reg+'/'+plot+'_log.png')
-    fshape = ROOT.TFile('plots_norm/'+datestr+'_' +
-                        str(options.year)+'/bbDMRoot/'+plot+'.root', "RECREATE")
+        c12.SaveAs('plots_norm/'+histVersion+'/bbDMPdf/'+reg+'/'+plot+'_log.pdf')
+        c12.SaveAs('plots_norm/'+histVersion+'/bbDMPng/'+reg+'/'+plot+'_log.png')
+    fshape = ROOT.TFile('plots_norm/'+histVersion+'/bbDMRoot/'+plot+'.root', "RECREATE")
     fshape.cd()
     Stackhist.SetNameTitle("bkgSum", "bkgSum")
     Stackhist.Write()
@@ -953,23 +1031,20 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     data_obs.SetNameTitle("data_obs", "data_obs")
     data_obs.Write()
     if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
-        [hist.SetNameTitle(sname.split('5f_')[-1].split('_tanb35_')[0], sname.split('5f_')
-                           [-1].split('_tanb35_')[0])for (sname, hist) in zip(signal_files_name, sig_hist)]
-        [hist.Write() for hist in sig_hist]
+        [sig_hist[h_key].SetNameTitle(h_key.split('5f_')[-1].split('_tanb35_')[0], h_key.split('5f_')[-1].split('_tanb35_')[0])for h_key in  sig_hist]
+        [sig_hist[h_key].Write() for h_key in sig_hist]
     fshape.Write()
     fshape.Close()
     c12.Close()
     print('\n')
-    #noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
     if (('MET' in hist and 'SR' in hist) or ('Recoil' in hist)) and not noYieldHisto:
         bkg_list = {'ZJets': ZJets, 'DYJets': DYJets, 'WJets': WJets, 'STop': STop, 'GJets': GJets,
                     'Top': Top, 'DIBOSON': DIBOSON, 'QCD': QCD, 'SMH': SMH, 'bkgSum': Stackhist, 'data_obs': h_data}
         yield_outfile.write('region '+str(hist)+'\n')
         yield_outfile_binwise.write('region '+str(hist)+'\n')
         if makeSIGplots:
-            for (sname, hist) in zip(signal_files_name, sig_hist):
-                bkg_list.update(
-                    {sname.split('5f_')[-1].split('_tanb35_')[0]: hist})
+            for h_key in sig_hist:
+                bkg_list.update({h_key.split('5f_')[-1].split('_tanb35_')[0]: sig_hist[h_key]})
         yield_outfile_binwise.write('       Bin1   Bin2   Bin3   Bin4\n')
         for key in bkg_list:
             yield_outfile_binwise.write(str(key)+'   '+str.format('{0:.1f}', bkg_list[key].GetBinContent(1))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(1))+'   '+str.format('{0:.1f}', bkg_list[key].GetBinContent(2))+'\xb1'+str.format('{0:.1f}', bkg_list[key].GetBinError(
@@ -995,86 +1070,250 @@ PUreg = []
 if makeMuCHplots:
     regions += ['preselR', 'SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
                 'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
-    # regions += ['ZmumuCR_1b', 'ZmumuCR_2b']
+    
 if makeEleCHplots:
     regions += ['ZeeCR_1b', 'ZeeCR_2b', 'TopenuCR_1b',
                 'TopenuCR_2b', 'WenuCR_1b', 'WenuCR_2b']
-    # regions += ['ZeeCR_1b', 'ZeeCR_2b']
 
-# makeplot("reg_WenuCR_1b_Recoil",'h_reg_WenuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'WenuCR_1b',varBin=False)
+# makeplot("reg_TopmunuCR_1b_Recoil",'h_reg_TopmunuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_1b',varBin=False)
+# makeplot("reg_TopmunuCR_2b_Recoil",'h_reg_TopmunuCR_2b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_2b',varBin=False)
 # makeplot("reg_SR_2b_MET",'h_reg_SR_2b_MET','p_{T}^{miss} (GeV)',200.,1000.,rebin,1,0,'SR_2b',varBin=False)
 for reg in regions:
     if '_2b' in reg:
         rebin = 1
     else:
         rebin = 1
-    # try:
-    if True:
-        if 'SR_' in reg or 'preselR' in reg:
-            makeplot("reg_"+reg+"_cutFlow", 'h_reg_'+reg+'_cutFlow',
-                     'CutFlow', 0, 7, 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET", 'h_reg_'+reg+'_MET',
-                     ' p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_dPhiTrk_pfMET", 'h_reg_'+reg+'_dPhiTrk_pfMET',
-                     '#Delta#phi (Trkp_{T}^{miss} - p_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_dPhiCalo_pfMET", 'h_reg_'+reg+'_dPhiCalo_pfMET',
-                     '#Delta#phi(Calop_{T}^{miss} - pfp_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightB_up", 'h_reg_'+reg+'_MET_weightB_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightB_down", 'h_reg_'+reg+'_MET_weightB_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightEWK_up", 'h_reg_'+reg+'_MET_weightEWK_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightEWK_down", 'h_reg_'+reg+'_MET_weightEWK_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightTop_up", 'h_reg_'+reg+'_MET_weightTop_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightTop_down", 'h_reg_'+reg+'_MET_weightTop_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightMET_up", 'h_reg_'+reg+'_MET_weightMET_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightMET_down", 'h_reg_'+reg+'_MET_weightMET_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightPU_up", 'h_reg_'+reg+'_MET_weightPU_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightPU_down", 'h_reg_'+reg+'_MET_weightPU_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightJEC_up", 'h_reg_'+reg+'_MET_weightJEC_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_weightJEC_down", 'h_reg_'+reg+'_MET_weightJEC_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_Res_up", 'h_reg_'+reg+'_MET_Res_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_Res_down", 'h_reg_'+reg+'_MET_Res_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_En_up", 'h_reg_'+reg+'_MET_En_up',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET_En_down", 'h_reg_'+reg+'_MET_En_down',
-                     'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_min_dPhi", 'h_reg_'+reg+'_min_dPhi',
-                     'min_dPhi', 0, 4, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Pt", 'h_reg_'+reg+'_Jet1Pt',
-                     'JET1 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_delta_pfCalo", 'h_reg_'+reg+'_delta_pfCalo',
-                     'PFp_{T}^{miss}-Calop_{T}^{miss}/Recoil', 0., 1.5, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Eta", 'h_reg_'+reg+'_Jet1Eta',
-                     'JET1 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Phi", 'h_reg_'+reg+'_Jet1Phi',
-                     'JET1 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1deepCSV", 'h_reg_'+reg+'_Jet1deepCSV',
-                     'JET1 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NHadEF", 'h_reg_'+reg+'_Jet1NHadEF',
-                     'Jet1NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CHadEF", 'h_reg_'+reg+'_Jet1CHadEF',
-                     'Jet1CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CEmEF", 'h_reg_'+reg+'_Jet1CEmEF',
-                     'Jet1CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NEmEF", 'h_reg_'+reg+'_Jet1NEmEF',
-                     'Jet1NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CMulti", 'h_reg_'+reg+'_Jet1CMulti',
-                     'Jet1CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NMultiplicity", 'h_reg_'+reg+'_Jet1NMultiplicity',
-                     'Jet1NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
+    if 'SR_' in reg or 'preselR' in reg:
+        makeplot("reg_"+reg+"_cutFlow", 'h_reg_'+reg+'_cutFlow',
+                 'CutFlow', 0, 7, 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET", 'h_reg_'+reg+'_MET',
+                 ' p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhiTrk_pfMET", 'h_reg_'+reg+'_dPhiTrk_pfMET',
+                 '#Delta#phi (Trkp_{T}^{miss} - p_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhiCalo_pfMET", 'h_reg_'+reg+'_dPhiCalo_pfMET',
+                 '#Delta#phi(Calop_{T}^{miss} - pfp_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightB_up", 'h_reg_'+reg+'_MET_weightB_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightB_down", 'h_reg_'+reg+'_MET_weightB_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightEWK_up", 'h_reg_'+reg+'_MET_weightEWK_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightEWK_down", 'h_reg_'+reg+'_MET_weightEWK_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightTop_up", 'h_reg_'+reg+'_MET_weightTop_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightTop_down", 'h_reg_'+reg+'_MET_weightTop_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightMET_up", 'h_reg_'+reg+'_MET_weightMET_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightMET_down", 'h_reg_'+reg+'_MET_weightMET_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightPU_up", 'h_reg_'+reg+'_MET_weightPU_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightPU_down", 'h_reg_'+reg+'_MET_weightPU_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightJEC_up", 'h_reg_'+reg+'_MET_weightJEC_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_weightJEC_down", 'h_reg_'+reg+'_MET_weightJEC_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_Res_up", 'h_reg_'+reg+'_MET_Res_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_Res_down", 'h_reg_'+reg+'_MET_Res_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_En_up", 'h_reg_'+reg+'_MET_En_up',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET_En_down", 'h_reg_'+reg+'_MET_En_down',
+                 'p_{T}^{miss} (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_min_dPhi", 'h_reg_'+reg+'_min_dPhi',
+                 'min_dPhi', 0, 4, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Pt", 'h_reg_'+reg+'_Jet1Pt',
+                 'JET1 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_delta_pfCalo", 'h_reg_'+reg+'_delta_pfCalo',
+                 'PFp_{T}^{miss}-Calop_{T}^{miss}/Recoil', 0., 1.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Eta", 'h_reg_'+reg+'_Jet1Eta',
+                 'JET1 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Phi", 'h_reg_'+reg+'_Jet1Phi',
+                 'JET1 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1deepCSV", 'h_reg_'+reg+'_Jet1deepCSV',
+                 'JET1 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NHadEF", 'h_reg_'+reg+'_Jet1NHadEF',
+                 'Jet1NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CHadEF", 'h_reg_'+reg+'_Jet1CHadEF',
+                 'Jet1CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CEmEF", 'h_reg_'+reg+'_Jet1CEmEF',
+                 'Jet1CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NEmEF", 'h_reg_'+reg+'_Jet1NEmEF',
+                 'Jet1NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CMulti", 'h_reg_'+reg+'_Jet1CMulti',
+                 'Jet1CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NMultiplicity", 'h_reg_'+reg+'_Jet1NMultiplicity',
+                 'Jet1NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2Pt", 'h_reg_'+reg+'_Jet2Pt',
+                 'JET2 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2Eta", 'h_reg_'+reg+'_Jet2Eta',
+                 'JET2 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2Phi", 'h_reg_'+reg+'_Jet2Phi',
+                 'JET2 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2deepCSV", 'h_reg_'+reg+'_Jet2deepCSV',
+                 'JET2 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2NHadEF", 'h_reg_'+reg+'_Jet2NHadEF',
+                 'Jet2NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2CHadEF", 'h_reg_'+reg+'_Jet2CHadEF',
+                 'Jet2CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2CEmEF", 'h_reg_'+reg+'_Jet2CEmEF',
+                 'Jet2CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2NEmEF", 'h_reg_'+reg+'_Jet2NEmEF',
+                 'Jet2NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2CMulti", 'h_reg_'+reg+'_Jet2CMulti',
+                 'Jet2CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet2NMultiplicity", 'h_reg_'+reg+'_Jet2NMultiplicity',
+                 'Jet2NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_nJets", 'h_reg_'+reg+'_nJets',
+                 'nJets', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NEle", 'h_reg_'+reg+'_NEle',
+                 'NEle', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NMu", 'h_reg_'+reg+'_NMu', 'NMu',
+                 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_nPho", 'h_reg_'+reg+'_nPho',
+                 'nPho', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NTau", 'h_reg_'+reg+'_NTau',
+                 'NTau', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_ratioPtJet21", 'h_reg_'+reg+'_ratioPtJet21',
+                 'JET2 p_{T}/JET1 p_{T} ', 0., 1.0, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhiJet12", 'h_reg_'+reg+'_dPhiJet12',
+                 'JET1#eta - JET2#eta', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dEtaJet12", 'h_reg_'+reg+'_dEtaJet12',
+                 'JET1#phi - JET2#phi', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
+        if ('SR_1b' in reg):
+            makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
+                     'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
+                     'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
+        elif ('SR_2b' in reg):
+            makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
+                     'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
+                     'Inv Mass(Jet1, Jet3)', 0, 2000, 10, 1, 0, reg, varBin=False)
+        elif ('preselR' in reg):
+            makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
+                     'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
+                     'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
+                     'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
+                     'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',
+                 'Jet1 p_{T}/MET', 0, 20, 5, 1, 0, reg, varBin=False)
+    else:
+        makeplot("reg_"+reg+"_cutFlow", 'h_reg_'+reg+'_cutFlow',
+                 'CutFlow', 0, 11, 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_MET", 'h_reg_'+reg+'_MET',
+                 'Real p_{T}^{miss} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhiTrk_pfMET", 'h_reg_'+reg+'_dPhiTrk_pfMET',
+                 '#Delta#phi (Trkp_{T}^{miss} - p_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhiCalo_pfMET", 'h_reg_'+reg+'_dPhiCalo_pfMET',
+                 '#Delta#phi(Calop_{T}^{miss} - pfp_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil", 'h_reg_'+reg+'_Recoil',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightB_up", 'h_reg_'+reg+'_Recoil_weightB_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightB_down", 'h_reg_'+reg+'_Recoil_weightB_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightEWK_up", 'h_reg_'+reg+'_Recoil_weightEWK_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightEWK_down", 'h_reg_'+reg+'_Recoil_weightEWK_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightTop_up", 'h_reg_'+reg+'_Recoil_weightTop_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightTop_down", 'h_reg_'+reg+'_Recoil_weightTop_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightRecoil_up", 'h_reg_'+reg +
+                 '_Recoil_weightRecoil_up', 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightRecoil_down", 'h_reg_'+reg +
+                 '_Recoil_weightRecoil_down', 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightPU_up", 'h_reg_'+reg+'_Recoil_weightPU_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightPU_down", 'h_reg_'+reg+'_Recoil_weightPU_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightEle_up", 'h_reg_'+reg+'_Recoil_weightEle_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightEle_down", 'h_reg_'+reg+'_Recoil_weightEle_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightMu_up", 'h_reg_'+reg+'_Recoil_weightMu_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightMu_down", 'h_reg_'+reg+'_Recoil_weightMu_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightJEC_up", 'h_reg_'+reg+'_Recoil_weightJEC_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_weightJEC_down", 'h_reg_'+reg+'_Recoil_weightJEC_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_Res_up", 'h_reg_'+reg+'_Recoil_Res_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_Res_down", 'h_reg_'+reg+'_Recoil_Res_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_En_up", 'h_reg_'+reg+'_Recoil_En_up',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Recoil_En_down", 'h_reg_'+reg+'_Recoil_En_down',
+                 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_min_dPhi", 'h_reg_'+reg+'_min_dPhi',
+                 'min_dPhi', 0, 4, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Pt", 'h_reg_'+reg+'_Jet1Pt',
+                 'JET1 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_delta_pfCalo", 'h_reg_'+reg+'_delta_pfCalo',
+                 'PFp_{T}^{miss}-Calop_{T}^{miss}/Recoil', 0., 1.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Eta", 'h_reg_'+reg+'_Jet1Eta',
+                 'JET1 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_dPhi_lep1_MET", 'h_reg_'+reg+'_dPhi_lep1_MET',
+                 '#Delta(lepton1,p_{T}^{Miss})', 0, 5, rebin, 1, 0, reg, varBin=False)
+        if '2b' in reg and 'Z' in reg:
+            makeplot("reg_"+reg+"_dPhi_lep2_MET", 'h_reg_'+reg+'_dPhi_lep2_MET',
+                     '#Delta(lepton2,p_{T}^{Miss})', 0, 5, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1Phi", 'h_reg_'+reg+'_Jet1Phi',
+                 'JET1 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1deepCSV", 'h_reg_'+reg+'_Jet1deepCSV',
+                 'JET1 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NHadEF", 'h_reg_'+reg+'_Jet1NHadEF',
+                 'Jet1NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CHadEF", 'h_reg_'+reg+'_Jet1CHadEF',
+                 'Jet1CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CEmEF", 'h_reg_'+reg+'_Jet1CEmEF',
+                 'Jet1CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NEmEF", 'h_reg_'+reg+'_Jet1NEmEF',
+                 'Jet1NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1CMulti", 'h_reg_'+reg+'_Jet1CMulti',
+                 'Jet1CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_Jet1NMultiplicity", 'h_reg_'+reg+'_Jet1NMultiplicity',
+                 'Jet1NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_lep1_pT", 'h_reg_'+reg+'_lep1_pT',
+                 'lepton1 p_{T}', 0, 500, rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_nJets", 'h_reg_'+reg+'_nJets',
+                 'nJets', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NEle", 'h_reg_'+reg+'_NEle',
+                 'NEle', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NMu", 'h_reg_'+reg+'_NMu', 'NMu',
+                 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_nPho", 'h_reg_'+reg+'_nPho',
+                 'nPho', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_NTau", 'h_reg_'+reg+'_NTau',
+                 'NTau', 0., 10., rebin, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_nPV", 'h_reg_'+reg+'_nPV',
+                 'Before PU reweighting', 0., 70., 1, 0, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_PUnPV", 'h_reg_'+reg+'_PUnPV',
+                 'After PU reweighting', 0., 70., 1, 0, 0, reg, varBin=False)
+        if ('W' in reg) or ('Top' in reg):
+            makeplot("reg_"+reg+"_Wmass", 'h_reg_'+reg+'_Wmass',
+                     'W candidate mass (GeV)', 0., 165., rebin, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_WpT", 'h_reg_'+reg+'_WpT',
+                     'W candidate p_{T} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
+        if ('Z' in reg):
+            makeplot("reg_"+reg+"_Zmass", 'h_reg_'+reg+'_Zmass',
+                     'Z candidate mass (GeV)', 70., 110., 1, 0, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_ZpT", 'h_reg_'+reg+'_ZpT',
+                     'Z candidate p_{T} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_lep2_pT", 'h_reg_'+reg+'_lep2_pT',
+                     'lepton2 p_{T}', 0, 200, 2, 1, 0, reg, varBin=False)
+        if ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
             makeplot("reg_"+reg+"_Jet2Pt", 'h_reg_'+reg+'_Jet2Pt',
                      'JET2 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_Jet2Eta", 'h_reg_'+reg+'_Jet2Eta',
@@ -1095,198 +1334,28 @@ for reg in regions:
                      'Jet2CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_Jet2NMultiplicity", 'h_reg_'+reg+'_Jet2NMultiplicity',
                      'Jet2NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_nJets", 'h_reg_'+reg+'_nJets',
-                     'nJets', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NEle", 'h_reg_'+reg+'_NEle',
-                     'NEle', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NMu", 'h_reg_'+reg+'_NMu', 'NMu',
-                     0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_nPho", 'h_reg_'+reg+'_nPho',
-                     'nPho', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NTau", 'h_reg_'+reg+'_NTau',
-                     'NTau', 0., 10., rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_ratioPtJet21", 'h_reg_'+reg+'_ratioPtJet21',
                      'JET2 p_{T}/JET1 p_{T} ', 0., 1.0, rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_dPhiJet12", 'h_reg_'+reg+'_dPhiJet12',
                      'JET1#eta - JET2#eta', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
             makeplot("reg_"+reg+"_dEtaJet12", 'h_reg_'+reg+'_dEtaJet12',
                      'JET1#phi - JET2#phi', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
-            if ('SR_1b' in reg):
-                makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET2#eta', 0, 1, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
-                         'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
-            elif ('SR_2b' in reg):
-                makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
-                         'Inv Mass(Jet1, Jet3)', 0, 2000, 10, 1, 0, reg, varBin=False)
-            elif ('preselR' in reg):
-                makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
-                         'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
-                         'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',
-                     'Jet1 p_{T}/MET', 0, 20, 5, 1, 0, reg, varBin=False)
-        else:
-            makeplot("reg_"+reg+"_cutFlow", 'h_reg_'+reg+'_cutFlow',
-                     'CutFlow', 0, 11, 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_MET", 'h_reg_'+reg+'_MET',
-                     'Real p_{T}^{miss} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_dPhiTrk_pfMET", 'h_reg_'+reg+'_dPhiTrk_pfMET',
-                     '#Delta#phi (Trkp_{T}^{miss} - p_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_dPhiCalo_pfMET", 'h_reg_'+reg+'_dPhiCalo_pfMET',
-                     '#Delta#phi(Calop_{T}^{miss} - pfp_{T}^{miss})', -3.2, 3.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil", 'h_reg_'+reg+'_Recoil',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightB_up", 'h_reg_'+reg+'_Recoil_weightB_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightB_down", 'h_reg_'+reg+'_Recoil_weightB_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEWK_up", 'h_reg_'+reg+'_Recoil_weightEWK_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEWK_down", 'h_reg_'+reg+'_Recoil_weightEWK_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightTop_up", 'h_reg_'+reg+'_Recoil_weightTop_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightTop_down", 'h_reg_'+reg+'_Recoil_weightTop_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightRecoil_up", 'h_reg_'+reg +
-                     '_Recoil_weightRecoil_up', 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightRecoil_down", 'h_reg_'+reg +
-                     '_Recoil_weightRecoil_down', 'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightPU_up", 'h_reg_'+reg+'_Recoil_weightPU_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightPU_down", 'h_reg_'+reg+'_Recoil_weightPU_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEle_up", 'h_reg_'+reg+'_Recoil_weightEle_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightEle_down", 'h_reg_'+reg+'_Recoil_weightEle_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightMu_up", 'h_reg_'+reg+'_Recoil_weightMu_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightMu_down", 'h_reg_'+reg+'_Recoil_weightMu_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightJEC_up", 'h_reg_'+reg+'_Recoil_weightJEC_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_weightJEC_down", 'h_reg_'+reg+'_Recoil_weightJEC_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_Res_up", 'h_reg_'+reg+'_Recoil_Res_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_Res_down", 'h_reg_'+reg+'_Recoil_Res_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_En_up", 'h_reg_'+reg+'_Recoil_En_up',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Recoil_En_down", 'h_reg_'+reg+'_Recoil_En_down',
-                     'Recoil (GeV)', 200., 1000., 1, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_min_dPhi", 'h_reg_'+reg+'_min_dPhi',
-                     'min_dPhi', 0, 4, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Pt", 'h_reg_'+reg+'_Jet1Pt',
-                     'JET1 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_delta_pfCalo", 'h_reg_'+reg+'_delta_pfCalo',
-                     'PFp_{T}^{miss}-Calop_{T}^{miss}/Recoil', 0., 1.5, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Eta", 'h_reg_'+reg+'_Jet1Eta',
-                     'JET1 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_dPhi_lep1_MET", 'h_reg_'+reg+'_dPhi_lep1_MET',
-                     '#Delta(lepton1,p_{T}^{Miss})', 0, 5, rebin, 1, 0, reg, varBin=False)
-            if '2b' in reg and 'Z' in reg:
-                makeplot("reg_"+reg+"_dPhi_lep2_MET", 'h_reg_'+reg+'_dPhi_lep2_MET',
-                         '#Delta(lepton2,p_{T}^{Miss})', 0, 5, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1Phi", 'h_reg_'+reg+'_Jet1Phi',
-                     'JET1 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1deepCSV", 'h_reg_'+reg+'_Jet1deepCSV',
-                     'JET1 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NHadEF", 'h_reg_'+reg+'_Jet1NHadEF',
-                     'Jet1NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CHadEF", 'h_reg_'+reg+'_Jet1CHadEF',
-                     'Jet1CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CEmEF", 'h_reg_'+reg+'_Jet1CEmEF',
-                     'Jet1CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NEmEF", 'h_reg_'+reg+'_Jet1NEmEF',
-                     'Jet1NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1CMulti", 'h_reg_'+reg+'_Jet1CMulti',
-                     'Jet1CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_Jet1NMultiplicity", 'h_reg_'+reg+'_Jet1NMultiplicity',
-                     'Jet1NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_lep1_pT", 'h_reg_'+reg+'_lep1_pT',
-                     'lepton1 p_{T}', 0, 500, rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_nJets", 'h_reg_'+reg+'_nJets',
-                     'nJets', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NEle", 'h_reg_'+reg+'_NEle',
-                     'NEle', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NMu", 'h_reg_'+reg+'_NMu', 'NMu',
-                     0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_nPho", 'h_reg_'+reg+'_nPho',
-                     'nPho', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_NTau", 'h_reg_'+reg+'_NTau',
-                     'NTau', 0., 10., rebin, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_nPV", 'h_reg_'+reg+'_nPV',
-                     'Before PU reweighting', 0., 70., 1, 0, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_PUnPV", 'h_reg_'+reg+'_PUnPV',
-                     'After PU reweighting', 0., 70., 1, 0, 0, reg, varBin=False)
-            if ('W' in reg) or ('Top' in reg):
-                makeplot("reg_"+reg+"_Wmass", 'h_reg_'+reg+'_Wmass',
-                         'W candidate mass (GeV)', 0., 165., rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_WpT", 'h_reg_'+reg+'_WpT',
-                         'W candidate p_{T} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
-            if ('Z' in reg):
-                makeplot("reg_"+reg+"_Zmass", 'h_reg_'+reg+'_Zmass',
-                         'Z candidate mass (GeV)', 70., 110., 1, 0, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_ZpT", 'h_reg_'+reg+'_ZpT',
-                         'Z candidate p_{T} (GeV)', 0., 700., rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_lep2_pT", 'h_reg_'+reg+'_lep2_pT',
-                         'lepton2 p_{T}', 0, 200, rebin, 1, 0, reg, varBin=False)
-            if ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
-                makeplot("reg_"+reg+"_Jet2Pt", 'h_reg_'+reg+'_Jet2Pt',
-                         'JET2 p_{T} (GeV)', 30., 800., rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2Eta", 'h_reg_'+reg+'_Jet2Eta',
-                         'JET2 #eta', -2.5, 2.5, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2Phi", 'h_reg_'+reg+'_Jet2Phi',
-                         'JET2 #phi', -3.14, 3.14, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2deepCSV", 'h_reg_'+reg+'_Jet2deepCSV',
-                         'JET2 deepCSV', 0, 1.2, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2NHadEF", 'h_reg_'+reg+'_Jet2NHadEF',
-                         'Jet2NHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2CHadEF", 'h_reg_'+reg+'_Jet2CHadEF',
-                         'Jet2CHadEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2CEmEF", 'h_reg_'+reg+'_Jet2CEmEF',
-                         'Jet2CEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2NEmEF", 'h_reg_'+reg+'_Jet2NEmEF',
-                         'Jet2NEmEF', 0, 1.1, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2CMulti", 'h_reg_'+reg+'_Jet2CMulti',
-                         'Jet2CMulti', 0, 50, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_Jet2NMultiplicity", 'h_reg_'+reg+'_Jet2NMultiplicity',
-                         'Jet2NMultiplicity', 0, 50, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_ratioPtJet21", 'h_reg_'+reg+'_ratioPtJet21',
-                         'JET2 p_{T}/JET1 p_{T} ', 0., 1.0, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_dPhiJet12", 'h_reg_'+reg+'_dPhiJet12',
-                         'JET1#eta - JET2#eta', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_dEtaJet12", 'h_reg_'+reg+'_dEtaJet12',
-                         'JET1#phi - JET2#phi', -7.5, 7.5, rebin, 1, 0, reg, varBin=False)
-            if ('1b' in reg) and ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
-                makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
-                         'Inv Mass(Jet1, Jet2)', 0, 2000, rebin, 1, 0, reg, varBin=False)
-            elif ('WmunuCR_2b' in reg or 'WenuCR_2b' in reg):
-                makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
-                         'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
-                         'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
-            elif ('2b' in reg):
-                makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
-                         'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
-                makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
-                         'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
-            makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',
-                     'Jet1 p_{T}/MET', 0, 10, 1, 1, 0, reg, varBin=False)
-    # except Exception as e:
-    #     print(e)
-    #     print("Cannot Plot")
-    #     pass
+        if ('1b' in reg) and ('WmunuCR_1b' not in reg) and ('WenuCR_1b' not in reg):
+            makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
+                     'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
+                     'Inv Mass(Jet1, Jet2)', 0, 2000, rebin, 1, 0, reg, varBin=False)
+        elif ('WmunuCR_2b' in reg or 'WenuCR_2b' in reg):
+            makeplot("reg_"+reg+"_isjet1EtaMatch", 'h_reg_'+reg+'_isjet1EtaMatch',
+                     'JET1#eta X JET2#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet2", 'h_reg_'+reg+'_M_Jet1Jet2',
+                     'Inv Mass(Jet1, Jet2)', 0, 2000, 5, 1, 0, reg, varBin=False)
+        elif ('2b' in reg):
+            makeplot("reg_"+reg+"_isjet2EtaMatch", 'h_reg_'+reg+'_isjet2EtaMatch',
+                     'JET1#eta X JET3#eta', -1, 1, 1, 1, 0, reg, varBin=False)
+            makeplot("reg_"+reg+"_M_Jet1Jet3", 'h_reg_'+reg+'_M_Jet1Jet3',
+                     'Inv Mass(Jet1, Jet3)', 0, 2000, 5, 1, 0, reg, varBin=False)
+        makeplot("reg_"+reg+"_rJet1PtMET", 'h_reg_'+reg+'_rJet1PtMET',
+                 'Jet1 p_{T}/MET', 0, 10, 1, 1, 0, reg, varBin=False)
 yield_outfile.close()
 yield_outfile_binwise.close()

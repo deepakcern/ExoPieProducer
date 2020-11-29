@@ -142,6 +142,7 @@ def CustomiseHistogram(h, titleX, titleY, color, lineStyle,title):
     h.GetYaxis().SetTitle(titleY)
     h.GetYaxis().SetTitleSize(0.06)
     h.GetYaxis().SetLabelSize(0.055)
+    # h.SetMinimum(1)
     h.SetTitle(title)
     return
 
@@ -176,8 +177,10 @@ ROOT.gStyle.SetOptTitle(0)
 ROOT.gStyle.SetOptStat(0)
 ROOT.gROOT.SetBatch(True)
 #ROOT.gStyle.SetGridStyle(2)
-uncertfile=open("uncert.txt","w")
-CRSRPath = '/Users/ptiwari/cernBox/Documents/ExoPieCapper/plots_norm/analysis_plots_v18_06-04-00-HemAtSkim/bbDMRoot'
+uncertfile = open("uncert_v17_07_04_00.txt", "w")
+uncertfile_binwise = open("uncert_binwise_v17_07_04_00.py", "w")
+uncertfile_binwise.write("syst_dict = {")
+CRSRPath = '/Users/ptiwari/cernBox/Documents/ExoPieCapper/plots_norm/v17_07_04_00/bbDMRoot'
 for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weightMu','weightPU','weightJEC','Res','En']:
     for reg in ['SR_1b','SR_2b','ZmumuCR_1b','ZmumuCR_2b','TopmunuCR_1b','TopmunuCR_2b','WmunuCR_1b','WmunuCR_2b','ZeeCR_1b','ZeeCR_2b','TopenuCR_1b','TopenuCR_2b','WenuCR_1b','WenuCR_2b']:
         if 'SR' in reg:
@@ -205,15 +208,15 @@ for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weigh
         titleY = "#Events"
         # Set Canvas
         c1 = myCanvas1D()
-        c1_1 =  ROOT.TPad("c1_1","newpad",0,0.20,1,1);
-        c1_1.SetBottomMargin(0.0);
-        c1_1.SetTopMargin(0.08);
-        c1_1.SetLeftMargin(0.12);
-        c1_1.SetRightMargin(0.06);
-        c1_1.SetLogy(1);
+        c1_1 =  ROOT.TPad("c1_1","newpad",0,0.30,1,1)
+        c1_1.SetBottomMargin(0.0)
+        c1_1.SetTopMargin(0.08)
+        c1_1.SetLeftMargin(0.12)
+        c1_1.SetRightMargin(0.06)
+        c1_1.SetLogy(1)
         c1_1.SetGrid(1)
-        c1_1.Draw();
-        c1_1.cd();
+        c1_1.Draw()
+        c1_1.cd()
         exec("CustomiseHistogram("+jetprop+"_syst_"+reg+"_"+miss_En+"_up, titleX, titleY, colors['up'], 1,'Up')")
         exec("CustomiseHistogram("+jetprop+"_syst_"+reg+"_"+miss_En+"_down, titleX, titleY, colors['down'], 1,'Down')")
         exec("CustomiseHistogram("+jetprop+"_syst_"+reg+"_"+miss_En+"_central, titleX, titleY, colors['central'], 1,'Central')")
@@ -224,10 +227,26 @@ for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weigh
 
         uncertfile.write(jetprop+"_syst_"+reg+"_"+miss_En+": ")
         uncertfile.write(str((max(abs(upUnc-centralUnc),abs(centralUnc-downUnc))/centralUnc)*100)+"\n")
-
-        # exec(jetprop+"_syst_"+reg+"_"+miss_En+"_up.Rebin(1)")
-        # exec(jetprop+"_syst_"+reg+"_"+miss_En+"_down.Rebin(1)")
-        # exec(jetprop+"_syst_"+reg+"_"+miss_En+"_central.Rebin(1)")
+        # uncertfile_binwise.write("\'"+jetprop+"_syst_"+reg+"_"+miss_En+"_UP\':[")
+        # for i in [1,2,3,4]:
+        #     exec("upUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_up.GetBinContent("+str(i)+")")
+        #     exec("downUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_down.GetBinContent("+str(i)+")")
+        #     exec("centralUnc = "+jetprop+"_syst_" +reg+"_"+miss_En+"_central.GetBinContent("+str(i)+")")
+        #     uncertfile_binwise.write(str((abs(upUnc-centralUnc)/centralUnc)*100)+",")
+        # uncertfile_binwise.write(']\n')
+        # uncertfile_binwise.write("\'"+jetprop+"_syst_"+reg+"_"+miss_En+"_DOWN\':[")
+        # for i in [1,2,3,4]:
+        #     exec("upUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_up.GetBinContent("+str(i)+")")
+        #     exec("downUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_down.GetBinContent("+str(i)+")")
+        #     exec("centralUnc = "+jetprop+"_syst_" +reg+"_"+miss_En+"_central.GetBinContent("+str(i)+")")
+        #     uncertfile_binwise.write(str((abs(centralUnc-downUnc)/centralUnc)*100)+",")
+        uncertfile_binwise.write("\'"+jetprop+"_syst_"+reg+"_"+miss_En+"\':[")
+        for i in [1,2,3,4]:
+            exec("upUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_up.GetBinContent("+str(i)+")")
+            exec("downUnc = "+jetprop+"_syst_"+reg+"_"+miss_En+"_down.GetBinContent("+str(i)+")")
+            exec("centralUnc = "+jetprop+"_syst_" +reg+"_"+miss_En+"_central.GetBinContent("+str(i)+")")
+            uncertfile_binwise.write(str((max(abs(upUnc-centralUnc), abs(centralUnc-downUnc))/centralUnc)*1)+",")
+        uncertfile_binwise.write('],\n')
 
         exec(jetprop+"_syst_"+reg+"_"+miss_En+"_up.Draw()")
         exec(jetprop+"_syst_"+reg+"_"+miss_En+"_down.Draw('same')")
@@ -241,11 +260,11 @@ for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weigh
 
         #texcms.Draw("same")
         #texCat.Draw("same")
-        latex1 = ROOT.TLatex();
-        latex1.SetNDC();
-        latex1.SetTextSize(0.06);
-        latex1.SetTextAlign(31);
-        latex1.SetTextAlign(11);
+        latex1 = ROOT.TLatex()
+        latex1.SetNDC()
+        latex1.SetTextSize(0.06)
+        latex1.SetTextAlign(31)
+        latex1.SetTextAlign(11)
         latex1.DrawLatex(0.30, .80, jetprop+'_'+reg)
         
         pt = drawenergy1D(True, text_="Internal", data=True)
@@ -269,17 +288,17 @@ for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weigh
         c1_2 = ROOT.TPad("c1_2", "newpad",0,0.00,1,0.3)
         c1_2.Draw()
         c1_2.cd()
-        #c1_2.Range(-7.862408,-629.6193,53.07125,486.5489);
-        c1_2.SetFillColor(0);
-        c1_2.SetLeftMargin(0.12);
-        c1_2.SetRightMargin(0.06);
-        c1_2.SetTopMargin(0.00);
-        c1_2.SetBottomMargin(0.42);
-        c1_2.SetFrameFillStyle(0);
-        c1_2.SetFrameBorderMode(0);
-        c1_2.SetFrameFillStyle(0);
-        c1_2.SetFrameBorderMode(0);
-        c1_2.SetLogy(0);
+        #c1_2.Range(-7.862408,-629.6193,53.07125,486.5489)
+        c1_2.SetFillColor(0)
+        c1_2.SetLeftMargin(0.12)
+        c1_2.SetRightMargin(0.06)
+        c1_2.SetTopMargin(0.0)
+        c1_2.SetBottomMargin(0.42)
+        c1_2.SetFrameFillStyle(0)
+        c1_2.SetFrameBorderMode(0)
+        c1_2.SetFrameFillStyle(0)
+        c1_2.SetFrameBorderMode(0)
+        c1_2.SetLogy(0)
         exec("CustomiseRatio(ratioUp,ratioDown,ratioCentral, titleX)")
         c1_2.SetGrid(1)
         c1_2.Update()
@@ -296,3 +315,4 @@ for jetprop in ['weightB','weightEWK','weightTop','weightMET','weightEle','weigh
         exec("central_"+reg+"_"+jetprop+"_file.Close()")
         exec("systematics_"+reg+"_"+miss_En+"_"+jetprop+"_up_file.Close()")
         exec("systematics_"+reg+"_"+miss_En+"_"+jetprop+"_down_file.Close()")
+uncertfile_binwise.write('}')
