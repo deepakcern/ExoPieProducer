@@ -62,7 +62,6 @@ else:
 
 
 year_file = open("Year.py", "w")
-samp_file = open("SampleName.py", "w")
 
 ######################################################################################################
 ## All import are done before this
@@ -134,24 +133,8 @@ if args.outputdir:
 def TextToList(textfile):
     return([iline.rstrip() for iline in open(textfile)])
 
-## for individual file for all
-## samp_file.write('samp_name = \"'+infile.strip('crab_').split('13TeV')[0]+'\"')
-if 'ZJetsToNuNu' :
-    samp_file.write('samp_name = \"ZJetsToNuNu_HT\"')
-elif 'WJetsToLNu':
-    samp_file.write('samp_name = \"WJetsToLNu_HT\"')
-elif 'TTTo' in infile:
-    samp_file.write('samp_name = \"TTbar\"')
-elif 'DYJetsToLL_M-50_HT' in infile: 
-    samp_file.write('samp_name = \"DYJetsToLL_M-50_HT\"')
-else:
-    samp_file.write('samp_name = \"bTagEffs_2016\"')
-
-samp_file.close()
-
 import ana_weight as wgt
 from Year import era
-from SampleName import samp_name
 
 def getJECWeight(ep_THINjetCorrUnc):
     JECWeight_up = 1.0
