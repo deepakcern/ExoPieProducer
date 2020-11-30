@@ -34,9 +34,9 @@ Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -y 2017 -F -i pathOfInputTxtFile
 ```
-txt files you can find here:
+txt files you can find filelists (`Filelists_v07.04_noJER_updatedFilter_v2_2017`) here:
 
-`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_v07.04_noJER_updatedFilter_v2/`
+`https://github.com/deepakcern/ExoPieFileList/tree/master/ExoPieSlimmerFiles`
 
 Important files to understand code:
 
