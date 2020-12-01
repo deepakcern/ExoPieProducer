@@ -30,6 +30,8 @@ df_out_SR_boosted = DataFrame(columns=['run', 'lumi', 'event', 'pu_nTrueInt','TH
                                        'Njets_PassID', 'Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho','st_TopMatching',
                                        'FJetPt', 'FJetEta', 'FJetPhi', 'FJetCSV', 'N2DDT','fjetTau21','Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet2Pt','Jet2Eta', 'Jet2Phi','isAK4jet1EtaMatch','isAK4jet2EtaMatch','M_Jet1AK8Jet','M_Jet2AK8Jet','Jet1CSV','Jet2CSV',
                                        'FJetMass', 'DiJetPt', 'DiJetEta','nJets','min_dPhi','met_Phi','FJetN2b1','FJetN2b2','FJetrho','min_dphi_jets',
+                                       'isak4JetBasedHemEvent', 'isak8JetBasedHemEvent',
+                                       'ismetphiBasedHemEvent1', 'ismetphiBasedHemEvent2',
                                        'weight','puweight','puweight_up','puweight_down','lepweight','lepweight_up','lepweight_down',
                                        'METweight','METweight_up','METweight_down','METRes_up','METRes_down','METEn_up','METEn_down',
                                        'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down'])

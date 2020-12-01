@@ -18,11 +18,11 @@ export SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_3_0
 cd CMSSW_10_3_0/src
 cmsenv
-git clone https://github.com/deepakcern/ExoPieUtils.git
+git clone https://github.com/ExoPie/ExoPieUtils.git
 cd ExoPieUtils
 git checkout test_systematics
 cd -
-git clone https://github.com/deepakcern/ExoPieProducer.git
+git clone https://github.com/ExoPie/ExoPieProducer.git
 cd ExoPieProducer
 git checkout monohbb
 cd -
@@ -34,76 +34,92 @@ Note: change ```isCondor = False```  inside `monoHbbAnalyzer.py`
 cd ExoPieProducer/ExoPieAnalyzer
 python monoHbbAnalyzer.py -y 2017 -F -i pathOfInputTxtFile
 ```
-txt files you can find here:
+txt files you can find filelists (`Filelists_v07.04_noJER_updatedFilter_v2_2017`) here:
 
-`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New`
+`https://github.com/deepakcern/ExoPieFileList/tree/master/ExoPieSlimmerFiles`
 
-merged files are here: `/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/skimmedFiles/Filelists_New_merged`
+Important files to understand code:
+
+1- `monoHbbAnalyzer.py` main file
+
+2- `configs/eventSelector.py` event selection file
+
+3- `configs/cutFlow.py` for cutflow
+
+4-  scalefactors and other important functions are taken from ExopieUtils repo
+
 
 ### Submit Condor Jobs
 Note: change ```isCondor = True```
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-git clone git@github.com:deepakcern/CondorJobs.git
+git clone https://github.com/deepakcern/CondorJobs.git
 cd CondorJobs
-. submitjobs_step2.sh
-```
-Note: Open `MultiSubmit_step2.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
-Fielists directory is already there you can use root files for now. Fielists will be updated soon for 2017/18
-
-please change output path in the file ```runAnalysis_step2.sh```
-
-#### For condor jobs on lxplus:
-if you want to submit condor jobs on lxplus, please update three files ``` submit_multi_step2.sub``` , ```MultiSubmit_step2.py``` and ```runAnalysis_step2.sh```
-
-remove `use_x509userproxy = true` and add following lines in ```submit_multi_step2.sub```
-```
-Proxy_filename = x509up
-Proxy_path = /afs/cern.ch/user/d/dekumar/private/$(Proxy_filename)
-request_cpus = 4
-+JobFlavour = "nextweek"
+mv AnalysisJobs/* .
+. submitjobs.sh
 ```
 
-And to get proxy file, open ```.bashrc``` file and add:
+Note: Open `MultiSubmit.py` and provide directory of Filelists name where all txt files of sample are saved. Make a directory and copy all txt files.
+Fielists directory with txt files is already there.
+
+please change output path in the file ```runAnalysis.sh``` before submitting condor jobs
+
+To get proxy file, open ```.bashrc``` file and add:
 ```
 alias voms='voms-proxy-init --voms cms --valid 192:00 && cp -v /tmp/x509up_u104803 /afs/cern.ch/user/d/dekumar/private/x509up'
 ```
 change username. 
 
+Once all jobs are done then merge output files to get single file per sample. You can use this shell script to merge the files.
+`/eos/cms/store/group/phys_exotica/monoHiggs/monoHbb/2017_AnalyserOutput/mergeFiles_2017.sh` 
 
-open `MultiSubmit_step2.py` file add this string `$(Proxy_path) ` at last in line 19 for 5th arguments.
-update line 19 with `submittemp.write("arguments = "+txtfile.split('/')[-1]+" "+dummy+" "+dummy+"  "+txtfile.split('/')[-1].replace('.txt','.root')+"    "+'$(Proxy_path)'+'\nqueue')`
-
-
-Now add following line in `runAnalysis_step2.sh`
-```
-export X509_USER_PROXY=$5
-voms-proxy-info -all
-voms-proxy-info -all -file $5
-```
 ### Writting Histograms from Trees
 
+#### For boosted category
 ```
 cd ExoPieProducer/ExoPieAnalyzer
-python DataFrameToHisto.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
+python DataFrameToHisto_B_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
-combined data files into single file
+#### For resolved category
 ```
-cd OutputDirectory
-hadd combined_data_SE.root SingleElectron-Run2017*.root
-hadd combined_data_MET.root MET-Run2017*.root
+cd ExoPieProducer/ExoPieAnalyzer
+python DataFrameToHisto_R_syst.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
 ```
+
+#### For signale samples
+```
+cd ExoPieProducer/ExoPieAnalyzer
+python DataFrameToHisto_signal.py -F -inDir pathOfAnalyserRootFilesOutput -D OutputDirectory
+```
+
+
 ### Making Control region plots
 
 ```
-cd ExoPieProducer/ExoPieAnalyzer
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/StackPlotter_2017_syst.py
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/sample_xsec_2017.py
-wget https://raw.githubusercontent.com/deepakcern/ExoAnalysis/master/monoH/plottingTools/samplelist_2017.txt
+cd ExoPieProducer/ExoPieCapper/
 
-python StackPlotter_2017_syst.py -c B -d MET -m [muon region plots for boosted analysis]
-python StackPlotter_2017_syst.py -c B -d MET -s [signal region]
-python StackPlotter_2017_syst.py -c B -d SE -e [electron region]
+python StackPlotter_2017_syst.py -c B -d MET -s [muon region plots for boosted analysis, use R for resolved category]
+python StackPlotter_2017_syst.py -c B -d MET -b [signal region]
+python StackPlotter_2017_syst.py -c B -d MET -m [electron region]
+python StackPlotter_2017_syst.py -c B -d MET -m [electron region]
 ```
-change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file
+change path of inputroot file inside ``` StackPlotter_2017_syst.py ``` file. Give path of DataFrameToHisto_B_syst.py or DataFrameToHisto_R_syst.py output root files
 
+### Making of AllMETHistos.root file [input file of limit model]
+
+```
+cd ExoPieProducer/ExoPieDecorator
+python monoH_combinedroot_v2.py 
+```
+give 3 paths inside the file:
+
+1-path of stack plotter output root files for boosted category
+
+2-path of stact plotter output root files for resolved ctegory
+
+3-output of DataframeTohist_Signal.py for signal sample
+
+Now run the command:
+```
+python monoH_combinedroot_v2.py
+```

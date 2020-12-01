@@ -14,7 +14,7 @@ import time
 import glob
 
 
-## ----- start of clock                                                                                                                                                                                    
+## ----- start of clock
 start = time.clock()
 
 
@@ -63,32 +63,29 @@ def SetHist(HISTNAME,binning):
 
 
 def VarToHist(df,df_var,df_weight,df_weight_den,df_weight_num,HISTNAME,binning,boost=False):#(df,df_var,df_weight, HISTNAME,binning,boost=False):
-    
+
     #df_var    = df[varname]
     #df_weight = df["weight"]
 
     h_var  = SetHist(HISTNAME, binning)
     weight=1.0
-    if boost:print "filling hist for boosted"
+    if not boost:
+	df["FJetPt"]=1.0#
+	print "filling hist for boosted"
     else:print "filling hist for resolved"
 
-    for ij in df_var.index:
-        value = df_var[ij]
-        weight= df_weight[ij]
-        #dbweight = df["dbweight"][ij]
-        #btagweight = df["btagweight"][ij]
-        #fjetpT = df["FJetPt"][ij]
-        #print ("fjetpT",fjetpT)
+    scale=1.0
+    for value,weight,numerator,denominator,fjetpT in zip(df_var,df_weight,df_weight_num,df_weight_den,df["FJetPt"]):
+        #value = df_var[ij]
+        #weight= df_weight[ij]
 
-        numerator   = df_weight_num[ij]
-        denominator = df_weight_den[ij]
-        scale       = numerator/denominator
-
-        if weight==0.0:scale=1.0
+        #numerator   = df_weight_num[ij]
+        #denominator = df_weight_den[ij]
+        if denominator!=0:scale       = numerator/denominator
 
 
         if boost:
-            fjetpT = df["FJetPt"][ij]
+            #fjetpT = df["FJetPt"][ij]
 	    #print "filling hist for boosted"
             if fjetpT < 350 and boost:
                 h_var.Fill(value, weight*0.82*scale)
@@ -115,11 +112,12 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
     '''
     FjetBins = getBinRange(15,200,1000)
     leppTbins = getBinRange(15,30,500)
-    fjSDBins  = getBinRange(15,100,150) 
+    fjSDBins  = getBinRange(15,100,150)
     '''
-    if 'SBand' in reg or 'SR' in reg: 
-	h_list.append(VarToHist(df,df["MET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_MET_"+cat,[200,270,345,480,1000],boost))
-
+    if 'SBand' in reg or 'SR' in reg:
+        h_list.append(VarToHist(df,df["MET"], df["weight"],df["weight"],df["weight"], "h_reg_"+reg+"_MET_"+cat,[200,270,345,480,1000],boost))
+        if boost:h_list.append(VarToHist(df,df["FJetN2b1"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_FJetN2b1_"+cat,[40,-0.5,0.5]))
+        if boost:h_list.append(VarToHist(df,df["N2DDT"], df["weight"],df["weight"],df["weight"],"h_reg_"+reg+"_N2DDT_"+cat,[40,-0.5,0.5]))
         #B-TAG SYSTEMATICS
         h_list.append(VarToHist(df,df["MET"], df["weight"],df["btagweight"],df["btagweight_up"],"h_reg_"+reg+"_MET_btagweight_up_"+cat,[200,270,345,480,1000],boost))
         h_list.append(VarToHist(df,df["MET"], df["weight"],df["btagweight"],df["btagweight_down"],"h_reg_"+reg+"_MET_btagweight_down_"+cat,[200,270,345,480,1000],boost))
@@ -166,7 +164,7 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
 	h_list.append(VarToHist(df,df["MET"], df["weight"], "h_reg_"+reg+"_MET",[200,270,345,480,1000]))
 	h_list.append(VarToHist(df,df["RECOIL"], df["weight"], "h_reg_"+reg+"_Recoil",[200,270,345,480,1000]))
         h_list.append(VarToHist(df,df["FJetPt"], df["weight"], "h_reg_"+reg+"_FJetPt",[15,200,1000]))
-        h_list.append(VarToHist(df,df["FJetMass"], df["weight"],"h_reg_"+reg+"_FJetMass",[15,100,150]))#FJetMass        
+        h_list.append(VarToHist(df,df["FJetMass"], df["weight"],"h_reg_"+reg+"_FJetMass",[15,100,150]))#FJetMass
         h_list.append(VarToHist(df,df["FJetEta"], df["weight"], "h_reg_"+reg+"_FJetEta",[30,-2.5,2.5]))
         h_list.append(VarToHist(df,df["FJetPhi"], df["weight"], "h_reg_"+reg+"_FJetPhi",[30,-3.14,3.14]))
         h_list.append(VarToHist(df,df["FJetCSV"], df["weight"], "h_reg_"+reg+"_FJetCSV",[30,0,1]))
@@ -177,10 +175,10 @@ def HistWrtter(df, outfilename, treeName,mode="UPDATE"):
         h_list.append(VarToHist(df,df["min_dPhi"],   df["weight"], "h_reg_"+reg+"_min_dPhi",[50,0,4]))#mini_dPhi)
         h_list.append(VarToHist(df,df["lep1_pT"], df["weight"], "h_reg_"+reg+"_lep1_pT",[15,30,500]))
         h_list.append(VarToHist(df,df["lep1_eta"], df["weight"], "h_reg_"+reg+"_lep1_eta",[30,-2.5,2.5]))
-        h_list.append(VarToHist(df,df["lep1_Phi"], df["weight"], "h_reg_"+reg+"_lep1_Phi",[30,-3.14,3.14]))       
+        h_list.append(VarToHist(df,df["lep1_Phi"], df["weight"], "h_reg_"+reg+"_lep1_Phi",[30,-3.14,3.14]))
         if 'Zmumu' in reg or 'Zee' in reg:
 	    h_list.append(VarToHist(df,df["Zmass"], df["weight"],"h_reg_"+reg+"_Zmass",[15,60,120]))
-	    h_list.append(VarToHist(df,df["ZpT"], df["weight"], "h_reg_"+reg+"_ZpT",[15,0,700])) 
+	    h_list.append(VarToHist(df,df["ZpT"], df["weight"], "h_reg_"+reg+"_ZpT",[15,0,700]))
             h_list.append(VarToHist(df,df["lep2_pT"], df["weight"], "h_reg_"+reg+"_lep2_pT",[15,30,500]))
             h_list.append(VarToHist(df,df["lep2_eta"], df["weight"], "h_reg_"+reg+"_lep2_eta",[30,-2.5,2.5]))
             h_list.append(VarToHist(df,df["lep2_Phi"], df["weight"], "h_reg_"+reg+"_lep2_Phi",[30,-3.14,3.14]))
@@ -200,7 +198,9 @@ def emptyHistWritter(treeName,outfilename,mode="UPDATE"):
     fjSDBins  = getBinRange(15,100,150)
     '''
     if 'SBand' in reg or 'SR' in reg:
-        h_list.append(SetHist("h_reg_"+reg+"_MET_"+cat,[200,270,345,480,1000]))#200,270,345,480,1000 # [50,0,700]
+        h_list.append(SetHist("h_reg_"+reg+"_MET_"+cat,[200,270,345,480,1000]))#200,270,345,480,1000 # [50,0,700]  FJetN2b1
+        if boost:h_list.append(SetHist("h_reg_"+reg+"_FJetN2b1_"+cat,[40,-0.5,0.5]))
+        if boost:h_list.append(SetHist("h_reg_"+reg+"_N2DDT_"+cat,[40,-0.5,0.5]))
         '''
         h_list.append(SetHist("h_reg_"+reg+"_FJetPt",[50,200,1000]))
         h_list.append(SetHist("h_reg_"+reg+"_FJetMass",[35,30,350]))#FJetMass
@@ -280,6 +280,8 @@ trees =[ 'monoHbb_SR_boosted','monoHbb_SR_resolved']
 #inputFilename=infile
 filename=infile
 
+ApplyN2DDT = False
+
 def runFile(filename,trees):
     tf =  ROOT.TFile(filename)
     h_total = tf.Get('h_total')
@@ -288,19 +290,27 @@ def runFile(filename,trees):
     for index, tree in enumerate(trees):
         tt = tf.Get(tree)
         nent = tt.GetEntries()
-        
+
         if index==0: mode="RECREATE"
         if index>0: mode="UPDATE"
 
         if nent > 0:
             df = read_root(filename,tree)
+	    #df = read_root(filename,tree)
+            #df = df[df.isak4JetBasedHemEvent==0]
+            #df = df[df.isak8JetBasedHemEvent==0]
+            #df = df[df.ismetphiBasedHemEvent1==0]
             #df = df[df.nJets <=2 ]
             if 'resolved' in tree:
                 df = df[df.Jet1Pt > 50.0]
                 print 'applying jet1 pT for tree', tree
+	    #if 'boosted' in tree and ApplyN2DDT:
+	#	df = df[df.N2DDT < 0]
+	#	df = df[df.N2DDT > -1]
+	#	print 'applying N2DDT cut for tree', tree
             HistWrtter(df, outfilename,tree,mode)
         else:
-            print 'writing empty histograms for tree : ',tree
+            #print 'writing empty histograms for tree : ',tree
             emptyHistWritter(tree,outfilename,mode)
 
     f = TFile(outfilename, "UPDATE")
