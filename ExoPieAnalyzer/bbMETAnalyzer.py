@@ -20,6 +20,7 @@ import glob
 from multiprocessing import Process
 import multiprocessing as mp
 
+dummyArr = np.array([0.0], dtype=np.float64)
 
 isCondor = True
 
@@ -2862,6 +2863,11 @@ def runbbdm(txtfile):
                 print('is2bCRTopmunu')
 
     outfilenameis = outfilename
+    for df in [df_out_preselR, df_out_SR_1b, df_out_SR_2b, df_out_ZeeCR_1b, df_out_ZeeCR_2b, df_out_ZmumuCR_1b, df_out_ZmumuCR_2b, df_out_WenuCR_1b, df_out_WenuCR_2b, df_out_WmunuCR_1b, df_out_WmunuCR_2b, df_out_TopenuCR_1b, df_out_TopenuCR_2b, df_out_TopmunuCR_1b, df_out_TopmunuCR_2b]:
+        if df.empty:
+            for col in df.columns:
+                df[col] = dummyArr
+    
     df_out_preselR.to_root(outfilenameis, key='bbDM_preselR', mode='w')
 
     df_out_SR_1b.to_root(outfilenameis, key='bbDM_SR_1b', mode='a')
