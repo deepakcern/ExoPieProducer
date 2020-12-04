@@ -735,7 +735,7 @@ def runbbdm(txtfile):
                                     if ep_THINnJet >= 2:
                                         ratioPtJet21 = (
                                             ep_THINjetPt[1]/ep_THINjetPt[0])
-                                        dPhiJet12 = (
+                                        dPhiJet12 = DeltaPhi(
                                             ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                         dEtaJet12 = (
                                             ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -800,7 +800,7 @@ def runbbdm(txtfile):
                                         Jet2deepCSV = ep_THINjetDeepCSV[1]
                                         ratioPtJet21 = (
                                             ep_THINjetPt[1]/ep_THINjetPt[0])
-                                        dPhiJet12 = (
+                                        dPhiJet12 = DeltaPhi(
                                             ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                         dEtaJet12 = (
                                             ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -906,7 +906,7 @@ def runbbdm(txtfile):
                                                             Jet2deepCSV = ep_THINjetDeepCSV[1]
                                                             ratioPtJet21 = (
                                                                 ep_THINjetPt[1]/ep_THINjetPt[0])
-                                                            dPhiJet12 = (
+                                                            dPhiJet12 = DeltaPhi(
                                                                 ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                                             dEtaJet12 = (
                                                                 ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -1009,7 +1009,7 @@ def runbbdm(txtfile):
                                                             Jet2deepCSV = ep_THINjetDeepCSV[1]
                                                             ratioPtJet21 = (
                                                                 ep_THINjetPt[1]/ep_THINjetPt[0])
-                                                            dPhiJet12 = (
+                                                            dPhiJet12 = DeltaPhi(
                                                                 ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                                             dEtaJet12 = (
                                                                 ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -1270,7 +1270,7 @@ def runbbdm(txtfile):
                                                             Jet2deepCSV = ep_THINjetDeepCSV[1]
                                                             ratioPtJet21 = (
                                                                 ep_THINjetPt[1]/ep_THINjetPt[0])
-                                                            dPhiJet12 = (
+                                                            dPhiJet12 = DeltaPhi(
                                                                 ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                                             dEtaJet12 = (
                                                                 ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -1371,7 +1371,7 @@ def runbbdm(txtfile):
                                                             Jet2deepCSV = ep_THINjetDeepCSV[1]
                                                             ratioPtJet21 = (
                                                                ep_THINjetPt[1]/ep_THINjetPt[0])
-                                                            dPhiJet12 = (
+                                                            dPhiJet12 = DeltaPhi(
                                                                ep_THINjetPhi[0]-ep_THINjetPhi[1])
                                                             dEtaJet12 = (
                                                                ep_THINjetEta[0]-ep_THINjetEta[1])
@@ -1636,7 +1636,7 @@ def runbbdm(txtfile):
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'M_Jet1Jet3': float(M_Jet1Jet3),
@@ -1835,7 +1835,7 @@ def runbbdm(txtfile):
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_elePt[0]),
                     'leadingLepEta': float(ep_eleEta[0]),
@@ -2038,7 +2038,7 @@ def runbbdm(txtfile):
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_muPt[0]),
                     'leadingLepEta': float(ep_muEta[0]),
@@ -2232,7 +2232,7 @@ def runbbdm(txtfile):
                     'isjet1EtaMatch': float(isjet1EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_elePt[0]),
                     'leadingLepEta': float(ep_eleEta[0]),
@@ -2424,7 +2424,7 @@ def runbbdm(txtfile):
                     'isjet1EtaMatch': float(isjet1EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_muPt[0]),
                     'leadingLepEta': float(ep_muEta[0]),
@@ -2620,7 +2620,7 @@ def runbbdm(txtfile):
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_elePt[0]),
                     'leadingLepEta': float(ep_eleEta[0]),
@@ -2816,7 +2816,7 @@ def runbbdm(txtfile):
                     'isjet2EtaMatch': float(isjet2EtaMatch),
                     'ratioPtJet21': float(ep_THINjetPt[1] / ep_THINjetPt[0]),
                     'rJet1PtMET': float(rJet1PtMET),
-                    'dPhiJet12': float(ep_THINjetPhi[0] - ep_THINjetPhi[1]),
+                    'dPhiJet12': float(DeltaPhi(ep_THINjetPhi[0] - ep_THINjetPhi[1])),
                     'dEtaJet12': float(ep_THINjetEta[0] - ep_THINjetEta[1]),
                     'leadingLepPt': float(ep_muPt[0]),
                     'leadingLepEta': float(ep_muEta[0]),
