@@ -350,7 +350,6 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
                 normlisation = (xsec*luminosity)/(total_events)
             else:
                 normlisation = 0
-                tot_eve = 0
             h_temp.Scale(normlisation)
             if isrebin:
                 h_temp2 = setHistStyle(h_temp, hist, Rebin)
@@ -419,7 +418,6 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
             # print ('file', file ,'xsec', xsec,'\n')
             if (total_events > 0):
                 normlisation = (xsec*luminosity)/(total_events)
-                tot_eve = 1/total_events
             else:
                 normlisation = 0
             h_temp.Scale(normlisation)
@@ -668,16 +666,20 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
         h = SetCMSAxis(h)
     hs.Draw()
     if makeMuCHplots:
-        if makeSIGplots:
-            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('_Recoil' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
-        else:
-            noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
+        # if makeSIGplots:
+        #     noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
+        #                         or ('_down' in hist) or or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
+        # else:
+        noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
+                                or ('_down' in hist) or ('dPhiTrk' in hist) or ('dPhiCalo' in hist) or ('rJet1Pt' in hist))
     elif makeEleCHplots:
-        noYieldHisto = bool(('weight' in hist) or ('_up' in hist) or ('_down' in hist))
+        noYieldHisto = bool(('weight' in hist) or ('_up' in hist)
+                            or ('_down' in hist))
     if makeSIGplots:
         if ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
             # how many signal points you want to include
-            ma_points = [1000, 150, 200, 250, 350, 400, 500, 700, 750]
+            # ma_points = [1000, 150, 200, 250, 350, 400, 500, 700, 750]
+            ma_points = [50,500]
             sig_leg = SetLegend([.50, .38, .60, .58], ncol=1)
             sig_leg.SetHeader("2HDM+a model")
             if runOn2016:
@@ -849,10 +851,10 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
 
             binerror = h_stat_err.GetBinError(i)/h_stat_err.GetBinContent(i)
             ratiostaterr.SetBinError(i, binerror)
-            h_stat_err.SetBinError(i, binerror)
+            # h_stat_err.SetBinError(i, binerror)
         else:
             ratiostaterr.SetBinError(i, 999.)
-            h_stat_err.SetBinError(i, 999.)
+            # h_stat_err.SetBinError(i, 999.)
 #============================================= systematic error section ======================
     if 'MET' in hist or 'Recoil' in hist:
         ratiosysterr = h_stat_err.Clone("ratiosysterr")
@@ -1030,7 +1032,7 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     data_obs = h_data
     data_obs.SetNameTitle("data_obs", "data_obs")
     data_obs.Write()
-    if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto:
+    if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto and ('SR_1b' in reg or 'SR_2b' in reg):
         [sig_hist[h_key].SetNameTitle(h_key.split('5f_')[-1].split('_tanb35_')[0], h_key.split('5f_')[-1].split('_tanb35_')[0])for h_key in  sig_hist]
         [sig_hist[h_key].Write() for h_key in sig_hist]
     fshape.Write()
@@ -1038,11 +1040,10 @@ def makeplot(loc, hist, titleX, XMIN, XMAX, Rebin, ISLOG, NORATIOPLOT, reg, varB
     c12.Close()
     print('\n')
     if (('MET' in hist and 'SR' in hist) or ('Recoil' in hist)) and not noYieldHisto:
-        bkg_list = {'ZJets': ZJets, 'DYJets': DYJets, 'WJets': WJets, 'STop': STop, 'GJets': GJets,
-                    'Top': Top, 'DIBOSON': DIBOSON, 'QCD': QCD, 'SMH': SMH, 'bkgSum': Stackhist, 'data_obs': h_data}
+        bkg_list = {'data_obs': h_data, 'Total_Bkg': Stackhist, 'Top': Top, 'STop': STop, 'WJets': WJets, 'DIBOSON': DIBOSON, 'GJets': GJets, 'ZJets': ZJets, 'DYJets': DYJets, 'QCD': QCD, 'SMH': SMH}
         yield_outfile.write('region '+str(hist)+'\n')
         yield_outfile_binwise.write('region '+str(hist)+'\n')
-        if makeSIGplots:
+        if makeSIGplots and ('MET' in hist) and ('SR' in hist) and not noYieldHisto and ('SR_1b' in reg or 'SR_2b' in reg):
             for h_key in sig_hist:
                 bkg_list.update({h_key.split('5f_')[-1].split('_tanb35_')[0]: sig_hist[h_key]})
         yield_outfile_binwise.write('       Bin1   Bin2   Bin3   Bin4\n')
@@ -1070,13 +1071,22 @@ PUreg = []
 if makeMuCHplots:
     regions += ['preselR', 'SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
                 'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
-    
+    # regions += ['SR_1b', 'SR_2b', 'ZmumuCR_1b', 'ZmumuCR_2b',
+    #             'TopmunuCR_1b', 'TopmunuCR_2b', 'WmunuCR_1b', 'WmunuCR_2b']
+    # regions += ['ZmumuCR_1b', 'ZmumuCR_2b']
+    # regions += ['SR_1b',]
 if makeEleCHplots:
     regions += ['ZeeCR_1b', 'ZeeCR_2b', 'TopenuCR_1b',
                 'TopenuCR_2b', 'WenuCR_1b', 'WenuCR_2b']
+    # regions += ['ZeeCR_1b', 'ZeeCR_2b']
 
 # makeplot("reg_TopmunuCR_1b_Recoil",'h_reg_TopmunuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_1b',varBin=False)
 # makeplot("reg_TopmunuCR_2b_Recoil",'h_reg_TopmunuCR_2b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmunuCR_2b',varBin=False)
+
+
+# makeplot("reg_TopenuCR_1b_Recoil",'h_reg_TopenuCR_1b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopenuCR_1b',varBin=False)
+# makeplot("reg_TopenuCR_2b_Recoil",'h_reg_TopenuCR_2b_Recoil','Recoil (GeV)',200.,1000.,1,1,0,'TopmenuCR_2b',varBin=False)
+
 # makeplot("reg_SR_2b_MET",'h_reg_SR_2b_MET','p_{T}^{miss} (GeV)',200.,1000.,rebin,1,0,'SR_2b',varBin=False)
 for reg in regions:
     if '_2b' in reg:
