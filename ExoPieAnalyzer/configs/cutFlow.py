@@ -38,10 +38,12 @@ class cutFlow:
             bin3 = bin2 and self.Wmurecoil > 200.0
 
         #bin3 = bin2 and self.recoil > 200.0
-        bin4 = bin3 and self.met > 50.0
+        #bin4 = bin3 and self.met > 100.0
         if isTop:
+	    bin4 = bin3 and self.met > 50.0
 	    bin5 = bin4 and self.njets >2
         else:
+	    bin4 = bin3 and self.met > 100.0
 	    bin5 = bin4 and self.njets ==2
 
         bin6 = bin5 and self.nBjets==2

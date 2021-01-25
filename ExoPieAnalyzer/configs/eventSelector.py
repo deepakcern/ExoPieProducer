@@ -69,14 +69,12 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
     cuts['resolved_zmm']    = False
 
     if nEle==1 and nMu==0:
-        #if WenuRecoil > 200 and nBjets==2:print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightEle',nTightEle,'WenuRecoil',WenuRecoil,'pfMet',pfMet,'h_mass',h_mass
         cuts['resolved_te']         = baseline and nBjets==2 and aditionalak4jets >0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
-        cuts['resolved_wen']         = baseline and nBjets==2 and aditionalak4jets ==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
+        cuts['resolved_wen']         = baseline and nBjets==2 and aditionalak4jets ==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 100.0 and h_mass > 100.0 and h_mass < 150.0
 
     if nEle==0 and nMu==1:
         cuts['resolved_tm']         = baseline and nBjets==2 and aditionalak4jets >0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
-        cuts['resolved_wmn']         = baseline and nBjets==2 and aditionalak4jets ==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
-        #if WmunuRecoil > 200 and nBjets==2: print 'nak4jets',nak4jets,'aditionalak4jets',aditionalak4jets,'baseline',baseline,'nBjets',nBjets,'nTightMu',nTightMu,'WmunuRecoil',WmunuRecoil,'pfMet',pfMet,'h_mass',h_mass
+        cuts['resolved_wmn']         = baseline and nBjets==2 and aditionalak4jets ==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 100.0 and h_mass > 100.0 and h_mass < 150.0
 
     if nEle==2 and nMu==0:
         cuts['resolved_zee']        = baseline and nBjets==2 and nMu==0 and nEle==2 and (isTightEle[0] or isTightEle[1]) and ZeeRecoil > 200.0  and ZeeMass > 60.0 and ZeeMass < 120.0 and pfMet < 100

@@ -44,3 +44,10 @@ monohbb.v07.02.00.2017, updated command to run code on single root file
 	   ,
 monohbb.v07.04.00.2017, updated DataFrameToHist macros
 	   , added plotting macros and combined root maker
+	   ,
+monohbb.v07.04.01.2017, added dijet pt eta vars
+	   , added macros to scale hists of root file
+	   , added trkMET vars
+	   , shifted leading jet pt > 50 cut here
+	   ,
+monohbb.v07.06.00.2017, using xy shift corrections 

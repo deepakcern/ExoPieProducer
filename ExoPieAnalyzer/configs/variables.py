@@ -1,5 +1,5 @@
 allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
-'st_pfMetCorrPt', 'st_pfMetCorrPhi', 'st_pfMetUncJetResUp', 'st_pfMetUncJetResDown', 'st_pfMetUncJetEnUp', 'st_pfMetUncJetEnDown', \
+'st_pfMetCorrPt', 'st_pfMetCorrPhi','st_METXYCorr_Met', 'st_METXYCorr_MetPhi', 'st_pfMetUncJetResUp', 'st_pfMetUncJetResDown', 'st_pfMetUncJetEnUp', 'st_pfMetUncJetEnDown', 'st_pfTRKMETPt', 'st_pfTRKMETPhi','st_pfMetCorrSig',\
 'st_isData', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
