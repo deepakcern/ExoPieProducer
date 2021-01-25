@@ -202,19 +202,6 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                 df["weight"], "h_reg_"+reg+"_MET_En_up", [200, 250, 350, 500, 1000]))
         h_list.append(VarToHist(df["MET_En_down"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_MET_En_down", [200, 250, 350, 500, 1000]))
-        #pdf and scale systematics
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightscale"],
-                                df["weightscale_up"], "h_reg_"+reg+"_MET_weightscale_up", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightscale"],
-                                df["weightscale_down"], "h_reg_"+reg+"_MET_weightscale_down", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightscale"],
-                                df["weightpdf_up"], "h_reg_"+reg+"_MET_weightpdf_up", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightpdf"],
-                                df["weightpdf_down"], "h_reg_"+reg+"_MET_weightpdf_down", [200, 250, 350, 500, 1000]))
-        #Prefire Systematics
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightPrefire"], df["weightPrefire_up"], "h_reg_"+reg+"_MET_weightPrefire_down", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["MET"], df["weight"], df["weightPrefire"],df["weightPrefire_down"], "h_reg_"+reg+"_MET_weightPrefire_up", [200, 250, 350, 500, 1000]))
-
         h_list.append(VarToHist(df["Njets_PassID"],   df["weight"],
                                 df["weight"], df["weight"], "h_reg_"+reg+"_nJets", [10, 0, 10]))
         h_list.append(VarToHist(df["Nbjets_PassID"],   df["weight"],
@@ -372,20 +359,6 @@ def HistWrtter(df, outfilename, treeName, mode="UPDATE"):
                                 df["weight"], "h_reg_"+reg+"_Recoil_En_up", [200, 250, 350, 500, 1000]))
         h_list.append(VarToHist(df["Recoil_En_down"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_Recoil_En_down", [200, 250, 350, 500, 1000]))
-        #pdf and scale systematics
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightscale"],
-                                df["weightscale_up"], "h_reg_"+reg+"_Recoil_weightscale_up", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightscale"],
-                                df["weightscale_down"], "h_reg_"+reg+"_Recoil_weightscale_down", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightpdf"],
-                                df["weightpdf_up"], "h_reg_"+reg+"_Recoil_weightpdf_up", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightpdf"],
-                                df["weightpdf_down"], "h_reg_"+reg+"_Recoil_weightpdf_down", [200, 250, 350, 500, 1000]))
-        #Prefire Systematics
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightPrefire"], df["weightPrefire_up"], "h_reg_"+reg+"_Recoil_weightPrefire_down", [200, 250, 350, 500, 1000]))
-        h_list.append(VarToHist(df["Recoil"], df["weight"], df["weightPrefire"],df["weightPrefire_down"], "h_reg_"+reg+"_Recoil_weightPrefire_up", [200, 250, 350, 500, 1000]))
-
-        ###########################                       
         h_list.append(VarToHist(df["dPhi_lep1_MET"], df["weight"], df["weight"],
                                 df["weight"], "h_reg_"+reg+"_dPhi_lep1_MET", [15, 0, 5]))
         h_list.append(VarToHist(df["dPhi_lep2_MET"], df["weight"], df["weight"],
@@ -529,44 +502,53 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
     if ('SR' in reg) or ('preselR' in reg):
         h_list.append(SetHist("h_reg_"+reg+"_MET", [200, 250, 350, 500, 1000]))
 
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightB_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightB_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightB_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightB_down",
+                              [200, 250, 350, 500, 1000]))
         #EWK SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEWK_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEWK_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEWK_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEWK_down",
+                              [200, 250, 350, 500, 1000]))
         #Top pT REWEIGHTING
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightTop_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightTop_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightTop_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightTop_down",
+                              [200, 250, 350, 500, 1000]))
         #MET Trigger SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMET_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMET_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMET_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMET_down",
+                              [200, 250, 350, 500, 1000]))
         #LEPTON WEIGHT SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEle_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEle_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMu_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMu_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEle_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightEle_down",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMu_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightMu_down",
+                              [200, 250, 350, 500, 1000]))
         #pu WEIGHT SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPU_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPU_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPU_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPU_down",
+                              [200, 250, 350, 500, 1000]))
         #weightJEC SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightJEC_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightJEC_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightJEC_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_weightJEC_down",
+                              [200, 250, 350, 500, 1000]))
         #JER SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_MET_Res_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_Res_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_En_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_En_down", [200, 250, 350, 500, 1000]))
-
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightscale_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightscale_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightpdf_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightpdf_down", [200, 250, 350, 500, 1000]))
-
-        #Prefire Systematics
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPrefire_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_MET_weightPrefire_up", [200, 250, 350, 500, 1000]))
-        
-
+        h_list.append(SetHist("h_reg_"+reg+"_MET_Res_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_Res_down",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_En_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_MET_En_down",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(SetHist("h_reg_"+reg+"_nJets", [10, 0, 10]))
         h_list.append(SetHist("h_reg_"+reg+"_nBJets", [10, 0, 10]))
         h_list.append(SetHist("h_reg_"+reg+"_NEle", [10, 0, 10]))
@@ -623,16 +605,21 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
             h_list.append(SetHist("h_reg_"+reg+"_M_Jet1Jet3", [100, 0, 2000]))
     else:
         h_list.append(SetHist("h_reg_"+reg+"_MET",   [30, 0, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil",
+                              [200, 250, 350, 500, 1000]))
         #btag SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightB_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightB_down", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightB_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightB_down",
+                              [200, 250, 350, 500, 1000]))
         #EWK SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEWK_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEWK_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightEWK_down", [200, 250, 350, 500, 1000]))
         #Top pT REWEIGHTING
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightTop_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightTop_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightTop_down", [200, 250, 350, 500, 1000]))
         #MET Trigger SYSTEMATICS
@@ -641,33 +628,33 @@ def emptyHistWritter(treeName, outfilename, mode="UPDATE"):
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightRecoil_down", [200, 250, 350, 500, 1000]))
         #LEPTON WEIGHT SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEle_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightEle_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightEle_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightMu_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightMu_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightMu_down", [200, 250, 350, 500, 1000]))
         #pu WEIGHT SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPU_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPU_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightPU_down", [200, 250, 350, 500, 1000]))
         #weightJEC SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightJEC_up", [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightJEC_up",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(
             SetHist("h_reg_"+reg+"_Recoil_weightJEC_down", [200, 250, 350, 500, 1000]))
         #JER SYSTEMATICS
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_Res_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_Res_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightscale_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightscale_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightpdf_up", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightpdf_down", [200, 250, 350, 500, 1000]))
-        #Prefire Systematics
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPrefire_down", [200, 250, 350, 500, 1000]))
-        h_list.append(SetHist("h_reg_"+reg+"_Recoil_weightPrefire_up", [200, 250, 350, 500, 1000]))
-
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_Res_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_Res_down",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_up",
+                              [200, 250, 350, 500, 1000]))
+        h_list.append(SetHist("h_reg_"+reg+"_Recoil_En_down",
+                              [200, 250, 350, 500, 1000]))
         h_list.append(SetHist("h_reg_"+reg+"_dPhi_lep1_MET", [15, 0, 5]))
         h_list.append(SetHist("h_reg_"+reg+"_dPhi_lep2_MET", [15, 0, 5]))
         h_list.append(SetHist("h_reg_"+reg+"_Jet1Pt", [50, 30, 1000]))
@@ -794,14 +781,12 @@ def runFile(trees, filename):
 
         if nent > 0:
             df = read_root(filename, tree)
+            df = df[df.Jet1Pt > 50.0]
+            df = df[df.delta_pfCalo < 0.5]
+            if 'bbDM_W' in tree:
+                df = df[df.MET > 100]
             df['dPhiTrk_pfMET'] = DeltaPhi(df.METPhi,df.pfTRKMETPhi)
             df['dPhiCalo_pfMET'] = DeltaPhi(df.METPhi, df.pfpatCaloMETPhi)
-            df['weightscale'] = 1
-            df['weightpdf'] = 1
-            if 'weightscale_up' not in df: df['weightscale_up'] = 1
-            if 'weightscale_down' not in df: df['weightscale_down'] = 1
-            if 'weightpdf_up' not in df: df['weightpdf_up'] = 1
-            if 'weightpdf_down' not in df: df['weightpdf_down'] = 1
             HistWrtter(df, outfilename, tree, mode)
         else:
             emptyHistWritter(tree, outfilename, mode)
