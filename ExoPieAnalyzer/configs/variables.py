@@ -4,11 +4,11 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_THINnJet', 'st_THINjetPx', 'st_THINjetPy', 'st_THINjetPz', 'st_THINjetEnergy', \
 'st_THINjetDeepCSV', 'st_THINjetHadronFlavor', \
 'st_THINjetNHadEF', 'st_THINjetCHadEF', 'st_THINjetCEmEF', \
-'st_THINjetCorrUnc','st_THINbRegNNCorr','st_TopMatching', \
+'st_THINjetCorrUnc','st_THINbRegNNCorr','st_TopMatching', 'st_THINjetUncSources','st_THINjetUncTotal',\
 'st_nfjet', 'st_fjetPx', 'st_fjetPy', 'st_fjetPz', 'st_fjetEnergy', \
 'st_fjetDoubleSV', 'st_fjetProbQCDb', 'st_fjetProbHbb', 'st_fjetProbQCDc', 'st_fjetProbHcc', 'st_fjetProbHbbc', 'st_fjetProbbbvsLight', \
 'st_fjetProbccvsLight', 'st_fjetProbTvsQCD', 'st_fjetProbWvsQCD', 'st_fjetProbZHbbvsQCD', \
-'st_fjetSDMass','st_fjetSDMassCorrFact','st_fjetN2b1', 'st_fjetN2b2', 'st_fjetTau21','st_fjetCHSPRMass', 'st_fjetCHSSDMass', \
+'st_fjetSDMass','st_fjetSDMassCorrFact','st_fjetN2b1', 'st_fjetN2b2', 'st_fjetTau21','st_fjetCHSPRMass', 'st_fjetCHSSDMass', 'st_fjetjetUncSources','st_fjetjetUncTotal',\
 'st_nEle', 'st_elePx', 'st_elePy', 'st_elePz', 'st_eleEnergy', \
 'st_eleIsPassTight', 'st_eleIsPassLoose','st_eleCharge', \
 'st_nPho', 'st_phoIsPassTight', 'st_phoPx', 'st_phoPy', 'st_phoPz', 'st_phoEnergy', \
@@ -17,4 +17,4 @@ allvars=['st_runId', 'st_lumiSection', 'st_eventId', \
 'st_pu_nTrueInt', 'st_pu_nPUVert', 'st_prefiringweight', 'st_prefiringweightup', 'st_prefiringweightdown',\
 'st_THINjetNPV', \
 'mcweight','st_genParPt', 'st_genParSample','st_isData','st_eletrigdecision','st_mutrigdecision','st_mettrigdecision',\
-'st_isak4JetBasedHemEvent', 'st_isak8JetBasedHemEvent', 'st_ismetphiBasedHemEvent1', 'st_ismetphiBasedHemEvent2']
+'st_isak4JetBasedHemEvent', 'st_isak8JetBasedHemEvent', 'st_ismetphiBasedHemEvent1', 'st_ismetphiBasedHemEvent2','st_scaleWeightUP','st_scaleWeightDOWN','st_pdfWeightUP','st_pdfWeightDOWN']
