@@ -48,6 +48,7 @@ sys.path.append('configs')
 import variables as var
 import outvars as out
 from cutFlow import cutFlow
+from setColumns import setColumns, remove
 #import eventSelector as eventSelector_v2
 
 applyMassCor = True
@@ -71,6 +72,7 @@ parser.add_argument("-runOnTXT", "--runOnTXT",action="store_true", dest="runOnTX
 parser.add_argument("-o", "--outputfile", dest="outputfile", default="out.root")
 parser.add_argument("-D", "--outputdir", dest="outputdir")
 parser.add_argument("-F", "--farmout", action="store_true",  dest="farmout")
+parser.add_argument("-X", "--defaultVar", action="store_true",  dest="defaultVar")
 parser.add_argument("-y", "--year", dest="year", default="Year")
 
 args = parser.parse_args()
@@ -79,6 +81,12 @@ if args.farmout==None:
     isfarmout = False
 else:
     isfarmout = args.farmout
+
+if not args.defaultVar:#==None:
+    addVar=False
+else:
+    addVar=True
+print "addVar",addVar
 
 if args.inputDir and isfarmout:
     dirName=args.inputDir
@@ -298,8 +306,11 @@ def runbbdm(txtfile):
 
     filename = infile_
     ieve = 0;icount = 0
+    if addVar:remove(var.allvars,['st_THINjetUncSources','st_THINjetUncTotal','st_fjetjetUncSources','st_fjetjetUncTotal','st_scaleWeightUP','st_scaleWeightDOWN','st_pdfWeightUP','st_pdfWeightDOWN'])
     for df in read_root(filename, 'outTree', columns=var.allvars, chunksize=125000):
-
+        if addVar:
+	    print "will add some columns"
+	    setColumns(df,['st_THINjetUncSources','st_THINjetUncTotal','st_fjetjetUncSources','st_fjetjetUncTotal','st_scaleWeightUP','st_scaleWeightDOWN','st_pdfWeightUP','st_pdfWeightDOWN'])
         for ep_runId, ep_lumiSection, ep_eventId, \
             ep_pfMetCorrPt, ep_pfMetCorrPhi, ep_pfMetUncJetResUp, ep_pfMetUncJetResDown, ep_pfMetUncJetEnUp, ep_pfMetUncJetEnDown,ep_pfTRKMETPt, ep_pfTRKMETPhi,ep_pfMetCorrSig, \
             ep_THINnJet, ep_THINjetPx, ep_THINjetPy, ep_THINjetPz, ep_THINjetEnergy, \
@@ -553,7 +564,7 @@ def runbbdm(txtfile):
             '''
             JEC SOURCE UNC
             '''
-            JECSourceUp, JECSourceDown = getJECSourceUnc(pass_ak4jet_index_cleaned, ep_THINjetUncSources,index=True)
+            JECSourceUp, JECSourceDown = getJECSourceUnc(pass_ak4jet_index_cleaned,ep_THINjetUncSources,isData,index=True)
 
 
 
