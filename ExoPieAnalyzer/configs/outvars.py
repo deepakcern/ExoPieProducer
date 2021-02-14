@@ -168,7 +168,7 @@ df_out_Topmu_resolved  = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt'
                                          'ismetphiBasedHemEvent1', 'ismetphiBasedHemEvent2',
                                          'weight','puweight','puweight_up','puweight_down','lepweight','lepweight_up','lepweight_down',
                                          'recoilweight','recoilweight_up','recoilweight_down','recoilRes_up','recoilRes_down','recoilEn_up','recoilEn_down',
-                                         'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down'])
+                                         'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down',"AbsoluteUp", "Absolute_yearUp", "BBEC1Up", "BBEC1_yearUp", "EC2Up", "EC2_yearUp","FlavorQCDUp", "HFUp", "HF_yearUp", "RelativeBalUp", "RelativeSample_yearUp","AbsoluteDown", "Absolute_yearDown", "BBEC1Down", "BBEC1_yearDown", "EC2Down", "EC2_yearDown","FlavorQCDDown", "HFDown", "HF_yearDown", "RelativeBalDown", "RelativeSample_yearDown","scaleWeightUP", "scaleWeightDOWN", "pdfWeightUP", "pdfWeightDOWN"])
 
 df_out_Wmu_resolved  = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt','THINjetNPV','MET','RECOIL' ,'trkMET','trkMETPhi','METSig',
                                          'Njets_PassID','Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho','st_TopMatching',
@@ -216,7 +216,7 @@ df_out_Zmumu_resolved    = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueIn
                                         'ismetphiBasedHemEvent1', 'ismetphiBasedHemEvent2',
                                         'weight','puweight','puweight_up','puweight_down','lepweight','lepweight_up','lepweight_down',
 					'recoilweight','recoilweight_up','recoilweight_down','recoilRes_up','recoilRes_down','recoilEn_up','recoilEn_down',
-					'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down'])
+					'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down',"AbsoluteUp", "Absolute_yearUp", "BBEC1Up", "BBEC1_yearUp", "EC2Up", "EC2_yearUp","FlavorQCDUp", "HFUp", "HF_yearUp", "RelativeBalUp", "RelativeSample_yearUp","AbsoluteDown", "Absolute_yearDown", "BBEC1Down", "BBEC1_yearDown", "EC2Down", "EC2_yearDown","FlavorQCDDown", "HFDown", "HF_yearDown", "RelativeBalDown", "RelativeSample_yearDown","scaleWeightUP", "scaleWeightDOWN", "pdfWeightUP", "pdfWeightDOWN"])
 
 
 df_out_SR_resolved = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt','THINjetNPV','MET','trkMET','trkMETPhi','METSig',
