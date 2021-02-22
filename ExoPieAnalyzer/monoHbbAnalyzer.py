@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = False
+isCondor = True
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -723,6 +723,8 @@ def runbbdm(txtfile):
             weight =1.0; JEC_up =1.0; JEC_down =1.0 ;PUweight =1.0; PUweight_up =1.0; PUweight_down =1.0; lepweight =1.0; lepweight_up =1.0; lepweight_down =1.0; recoilweight =1.0; recoil_up =1.0; recoil_down =1.0; recoilweight = 1.0
             btagweight =1.0; btagweight_up =1.0; btagweight_down =1.0; btagweight_B =1.0; btagweight_B_up =1.0 ;btagweight_B_down =1.0 ;ewkweight =1.0; ewkweight_up =1.0; ewkweight_down =1.0; qcdk=1.0
             toppTweight =1.0; toppTweight_up =1.0; toppTweight_down =1.0; METweight =1.0; METweight_up =1.0; METweight_down =1.0; R_weight=1.0;B_weight=1.0
+            muID=1.0; muIDUp=1.0; muIDDown=1.0; muIso=1.0; muIsoUp=1.0; muIsoDown=1.0
+            eleID=1.0; eleIDUp=1.0; eleIDDown=1.0; eleReco=1.0; eleRecoUp=1.0; eleRecoDown=1.0
 
             commanweight=1.0;commanweight_B=1.0;R_weight=1.0;B_weight=1.0;
 
@@ -740,7 +742,9 @@ def runbbdm(txtfile):
                     qcdk      = wgt.getQCDW(ep_genParPt[0])
                 if ep_genParSample == 6 and len(ep_genParPt) > 0  : toppTweight,toppTweight_up,toppTweight_down = wgt.getTopPtReWgt(ep_genParPt[0],ep_genParPt[1])
 
-
+                ewkweight_up    = ewkweight*1.5;    
+                ewkweight_down  = ewkweight*0.5
+                    
                 PUweight, PUweight_up, PUweight_down = wgt.puweight(ep_pu_nTrueInt)
                 commanweight = ewkweight*qcdk*toppTweight*PUweight*btagweight
                 commanweight_B = ewkweight*qcdk*toppTweight*PUweight*btagweight_B
@@ -844,7 +848,6 @@ def runbbdm(txtfile):
             if  isResolvedSR:
 
                 if not isData:
-                        ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                         weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
                         weight = commanweight*weightMET*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
@@ -866,14 +869,13 @@ def runbbdm(txtfile):
                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN
                                            },
                                               ignore_index=True)
 
             if  isResolvedSBand:
 
                 if not isData:
-                        ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                         weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
                         weight = commanweight*weightMET*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
@@ -895,7 +897,7 @@ def runbbdm(txtfile):
                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN
                                            },
                                               ignore_index=True)
 
@@ -905,13 +907,20 @@ def runbbdm(txtfile):
                 ele1_index    = ele_tight_index[0]
 
                 if not isData:
-                    lepIdReco,lepIdReco_up,lepIdReco_down = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    
+                    eleweight,eleweighUp,eleweightDown = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
                     lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
-                    lepweight = lepIdReco*lepTrigSF
-                    lepweight_up = lepIdReco_up*lepTrigSF_up
-                    lepweight_down = lepIdReco_down*lepTrigSF_down
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*ep_prefiringweight
+                    
+                    eleID                              = eleweight[1] 
+                    eleIDUp                            = eleweighUp[1] 
+                    eleIDDown                          = eleweightDown[1]
+                    eleReco                            = eleweight[2]
+                    eleRecoUp                          = eleweighUp[2]
+                    eleRecoDown                        = eleweightDown[2]
+                    
+                    lepweight       = eleID * eleReco * lepTrigSF
+
+                    weight          = lepweight*commanweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Tope','R_weight',R_weight,'weight',weight
@@ -931,7 +940,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
@@ -940,11 +950,18 @@ def runbbdm(txtfile):
                 muon1_index          = muon_tight_index[0]
 
                 if not isData:
-                    recoilweight,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil,cat='R')
-                    lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
-                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
+                    recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(Wmurecoil,cat='R')
+                    muweight,muweightUp,muweightDown   = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    muID                               = muweight[1]
+                    muIDUp                             = muweightUp[1]
+                    muIDDown                           = muweightDown[1]
+                    muIso                              = muweight[2]
+                    muIsoUp                            = muweightUp[2]
+                    muIsoDown                          = muweightDown[2]
+                    
+                    lepweight                          = muID * muIso
+                    weight                             = lepweight*commanweight*recoilweight*ep_prefiringweight
+                    JEC_up,JEC_down                    = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Topmu','R_weight',R_weight,'weight',weight
 
@@ -963,26 +980,32 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
 
             if isResolvedCRWenu:
                 ele1_index    = ele_tight_index[0]
-                ele_trig      = True
 
                 if not isData:
-                    lepIdReco,lepIdReco_up,lepIdReco_down = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    
+                    eleweight,eleweighUp,eleweightDown    = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
                     lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
-                    lepweight = lepIdReco*lepTrigSF
-                    lepweight_up = lepIdReco_up*lepTrigSF_up
-                    lepweight_down = lepIdReco_down*lepTrigSF_down
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*ep_prefiringweight
+                    eleID                                 = eleweight[1] 
+                    eleIDUp                               = eleweighUp[1] 
+                    eleIDDown                             = eleweightDown[1]
+                    eleReco                               = eleweight[2]
+                    eleRecoUp                             = eleweighUp[2]
+                    eleRecoDown                           = eleweightDown[2]
+                    
+                    lepweight       = eleID * eleReco * lepTrigSF
+
+                    weight          = lepweight*commanweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
-                #print 'We','R_weight',R_weight,'weight',weight
+
 
                 df_out_We_resolved  = df_out_We_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':Werecoil ,'trkMET':ep_pfTRKMETPt,'trkMETPhi':ep_pfTRKMETPhi,'METSig':ep_pfMetCorrSig,'Njets_PassID':ep_THINnJet,
@@ -999,7 +1022,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
@@ -1008,12 +1032,17 @@ def runbbdm(txtfile):
 
                 if not isData:
                     recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(Wmurecoil,cat='R')
-                    lepweight,lep_up,lep_down=wgt.mu_weight(mupt[0],mueta[0],'T')
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
-                    JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
-
-                #print 'Wmu','R_weight',R_weight,'weight',weight
+                    muweight,muweightUp,muweightDown   = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    muID                               = muweight[1]
+                    muIDUp                             = muweightUp[1]
+                    muIDDown                           = muweightDown[1]
+                    muIso                              = muweight[2]
+                    muIsoUp                            = muweightUp[2]
+                    muIsoDown                          = muweightDown[2]
+                    
+                    lepweight                          = muID * muIso
+                    weight                             = lepweight*commanweight*recoilweight*ep_prefiringweight
+                    JEC_up,JEC_down                    = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 
                 df_out_Wmu_resolved  = df_out_Wmu_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
@@ -1031,7 +1060,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
@@ -1041,32 +1071,46 @@ def runbbdm(txtfile):
 
                 ele1_loose = ele_loose_index[0]
                 ele2_loose = ele_loose_index[1]
+                
                 if isTightEles[0] and not isData:
-                    lepweight1,lep1_up,lep1_down          = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
-                    if isTightEles[1]:lepweight2,lep2_up,lep2_down          = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
-                    else:lepweight2,lep2_up,lep2_down          = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+                    ele1weight,ele1weighUp,ele1weightDown      = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+                    
+                    if isTightEles[1]:
+                        ele2weight,ele2weighUp,ele2weightDown  = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
+                    else:ele2weight,ele2weighUp,ele2weightDown = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
 
-                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
-                    lepweight                             = lepweight1*lepweight2*lepTrigSF
-                    lepweight_up                          = lep1_up*lep2_up*lepTrigSF_up
-                    lepweight_down                        = lep1_down*lep2_down*lepTrigSF_down
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down      = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
+                    
+                    eleID                                      = ele1weight[1] * ele2weight[1]
+                    eleIDUp                                    = ele1weighUp[1] * ele2weighUp[1]
+                    eleIDDown                                  = ele1weightDown[1] * ele2weightDown[1]
+                    eleReco                                    = ele1weight[2] * ele2weight[2]
+                    eleRecoUp                                  = ele1weighUp[2] * ele2weighUp[2]
+                    eleRecoDown                                = ele1weightDown[2] * ele2weightDown[2]
+                    
+                    lepweight = eleID*eleReco*lepTrigSF
 
                 elif isTightEles[1] and not isData:
-                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
-                    lepweight1,lep1_up,lep1_down=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'L'))
-                    lepweight2,lep2_up,lep2_down=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
-                    lepweight = lepweight1*lepweight2*lepTrigSF
-                    lepweight_up                          = lep1_up*lep2_up*lepTrigSF_up
-                    lepweight_down                        = lep1_down*lep2_down*lepTrigSF_down
+                    
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down      = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
+                    ele1weight,ele1weighUp,ele1weightDown      = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'L'))
+                    ele2weight,ele2weighUp,ele2weightDown      = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
+                    
+                    eleID                                      = ele1weight[1] * ele2weight[1]
+                    eleIDUp                                    = ele1weighUp[1] * ele2weighUp[1]
+                    eleIDDown                                  = ele1weightDown[1] * ele2weightDown[1]
+                    eleReco                                    = ele1weight[2] * ele2weight[2]
+                    eleRecoUp                                  = ele1weighUp[2] * ele2weighUp[2]
+                    eleRecoDown                                = ele1weightDown[2] * ele2weightDown[2]                    
+                    
+                    lepweight = eleID*eleReco*lepTrigSF
 
                 ZpT = math.sqrt( (ep_elePx[0] + ep_elePx[0])**2 + (ep_elePy[1]+ep_elePy[1])**2 )
 
                 if not isData:
                     weight = lepweight*commanweight*ep_prefiringweight
-                    ewkweight_up=ewkweight*1.5; ewkweight_down=ewkweight*0.5
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
-                #print 'Zee','R_weight',R_weight,'weight',weight
 
                 df_out_Zee_resolved    = df_out_Zee_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
                                                 'MET':ep_pfMetCorrPt,'RECOIL':ZeeRecoil ,'trkMET':ep_pfTRKMETPt,'trkMETPhi':ep_pfTRKMETPhi,'METSig':ep_pfMetCorrSig,'Njets_PassID':ep_THINnJet,
@@ -1085,7 +1129,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
@@ -1094,22 +1139,39 @@ def runbbdm(txtfile):
             if isResolvedCRZmumu:
 
                 if isTightMuons[0] and not isData:
-                    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],'T')
-                    if isTightMuons[1]:lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'T')
-                    else:lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'L')
-                    lepweight = lepweight1*lepweight2
+                    mu1weight,mu1weighUp,mu1weightDown       = wgt.mu_weight(mupt[0],mueta[0],'T')
+        
+                    if isTightMuons[1]:
+                        mu2weight,mu2weighUp,mu2weightDown   = wgt.mu_weight(mupt[1],mueta[1],'T')
+                    else:mu2weight,mu2weighUp,mu2weightDown  = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    
+                    muID                                     = mu1weight[1] * mu2weight[1]
+                    muIDUp                                   = mu1weighUp[1] * mu2weighUp[1]
+                    muIDDown                                 = mu1weightDown[1] * mu2weightDown[1]
+                    muIso                                    = mu1weight[2] * mu2weight[2]
+                    muIsoUp                                  = mu1weighUp[2] * mu2weighUp[2]
+                    muIsoDown                                = mu1weightDown[2] * mu2weightDown[2]
+                    
+                    lepweight = muID*muIso
 
                 elif isTightMuons[1] and not isData:
-                    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],'L')
-                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[0],mueta[0],'T')
-                    lepweight = lepweight1*lepweight2
+                    mu1weight,mu1weighUp,mu1weightDown       = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    mu2weight,mu2weighUp,mu2weightDown       = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    
+                    muID                                     = mu1weight[1] * mu2weight[1]
+                    muIDUp                                   = mu1weighUp[1] * mu2weighUp[1]
+                    muIDDown                                 = mu1weightDown[1] * mu2weightDown[1]
+                    muIso                                    = mu1weight[2] * mu2weight[2]
+                    muIsoUp                                  = mu1weighUp[2] * mu2weighUp[2]
+                    muIsoDown                                = mu1weightDown[2] * mu2weightDown[2]
+                    
+                    lepweight = muID*muIso
 
                 ZpT  = math.sqrt( (ep_muPx[0] + ep_muPx[1])**2 + (ep_muPy[0]+ep_muPy[1])**2 )
 
 
                 if not isData:
                     recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(ZmumuRecoil,cat='R')
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                     weight = lepweight*commanweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
@@ -1132,7 +1194,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
@@ -1186,7 +1249,7 @@ def runbbdm(txtfile):
                                                'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN
                                            },
                                                 ignore_index=True)
 
@@ -1234,7 +1297,7 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN
                                            },
                                                 ignore_index=True)
 
@@ -1261,14 +1324,22 @@ def runbbdm(txtfile):
                     if fatjeteta[fjet_index]*ak4jeteta[pass_ak4jet_index_cleaned[1]] > 0  : isAK4jet2EtaMatch=1
 
                 if not isData:
-                    weightele,lep_up,lep_down             = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    eleweight,eleweighUp,eleweightDown    = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
                     lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
-                    lepweight                             = weightele*lepTrigSF
-                    lepweight_up                          = lep_up*lepTrigSF_up
-                    lepweight_down                        = lep_down*lepTrigSF_down
-                    ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5
+                    
+                    eleID                                 = eleweight[1] 
+                    eleIDUp                               = eleweighUp[1] 
+                    eleIDDown                             = eleweightDown[1]
+                    eleReco                               = eleweight[2]
+                    eleRecoUp                             = eleweighUp[2]
+                    eleRecoDown                           = eleweightDown[2]
+                    
+                    lepweight                             = eleID * eleReco * lepTrigSF
+                    
+                    
                     weight                                = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
+
 
                 #print 'Tope_B','B_weight',B_weight,'weight',weight
 
@@ -1287,7 +1358,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
@@ -1314,11 +1386,19 @@ def runbbdm(txtfile):
                     if fatjeteta[fjet_index]*ak4jeteta[pass_ak4jet_index_cleaned[1]] > 0  : isAK4jet2EtaMatch=1
 
                 if not isData:
-                    lepweight,lepweight_up,lepweight_down      =  wgt.mu_weight(mupt[0],mueta[0],'T')
-                    recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(Wmurecoil,cat='B')
-                    weight                                     = commanweight_B*lepweight*recoilweight*ep_prefiringweight
-                    JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
+                    recoilweight,recoil_up,recoil_down =  wgt.getMETtrig_First(Wmurecoil,cat='B')
+                    muweight,muweightUp,muweightDown   = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    muID                               = muweight[1]
+                    muIDUp                             = muweightUp[1]
+                    muIDDown                           = muweightDown[1]
+                    muIso                              = muweight[2]
+                    muIsoUp                            = muweightUp[2]
+                    muIsoDown                          = muweightDown[2]
+                    
+                    lepweight                          = muID * muIso
+                    
+                    weight                             = commanweight_B*lepweight*recoilweight*ep_prefiringweight
+                    JEC_up,JEC_down                    = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'Topmu_B','B_weight',B_weight,'weight',weight
                 df_out_Topmu_boosted  = df_out_Topmu_boosted.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
@@ -1336,7 +1416,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
@@ -1364,12 +1445,19 @@ def runbbdm(txtfile):
 
 
                 if not isData:
-                    weightele,lep_up,lep_down             = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
+                    eleweight,eleweighUp,eleweightDown    = wgt.ele_weight(elept[ele1_index],eleeta[ele1_index],'T')
                     lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_index],eleeta[ele1_index])
-                    lepweight                             = weightele*lepTrigSF
-                    lepweight_up                          = lep_up*lepTrigSF_up
-                    lepweight_down                        = lep_down*lepTrigSF_down
-                    ewkweight_up=ewkweight*1.5;  ewkweight_down=ewkweight*0.5
+                    
+                    eleID                                 = eleweight[1] 
+                    eleIDUp                               = eleweighUp[1] 
+                    eleIDDown                             = eleweightDown[1]
+                    eleReco                               = eleweight[2]
+                    eleRecoUp                             = eleweighUp[2]
+                    eleRecoDown                           = eleweightDown[2]
+                    
+                    lepweight                             = eleID * eleReco * lepTrigSF
+                    
+                    
                     weight                                = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down                       = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
@@ -1390,7 +1478,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
@@ -1418,8 +1507,17 @@ def runbbdm(txtfile):
                     if fatjeteta[fjet_index]*ak4jeteta[pass_ak4jet_index_cleaned[1]] > 0  : isAK4jet2EtaMatch=1
 
                 if not isData:
-                    lepweight,lepweight_up,lepweight_down=wgt.mu_weight(mupt[0],mueta[0],'T')
-                    weightRecoil,recoil_up,recoil_down=wgt.getMETtrig_First(Wmurecoil,cat='B')
+                    weightRecoil,recoil_up,recoil_down = wgt.getMETtrig_First(Wmurecoil,cat='B')
+                    muweight,muweightUp,muweightDown   = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    muID                               = muweight[1]
+                    muIDUp                             = muweightUp[1]
+                    muIDDown                           = muweightDown[1]
+                    muIso                              = muweight[2]
+                    muIsoUp                            = muweightUp[2]
+                    muIsoDown                          = muweightDown[2]
+                    
+                    lepweight                          = muID * muIso
+                    
                     weight = commanweight_B*lepweight*weightRecoil*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
@@ -1440,7 +1538,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
@@ -1459,19 +1558,33 @@ def runbbdm(txtfile):
 
                 #print 'number of muons',len(mupt)
                 if isTightMuons[0] and not isData:
-                    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[0],mueta[0],'T')
-                    if isTightMuons[1]:lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'T')
-                    else:lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[1],mueta[1],'L')
-                    lepweight = lepweight1*lepweight2
-                    lepweight_up = lep1_up*lep2_up
-                    lepweight_down = lep1_down*lep2_down
+                    mu1weight,mu1weighUp,mu1weightDown       = wgt.mu_weight(mupt[0],mueta[0],'T')
+        
+                    if isTightMuons[1]:
+                        mu2weight,mu2weighUp,mu2weightDown   = wgt.mu_weight(mupt[1],mueta[1],'T')
+                    else:mu2weight,mu2weighUp,mu2weightDown  = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    
+                    muID                                     = mu1weight[1] * mu2weight[1]
+                    muIDUp                                   = mu1weighUp[1] * mu2weighUp[1]
+                    muIDDown                                 = mu1weightDown[1] * mu2weightDown[1]
+                    muIso                                    = mu1weight[2] * mu2weight[2]
+                    muIsoUp                                  = mu1weighUp[2] * mu2weighUp[2]
+                    muIsoDown                                = mu1weightDown[2] * mu2weightDown[2]
+                    
+                    lepweight = muID*muIso
 
                 elif isTightMuons[1] and not isData:
-                    lepweight1,lep1_up,lep1_down = wgt.mu_weight(mupt[1],mueta[1],'L')
-                    lepweight2,lep2_up,lep2_down = wgt.mu_weight(mupt[0],mueta[0],'T')
-                    lepweight = lepweight1*lepweight2
-                    lepweight_up = lep1_up*lep2_up
-                    lepweight_down = lep1_down*lep2_down
+                    mu1weight,mu1weighUp,mu1weightDown       = wgt.mu_weight(mupt[1],mueta[1],'L')
+                    mu2weight,mu2weighUp,mu2weightDown       = wgt.mu_weight(mupt[0],mueta[0],'T')
+                    
+                    muID                                     = mu1weight[1] * mu2weight[1]
+                    muIDUp                                   = mu1weighUp[1] * mu2weighUp[1]
+                    muIDDown                                 = mu1weightDown[1] * mu2weightDown[1]
+                    muIso                                    = mu1weight[2] * mu2weight[2]
+                    muIsoUp                                  = mu1weighUp[2] * mu2weighUp[2]
+                    muIsoDown                                = mu1weightDown[2] * mu2weightDown[2]
+                    
+                    lepweight = muID*muIso
 
 
                 if ep_fjetSDMass[fjet_index]==0: fatjet_rho = math.log((0.0001*0.0001)/(fatjetpt[fjet_index]*fatjetpt[fjet_index]))
@@ -1479,7 +1592,6 @@ def runbbdm(txtfile):
                 N2DDT      = ep_fjetN2b1[fjet_index] - getN2bkgEff(fatjetpt[fjet_index],fatjet_rho)
 
                 if not isData:
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                     recoilweight,recoil_up,recoil_down         =  wgt.getMETtrig_First(ZmumuRecoil,cat='B')
                     weight                                     = commanweight_B*lepweight*recoilweight*ep_prefiringweight
                     JEC_up,JEC_down                            = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
@@ -1503,7 +1615,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "muID":muID,"muIDUp":muIDUp,"muIDDown":muIDDown,"muIso":muIso,"muIsoUp":muIsoUp,"muIsoDown":muIsoDown
                                            },
                                                 ignore_index=True)
 
@@ -1528,25 +1641,40 @@ def runbbdm(txtfile):
                 ele1_loose = ele_loose_index[0]
                 ele2_loose = ele_loose_index[1]
                 if isTightEles[0] and not isData:
-                    weightele1,ele1_up,ele1_down=(wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
-                    if isTightEles[1]:weightele2,ele2_up,ele2_down=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
-                    else:weightele2,ele2_up,ele2_down=(wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
-                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
-                    lepweight = weightele1*weightele2*lepTrigSF
-                    lepweight_up = ele1_up*ele2_up*lepTrigSF_up
-                    lepweight_down = ele1_down*ele2_down*lepTrigSF_down
+                    ele1weight,ele1weighUp,ele1weightDown      = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'T'))
+                    
+                    if isTightEles[1]:
+                        ele2weight,ele2weighUp,ele2weightDown  = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
+                    else:ele2weight,ele2weighUp,ele2weightDown = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'L'))
+
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down      = wgt.eletrig_weight(elept[ele1_loose],eleeta[ele1_loose])
+                    
+                    eleID                                      = ele1weight[1] * ele2weight[1]
+                    eleIDUp                                    = ele1weighUp[1] * ele2weighUp[1]
+                    eleIDDown                                  = ele1weightDown[1] * ele2weightDown[1]
+                    eleReco                                    = ele1weight[2] * ele2weight[2]
+                    eleRecoUp                                  = ele1weighUp[2] * ele2weighUp[2]
+                    eleRecoDown                                = ele1weightDown[2] * ele2weightDown[2]
+                    
+                    lepweight = eleID*eleReco*lepTrigSF
 
                 elif isTightEles[1] and not isData:
-                    lepTrigSF,lepTrigSF_up,lepTrigSF_down = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
-                    weightele1,ele1_up,ele1_down = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'L'))
-                    weightele2,ele2_up,ele2_down  = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
-                    lepweight = weightele1*weightele2*lepTrigSF
-                    lepweight_up = ele1_up*ele2_up*lepTrigSF_up
-                    lepweight_down = ele1_down*ele2_down*lepTrigSF_down
+                    
+                    lepTrigSF,lepTrigSF_up,lepTrigSF_down      = wgt.eletrig_weight(elept[ele2_loose],eleeta[ele2_loose])
+                    ele1weight,ele1weighUp,ele1weightDown      = (wgt.ele_weight(elept[ele1_loose],eleeta[ele1_loose],'L'))
+                    ele2weight,ele2weighUp,ele2weightDown      = (wgt.ele_weight(elept[ele2_loose],eleeta[ele2_loose],'T'))
+                    
+                    eleID                                      = ele1weight[1] * ele2weight[1]
+                    eleIDUp                                    = ele1weighUp[1] * ele2weighUp[1]
+                    eleIDDown                                  = ele1weightDown[1] * ele2weightDown[1]
+                    eleReco                                    = ele1weight[2] * ele2weight[2]
+                    eleRecoUp                                  = ele1weighUp[2] * ele2weighUp[2]
+                    eleRecoDown                                = ele1weightDown[2] * ele2weightDown[2]                    
+                    
+                    lepweight = eleID*eleReco*lepTrigSF
 
 
                 if not isData:
-                    ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
                     weight          = commanweight_B*lepweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
@@ -1569,7 +1697,8 @@ def runbbdm(txtfile):
                                                 'toppTweight':toppTweight,'toppTweight_up':toppTweight_up,'toppTweight_down':toppTweight_down,'jec':1.0,'jec_up':JEC_up,'jec_down':JEC_down,'prefiringweight':ep_prefiringweight,'prefiringweight_up':ep_prefiringweight_up,'prefiringweight_down':ep_prefiringweight_down,
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
-                                               "scaleWeightUP":ep_scaleWeightUP, "scaleWeightDOWN":ep_scaleWeightDOWN, "pdfWeightUP":ep_pdfWeightUP, "pdfWeightDOWN":ep_pdfWeightDOWN
+                                               "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
                                            },
                                                 ignore_index=True)
 
