@@ -881,9 +881,9 @@ def runbbdm(txtfile):
                 
                 j1j2DR=dummy;   j1j2Dphi=dummy; HT=dummy;       hMETDphi=dummy; j1j3Dphi=dummy; j2j3Dphi=dummy; hj3Dphi=dummy
                 j1j4Dphi=dummy; j2j4Dphi=dummy; j3j4Dphi=dummy; hj4Dphi=dummy
-                j3pt = dummy; j3eta = dummy; j3phi = dummy; j3csv=dummy
+                j3pt = dummy;   j3eta = dummy;  j3phi = dummy;  j3csv=dummy
                 
-                nonbtagIndex = pass_ak4jet_index_cleaned
+                nonbtagIndex = list(pass_ak4jet_index_cleaned)
                 nonbtagIndex.remove(nBjets_notiso_index[0])
                 nonbtagIndex.remove(nBjets_notiso_index[1])
                 
