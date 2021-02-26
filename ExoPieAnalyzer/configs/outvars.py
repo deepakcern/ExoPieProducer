@@ -253,3 +253,16 @@ df_out_SBand_resolved = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt',
                                         'weight','puweight','puweight_up','puweight_down','lepweight','lepweight_up','lepweight_down',
 					'METweight','METweight_up','METweight_down','METRes_up','METRes_down','METEn_up','METEn_down',
 					'btagweight','btagweight_up','btagweight_down','ewkweight','ewkweight_up','ewkweight_down','toppTweight','toppTweight_up','toppTweight_down','jec','jec_up','jec_down','prefiringweight','prefiringweight_up','prefiringweight_down' ,"AbsoluteUp", "Absolute_yearUp", "BBEC1Up", "BBEC1_yearUp", "EC2Up", "EC2_yearUp","FlavorQCDUp", "HFUp", "HF_yearUp", "RelativeBalUp", "RelativeSample_yearUp","AbsoluteDown", "Absolute_yearDown", "BBEC1Down", "BBEC1_yearDown", "EC2Down", "EC2_yearDown","FlavorQCDDown", "HFDown", "HF_yearDown", "RelativeBalDown", "RelativeSample_yearDown","scaleWeightUp", "scaleWeightDown", "pdfWeightUp", "pdfWeightDown"])
+					
+					
+					
+					
+
+df_out_bdt_resolved = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt','THINjetNPV','MET','trkMET','trkMETPhi','METSig',
+                                       'Njets_PassID','Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho','st_TopMatching',
+                                       'Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet1CSV','Jet2Pt', 'Jet2Eta', 'Jet2Phi', 'Jet2CSV',
+                                       'Jet3Pt', 'Jet3Eta', 'Jet3Phi', 'Jet3CSV',
+                                       'DiJetMass','DiJetPt', 'DiJetEta','DiJetPhi','nJets','met_Phi',
+                                       "j1j2DR","j1j2Dphi","HT","hMETDphi","j1j3Dphi","j2j3Dphi",
+                                       "hj3Dphi","j1j4Dphi","j2j4Dphi","j3j4Dphi","hj4Dphi",'min_dPhi'])
+

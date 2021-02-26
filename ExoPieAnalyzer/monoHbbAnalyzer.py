@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = True
+isCondor = False
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -217,6 +217,7 @@ def runbbdm(txtfile):
     df_out_Zee_boosted  = out.df_out_Zee_boosted
     df_out_TopWmu_boosted = out.df_out_TopWmu_boosted
     df_out_TopWe_boosted  = out.df_out_TopWe_boosted
+    df_out_bdt_resolved   = out.df_out_bdt_resolved
 
 
     #outputfilename = args.outputfile
@@ -375,6 +376,7 @@ def runbbdm(txtfile):
             isResolvedCRTope=False
             isResolvedCRTopmu=False
             isResolvedSB=False
+            isResolvedBDT=False
 
             ep_isak4JetBasedHemEvent=int(ep_isak4JetBasedHemEvent)
             ep_isak8JetBasedHemEvent=int(ep_isak8JetBasedHemEvent)
@@ -709,6 +711,7 @@ def runbbdm(txtfile):
             if region_resolved['resolved_wen']    and eletrigdecision and not isBoostedCRWenu  :  isResolvedCRWenu  = True
             if region_resolved['resolved_zmm']    and mettrigdecision and not isBoostedCRZmumu :  isResolvedCRZmumu = True
             if region_resolved['resolved_zee']    and eletrigdecision and not isBoostedCRZee   :  isResolvedCRZee   = True
+            if region_resolved['resolved_bdt']    and mettrigdecision and not isBoostedSR      :  isResolvedBDT     = True
 
 
 
@@ -872,6 +875,67 @@ def runbbdm(txtfile):
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN
                                            },
                                               ignore_index=True)
+
+
+            if  isResolvedBDT:
+                
+                j1j2DR=dummy;   j1j2Dphi=dummy; HT=dummy;       hMETDphi=dummy; j1j3Dphi=dummy; j2j3Dphi=dummy; hj3Dphi=dummy
+                j1j4Dphi=dummy; j2j4Dphi=dummy; j3j4Dphi=dummy; hj4Dphi=dummy
+                j3pt = dummy; j3eta = dummy; j3phi = dummy; j3csv=dummy
+                
+                nonbtagIndex = pass_ak4jet_index_cleaned
+                nonbtagIndex.remove(nBjets_notiso_index[0])
+                nonbtagIndex.remove(nBjets_notiso_index[1])
+                
+                
+                j1phi     = ak4jetphi[jet1Index]
+                j2phi     = ak4jetphi[jet2Index]
+                j1eta     = ak4jeteta[jet1Index]
+                j2eta     = ak4jeteta[jet2Index]
+
+                j1j2DR    = Delta_R(j1eta, j2eta, j1phi,j2phi)
+                j1j2Dphi  = DeltaPhi(j1phi,j2phi)
+                HT        = sum(ak4jetpt)
+                
+                hMETDphi  = DeltaPhi(dijet_phi,ep_pfMetCorrPhi)
+                
+                
+                if len(nonbtagIndex)>0:
+                    jet3Index = nonbtagIndex[0]
+                    j3phi     = ak4jetphi[jet3Index]
+                    j3pt      = ak4jetpt[jet3Index]
+                    j3eta     = ak4jeteta[jet3Index]
+                    j3csv     = ep_THINjetDeepCSV[jet3Index]
+                    
+                    j1j3Dphi  = DeltaPhi(j1phi,j3phi)
+                    j2j3Dphi  = DeltaPhi(j2phi,j3phi)
+                    hj3Dphi   = DeltaPhi(dijet_phi,j3phi)
+                    
+                if len(nonbtagIndex)>1:
+                    jet4Index = nonbtagIndex[1]
+                    j4phi     = ak4jetphi[jet4Index]
+                    
+                    j1j4Dphi  = DeltaPhi(j1phi,j4phi)
+                    j2j4Dphi  = DeltaPhi(j2phi,j4phi)
+                    j3j4Dphi  = DeltaPhi(j3phi,j4phi)
+                    hj4Dphi   = DeltaPhi(dijet_phi,j4phi)
+                
+                
+
+                df_out_bdt_resolved = df_out_bdt_resolved.append({'run':ep_runId, 'lumi':ep_lumiSection, 'event':ep_eventId,'pu_nTrueInt':ep_pu_nTrueInt,'THINjetNPV':ep_THINjetNPV,
+                                               'MET':ep_pfMetCorrPt,'trkMET':ep_pfTRKMETPt,'trkMETPhi':ep_pfTRKMETPhi,'METSig':ep_pfMetCorrSig, 'Njets_PassID':ep_THINnJet,
+                                               'Nbjets_PassID':nBjets_notiso, 'NTauJets':ep_HPSTau_n, 'NEle':ep_nEle, 'NMu':ep_nMu, 'nPho':nPho,
+                                               'Jet1Pt':ak4jetpt[jet1Index], 'Jet1Eta':ak4jeteta[jet1Index], 'Jet1Phi':ak4jetphi[jet1Index], 'Jet1CSV':ep_THINjetDeepCSV[jet1Index],
+                                               'Jet2Pt':ak4jetpt[jet2Index], 'Jet2Eta':ak4jeteta[jet2Index], 'Jet2Phi':ak4jetphi[jet2Index], 'Jet2CSV':ep_THINjetDeepCSV[jet2Index],
+                                               'Jet3Pt':j3pt, 'Jet3Eta':j3eta, 'Jet3Phi':j3phi, 'Jet3CSV':j3csv,
+                                               'DiJetMass':h_mass,'DiJetPt':dijet_pt, 'DiJetEta':dijet_eta,'DiJetPhi':dijet_phi,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
+                                               "j1j2DR":j1j2DR,"j1j2Dphi":j1j2Dphi,"HT":HT,"hMETDphi":hMETDphi,"j1j3Dphi":j1j3Dphi,
+                                               "j2j3Dphi":j2j3Dphi,"hj3Dphi":hj3Dphi,"j1j4Dphi":j1j4Dphi,"j2j4Dphi":j2j4Dphi,
+                                               "j3j4Dphi":j3j4Dphi,"hj4Dphi":hj4Dphi,'min_dPhi':min_dPhi_ak4_MET
+                                               },
+                                                ignore_index=True)
+
+
 
             if  isResolvedSBand:
 
@@ -1704,7 +1768,7 @@ def runbbdm(txtfile):
 
 
     outfilenameis=outfilename
-    for df in [df_out_SR_resolved,df_out_SBand_resolved,df_out_Tope_resolved,df_out_Topmu_resolved,df_out_We_resolved,df_out_Wmu_resolved,df_out_Zmumu_resolved,df_out_Zee_resolved,df_out_SR_boosted,df_out_SBand_boosted,df_out_Tope_boosted,df_out_Topmu_boosted,df_out_We_boosted,df_out_Wmu_boosted,df_out_Zmumu_boosted,df_out_Zee_boosted]:
+    for df in [df_out_bdt_resolved,df_out_SR_resolved,df_out_SBand_resolved,df_out_Tope_resolved,df_out_Topmu_resolved,df_out_We_resolved,df_out_Wmu_resolved,df_out_Zmumu_resolved,df_out_Zee_resolved,df_out_SR_boosted,df_out_SBand_boosted,df_out_Tope_boosted,df_out_Topmu_boosted,df_out_We_boosted,df_out_Wmu_boosted,df_out_Zmumu_boosted,df_out_Zee_boosted]:
         if df.empty:
 	    for col in df.columns:
 	        df[col]=dummyArr
@@ -1718,6 +1782,7 @@ def runbbdm(txtfile):
     df_out_Wmu_resolved.to_root(outfilenameis, key='monoHbb_Wmu_resolved',mode='a')
     df_out_Zmumu_resolved.to_root(outfilenameis, key='monoHbb_Zmumu_resolved',mode='a')
     df_out_Zee_resolved.to_root(outfilenameis, key='monoHbb_Zee_resolved',mode='a')
+    df_out_bdt_resolved.to_root(outfilenameis,key='monoHbb_bdt_resolved',mode='a')
 
 
     df_out_SR_boosted.to_root(outfilenameis, key='monoHbb_SR_boosted',mode='a')
