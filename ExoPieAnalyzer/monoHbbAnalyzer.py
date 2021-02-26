@@ -436,6 +436,7 @@ def runbbdm(txtfile):
             ak4jetpt  = [getPt(ep_THINjetPx[ij]*ep_RegNNCorr[ij], ep_THINjetPy[ij]*ep_RegNNCorr[ij]) for ij in range(ep_THINnJet)]
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
+            ak4jetIndex = [ij for ij in range(ep_THINnJet)]
 
 	    nBjets_notiso_index =[]
             tmp_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)]
@@ -883,7 +884,7 @@ def runbbdm(txtfile):
                 j1j4Dphi=dummy; j2j4Dphi=dummy; j3j4Dphi=dummy; hj4Dphi=dummy
                 j3pt = dummy;   j3eta = dummy;  j3phi = dummy;  j3csv=dummy
                 
-                nonbtagIndex = list(pass_ak4jet_index_cleaned)
+                nonbtagIndex = list(ak4jetIndex)
                 nonbtagIndex.remove(nBjets_notiso_index[0])
                 nonbtagIndex.remove(nBjets_notiso_index[1])
                 
