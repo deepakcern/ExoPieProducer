@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = False
+isCondor = True
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -932,7 +932,7 @@ def runbbdm(txtfile):
                                                'DiJetMass':h_mass,'DiJetPt':dijet_pt, 'DiJetEta':dijet_eta,'DiJetPhi':dijet_phi,'nJets':additional_jets,'met_Phi':ep_pfMetCorrPhi,
                                                "j1j2DR":j1j2DR,"j1j2Dphi":j1j2Dphi,"HT":HT,"hMETDphi":hMETDphi,"j1j3Dphi":j1j3Dphi,
                                                "j2j3Dphi":j2j3Dphi,"hj3Dphi":hj3Dphi,"j1j4Dphi":j1j4Dphi,"j2j4Dphi":j2j4Dphi,
-                                               "j3j4Dphi":j3j4Dphi,"hj4Dphi":hj4Dphi,'min_dPhi':min_dPhi_ak4_MET
+                                               "j3j4Dphi":j3j4Dphi,"hj4Dphi":hj4Dphi,'min_dPhi':min_ak4jet_MET_dPhi
                                                },
                                                 ignore_index=True)
 
