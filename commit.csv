@@ -56,3 +56,8 @@ monohbb.v12.07.00.2017, added jec source unc and pdf unc
 	    ,
 monohbb.v12.07.01.2017, added individuals lep unc
 	    , adding default jec source vars for data
+	    ,
+monohbb.v12.07.02.2017, updated selections of bdt tree
+	    , mass cut 50To200
+	    , added njets cut again
+	    , added miniDphi cut again

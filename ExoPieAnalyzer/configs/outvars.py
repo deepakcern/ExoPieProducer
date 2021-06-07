@@ -206,7 +206,7 @@ df_out_Wmu_resolved  = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt','
 
 df_out_We_resolved  = DataFrame(columns=['run', 'lumi', 'event','pu_nTrueInt','THINjetNPV','MET','RECOIL' ,'trkMET','trkMETPhi','METSig',
                                          'Njets_PassID','Nbjets_PassID', 'NTauJets', 'NEle', 'NMu', 'nPho','st_TopMatching',
-                                         'FJetPt', 'FJetEta', 'FJetPhi', 'FJetCSV','Jet1Pt', 
+                                         'FJetPt', 'FJetEta', 'FJetPhi', 'FJetCSV', 
                                          'Jet1Pt', 'Jet1Eta', 'Jet1Phi', 'Jet1CSV','Jet2Pt', 'Jet2Eta', 'Jet2Phi', 'Jet2CSV',
                                        'Jet3Pt', 'Jet3Eta', 'Jet3Phi', 'Jet3CSV',
                                          'DiJetMass', 'DiJetPt', 'DiJetEta','DiJetPhi','nJets','min_dPhi','met_Phi','RECOIL_Phi',

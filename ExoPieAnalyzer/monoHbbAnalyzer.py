@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor = False
+isCondor =True
 runInteractive = False
 testing=True
 isAnalysis = True

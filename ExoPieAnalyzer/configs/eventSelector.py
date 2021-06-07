@@ -60,7 +60,7 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
     baseline       = nak4jets >= 2 and nTau==0  and nPho==0 #and h_mass > 100.0 and h_mass < 150.0 # and nPho==0
 
     cuts['resolved_signal'] = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 100.0 and h_mass < 150.0 and mini_ak4jet_MET_dPhi > 0.4 and nBjets==2 and aditionalak4jets<=2
-    cuts['resolved_bdt']    = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 100.0 and h_mass < 150.0 and  nBjets==2 
+    cuts['resolved_bdt']    = baseline and nMu+nEle==0 and pfMet > 200.0 and h_mass > 50.0 and h_mass < 200.0  and mini_ak4jet_MET_dPhi > 0.4 and nBjets==2 and aditionalak4jets<=2 
     
     cuts['resolved_SBand'] = baseline and nMu+nEle==0 and pfMet > 200.0 and ((h_mass > 50.0 and h_mass < 100.0) or (h_mass > 150.0 and h_mass < 350.0)) and mini_ak4jet_MET_dPhi > 0.4
     cuts['resolved_tm']     = False
@@ -71,7 +71,7 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
     cuts['resolved_zmm']    = False
 
     if nEle==1 and nMu==0:
-        cuts['resolved_te']         = baseline and nBjets==2 and aditionalak4jets >0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 100.0 and h_mass > 100.0 and h_mass < 150.0
+        cuts['resolved_te']         = baseline and nBjets==2 and aditionalak4jets >0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 50.0 and h_mass > 100.0 and h_mass < 150.0
         cuts['resolved_wen']         = baseline and nBjets==2 and aditionalak4jets ==0 and nMu==0 and nEle==1 and nTightEle==1 and WenuRecoil > 200.0  and pfMet > 100.0 and h_mass > 100.0 and h_mass < 150.0
 
     if nEle==0 and nMu==1:
