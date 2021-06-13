@@ -61,3 +61,5 @@ monohbb.v12.07.02.2017, updated selections of bdt tree
 	    , mass cut 50To200
 	    , added njets cut again
 	    , added miniDphi cut again
+	    ,
+monohbb.v12.07.03.2017, removed bjet condition from resolved ZCR

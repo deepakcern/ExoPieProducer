@@ -79,10 +79,10 @@ def getSel_resolved(nEle,nTightEle,isTightEle,nMu,nTightMu,isTightMuon,nTau,nPho
         cuts['resolved_wmn']         = baseline and nBjets==2 and aditionalak4jets ==0 and nEle==0 and nMu==1 and nTightMu==1 and WmunuRecoil > 200.0  and pfMet > 100.0 and h_mass > 100.0 and h_mass < 150.0
 
     if nEle==2 and nMu==0:
-        cuts['resolved_zee']        = baseline and nBjets==2 and nMu==0 and nEle==2 and (isTightEle[0] or isTightEle[1]) and ZeeRecoil > 200.0  and ZeeMass > 60.0 and ZeeMass < 120.0 and pfMet < 100
+        cuts['resolved_zee']        = baseline  and nMu==0 and nEle==2 and (isTightEle[0] or isTightEle[1]) and ZeeRecoil > 200.0  and ZeeMass > 60.0 and ZeeMass < 120.0 and pfMet < 100
 
     if nEle==0 and nMu==2:
-        cuts['resolved_zmm']        = baseline and nBjets==2 and nEle==0 and nMu==2 and (isTightMuon[0] or isTightMuon[1]) and ZmumuRecoil > 200.0  and ZmumuMass > 60.0 and ZmumuMass < 120.0 and pfMet < 100
+        cuts['resolved_zmm']        = baseline  and nEle==0 and nMu==2 and (isTightMuon[0] or isTightMuon[1]) and ZmumuRecoil > 200.0  and ZmumuMass > 60.0 and ZmumuMass < 120.0 and pfMet < 100
 
     return cuts
 
