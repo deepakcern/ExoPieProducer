@@ -567,8 +567,16 @@ def runbbdm(txtfile):
             '''
             JEC SOURCE UNC
             '''
-            JECSourceUp, JECSourceDown = getJECSourceUnc(pass_ak4jet_index_cleaned,ep_THINjetUncSources,isData,index=True)
-
+            if ep_nfjet>0:
+		JECSourceUp_ak8, JECSourceDown_ak8 = getJECSourceUnc(ep_nfjet,ep_fjetjetUncSources,isData,index=False)
+	        JECSourceUp_ak4, JECSourceDown_ak4 = getJECSourceUnc(ep_THINnJet,ep_THINjetUncSources,isData,index=False)
+		JECSourceUp={}
+		JECSourceDown={}
+		for isyst in JECSourceUp_ak8:
+			JECSourceUp[isyst] = JECSourceUp_ak8[isyst] * JECSourceUp_ak4[isyst]
+			JECSourceDown[isyst]= JECSourceDown_ak8[isyst] * JECSourceDown_ak4[isyst]
+	    else:
+		JECSourceUp, JECSourceDown = getJECSourceUnc(ep_THINnJet,ep_THINjetUncSources,isData,index=False)
 
 
             '''
