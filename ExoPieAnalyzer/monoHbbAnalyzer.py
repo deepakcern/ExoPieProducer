@@ -747,8 +747,19 @@ def runbbdm(txtfile):
             if isResolvedSR or isResolvedSBand or isResolvedCRTopmu or isResolvedCRTope or isResolvedCRWmunu or isResolvedCRWenu or isResolvedCRZmumu or isResolvedCRZee or isResolvedBDT:
                 
                 nonbtagIndex = list(ak4jetIndex)
-                nonbtagIndex.remove(nBjets_notiso_index[0])
-                nonbtagIndex.remove(nBjets_notiso_index[1])
+		if isResolvedCRZmumu or isResolvedCRZee:
+			nonbtagIndex.remove(0)
+		        nonbtagIndex.remove(1)
+			jet1Index = 0
+			jet2Index = 1
+			dijet_pt= dijetPt(ep_THINjetPx[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPy[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPz[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetEnergy[jet1Index]*ep_RegNNCorr[jet1Index],ep_THINjetPx[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPy[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPz[jet2Index]*ep_RegNNCorr[jet2Index],ep_THINjetEnergy[jet2Index]*ep_RegNNCorr[jet2Index])
+			dijet_eta= dijetEta(ep_THINjetPx[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPy[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPz[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetEnergy[jet1Index]*ep_RegNNCorr[jet1Index],ep_THINjetPx[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPy[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPz[jet2Index]*ep_RegNNCorr[jet2Index],ep_THINjetEnergy[jet2Index]*ep_RegNNCorr[jet2Index])
+                	dijet_phi= dijetPhi(ep_THINjetPx[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPy[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetPz[jet1Index]*ep_RegNNCorr[jet1Index], ep_THINjetEnergy[jet1Index]*ep_RegNNCorr[jet1Index],ep_THINjetPx[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPy[jet2Index]*ep_RegNNCorr[jet2Index], ep_THINjetPz[jet2Index]*ep_RegNNCorr[jet2Index],ep_THINjetEnergy[jet2Index]*ep_RegNNCorr[jet2Index])
+
+
+		else:	
+		        nonbtagIndex.remove(nBjets_notiso_index[0])
+		        nonbtagIndex.remove(nBjets_notiso_index[1])
                 
                 
                 j1phi     = ak4jetphi[jet1Index]
@@ -1208,7 +1219,8 @@ def runbbdm(txtfile):
                 ZpT = math.sqrt( (ep_elePx[0] + ep_elePx[0])**2 + (ep_elePy[1]+ep_elePy[1])**2 )
 
                 if not isData:
-                    weight = lepweight*commanweight*ep_prefiringweight
+                    #weight = lepweight*commanweight*ep_prefiringweight
+		    weight =	ewkweight*qcdk*toppTweight*PUweight*lepweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 
@@ -1277,7 +1289,9 @@ def runbbdm(txtfile):
 
                 if not isData:
                     recoilweight,recoil_up,recoil_down = wgt.getMETtrig_First(ZmumuRecoil,cat='R')
-                    weight = lepweight*commanweight*recoilweight*ep_prefiringweight
+                    #weight = lepweight*commanweight*recoilweight*ep_prefiringweight
+		    weight =	ewkweight*qcdk*toppTweight*PUweight*lepweight*ep_prefiringweight*recoilweight
+
                     JEC_up,JEC_down = getJECWeight(ep_THINnJet,ep_THINjetCorrUnc,index=False)
 
 		#print 'Zmumu','R_weight',R_weight,'weight',weight
