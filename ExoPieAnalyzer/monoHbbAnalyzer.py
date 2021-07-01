@@ -437,19 +437,20 @@ def runbbdm(txtfile):
             ak4jeteta = [getEta(ep_THINjetPx[ij], ep_THINjetPy[ij], ep_THINjetPz[ij]) for ij in range(ep_THINnJet)]
             ak4jetphi = [getPhi(ep_THINjetPx[ij], ep_THINjetPy[ij]) for ij in range(ep_THINnJet)]
             ak4jetIndex = [ij for ij in range(ep_THINnJet)]
-
-	    nBjets_notiso_index =[]
+            
+            nBjets_notiso_index =[]
             tmp_index = [ij for ij in range(ep_THINnJet) if (ep_THINjetDeepCSV[ij] > MWP and abs(ak4jeteta[ij]) < 2.5)]
-            isleadJetPt50Present = False
-	    for ij in range(len(tmp_index)):
-		if ak4jetpt[tmp_index[ij]] > 50.0:isleadJetPt50Present = True
-		if not isleadJetPt50Present:continue
-		nBjets_notiso_index.append(tmp_index[ij])
+            if len(tmp_index)==2:
+                for ij in range(len(tmp_index)):
+                    if ij==0 and ak4jetpt[tmp_index[0]] > 50: 
+                        nBjets_notiso_index.append(tmp_index[0])
+                    if ij==1:
+                        nBjets_notiso_index.append(tmp_index[1])
 
             nBjets_notiso = len(nBjets_notiso_index) 
-	    if nBjets_notiso==2 and len(tmp_index)>2:
-		print "before", tmp_index,'ak4jetpt',ak4jetpt
-	        print "after",nBjets_notiso_index
+            # if nBjets_notiso==2 and len(tmp_index)>2:
+            # print "before", tmp_index,'ak4jetpt',ak4jetpt
+            # print "after",nBjets_notiso_index
             
 
             ak4_pt30_eta4p5  = [True for ij in range(ep_THINnJet)] #pt > 30 and eta < 4.5 is already applied at skimmer level
