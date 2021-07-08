@@ -915,8 +915,8 @@ def runbbdm(txtfile):
             if  isResolvedSR:
 
                 if not isData:
-                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
-                        weight = commanweight*weightMET*ep_prefiringweight
+                        METweight,METweight_up,METweight_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
+                        weight = commanweight*METweight*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
 		#print 'SR_R','R_weight',R_weight,'weight',weight
@@ -965,8 +965,8 @@ def runbbdm(txtfile):
             if  isResolvedSBand:
 
                 if not isData:
-                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
-                        weight = commanweight*weightMET*ep_prefiringweight
+                        METweight,METweight_up,METweight_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='R')
+                        weight = commanweight*METweight*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SBand_R','R_weight',R_weight,'weight',weight
@@ -1355,8 +1355,8 @@ def runbbdm(txtfile):
 
                 if not isData:
                         ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                        weightMET,weightMET_up,weightMET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
-                        weight = commanweight_B*weightMET*ep_prefiringweight
+                        METweight,METweight_up,METweight_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
+                        weight = commanweight_B*METweight*ep_prefiringweight
                         JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SR_B','B_weight',B_weight,'weight',weight
@@ -1401,9 +1401,9 @@ def runbbdm(txtfile):
                     if fatjeteta[fjet_index]*ak4jeteta[pass_ak4jet_index_cleaned[1]] > 0  : isAK4jet2EtaMatch=1
 
                 if not isData:
-                    weightMET,MET_up,MET_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
+                    METweight,METweight_up,METweight_down=wgt.getMETtrig_First(ep_pfMetCorrPt,cat='B')
                     ewkweight_up=ewkweight*1.5;ewkweight_down=ewkweight*0.5
-                    weight = commanweight_B*weightMET*ep_prefiringweight
+                    weight = commanweight_B*METweight*ep_prefiringweight
                     JEC_up,JEC_down = getJECWeight(pass_ak4jet_index_cleaned,ep_THINjetCorrUnc,index=True)
 
                 #print 'SBand_B','B_weight',B_weight,'weight',weight
