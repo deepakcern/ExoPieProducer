@@ -1038,7 +1038,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
@@ -1130,7 +1130,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
@@ -1248,7 +1248,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
@@ -1484,7 +1484,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
@@ -1604,7 +1604,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
@@ -1823,7 +1823,7 @@ def runbbdm(txtfile):
                                                 "AbsoluteUp":JECSourceUp['Absolute'], "Absolute_yearUp":JECSourceUp['Absolute_year'], "BBEC1Up":JECSourceUp['BBEC1'], "BBEC1_yearUp":JECSourceUp['BBEC1_year'], "EC2Up":JECSourceUp['EC2'], "EC2_yearUp":JECSourceUp['EC2_year'],"FlavorQCDUp":JECSourceUp['FlavorQCD'], "HFUp":JECSourceUp['HF'], "HF_yearUp":JECSourceUp['HF_year'], "RelativeBalUp":JECSourceUp['RelativeBal'], "RelativeSample_yearUp":JECSourceUp['RelativeSample_year'],
                                                "AbsoluteDown":JECSourceDown['Absolute'], "Absolute_yearDown":JECSourceDown['Absolute_year'], "BBEC1Down":JECSourceDown['BBEC1'], "BBEC1_yearDown":JECSourceDown['BBEC1_year'], "EC2Down":JECSourceDown['EC2'], "EC2_yearDown":JECSourceDown['EC2_year'],"FlavorQCDDown":JECSourceDown['FlavorQCD'], "HFDown":JECSourceDown['HF'], "HF_yearDown":JECSourceDown['HF_year'], "RelativeBalDown":JECSourceDown['RelativeBal'], "RelativeSample_yearDown":JECSourceDown['RelativeSample_year'],
                                                "scaleWeightUp":ep_scaleWeightUP, "scaleWeightDown":ep_scaleWeightDOWN, "pdfWeightUp":ep_pdfWeightUP, "pdfWeightDown":ep_pdfWeightDOWN,
-                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown
+                                               "eleID":eleID,"eleIDUp":eleIDUp,"eleIDDown":eleIDDown,"eleReco":eleReco,"eleRecoUp":eleRecoUp,"eleRecoDown":eleRecoDown,"eleTrigUp":lepTrigSF_up,"eleTrigDown":lepTrigSF_down
                                            },
                                                 ignore_index=True)
 
