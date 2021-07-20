@@ -1,5 +1,5 @@
 class cutFlow:
-    def __init__(self,nPho,nEle_loose,nEle_tight,nMu_loose,nMu_tight,nTau,Werecoil,Wmurecoil,ZeeRecoil,ZmumuRecoil,pfMet,njets,njets_iso,nBjets,nBjets_iso,h_mass,nAK8JetsSR,nAK8JetsSBand,nAK8JetsZCR,ZeeMass,ZmumuMass):
+    def __init__(self,nPho,nEle_loose,nEle_tight,nMu_loose,nMu_tight,nTau,Werecoil,Wmurecoil,ZeeRecoil,ZmumuRecoil,pfMet,njets,njets_iso,nBjets,nBjets_iso,h_mass,nAK8JetsSR,nAK8JetsSBand,nAK8JetsZCR,ZeeMass,ZmumuMass,min_ak4jet_MET_dPhi):
 
         self.nPho         =  nPho
         self.nEle_loose   =  nEle_loose
@@ -9,7 +9,7 @@ class cutFlow:
         self.nTau         =  nTau
         self.Werecoil     =  Werecoil
         self.Wmurecoil    =  Wmurecoil
-	self.ZeeRecoil    =  ZeeRecoil
+        self.ZeeRecoil    =  ZeeRecoil
         self.ZmumuRecoil  =  ZmumuRecoil
         self.met          =  pfMet
         self.njets        =  njets
@@ -22,6 +22,7 @@ class cutFlow:
         self.nAK8JetsZCR  =  nAK8JetsZCR
         self.ZeeMass      =  ZeeMass
         self.ZmumuMass    =  ZmumuMass
+        self.min_ak4jet_MET_dPhi = min_ak4jet_MET_dPhi
         self.value = 0
         self.cuts = {}
 
@@ -31,20 +32,20 @@ class cutFlow:
         if isEleRegion:
             bin1 = self.nEle_loose==1 and self.nEle_tight==1
             bin2 = bin1 and self.nMu_loose==0 and self.nTau==0 and self.nPho==0
-            bin3 = bin2 and self.Werecoil > 200.0
+            bin3 = bin2 and self.Werecoil > 250.0
         else:
             bin1 = self.nMu_loose==1 and self.nMu_tight==1
-            bin2 = bin1 and self.nEle_loose==0 and self.nTau==0
-            bin3 = bin2 and self.Wmurecoil > 200.0
+            bin2 = bin1 and self.nEle_loose==0 and self.nTau==0 and self.nPho==0
+            bin3 = bin2 and self.Wmurecoil > 250.0
 
         #bin3 = bin2 and self.recoil > 200.0
         #bin4 = bin3 and self.met > 100.0
         if isTop:
-	    bin4 = bin3 and self.met > 50.0
-	    bin5 = bin4 and self.njets >2
+            bin4 = bin3 and self.met > 50.0
+            bin5 = bin4 and self.njets >2
         else:
-	    bin4 = bin3 and self.met > 100.0
-	    bin5 = bin4 and self.njets ==2
+            bin4 = bin3 and self.met > 100.0
+            bin5 = bin4 and self.njets ==2
 
         bin6 = bin5 and self.nBjets==2
         bin7 = bin6 and self.Mbb > 100.0 and self.Mbb < 150.0
@@ -64,11 +65,11 @@ class cutFlow:
         if isEleRegion:
             bin1 = self.nEle_loose==1 and self.nEle_tight==1
             bin2 = bin1 and self.nMu_loose==0 and self.nTau==0 and self.nPho==0
-            bin3 = bin2 and self.Werecoil > 200.0
+            bin3 = bin2 and self.Werecoil > 250.0
         else:
             bin1 = self.nMu_loose==1 and self.nMu_tight==1
-            bin2 = bin1 and self.nEle_loose==0 and self.nTau==0
-            bin3 = bin2 and self.Wmurecoil > 200.0
+            bin2 = bin1 and self.nEle_loose==0 and self.nTau==0 and self.nPho==0
+            bin3 = bin2 and self.Wmurecoil > 250.0
 
         #bin3 = bin2 and self.recoil > 200.0
         bin4 = bin3 and self.met > 50.0
@@ -93,18 +94,18 @@ class cutFlow:
     def diLepton_R(self,value,isEleRegion=True):
 
         if isEleRegion:
-	    bin1 = self.nEle_loose==2 and (self.nEle_tight==1 or self.nEle_tight==2)
+            bin1 = self.nEle_loose==2 and (self.nEle_tight==1 or self.nEle_tight==2)
             bin2 = bin1 and self.nMu_loose==0 and self.nTau==0 and self.nPho==0
-            bin3 = bin2 and self.ZeeRecoil > 200.0
+            bin3 = bin2 and self.ZeeRecoil > 250.0
             ZMass = self.ZeeMass
         else:
             bin1 = self.nMu_loose==2 and (self.nMu_tight==1 or self.nMu_tight==2)
             bin2 = bin1 and self.nEle_loose==0 and self.nTau==0
-            bin3 = bin2 and self.ZmumuRecoil > 200.0
+            bin3 = bin2 and self.ZmumuRecoil > 250.0
             ZMass = self.ZmumuMass
 
         bin4 = bin3 and self.met < 100.0
-        bin5 = bin4 and self.njets >2
+        bin5 = bin4 and self.njets >=2
         bin6 = bin5 and self.nBjets==2
         bin7 = bin6 and ZMass > 60.0 and ZMass < 120.0
 
@@ -123,12 +124,12 @@ class cutFlow:
         if isEleRegion:
             bin1 = self.nEle_loose==2 and (self.nEle_tight==1 or self.nEle_tight==2)
             bin2 = bin1 and self.nMu_loose==0 and self.nTau==0 and self.nPho==0
-            bin3 = bin2 and self.ZeeRecoil > 200.0
+            bin3 = bin2 and self.ZeeRecoil > 250.0
             ZMass = self.ZeeMass
         else:
             bin1 = self.nMu_loose==2 and (self.nMu_tight==1 or self.nMu_tight==2)
             bin2 = bin1 and self.nEle_loose==0 and self.nTau==0
-            bin3 = bin2 and self.ZmumuRecoil > 200.0
+            bin3 = bin2 and self.ZmumuRecoil > 250.0
             ZMass = self.ZmumuMass
 
         bin4 = bin3 and self.met > 0.0
@@ -150,7 +151,7 @@ class cutFlow:
         bin1 = self.nEle_loose==0 and self.nMu_loose==0
         bin2 = bin1 and self.nTau==0
         bin3 = bin2 and self.nPho==0
-        bin4 = bin3 and self.met > 200.0
+        bin4 = bin3 and self.met > 250.0
         bin5 = bin4 and self.njets>=0 
         bin6 = bin5 and self.nBjets==2
         bin7 = bin6 and ((self.Mbb > 50 and self.Mbb < 100) or (self.Mbb > 150 and self.Mbb < 350))
@@ -170,12 +171,61 @@ class cutFlow:
         bin1 = self.nEle_loose==0 and self.nMu_loose==0
         bin2 = bin1 and self.nTau==0
         bin3 = bin2 and self.nPho==0
-        bin4 = bin3 and self.met > 200.0
+        bin4 = bin3 and self.met > 250.0
         bin5 = bin4 and self.nAK8JetsSBand==1
         bin6 = bin5 and self.nBjets_iso==0
         bin7 = bin6
 
         if bin7:     return value,value,value,value,value,value,value
+        elif bin6:   return value,value,value,value,value,value,0.0
+        elif bin5:   return value,value,value,value,value,0.0,0.0
+        elif bin4:   return value,value,value,value,0.0,0.0,0.0
+        elif bin3:   return value,value,value,0.0,0.0,0.0,0.0
+        elif bin2:   return value,value,0.0,0.0,0.0,0.0,0.0
+        elif bin1:   return value,0.0,0.0,0.0,0.0,0.0,0.0
+        else:        return 0.0,0.0,0.0,0.0,0.0,0.0,0.0
+
+
+
+    def SR_R(self,value):
+
+        bin1 = self.nEle_loose==0
+        bin2 = bin1 and self.nMu_loose==0
+        bin3 = bin2 and self.nTau==0
+        bin4 = bin3 and self.nPho==0
+        bin5 = bin4 and self.met > 250.0
+        bin6 = bin5 and self.njets<=4 
+        bin7 = bin6 and self.nBjets==2
+        bin8 = bin7 and (self.Mbb > 100 and self.Mbb < 150)
+        bin9 = bin8 and self.min_ak4jet_MET_dPhi > 0.4
+
+        if bin9:     return value,value,value,value,value,value,value,value,value
+        elif bin8:   return value,value,value,value,value,value,value,value
+        elif bin7:   return value,value,value,value,value,value,value
+        elif bin6:   return value,value,value,value,value,value,0.0
+        elif bin5:   return value,value,value,value,value,0.0,0.0
+        elif bin4:   return value,value,value,value,0.0,0.0,0.0
+        elif bin3:   return value,value,value,0.0,0.0,0.0,0.0
+        elif bin2:   return value,value,0.0,0.0,0.0,0.0,0.0
+        elif bin1:   return value,0.0,0.0,0.0,0.0,0.0,0.0
+        else:        return 0.0,0.0,0.0,0.0,0.0,0.0,0.0
+
+
+    def SR_B(self,value):
+
+        bin1 = self.nEle_loose==0
+        bin2 = bin1 and self.nMu_loose==0
+        bin3 = bin2 and self.nTau==0
+        bin4 = bin3 and self.nPho==0
+        bin5 = bin4 and self.met > 250.0
+        bin6 = bin5 and self.nAK8JetsSR==1
+        bin7 = bin6 and self.njets_iso<=2
+        bin8 = bin7 and self.nBjets_iso==0
+        bin9 = bin8 = bin8 and self.min_ak4jet_MET_dPhi > 0.4
+        
+        if bin9:     return value,value,value,value,value,value,value,value,value
+        elif bin8:   return value,value,value,value,value,value,value,value
+        elif bin7:   return value,value,value,value,value,value,value
         elif bin6:   return value,value,value,value,value,value,0.0
         elif bin5:   return value,value,value,value,value,0.0,0.0
         elif bin4:   return value,value,value,value,0.0,0.0,0.0

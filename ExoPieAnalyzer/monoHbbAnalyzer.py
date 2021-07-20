@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor =True
+isCondor =False
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -266,6 +266,10 @@ def runbbdm(txtfile):
     h_reg_SBand_resolved_cutFlow     = TH1F("h_reg_SBand_resolved_cutFlow","h_reg_SBand_resolved_cutFlow",12,0,12)
     h_reg_SBand_boosted_cutFlow     = TH1F("h_reg_SBand_boosted_cutFlow","h_reg_SBand_boosted_cutFlow",12,0,12)
 
+    h_reg_SR_resolved_cutFlow     = TH1F("h_reg_SR_resolved_cutFlow","h_reg_SR_resolved_cutFlow",12,0,12)
+    h_reg_SR_boosted_cutFlow     = TH1F("h_reg_SR_boosted_cutFlow","h_reg_SR_boosted_cutFlow",12,0,12)
+
+
     h_reg_WenuCR_resolved_cutFlow.AddBinContent(1,total_events)
     h_reg_WmunuCR_resolved_cutFlow.AddBinContent(1,total_events)
     h_reg_WenuCR_resolved_cutFlow.AddBinContent(2,Entrees)
@@ -303,6 +307,11 @@ def runbbdm(txtfile):
     h_reg_SBand_boosted_cutFlow.AddBinContent(1,total_events)
     h_reg_SBand_boosted_cutFlow.AddBinContent(2,Entrees)
 
+    h_reg_SR_boosted_cutFlow.AddBinContent(1,total_events)
+    h_reg_SR_boosted_cutFlow.AddBinContent(2,Entrees)
+
+    h_reg_SR_resolved_cutFlow.AddBinContent(1,total_events)
+    h_reg_SR_resolved_cutFlow.AddBinContent(2,Entrees)
 
 
     filename = infile_
@@ -556,10 +565,11 @@ def runbbdm(txtfile):
             mymuBooleans = [True for ij in range(ep_nMu)]
             cleanedPho_ag_ele = []; cleanedPho_ag_mu = [];pass_pho_index_cleaned=[]
             if ep_nPho > 0: #and ep_nEle > 0:
-                cleanedPho_ag_ele = anautil.jetcleaning(myphotons, myeleBooleans, pho_eta, eleeta, pho_phi, elephi, 0.4)
-                cleanedPho_ag_mu  = anautil.jetcleaning(myphotons, mymuBooleans, pho_eta, mueta, pho_phi, muphi, 0.4)
-                cleanedPhoton     = boolutil.logical_AND_List2(cleanedPho_ag_ele,cleanedPho_ag_mu)
-                pass_pho_index_cleaned = boolutil.WhereIsTrue(cleanedPhoton)
+                # cleanedPho_ag_ele = anautil.jetcleaning(myphotons, myeleBooleans, pho_eta, eleeta, pho_phi, elephi, 0.4)
+                # cleanedPho_ag_mu  = anautil.jetcleaning(myphotons, mymuBooleans, pho_eta, mueta, pho_phi, muphi, 0.4)
+                # cleanedPhoton     = boolutil.logical_AND_List2(cleanedPho_ag_ele,cleanedPho_ag_mu)
+                cleanedPho_ag_jet = anautil.jetcleaning(myphotons, ak4_pt30_eta4p5, pho_eta, ak4jeteta, pho_phi, ak4jetphi,0.4)
+                pass_pho_index_cleaned = boolutil.WhereIsTrue(cleanedPho_ag_jet)
                 #print 'cleanedPho_ag_ele',cleanedPho_ag_ele, 'cleanedPho_ag_mu', cleanedPho_ag_mu
 
 
@@ -832,7 +842,7 @@ def runbbdm(txtfile):
             ------------------------------------------------------------
             '''
 
-            cutFlow_bins = cutFlow(nPho,nEle_loose,nTightEle,ep_nMu,nTightMu,ep_HPSTau_n,Werecoil,Wmurecoil,ZeeRecoil,ZmumuRecoil,ep_pfMetCorrPt,ep_THINnJet,nJets_cleaned,nBjets_notiso,nBjets_iso,h_mass,sel_nfjets,nFatJet_SBand,nFatJet_ZCR,ZeeMass,ZmumuMass)
+            cutFlow_bins = cutFlow(nPho,nEle_loose,nTightEle,ep_nMu,nTightMu,ep_HPSTau_n,Werecoil,Wmurecoil,ZeeRecoil,ZmumuRecoil,ep_pfMetCorrPt,ep_THINnJet,nJets_cleaned,nBjets_notiso,nBjets_iso,h_mass,sel_nfjets,nFatJet_SBand,nFatJet_ZCR,ZeeMass,ZmumuMass,min_ak4jet_MET_dPhi)
 
             TopmuBins_B = cutFlow_bins.singleLepton_B(B_weight,isEleRegion=False,isTop=True)
             TopeBins_B  = cutFlow_bins.singleLepton_B(B_weight,isEleRegion=True,isTop=True)
@@ -843,6 +853,8 @@ def runbbdm(txtfile):
             ZmumuBins_B = cutFlow_bins.diLepton_B(B_weight,isEleRegion=False)
             SBand_B     = cutFlow_bins.SBand_B(B_weight)
 
+            SR_B     = cutFlow_bins.SR_B(B_weight)
+
             TopmuBins_R = cutFlow_bins.singleLepton_R(R_weight,isEleRegion=False,isTop=True)
             TopeBins_R  = cutFlow_bins.singleLepton_R(R_weight,isEleRegion=True,isTop=True)
             WmuBins_R   = cutFlow_bins.singleLepton_R(R_weight,isEleRegion=False,isTop=False)
@@ -851,6 +863,8 @@ def runbbdm(txtfile):
             ZeeBins_R   = cutFlow_bins.diLepton_R(R_weight,isEleRegion=True)
             ZmumuBins_R = cutFlow_bins.diLepton_R(R_weight,isEleRegion=False)
             SBand_R     = cutFlow_bins.SBand_R(R_weight)
+
+            SR_R     = cutFlow_bins.SR_R(R_weight)
 
 
             if eletrigdecision:
@@ -886,6 +900,11 @@ def runbbdm(txtfile):
                 h_reg_WmunuCR_boosted_cutFlow.AddBinContent(3,1)
                 h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(3,1)
                 h_reg_SBand_boosted_cutFlow.AddBinContent(3,1)
+
+                h_reg_SR_boosted_cutFlow.AddBinContent(3,1)
+                h_reg_SR_resolved_cutFlow.AddBinContent(3,1)
+
+
                 for ibin, binweight in enumerate(TopmuBins_R):
                     h_reg_TopmunuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
                 for ibin, binweight in enumerate(WmuBins_R):
@@ -894,6 +913,9 @@ def runbbdm(txtfile):
                     h_reg_ZmumuCR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
                 for ibin, binweight in enumerate(SBand_R):
                     h_reg_SBand_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+                for ibin, binweight in enumerate(SR_R):
+                    h_reg_SR_resolved_cutFlow.AddBinContent(4+ibin,binweight)
+
 
                 for ibin, binweight in enumerate(TopmuBins_B):
                     h_reg_TopmunuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
@@ -903,7 +925,9 @@ def runbbdm(txtfile):
                     h_reg_ZmumuCR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
                 for ibin, binweight in enumerate(SBand_B):
                     h_reg_SBand_boosted_cutFlow.AddBinContent(4+ibin,binweight)
-
+                for ibin, binweight in enumerate(SR_B):
+                    h_reg_SR_boosted_cutFlow.AddBinContent(4+ibin,binweight)
+                
 
             '''
             --------------------------------------------------------------------------------
@@ -1864,7 +1888,9 @@ def runbbdm(txtfile):
 
     ZCR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lep",5:"lepVeto",6:"Recoil",7:"MET",8:"nJets",9:"nBjets",10:"Zmass",11:"extra",12:"extra2"}
 
-    SR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"lepVeto",5:"tauVeto",6:"nPho",7:"MET",8:"nJets",9:"nBjets",10:"extra",11:"extra",12:"extra2"}
+    SR_CutFlow_B = {1:"Total",2:"preselection",3:"trigger",4:"nEle",5:"nMu",6:"nTau",7:"nPho",8:"MET",9:'nAK8',10:"nJets",11:"nBjets",12:"minDPhi"}
+    SR_CutFlow_R = {1:"Total",2:"preselection",3:"trigger",4:"nEle",5:"nMu",6:"nTau",7:"nPho",8:"MET",9:"nJets",10:"nBjets",11:"Mbb",12:"extra"}
+
 
     for i in [1,2,3,4,5,6,7,8,9,10,11,12]:
         h_reg_WenuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
@@ -1873,10 +1899,10 @@ def runbbdm(txtfile):
         h_reg_TopmunuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
         h_reg_ZeeCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
         h_reg_ZmumuCR_resolved_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow[i])
-	h_reg_SBand_resolved_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow[i])
-        #h_reg_SBand_boosted_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow[i])
+        h_reg_SBand_resolved_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow[i])
+        h_reg_SR_resolved_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow_R[i])
 
-    for i in [1,2,3,4,5,6,7,8,9,10,11]:
+    for i in [1,2,3,4,5,6,7,8,9,10,11,12]:
         h_reg_WenuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
         h_reg_WmunuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
         h_reg_TopenuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,WCR_CutFlow_B[i])
@@ -1884,6 +1910,7 @@ def runbbdm(txtfile):
         h_reg_ZeeCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,ZCR_CutFlow_B[i])
         h_reg_ZmumuCR_boosted_cutFlow.GetXaxis().SetBinLabel(i,ZCR_CutFlow_B[i])
         h_reg_SBand_boosted_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow_B[i])
+        h_reg_SR_boosted_cutFlow.GetXaxis().SetBinLabel(i,SR_CutFlow_B[i])
 
 
     h_reg_WenuCR_resolved_cutFlow.SetEntries(1)
@@ -1892,8 +1919,8 @@ def runbbdm(txtfile):
     h_reg_TopmunuCR_resolved_cutFlow.SetEntries(1)
     h_reg_ZeeCR_resolved_cutFlow.SetEntries(1)
     h_reg_ZmumuCR_resolved_cutFlow.SetEntries(1)
-
     h_reg_SBand_resolved_cutFlow.SetEntries(1)
+    h_reg_SR_resolved_cutFlow.SetEntries(1)
 
     h_reg_WenuCR_boosted_cutFlow.SetEntries(1)
     h_reg_WmunuCR_boosted_cutFlow.SetEntries(1)
@@ -1902,6 +1929,7 @@ def runbbdm(txtfile):
     h_reg_ZeeCR_boosted_cutFlow.SetEntries(1)
     h_reg_ZmumuCR_boosted_cutFlow.SetEntries(1)
     h_reg_SBand_boosted_cutFlow.SetEntries(1)
+    h_reg_SR_boosted_cutFlow.SetEntries(1)
 
 
 
@@ -1913,11 +1941,11 @@ def runbbdm(txtfile):
     h_reg_WmunuCR_resolved_cutFlow.Write()
     h_reg_TopenuCR_resolved_cutFlow.Write()
     h_reg_TopmunuCR_resolved_cutFlow.Write()
-    h_reg_SBand_resolved_cutFlow.Write()
-    h_reg_SBand_boosted_cutFlow.Write()
-
     h_reg_ZeeCR_resolved_cutFlow.Write()
     h_reg_ZmumuCR_resolved_cutFlow.Write()
+    h_reg_SBand_resolved_cutFlow.Write()
+    h_reg_SR_resolved_cutFlow.Write()
+
 
     h_reg_WenuCR_boosted_cutFlow.Write()
     h_reg_WmunuCR_boosted_cutFlow.Write()
@@ -1925,6 +1953,8 @@ def runbbdm(txtfile):
     h_reg_TopmunuCR_boosted_cutFlow.Write()
     h_reg_ZeeCR_boosted_cutFlow.Write()
     h_reg_ZmumuCR_boosted_cutFlow.Write()
+    h_reg_SBand_boosted_cutFlow.Write()
+    h_reg_SR_boosted_cutFlow.Write()
 
     h_total_mcweight.Write()
     h_total.Write()
