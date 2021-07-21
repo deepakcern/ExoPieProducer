@@ -24,7 +24,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 from os import sys
 
-isCondor =False
+isCondor = True
 runInteractive = False
 testing=True
 isAnalysis = True
@@ -743,7 +743,7 @@ def runbbdm(txtfile):
 
 
 
-            weight =1.0; JEC_up =1.0; JEC_down =1.0 ;PUweight =1.0; PUweight_up =1.0; PUweight_down =1.0; lepweight =1.0; lepweight_up =1.0; lepweight_down =1.0; recoilweight =1.0; recoil_up =1.0; recoil_down =1.0; recoilweight = 1.0
+            weight =1.0; JEC_up =1.0; JEC_down =1.0 ;PUweight =1.0; PUweight_up =1.0; PUweight_down =1.0; lepweight =1.0; lepweight_up =1.0; lepweight_down =1.0; recoilweight =1.0; recoil_up =1.0; recoil_down =1.0; recoilweight = 1.0; lepTrigSF_up=1.0; lepTrigSF_down=1.0;lepTrigSF=1.0
             btagweight =1.0; btagweight_up =1.0; btagweight_down =1.0; btagweight_B =1.0; btagweight_B_up =1.0 ;btagweight_B_down =1.0 ;ewkweight =1.0; ewkweight_up =1.0; ewkweight_down =1.0; qcdk=1.0
             toppTweight =1.0; toppTweight_up =1.0; toppTweight_down =1.0; METweight =1.0; METweight_up =1.0; METweight_down =1.0; R_weight=1.0;B_weight=1.0
             muID=1.0; muIDUp=1.0; muIDDown=1.0; muIso=1.0; muIsoUp=1.0; muIsoDown=1.0
